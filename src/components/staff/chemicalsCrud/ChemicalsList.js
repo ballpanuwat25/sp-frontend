@@ -67,7 +67,7 @@ function ChemicalsList() {
     return (
         <div className="container-fluid">
             <div className='d-flex justify-content-between align-items-center'>
-                <h2>Chemicals List</h2>
+                <h2>Chemicals Bottle List</h2>
                 <div className="btn-group">
                     <form className="d-flex" onSubmit={(e) => e.preventDefault()}>
                         <div className="input-group">

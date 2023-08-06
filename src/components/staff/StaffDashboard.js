@@ -53,6 +53,7 @@ function StaffDashboard() {
                         </button>
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><Link to="/chemicals-list" className='dropdown-item'>Chemicals</Link></li>
+                            <li><Link to="/chemicals-stock" className='dropdown-item'>Chemicals Stock</Link></li>
                             <li><Link to="/equipment-list" className='dropdown-item'>Equipment</Link></li>
                         </ul>
                     </div>

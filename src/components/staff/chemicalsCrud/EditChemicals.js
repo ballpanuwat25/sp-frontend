@@ -95,7 +95,7 @@ function EditChemicals() {
 
                 <div className="mb-3">
                     <label htmlFor="Counting_Unit" className="form-label">Counting Unit</label>
-                    <input type="text" className="form-control" id="Counting_Unit" placeholder="Enter Counting Unit" required
+                    <input type="text" className="form-control" id="Counting_Unit" placeholder="Enter Counting Unit" 
                         value={Counting_Unit}
                         onChange={(e) => {
                             setCounting_Unit(e.target.value);

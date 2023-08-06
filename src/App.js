@@ -27,6 +27,8 @@ import AddChemicalsDetail from './components/staff/chemicalsDetailCrud/AddChemic
 import EditChemicalsDetail from './components/staff/chemicalsDetailCrud/EditChemicalsDetail.js';
 import ChemicalsDetailList from './components/staff/chemicalsDetailCrud/ChemicalsDetailList.js';
 
+import ChemicalsStockList from './components/staff/chemicalsStock/ChemicalsStockList.js';
+
 import AddEquipment from './components/staff/equipmentCrud/AddEquipment.js';
 import EditEquipment from './components/staff/equipmentCrud/EditEquipment.js';
 import EquipmentList from './components/staff/equipmentCrud/EquipmentList.js';
@@ -83,6 +85,8 @@ function App() {
         <Route path="/chemicals-list" element={<ChemicalsList/> } />
         <Route path="/chemicals-list/add-chemicals" element={<AddChemicals/> } />
         <Route path="/chemicals-list/edit-chemicals/:id" element={<EditChemicals/> } />
+
+        <Route path="/chemicals-stock" element={<ChemicalsStockList/> } />
 
         <Route path="/chemicalsDetail-list" element={<ChemicalsDetailList/> } />
         <Route path="/chemicalsDetail-list/add-chemicalsDetail" element={<AddChemicalsDetail/> } />
