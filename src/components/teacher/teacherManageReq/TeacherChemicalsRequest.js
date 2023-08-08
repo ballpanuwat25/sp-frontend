@@ -10,7 +10,7 @@ function TeacherChemicalsRequest() {
     const [selectedIds, setSelectedIds] = useState([]);
 
     const [studentIdSearch, setStudentIdSearch] = useState("");
-    const [teacherIdSearch, setTeacherIdSearch] = useState(""); // Initialize with an empty string
+    const [teacherIdSearch, setTeacherIdSearch] = useState(""); 
 
     axios.defaults.withCredentials = true;
 
@@ -105,6 +105,10 @@ function TeacherChemicalsRequest() {
     // Filter the chemicalsReq array based on search criteria
     const filteredChemicalsReq = filterChemicalsReq(chemicalsReq);
 
+    useEffect(() => {
+        setTeacherIdSearch(teacherId); // Set teacherIdSearch with the value from API response
+    }, [teacherId]);
+
     return (
         <div className="container-fluid">
             <div className="d-flex justify-content-between align-items-center">
@@ -136,6 +140,7 @@ function TeacherChemicalsRequest() {
                             placeholder="Enter Teacher Id"
                             value={teacherIdSearch}
                             onChange={(e) => setTeacherIdSearch(e.target.value)}
+                            readOnly
                         />
                     </div>
                 </div>

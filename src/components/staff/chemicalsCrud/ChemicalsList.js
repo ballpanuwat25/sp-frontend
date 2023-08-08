@@ -8,6 +8,8 @@ import BarcodeScanner from "../barcode/BarcodeScanner";
 
 function ChemicalsList() {
     const [chemicals, setChemicals] = useState([]);
+    const [chemicalsDetail, setChemicalsDetail] = useState([]);
+
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredChemicals, setFilteredChemicals] = useState([]);
     const [scannedText, setScannedText] = useState("");
@@ -17,11 +19,17 @@ function ChemicalsList() {
 
     useEffect(() => {
         getChemicals();
+        getChemicalsDetail();
     }, []);
 
     const getChemicals = async () => {
         const response = await axios.get("http://localhost:3001/chemicals-list");
         setChemicals(response.data);
+    }
+
+    const getChemicalsDetail = async () => {
+        const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
+        setChemicalsDetail(response.data);
     }
 
     const deleteChemicals = async (id) => {
@@ -62,6 +70,11 @@ function ChemicalsList() {
 
     const handleChange = (event) => {
         setBarcode(event.target.value);
+    };
+
+    const getChemNameById = (chemId) => {
+        const chemicalDetail = chemicalsDetail.find((chem) => chem.Chem_Id === chemId);
+        return chemicalDetail ? chemicalDetail.Chem_Name : "N/A";
     };
 
     return (
@@ -126,7 +139,7 @@ function ChemicalsList() {
                     <tr>
                         <th scope="col">No</th>
                         <th scope="col">Chemicals Bottle Id</th>
-                        <th scope="col">Chemicals Id</th>
+                        <th scope="col">Chemicals Name</th>
                         <th scope="col">Package Size</th>
                         <th scope="col">Remaining Quantity</th>
                         <th scope="col">Counting Unit</th>
@@ -140,7 +153,7 @@ function ChemicalsList() {
                         <tr key={index}>
                             <td> {index + 1} </td>
                             <td> {chemicals.Chem_Bottle_Id} </td>
-                            <td> {chemicals.Chem_Id} </td>
+                            <td> {getChemNameById(chemicals.Chem_Id)} </td>
                             <td> {chemicals.Package_Size} </td>
                             <td> {chemicals.Remaining_Quantity} </td>
                             <td> {chemicals.Counting_Unit} </td>
@@ -148,7 +161,7 @@ function ChemicalsList() {
                             <td> {chemicals.Price} </td>
                             <td>
                                 <div className="d-grid gap-2 d-sm-flex">
-                                    <Link to={`edit-chemicals/${chemicals.Chem_Bottle_Id}`} className="btn btn-primary">Edit</Link>
+                                    <Link to={`edit-chemicals/${chemicals.Chem_Bottle_Id}`} className="btn btn-primary">Update</Link>
                                     <button onClick={() => deleteChemicals(chemicals.Chem_Bottle_Id)} className="btn btn-danger">Delete</button>
                                 </div>
                             </td>
