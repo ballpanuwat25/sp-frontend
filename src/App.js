@@ -61,6 +61,8 @@ import StudentCart from './components/student/studentChemReq/StudentCart.js';
 import TeacherChemicalsRequest from './components/teacher/teacherManageReq/TeacherChemicalsRequest.js';
 import StaffChemicalsRequest from './components/staff/staffConfirmReq/StaffChemicalsRequest.js';
 
+import LogActivityList from './components/admin/logActivity/LogActivityList.js';
+
 function App() {
   return (
     <BrowserRouter>
@@ -123,6 +125,8 @@ function App() {
         <Route path="/teacher-dashboard/teacher-chemicals-request/:id" element={<TeacherChemicalsRequest/> } />
         <Route path="/staff-dashboard/staff-chemicals-request/:id" element={<StaffChemicalsRequest/> } />
         <Route path="/student-dashboard/student-cart" element={<StudentCart/> } />
+
+        <Route path="/log-activity" element={<LogActivityList/> } />
       </Routes>
     </BrowserRouter>
   );
