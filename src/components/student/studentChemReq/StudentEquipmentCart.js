@@ -2,11 +2,11 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function StudentCart() {
-    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
-    const [chemicalsRequest, setChemicalsRequest] = useState({
+function StudentEquipmentCart() {
+    const cartData = JSON.parse(localStorage.getItem('equipmentCart')) || [];
+    const [equipmentRequest, setEquipmentRequest] = useState({
         Student_Id: "",
-        Chem_Id: "",
+        Equip_Id: "",
         Requested_Quantity: "",
         Counting_Unit: "",
         Request_Purpose: "",
@@ -25,26 +25,24 @@ function StudentCart() {
         setCartItems(updatedCartItems);
     };
 
-    const sendChemicalsRequest = async (e) => {
+    const sendEquipmentRequest = async (e) => {
         e.preventDefault();
         try {
-            // Log each attribute separately
             for (const item of cartItems) {
                 const requestData = {
-                    ...chemicalsRequest,
+                    ...equipmentRequest,
                     Student_Id: item.Student_Id,
-                    Chem_Id: item.Chem_Id,
+                    Equipment_Id: item.Equipment_Id,
                     Requested_Quantity: item.Requested_Quantity,
-                    Counting_Unit: item.Counting_Unit,
                     Request_Purpose: item.Request_Purpose,
                     Request_Room: item.Request_Room,
                     Teacher_Id: item.Teacher_Id,
                 };
-                await axios.post("http://localhost:3001/chemicals-request-list", requestData);
+                await axios.post("http://localhost:3001/equipment-request-list", requestData);
             }
 
             // Clear localStorage
-            localStorage.removeItem('cart');
+            localStorage.removeItem('equipmentCart');
 
             // Redirect to the student dashboard or any other page
             navigate("/student-dashboard");
@@ -56,15 +54,14 @@ function StudentCart() {
                 console.log('Server Error Message:', err.response.data);
             }
         }
-    };
+    }
 
     const removeCartItem = (index) => {
         const updatedCartItems = [...cartItems];
         updatedCartItems.splice(index, 1);
         setCartItems(updatedCartItems);
-        localStorage.setItem('cart', JSON.stringify(updatedCartItems)); // Update localStorage
+        localStorage.setItem('equipmentCart', JSON.stringify(updatedCartItems)); // Update localStorage
     };
-
 
     return (
         <div className="container">
@@ -72,14 +69,13 @@ function StudentCart() {
             {cartItems.length === 0 ? (
                 <p>Nothing in cart.</p>
             ) : (
-                <form onSubmit={sendChemicalsRequest}>
+                <form onSubmit={sendEquipmentRequest}>
                     <table className="table table-striped">
                         <thead>
                             <tr>
                                 <th>Student Id</th>
-                                <th>Chemicals Id</th>
+                                <th>Equipment Id</th>
                                 <th>Requested Quantity</th>
-                                <th>Counting Unit</th>
                                 <th>Request Purpose</th>
                                 <th>Request Room</th>
                                 <th>Teacher Id</th>
@@ -101,7 +97,7 @@ function StudentCart() {
                                         <input
                                             type="text"
                                             className="form-control"
-                                            value={item.Chem_Id}
+                                            value={item.Equipment_Id}
                                             readOnly
                                         />
                                     </td>
@@ -114,18 +110,6 @@ function StudentCart() {
                                                 handleChange(index, 'Requested_Quantity', e.target.value)
                                             }
                                         />
-                                    </td>
-                                    <td>
-                                        <select
-                                            className="form-control"
-                                            value={item.Counting_Unit}
-                                            onChange={(e) => handleChange(index, 'Counting_Unit', e.target.value)}
-                                            required
-                                        >
-                                            <option value="">Select counting unit</option>
-                                            <option value="g">g</option>
-                                            <option value="ml">ml</option>
-                                        </select>
                                     </td>
                                     <td>
                                         <input
@@ -181,4 +165,4 @@ function StudentCart() {
     );
 }
 
-export default StudentCart;
+export default StudentEquipmentCart;

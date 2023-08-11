@@ -53,10 +53,12 @@ import StudentForgetPassword from './components/student/studentLogin/StudentForg
 import StudentDashboard from './components/student/StudentDashboard.js';
 import StudentProfile from './components/student/studentLogin/StudentProfile';
 
-import AddChemicalsRequest from './components/student/studentChemReq/AddChemicalsRequest.js';
 import StudentChemicalsRequest from './components/student/studentChemReq/StudentChemicalsRequest.js';
 import StudentChemicalsList from './components/student/studentChemReq/StudentChemicalsList.js';
-import StudentCart from './components/student/studentChemReq/StudentCart.js';
+import StudentChemicalsCart from './components/student/studentChemReq/StudentChemicalsCart.js';
+
+import StudentEquipmentCart from './components/student/studentChemReq/StudentEquipmentCart.js';
+import StudentEquipmentRequest from './components/student/studentChemReq/StudentEquipmentRequest.js';
 
 import TeacherChemicalsRequest from './components/teacher/teacherManageReq/TeacherChemicalsRequest.js';
 import StaffChemicalsRequest from './components/staff/staffConfirmReq/StaffChemicalsRequest.js';
@@ -118,13 +120,16 @@ function App() {
         <Route path="/student-dashboard" element={<StudentDashboard/> } />
         <Route path="/student-profile" element={<StudentProfile/> } />
 
-        <Route path="/add-chemicals-request" element={<AddChemicalsRequest/> } />
         <Route path="/student-dashboard/student-chemicals-request" element={<StudentChemicalsRequest/> } />
         <Route path="/student-dashboard/student-chemicals-list" element={<StudentChemicalsList/> } />
 
+        <Route path="/student-dashboard/student-equipment-request" element={<StudentEquipmentRequest/> } />
+
         <Route path="/teacher-dashboard/teacher-chemicals-request/:id" element={<TeacherChemicalsRequest/> } />
         <Route path="/staff-dashboard/staff-chemicals-request/:id" element={<StaffChemicalsRequest/> } />
-        <Route path="/student-dashboard/student-cart" element={<StudentCart/> } />
+
+        <Route path="/student-dashboard/student-chemicals-cart" element={<StudentChemicalsCart/> } />
+        <Route path="/student-dashboard/student-equipment-cart" element={<StudentEquipmentCart/> } />
 
         <Route path="/log-activity" element={<LogActivityList/> } />
       </Routes>

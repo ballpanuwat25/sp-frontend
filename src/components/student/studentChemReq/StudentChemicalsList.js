@@ -45,7 +45,7 @@ function StudentChemicalsList() {
 
     const addToCart = (Chem_Id) => {
         // Get the existing cart data from localStorage (if any)
-        const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartData = JSON.parse(localStorage.getItem('chemicalsCart')) || [];
 
         // Check if the selected chemicals are already in the cart
         const existingChemical = cartData.find(item => item.Student_Id === studentId && item.Chem_Id === Chem_Id);
@@ -63,7 +63,7 @@ function StudentChemicalsList() {
             });
         }
 
-        localStorage.setItem('cart', JSON.stringify(cartData));
+        localStorage.setItem('chemicalsCart', JSON.stringify(cartData));
     };
 
     const handleSearch = (e) => {
@@ -101,7 +101,6 @@ function StudentChemicalsList() {
                 <thead>
                     <tr>
                         <th scope="col">No</th>
-                        <th scope="col">Chemicals Id</th>
                         <th scope="col">Chemicals Name</th>
                         <th scope="col">Chemicals CAS</th>
                         <th scope="col">Chemicals UN</th>
@@ -115,7 +114,6 @@ function StudentChemicalsList() {
                     {filteredChemicals.map((chemicalsDetail, index) => (
                         <tr key={index}>
                             <td> {index + 1} </td>
-                            <td> {chemicalsDetail.Chem_Id} </td>
                             <td> {chemicalsDetail.Chem_Name} </td>
                             <td> {chemicalsDetail.Chem_CAS} </td>
                             <td> {chemicalsDetail.Chem_UN} </td>
