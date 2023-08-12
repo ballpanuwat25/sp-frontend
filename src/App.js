@@ -61,7 +61,11 @@ import StudentEquipmentCart from './components/student/studentChemReq/StudentEqu
 import StudentEquipmentRequest from './components/student/studentChemReq/StudentEquipmentRequest.js';
 
 import TeacherChemicalsRequest from './components/teacher/teacherManageReq/TeacherChemicalsRequest.js';
+
 import StaffChemicalsRequest from './components/staff/staffConfirmReq/StaffChemicalsRequest.js';
+import StaffChemicalsRequestList from './components/staff/staffConfirmReq/StaffChemicalsRequestList.js';
+import StaffEquipmentRequest from './components/staff/staffConfirmReq/StaffEquipmentRequest.js';
+import StaffEquipmentRequestList from './components/staff/staffConfirmReq/StaffEquipmentRequestList.js';
 
 import LogActivityList from './components/admin/logActivity/LogActivityList.js';
 
@@ -127,6 +131,9 @@ function App() {
 
         <Route path="/teacher-dashboard/teacher-chemicals-request/:id" element={<TeacherChemicalsRequest/> } />
         <Route path="/staff-dashboard/staff-chemicals-request/:id" element={<StaffChemicalsRequest/> } />
+        <Route path="/staff-dashboard/staff-chemicals-request-list" element={<StaffChemicalsRequestList/> } />
+        <Route path="/staff-dashboard/staff-equipment-request/:id" element={<StaffEquipmentRequest/> } />
+        <Route path="/staff-dashboard/staff-equipment-request-list" element={<StaffEquipmentRequestList/> } />
 
         <Route path="/student-dashboard/student-chemicals-cart" element={<StudentChemicalsCart/> } />
         <Route path="/student-dashboard/student-equipment-cart" element={<StudentEquipmentCart/> } />
