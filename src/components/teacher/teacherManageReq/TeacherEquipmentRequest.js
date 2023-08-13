@@ -1,16 +1,16 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 
-function TeacherChemicalsRequest() {
+function TeacherEquipmentRequest() {
     const [teacherId, setTeacherId] = useState("");
-    const [chemicalsReq, setChemicalsReq] = useState([]);
+    const [equipmentReq, setEquipmentReq] = useState([]);
 
     const [Request_Comment, setRequest_Comment] = useState("");
     const [activeRequestId, setActiveRequestId] = useState(null);
     const [selectedIds, setSelectedIds] = useState([]);
 
     const [studentIdSearch, setStudentIdSearch] = useState("");
-    const [teacherIdSearch, setTeacherIdSearch] = useState(""); 
+    const [teacherIdSearch, setTeacherIdSearch] = useState("");
 
     axios.defaults.withCredentials = true;
 
@@ -25,12 +25,12 @@ function TeacherChemicalsRequest() {
     }, []);
 
     useEffect(() => {
-        getChemicalsRequest();
+        getEquipmentRequest();
     }, []);
 
-    const getChemicalsRequest = async () => {
-        const response = await axios.get("http://localhost:3001/chemicals-request-list");
-        setChemicalsReq(response.data);
+    const getEquipmentRequest = async () => {
+        const response = await axios.get("http://localhost:3001/equipment-request-list");
+        setEquipmentReq(response.data);
     };
 
     const formatDate = (dateString) => {
@@ -39,46 +39,46 @@ function TeacherChemicalsRequest() {
         return date.toLocaleDateString('en-GB', options);
     };
 
-    const approveChemicalsRequest = async (id) => {
+    const approveEquipmentRequest = async (id) => {
         try {
-            await updateChemicalsRequestStatus(id, "Approve");
-        } catch (error) {
-            console.log(error)
+            await updateEquipmentRequestStatus(id, "Approved");
+        } catch (err) {
+            console.log(err);
         }
     }
 
-    const declineChemicalsRequest = async () => {
+    const declineEquipmentRequest = async () => {
         try {
             if (activeRequestId) {
-                await updateChemicalsRequestStatus(activeRequestId, "Decline", Request_Comment);
-                setRequest_Comment(""); // Clear the comment after successful decline
-                setActiveRequestId(null); // Reset activeRequestId after successful decline
+                await updateEquipmentRequestStatus(activeRequestId, "Declined", Request_Comment);
+                setRequest_Comment("");
+                setActiveRequestId(null);
             }
-        } catch (error) {
-            console.log(error)
+        } catch (err) {
+            console.log(err);
         }
     }
 
-    const updateChemicalsRequestStatus = async (id, status, comment) => {
+    const updateEquipmentRequestStatus = async (id, status, comment) => {
         try {
             const data = {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`http://localhost:3001/chemicals-request-list/${id}`, data);
-            getChemicalsRequest(); // Refresh the chemicals request list after updating status
-        } catch (error) {
-            console.log(error);
+            await axios.patch(`http://localhost:3001/equipment-request-list/${id}`, data);
+            getEquipmentRequest();
+        } catch (err) {
+            console.log(err);
         }
     }
 
     const handleCheckAll = () => {
-        const allIds = chemicalsReq.map((req) => req.Chem_Request_Id);
+        const allIds = equipmentReq.map((req) => req.Equipment_Request_Id);
         setSelectedIds(allIds);
     }
 
     const handleApproveChecked = () => {
-        selectedIds.forEach((id) => approveChemicalsRequest(id));
+        selectedIds.forEach((id) => approveEquipmentRequest(id));
         setSelectedIds([]);
     }
 
@@ -90,7 +90,7 @@ function TeacherChemicalsRequest() {
         }
     }
 
-    const filterChemicalsReq = (data) => {
+    const filterEquipmentReq = (data) => {
         const studentIdRegex = new RegExp(studentIdSearch, "i"); // "i" flag for case-insensitive search
         const teacherIdRegex = new RegExp(teacherIdSearch, "i"); // "i" flag for case-insensitive search
 
@@ -102,16 +102,16 @@ function TeacherChemicalsRequest() {
         });
     };
 
-    const filteredChemicalsReq = filterChemicalsReq(chemicalsReq);
+    const filteredEquipmentReq = filterEquipmentReq(equipmentReq);
 
     useEffect(() => {
-        setTeacherIdSearch(teacherId); // Set teacherIdSearch with the value from API response
+        setTeacherIdSearch(teacherId); 
     }, [teacherId]);
 
     return (
         <div className="container-fluid">
             <div className="d-flex justify-content-between align-items-center">
-                <h1>TeacherId: {teacherId} Chemicals Request</h1>
+                <h1>TeacherId: {teacherId} Equipment Request</h1>
                 <div>
                     <button className="btn btn-warning me-2" onClick={handleCheckAll}>
                         Check ALL
@@ -149,9 +149,8 @@ function TeacherChemicalsRequest() {
                     <tr>
                         <th scope="col">Check</th>
                         <th scope="col">Student Id</th>
-                        <th scope="col">Chem Id</th>
+                        <th scope="col">Equipment Id</th>
                         <th scope="col">Requested Quantity</th>
-                        <th scope="col">Counting Unit</th>
                         <th scope="col">Teacher Id</th>
                         <th scope="col">Request Status</th>
                         <th scope="col">Request Comment</th>
@@ -160,40 +159,39 @@ function TeacherChemicalsRequest() {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredChemicalsReq.map((chemicalsReq) => (
-                        <tr key={chemicalsReq.Chem_Request_Id}>
+                    {filteredEquipmentReq.map((equipmentReq) => (
+                        <tr key={equipmentReq.Equipment_Request_Id}>
                             <td>
                                 <div className="form-check">
                                     <input
                                         className="form-check-input"
                                         type="checkbox"
-                                        value={chemicalsReq.Chem_Request_Id}
-                                        id={`flexCheckDefault-${chemicalsReq.Chem_Request_Id}`}
-                                        checked={selectedIds.includes(chemicalsReq.Chem_Request_Id)}
-                                        onChange={() => handleCheckboxChange(chemicalsReq.Chem_Request_Id)}
+                                        value={equipmentReq.Equipment_Request_Id}
+                                        id={`flexCheckDefault-${equipmentReq.Equipment_Request_Id}`}
+                                        checked={selectedIds.includes(equipmentReq.Equipment_Request_Id)}
+                                        onChange={() => handleCheckboxChange(equipmentReq.Equipment_Request_Id)}
                                     />
                                 </div>
                             </td>
-                            <td> {chemicalsReq.Student_Id} </td>
-                            <td> {chemicalsReq.Chem_Id} </td>
-                            <td> {chemicalsReq.Requested_Quantity} </td>
-                            <td> {chemicalsReq.Counting_Unit} </td>
-                            <td> {chemicalsReq.Teacher_Id} </td>
-                            <td> {chemicalsReq.Request_Status} </td>
-                            <td> {chemicalsReq.Request_Comment} </td>
-                            <td>{formatDate(chemicalsReq.createdAt)}</td>
+                            <td> {equipmentReq.Student_Id} </td>
+                            <td> {equipmentReq.Equipment_Id} </td>
+                            <td> {equipmentReq.Requested_Quantity} </td>
+                            <td> {equipmentReq.Teacher_Id} </td>
+                            <td> {equipmentReq.Request_Status} </td>
+                            <td> {equipmentReq.Request_Comment} </td>
+                            <td>{formatDate(equipmentReq.createdAt)}</td>
                             <td>
                                 <div className="d-grid gap-2 d-sm-flex">
-                                    <button onClick={() => approveChemicalsRequest(chemicalsReq.Chem_Request_Id)} className="btn btn-success mx-1">Approve</button>
+                                    <button onClick={() => approveEquipmentRequest(equipmentReq.Equipment_Request_Id)} className="btn btn-success mx-1">Approve</button>
                                     <button
                                         className="btn btn-danger mx-1"
-                                        data-bs-toggle="modal" data-bs-target={`#exampleModal-${chemicalsReq.Chem_Request_Id}`}
-                                        onClick={() => setActiveRequestId(chemicalsReq.Chem_Request_Id)}
+                                        data-bs-toggle="modal" data-bs-target={`#exampleModal-${equipmentReq.Equipment_Request_Id}`}
+                                        onClick={() => setActiveRequestId(equipmentReq.Equipment_Request_Id)}
                                     >
                                         Decline
                                     </button>
 
-                                    <div className="modal fade" id={`exampleModal-${chemicalsReq.Chem_Request_Id}`} tabIndex="-1" aria-labelledby={`exampleModalLabel-${chemicalsReq.Chem_Request_Id}`} aria-hidden="true">
+                                    <div className="modal fade" id={`exampleModal-${equipmentReq.Equipment_Request_Id}`} tabIndex="-1" aria-labelledby={`exampleModalLabel-${equipmentReq.Equipment_Request_Id}`} aria-hidden="true">
                                         <div className="modal-dialog">
                                             <div className="modal-content">
                                                 <div className="modal-header">
@@ -212,7 +210,7 @@ function TeacherChemicalsRequest() {
                                                 </div>
                                                 <div className="modal-footer">
                                                     <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button onClick={declineChemicalsRequest} type="button" className="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+                                                    <button onClick={declineEquipmentRequest} type="button" className="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -227,4 +225,4 @@ function TeacherChemicalsRequest() {
     )
 }
 
-export default TeacherChemicalsRequest;
+export default TeacherEquipmentRequest;

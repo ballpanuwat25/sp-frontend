@@ -26,48 +26,60 @@ function ChemicalsStockList() {
   const processChemicalsData = () => {
     const uniqueChemicals = {};
     chemicals.forEach((chemical) => {
-      const { Chem_Id, Remaining_Quantity } = chemical;
+      const { Chem_Id, Remaining_Quantity, Package_Size } = chemical;
       if (uniqueChemicals[Chem_Id]) {
-        uniqueChemicals[Chem_Id] += Remaining_Quantity;
+        uniqueChemicals[Chem_Id].Package_Size += Package_Size;
+        uniqueChemicals[Chem_Id].Remaining_Quantity += Remaining_Quantity;
       } else {
-        uniqueChemicals[Chem_Id] = Remaining_Quantity;
+        uniqueChemicals[Chem_Id] = {
+          Package_Size: Package_Size,
+          Remaining_Quantity,
+        };
       }
     });
-
+  
     // Convert the object of unique chemicals to an array of objects
     let processedChemicals = Object.keys(uniqueChemicals).map((Chem_Id) => {
       // Find the corresponding chemicalsDetail based on Chem_Id
       const detail = chemicalsDetail.find((detail) => detail.Chem_Id === Chem_Id);
-
+  
       // Set Counting_Unit based on Chem_State
       let Counting_Unit;
       if (detail) {
-        Counting_Unit = detail.Chem_State === "Solid" ? "g" : detail.Chem_State === "Liquid" ? "ml" : "N/A";
+        Counting_Unit =
+          detail.Chem_State === "Solid"
+            ? "g"
+            : detail.Chem_State === "Liquid"
+            ? "ml"
+            : "N/A";
       } else {
         Counting_Unit = "N/A";
       }
-
+  
       return {
         Chem_Id,
         Chem_Name: detail ? detail.Chem_Name : "N/A",
-        Remaining_Quantity: uniqueChemicals[Chem_Id],
+        Package_Size: uniqueChemicals[Chem_Id].Package_Size,
+        Remaining_Quantity: uniqueChemicals[Chem_Id].Remaining_Quantity,
         Counting_Unit,
         Chem_State: detail ? detail.Chem_State : "N/A",
       };
     });
-
+  
     // Filter chemicals based on the searchFilter (Chem_State)
     if (searchFilter !== "All") {
-      processedChemicals = processedChemicals.filter((chemical) => chemical.Chem_State === searchFilter);
+      processedChemicals = processedChemicals.filter(
+        (chemical) => chemical.Chem_State === searchFilter
+      );
     }
-
+  
     // Filter chemicals based on the searchTerm (Chem_Name)
     if (searchTerm.trim() !== "") {
       processedChemicals = processedChemicals.filter((chemical) =>
         chemical.Chem_Name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-
+  
     return processedChemicals;
   };
 
@@ -106,6 +118,7 @@ function ChemicalsStockList() {
             <th scope="col">Chemicals Id</th>
             <th scope="col">Chemicals Name</th>
             <th scope="col">Remaining Quantity</th>
+            <th scope="col">Total Quantity</th>
             <th scope="col">Counting Unit</th>
             <th scope="col">Chemicals State</th>
           </tr>
@@ -117,6 +130,7 @@ function ChemicalsStockList() {
               <td> {chemical.Chem_Id} </td>
               <td> {chemical.Chem_Name} </td>
               <td> {chemical.Remaining_Quantity} </td>
+              <td> {chemical.Package_Size} </td>
               <td> {chemical.Counting_Unit} </td>
               <td> {chemical.Chem_State} </td>
             </tr>

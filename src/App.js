@@ -61,6 +61,7 @@ import StudentEquipmentCart from './components/student/studentChemReq/StudentEqu
 import StudentEquipmentRequest from './components/student/studentChemReq/StudentEquipmentRequest.js';
 
 import TeacherChemicalsRequest from './components/teacher/teacherManageReq/TeacherChemicalsRequest.js';
+import TeacherEquipmentRequest from './components/teacher/teacherManageReq/TeacherEquipmentRequest.js';
 
 import StaffChemicalsRequest from './components/staff/staffConfirmReq/StaffChemicalsRequest.js';
 import StaffChemicalsRequestList from './components/staff/staffConfirmReq/StaffChemicalsRequestList.js';
@@ -129,7 +130,9 @@ function App() {
 
         <Route path="/student-dashboard/student-equipment-request" element={<StudentEquipmentRequest/> } />
 
-        <Route path="/teacher-dashboard/teacher-chemicals-request/:id" element={<TeacherChemicalsRequest/> } />
+        <Route path="/teacher-dashboard/teacher-chemicals-request" element={<TeacherChemicalsRequest/> } />
+        <Route path="/teacher-dashboard/teacher-equipment-request" element={<TeacherEquipmentRequest/> } />
+
         <Route path="/staff-dashboard/staff-chemicals-request/:id" element={<StaffChemicalsRequest/> } />
         <Route path="/staff-dashboard/staff-chemicals-request-list" element={<StaffChemicalsRequestList/> } />
         <Route path="/staff-dashboard/staff-equipment-request/:id" element={<StaffEquipmentRequest/> } />
