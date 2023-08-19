@@ -1,8 +1,15 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function AddEquipment() {
+    const [staffId, setStaffId] = useState("");
+    const [logActivity, setLogActivity] = useState({
+        LogActivity_Id: "",
+        LogActivity_Name: "",
+        Equipment_Id: "",
+        Staff_Id: "",
+    });
     const [equipment, setEquipment] = useState({
         Equipment_Id: "",
         Equipment_Category_Id: "",
@@ -13,11 +20,35 @@ function AddEquipment() {
     });
 
     const navigate = useNavigate();
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        axios.get("http://localhost:3001/staff").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffId(response.data.staffId);
+                setLogActivity({ ...logActivity, Staff_Id: response.data.staffId });
+            }
+        });
+    }, [logActivity]);
 
     const saveEquipment = async (e) => {
         e.preventDefault();
         try {
+            const { Equipment_Id } = equipment;
+
+            const equipmentIdExists = await axios.get(`http://localhost:3001/equipment-list/${Equipment_Id}`);
+            if (equipmentIdExists.data) {
+                alert("Equipment Id already exists. Please enter a different Equipment Id.");
+                return;
+            }
+
+            const updatedLogActivity = { ...logActivity, LogActivity_Name: "Add Equipment", Equipment_Id: Equipment_Id };
+            await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
             await axios.post("http://localhost:3001/equipment-list", (equipment));
+
+            alert("Equipment added successfully");
             navigate("/equipment-list");
         } catch (err) {
             console.log(err);
@@ -27,6 +58,17 @@ function AddEquipment() {
     return (
         <div className='container-fluid'>
             <form onSubmit={saveEquipment}>
+
+                <div className='mb-3'>
+                    <label htmlFor='Staff_Id' className='form-label'>Staff_Id</label>
+                    <input type='text'
+                        className='form-control'
+                        placeholder='Enter Staff Id'
+                        defaultValue={staffId}
+                        readOnly
+                    />
+                </div>
+                
                 <div className="mb-3">
                     <label htmlFor="Equipment_Id" className="form-label">Equipment Id</label>
                     <input type="text" className="form-control" id="Equipment_Id" placeholder="Enter Equipment Id" required

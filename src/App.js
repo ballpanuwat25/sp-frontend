@@ -68,7 +68,8 @@ import StaffChemicalsRequestList from './components/staff/staffConfirmReq/StaffC
 import StaffEquipmentRequest from './components/staff/staffConfirmReq/StaffEquipmentRequest.js';
 import StaffEquipmentRequestList from './components/staff/staffConfirmReq/StaffEquipmentRequestList.js';
 
-import LogActivityList from './components/admin/logActivity/LogActivityList.js';
+import ChemicalsLogActivity from './components/admin/logActivity/ChemicalsLogActivity.js';
+import EquipmentLogActivity from './components/admin/logActivity/EquipmentLogActivity.js';
 
 function App() {
   return (
@@ -141,7 +142,8 @@ function App() {
         <Route path="/student-dashboard/student-chemicals-cart" element={<StudentChemicalsCart/> } />
         <Route path="/student-dashboard/student-equipment-cart" element={<StudentEquipmentCart/> } />
 
-        <Route path="/log-activity" element={<LogActivityList/> } />
+        <Route path="/chemicals-log-activity" element={<ChemicalsLogActivity/> } />
+        <Route path="/equipment-log-activity" element={<EquipmentLogActivity/> } />
       </Routes>
     </BrowserRouter>
   );

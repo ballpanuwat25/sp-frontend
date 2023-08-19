@@ -3,6 +3,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditChemicalsDetail() {
+    const [staffId, setStaffId] = useState("");
+    const [logActivity, setLogActivity] = useState({
+        LogActivity_Id: "",
+        LogActivity_Name: "",
+        Chem_Id: "",
+        Staff_Id: "",
+    });
+
     const [Chem_Id, setChem_Id] = useState("");
     const [Chem_Name, setChem_Name] = useState("");
     const [Chem_CAS, setChem_CAS] = useState("");
@@ -12,11 +20,22 @@ function EditChemicalsDetail() {
     const [Chem_State, setChem_State] = useState("");
     const [Chem_MSDS, setChem_MSDS] = useState("");
     const [Chem_GHS, setChem_GHs] = useState("");
-    
+
     const { id } = useParams();
-    
     const navigate = useNavigate();
-    
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        axios.get("http://localhost:3001/staff").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffId(response.data.staffId);
+                setLogActivity({ ...logActivity, Staff_Id: response.data.staffId });
+            }
+        });
+    }, [logActivity]);
+
     useEffect(() => {
         getChemicalsDetailById()
         // eslint-disable-next-line
@@ -49,6 +68,8 @@ function EditChemicalsDetail() {
             Chem_MSDS,
             Chem_GHS,
         });
+        const updatedLogActivity = { ...logActivity, LogActivity_Name: "Updated Chemicals", Chem_Id: Chem_Id };
+        await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
         if (response.data.Error) {
             alert(response.data.Error);
         } else {
@@ -60,6 +81,17 @@ function EditChemicalsDetail() {
         <div className="container-fluid">
             <h1>Edit Chemicals Detail</h1>
             <form onSubmit={updateChemicalsDetail}>
+
+                <div className='mb-3'>
+                    <label htmlFor='Staff_Id' className='form-label'>Staff_Id</label>
+                    <input type='text'
+                        className='form-control'
+                        placeholder='Enter Staff Id'
+                        defaultValue={staffId}
+                        readOnly
+                    />
+                </div>
+
                 <div className="mb-3">
                     <label htmlFor="Chem_Id" className="form-label">Chemicals Id</label>
                     <input type="text" className="form-control" id="Chem_Id" placeholder="Enter Chemicals Id" required

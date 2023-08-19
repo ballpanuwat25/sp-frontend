@@ -3,16 +3,35 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditEquipment() {
+    const [staffId, setStaffId] = useState("");
+    const [logActivity, setLogActivity] = useState({
+        LogActivity_Id: "",
+        LogActivity_Name: "",
+        Equipment_Id: "",
+        Staff_Id: "",
+    });
+
     const [Equipment_Id, setEquipment_Id] = useState("");
     const [Equipment_Category_Id, setEquipment_Category_Id] = useState("");
     const [Equipment_Name, setEquipment_Name] = useState("");
     const [Quantity, setQuantity] = useState("");
     const [Location, setLocation] = useState("");
     const [Price, setPrice] = useState("");
-    
-    const { id } = useParams();
 
+    const { id } = useParams();
     const navigate = useNavigate();
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        axios.get("http://localhost:3001/staff").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffId(response.data.staffId);
+                setLogActivity({ ...logActivity, Staff_Id: response.data.staffId });
+            }
+        });
+    }, [logActivity]);
 
     useEffect(() => {
         getEquipmentById()
@@ -40,6 +59,8 @@ function EditEquipment() {
             Location,
             Price
         });
+        const updatedLogActivity = { ...logActivity, LogActivity_Name: "Update Equipment", Equipment_Id: Equipment_Id };
+        await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
         if (response.data.Error) {
             alert(response.data.Error);
         } else {
@@ -50,6 +71,17 @@ function EditEquipment() {
     return (
         <div className="container-fluid">
             <form onSubmit={updateEquipment}>
+                
+                <div className='mb-3'>
+                    <label htmlFor='Staff_Id' className='form-label'>Staff_Id</label>
+                    <input type='text'
+                        className='form-control'
+                        placeholder='Enter Staff Id'
+                        defaultValue={staffId}
+                        readOnly
+                    />
+                </div>
+
                 <div className="mb-3">
                     <label htmlFor="Equipment_Id" className="form-label">Equipment Id</label>
                     <input type="text" className="form-control" id="Equipment_Id" placeholder="Enter Equipment Id" required
@@ -59,7 +91,7 @@ function EditEquipment() {
                         value={Equipment_Id}
                     />
                 </div>
-                
+
                 <div className="mb-3">
                     <label type="text" htmlFor="Equipment_Category_Id" className="form-label">Equipment Category Id</label>
                     <input type="text" className="form-control" id="Equipment_Category_Id" placeholder="Enter Equipment Category Id" required
@@ -109,7 +141,7 @@ function EditEquipment() {
                         value={Price}
                     />
                 </div>
-                
+
                 <button type="submit" className="btn btn-primary">Update</button>
             </form>
         </div>
