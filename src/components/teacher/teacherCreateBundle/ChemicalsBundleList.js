@@ -1,30 +1,30 @@
 import axios from "axios";
 import React, { useState, useEffect } from 'react'
 
-function StudentChemicalsList() {
-    const [studentId, setStudentId] = useState("");
+function ChemicalsBundleList() {
+    const [teacherId, setTeacherId] = useState("");
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredChemicals, setFilteredChemicals] = useState([]);
 
-    const [chemicalsRequest, setChemicalsRequest] = useState({
-        Student_Id: "",
+    const [bundle, setBundle] = useState({
+        Teacher_Id: "",
         Chem_Id: "",
     });
 
     const [selectedChemicalsId, setSelectedChemicalsId] = useState(null);
 
     useEffect(() => {
-        axios.get("http://localhost:3001/student").then((response) => {
+        axios.get("http://localhost:3001/teacher").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                const fetchedStudentId = response.data.studentId;
-                setStudentId(fetchedStudentId);
-                setChemicalsRequest({
-                    ...chemicalsRequest,
-                    Student_Id: fetchedStudentId,
+                const fetchedTeacherId = response.data.teacherId;
+                setTeacherId(fetchedTeacherId);
+                setBundle({
+                    ...bundle,
+                    Teacher_Id: fetchedTeacherId,
                     Chem_Id: selectedChemicalsId,
                 });
             }
@@ -42,42 +42,38 @@ function StudentChemicalsList() {
     }
 
     const addToCart = (Chem_Id) => {
-        // Get the existing cart data from localStorage (if any)
-        const cartData = JSON.parse(localStorage.getItem('chemicalsCart')) || [];
+        const cartData = JSON.parse(localStorage.getItem('bundleCart')) || [];
 
-        // Check if the selected chemicals are already in the cart
-        const existingChemical = cartData.find(item => item.Student_Id === studentId && item.Chem_Id === Chem_Id);
+        const existingChemical = cartData.find(item => item.Teacher_Id === teacherId && item.Chem_Id === Chem_Id);
 
         if (existingChemical) {
             alert('This chemical is already in your cart');
         } else {
-            // If the selected chemicals are not in the cart, add them as a new item
             cartData.push({
-                Student_Id: studentId,
+                Teacher_Id: teacherId,
                 Chem_Id,
             });
         }
 
-        localStorage.setItem('chemicalsCart', JSON.stringify(cartData));
+        localStorage.setItem('bundleCart', JSON.stringify(cartData));
     };
 
     const handleSearch = (e) => {
         const query = e.target.value;
         setSearchQuery(query);
 
-        // Filter the chemicalsDetail based on the search query
-        const filteredChemicals = chemicalsDetail.filter((chemical) =>
-            chemical.Chem_Name.toLowerCase().includes(query.toLowerCase())
-        );
+        const filteredChemicals = chemicalsDetail.filter((chemical) => {
+            return chemical.Chem_Name.toLowerCase().includes(query.toLowerCase());
+        });
 
-        // Set the filtered chemicals as the new data to be displayed
         setFilteredChemicals(filteredChemicals);
+    
     };
 
     return (
         <div className="container-fluid">
             <div className='d-flex justify-content-between align-items-center'>
-                <h2>Chemicals List</h2>
+                <h2>Teacher Chemicals List</h2>
                 <form className="d-flex">
                     <input
                         className="form-control me-2"
@@ -128,4 +124,4 @@ function StudentChemicalsList() {
     )
 }
 
-export default StudentChemicalsList
+export default ChemicalsBundleList

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import StudentChemicalsList from './studentChemReq/StudentChemicalsList';
-import StudentEquipmentList from './studentChemReq/StudentEquipmentList';
+import StudentEquipmentList from './studentEquipmentReq/StudentEquipmentList';
 
 function StudentDashboard() {
     const [studentId, setStudentId] = useState("");
@@ -64,6 +64,7 @@ function StudentDashboard() {
                                 <li><Link to="./student-chemicals-cart" className="dropdown-item">Chemicals Cart</Link></li>
                                 <li><Link to="./student-equipment-request" className="dropdown-item">Equipment Request List</Link></li>
                                 <li><Link to="./student-equipment-cart" className="dropdown-item">Equipment Cart</Link></li>
+                                <li><Link to="./bundle-list" className='dropdown-item'>Bundle List</Link> </li>
                             </ul>
                         </div>
                         <div className='d-flex justify-content-between align-items-center'>

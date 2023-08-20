@@ -90,11 +90,10 @@ function StudentEquipmentRequest() {
                     {filteredEquipmentReq.map((equipmentReq) => (
                         <tr key={equipmentReq.Chem_Request_Id}>
                             <td> {equipmentReq.Student_Id} </td>
-                            <td> {equipmentReq.Chem_Id} </td>
-                            <td> {equipmentReq.Chem_Bottle_Id} </td>
+                            <td> {equipmentReq.Equipment_Id} </td>
+                            <td> {equipmentReq.Equipment_Category_Id} </td>
                             <td> {equipmentReq.Requested_Quantity} </td>
                             <td> {equipmentReq.Release_Quantity} </td>
-                            <td> {equipmentReq.Counting_Unit} </td>
                             <td> {equipmentReq.Staff_Id} </td>
                             <td> {equipmentReq.Teacher_Id} </td>
                             <td> {equipmentReq.Request_Status} </td>

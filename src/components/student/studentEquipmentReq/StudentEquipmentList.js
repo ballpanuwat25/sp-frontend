@@ -101,7 +101,7 @@ function StudentEquipmentList() {
                     <tr>
                         <th scope="col">No</th>
                         <th scope="col">Equipment Name</th>
-                        <th scope="col">Equipment Category</th>
+                        <th scope="col">Equipment Category Id</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>

@@ -1,0 +1,188 @@
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+function TeacherBundleCart() {
+    const cartData = JSON.parse(localStorage.getItem('bundleCart')) || [];
+    const [bundle, setBundle] = useState({
+        Bundle_Name: "",
+        Bundle_Description: "",
+        Chem_Id: "",
+        Equipment_Id: "",
+        Requested_Quantity: "",
+        Counting_Unit: "",
+        Request_Purpose: "",
+        Request_Room: "",
+        Teacher_Id: "",
+    });
+
+    const [bundleName, setBundleName] = useState(""); // State for Bundle Name
+    const [bundleDescription, setBundleDescription] = useState(""); // State for Bundle Description
+    const [bundlePurpose, setBundlePurpose] = useState(""); // State for Bundle Purpose
+    const [bundleRoom, setBundleRoom] = useState(""); // State for Bundle Room
+
+    const navigate = useNavigate();
+
+    const [cartItems, setCartItems] = useState(cartData);
+
+    const handleChange = (index, key, value) => {
+        const updatedCartItems = [...cartItems];
+        updatedCartItems[index][key] = value;
+        setCartItems(updatedCartItems);
+    };
+
+    const createBundle = async (e) => {
+        e.preventDefault();
+        try {
+            for (const item of cartItems) {
+                const requestData = {
+                    ...bundle,
+                    Bundle_Name: bundleName, // Use bundleName for all items
+                    Bundle_Description: bundleDescription, // Use bundleDescription for all items
+                    Chem_Id: item.Chem_Id,
+                    Equipment_Id: item.Equipment_Id,
+                    Requested_Quantity: item.Requested_Quantity,
+                    Counting_Unit: item.Counting_Unit,
+                    Request_Purpose: bundlePurpose, // Use bundlePurpose for all items
+                    Request_Room: bundleRoom, // Use bundleRoom for all items
+                    Teacher_Id: item.Teacher_Id,
+                };
+                await axios.post("http://localhost:3001/bundle-list", requestData);
+            }
+
+            localStorage.removeItem('bundleCart');
+
+            navigate("/teacher-dashboard");
+        } catch (err) {
+            console.log('Error:', err);
+
+            if (err.response && err.response.data) {
+                console.log('Server Error Message:', err.response.data);
+            }
+        }
+    };
+
+    const removeCartItem = (index) => {
+        const updatedCartItems = [...cartItems];
+        updatedCartItems.splice(index, 1);
+        setCartItems(updatedCartItems);
+        localStorage.setItem('bundleCart', JSON.stringify(updatedCartItems));
+    };
+
+    return (
+        <div className="container">
+            <h2>Teacher Create Bundle</h2>
+            {cartItems && cartItems.length === 0 ? (
+                <p>Nothing in bundle. Please Select item into bundle before.</p>
+            ) : (
+                <form onSubmit={createBundle}>
+                    <label>Bundle Name</label>
+                    <input
+                        type="text"
+                        name="Bundle_Name"
+                        onChange={(e) => setBundleName(e.target.value)}
+                        value={bundleName}
+                        className="form-control"
+                        required
+                    /> <br />
+                    <label>Bundle Description</label>
+                    <input
+                        type="text"
+                        name="Bundle_Description"
+                        onChange={(e) => setBundleDescription(e.target.value)}
+                        value={bundleDescription}
+                        className="form-control"
+                        required
+                    /> <br />
+                    <label>Bundle Purpose</label>
+                    <input
+                        type="text"
+                        name="Bundle_Purpose"
+                        onChange={(e) => setBundlePurpose(e.target.value)}
+                        value={bundlePurpose}
+                        className="form-control"
+                        required
+                    /> <br />
+                    <label>Bundle Room</label>
+                    <input
+                        type="text"
+                        name="Bundle_Room"
+                        onChange={(e) => setBundleRoom(e.target.value)}
+                        value={bundleRoom}
+                        className="form-control"
+                        required
+                    /> <br />
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Teacher Id</th>
+                                <th>Items Id</th>
+                                <th>Requested Quantity</th>
+                                <th>Counting Unit</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {cartItems.map((item, index) => (
+                                <tr key={index}>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={item.Teacher_Id}
+                                            readOnly
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={item.Chem_Id || item.Equipment_Id}
+                                            readOnly
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={item.Requested_Quantity}
+                                            onChange={(e) =>
+                                                handleChange(index, 'Requested_Quantity', e.target.value)
+                                            }
+                                        />
+                                    </td>
+                                    <td>
+                                        <select
+                                            className="form-control"
+                                            value={item.Counting_Unit}
+                                            onChange={(e) => handleChange(index, 'Counting_Unit', e.target.value)}
+                                            required
+                                        >
+                                            <option value="">Select counting unit</option>
+                                            <option value="pcs">pcs</option>
+                                            <option value="g">g</option>
+                                            <option value="ml">ml</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button
+                                            className="btn btn-danger"
+                                            onClick={() => removeCartItem(index)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <button type="submit" className="btn btn-primary">
+                        Create Bundle
+                    </button>
+                </form>
+            )}
+        </div>
+    )
+}
+
+export default TeacherBundleCart

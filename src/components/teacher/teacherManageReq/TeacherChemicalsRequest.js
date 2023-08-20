@@ -154,7 +154,8 @@ function TeacherChemicalsRequest() {
                         <th scope="col">Counting Unit</th>
                         <th scope="col">Teacher Id</th>
                         <th scope="col">Request Status</th>
-                        <th scope="col">Request Comment</th>
+                        <th scope="col">Request Purpose</th>
+                        <th scope="col">Request Room</th>
                         <th scope="col">Request Date</th>
                         <th scope="col">Actions</th>
                     </tr>
@@ -180,7 +181,8 @@ function TeacherChemicalsRequest() {
                             <td> {chemicalsReq.Counting_Unit} </td>
                             <td> {chemicalsReq.Teacher_Id} </td>
                             <td> {chemicalsReq.Request_Status} </td>
-                            <td> {chemicalsReq.Request_Comment} </td>
+                            <td> {chemicalsReq.Request_Purpose} </td>
+                            <td> {chemicalsReq.Request_Room} </td>
                             <td>{formatDate(chemicalsReq.createdAt)}</td>
                             <td>
                                 <div className="d-grid gap-2 d-sm-flex">

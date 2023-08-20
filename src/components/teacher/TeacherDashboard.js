@@ -2,6 +2,9 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
+import ChemicalsBundleList from './teacherCreateBundle/ChemicalsBundleList';
+import EquipmentBundleList from './teacherCreateBundle/EquipmentBundleList';
+
 function TeacherDashboard() {
     const [teacherUsername, setTeacherUsername] = useState("");
 
@@ -39,12 +42,16 @@ function TeacherDashboard() {
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><Link to="./teacher-chemicals-request" className='dropdown-item'>Chemicals Request</Link></li>
                             <li><Link to="./teacher-equipment-request" className='dropdown-item'>Equipment Request</Link></li>
+                            <li><Link to="./teacher-create-bundle" className='dropdown-item'>Create Bundle</Link> </li>
+                            <li><Link to="./bundle-list" className='dropdown-item'>View Bundle</Link></li>
                         </ul>
                     </div>
                     <Link to="/teacher-profile" className='btn btn-primary me-2'>Profile</Link>
                     <button className='btn btn-outline-danger' onClick={handleLogout}>Logout</button>
                 </div>
             </div> <hr />
+            <ChemicalsBundleList />
+            <EquipmentBundleList />
         </div>
     )
 }

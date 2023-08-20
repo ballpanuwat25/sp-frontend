@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 
-function ChemicalsLogActivity() {
+function LogActivity() {
     const [logActivity, setLogActivity] = useState([]);
     const [filteredLogActivity, setFilteredLogActivity] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -88,7 +88,7 @@ function ChemicalsLogActivity() {
                         <th scope="col">No</th>
                         <th scope="col">Staff Id</th>
                         <th scope="col">Log Activity</th>
-                        <th scope="col">Chemicals</th>
+                        <th scope="col">Products</th>
                         <th scope="col">Create At</th>
                         <th scope="col">Update At</th>
                         <th scope="col">Actions</th>
@@ -96,21 +96,19 @@ function ChemicalsLogActivity() {
                 </thead>
                 <tbody>
                     {filteredLogActivity.map((logActivity) => (
-                        (logActivity.Chem_Id !== null && logActivity.Chem_Id !== "") && (
-                            <tr key={logActivity.LogActivity_Id}>
-                                <td> {logActivity.LogActivity_Id} </td>
-                                <td> {logActivity.Staff_Id} </td>
-                                <td> {logActivity.LogActivity_Name} </td>
-                                <td> {logActivity.Chem_Id} </td>
-                                <td> {formatDate(logActivity.createdAt)} </td>
-                                <td> {formatDate(logActivity.updatedAt)} </td>
-                                <td>
-                                    <div className="d-grid gap-2 d-sm-flex">
-                                        <button onClick={() => deleteLogActivity(logActivity.LogActivity_Id)} className="btn btn-danger">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        )
+                        <tr key={logActivity.LogActivity_Id}>
+                            <td> {logActivity.LogActivity_Id} </td>
+                            <td> {logActivity.Staff_Id} </td>
+                            <td> {logActivity.LogActivity_Name} </td>
+                            <td> {logActivity.Chem_Id || logActivity.Equipment_Id} </td>
+                            <td> {formatDate(logActivity.createdAt)} </td>
+                            <td> {formatDate(logActivity.updatedAt)} </td>
+                            <td>
+                                <div className="d-grid gap-2 d-sm-flex">
+                                    <button onClick={() => deleteLogActivity(logActivity.LogActivity_Id)} className="btn btn-danger">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
                     ))}
                 </tbody>
             </table>
@@ -118,4 +116,4 @@ function ChemicalsLogActivity() {
     )
 }
 
-export default ChemicalsLogActivity
+export default LogActivity

@@ -53,12 +53,13 @@ import StudentForgetPassword from './components/student/studentLogin/StudentForg
 import StudentDashboard from './components/student/StudentDashboard.js';
 import StudentProfile from './components/student/studentLogin/StudentProfile';
 
-import StudentChemicalsRequest from './components/student/studentChemReq/StudentChemicalsRequest.js';
 import StudentChemicalsList from './components/student/studentChemReq/StudentChemicalsList.js';
 import StudentChemicalsCart from './components/student/studentChemReq/StudentChemicalsCart.js';
+import StudentChemicalsRequest from './components/student/studentChemReq/StudentChemicalsRequest.js';
 
-import StudentEquipmentCart from './components/student/studentChemReq/StudentEquipmentCart.js';
-import StudentEquipmentRequest from './components/student/studentChemReq/StudentEquipmentRequest.js';
+import StudentEquipmentList from './components/student/studentEquipmentReq/StudentEquipmentList.js';
+import StudentEquipmentCart from './components/student/studentEquipmentReq/StudentEquipmentCart.js';
+import StudentEquipmentRequest from './components/student/studentEquipmentReq/StudentEquipmentRequest.js';
 
 import TeacherChemicalsRequest from './components/teacher/teacherManageReq/TeacherChemicalsRequest.js';
 import TeacherEquipmentRequest from './components/teacher/teacherManageReq/TeacherEquipmentRequest.js';
@@ -68,8 +69,15 @@ import StaffChemicalsRequestList from './components/staff/staffConfirmReq/StaffC
 import StaffEquipmentRequest from './components/staff/staffConfirmReq/StaffEquipmentRequest.js';
 import StaffEquipmentRequestList from './components/staff/staffConfirmReq/StaffEquipmentRequestList.js';
 
-import ChemicalsLogActivity from './components/admin/logActivity/ChemicalsLogActivity.js';
-import EquipmentLogActivity from './components/admin/logActivity/EquipmentLogActivity.js';
+import LogActivity from './components/admin/logActivity/logActivity.js';
+
+import TeacherBundleCart from './components/teacher/teacherCreateBundle/TeacherBundleCart.js';
+
+import BundleList from './components/teacher/teacherCreateBundle/BundleList.js';
+import BundleView from './components/teacher/teacherCreateBundle/BundleView.js';
+
+import StudentBundleRequest from './components/student/studentBundleReq/StudentBundleRequest.js';
+import StudentBundleList from './components/student/studentBundleReq/StudentBundleList.js';
 
 function App() {
   return (
@@ -130,6 +138,7 @@ function App() {
         <Route path="/student-dashboard/student-chemicals-list" element={<StudentChemicalsList/> } />
 
         <Route path="/student-dashboard/student-equipment-request" element={<StudentEquipmentRequest/> } />
+        <Route path="/student-dashboard/student-equipment-list" element={<StudentEquipmentList/> } />
 
         <Route path="/teacher-dashboard/teacher-chemicals-request" element={<TeacherChemicalsRequest/> } />
         <Route path="/teacher-dashboard/teacher-equipment-request" element={<TeacherEquipmentRequest/> } />
@@ -142,8 +151,14 @@ function App() {
         <Route path="/student-dashboard/student-chemicals-cart" element={<StudentChemicalsCart/> } />
         <Route path="/student-dashboard/student-equipment-cart" element={<StudentEquipmentCart/> } />
 
-        <Route path="/chemicals-log-activity" element={<ChemicalsLogActivity/> } />
-        <Route path="/equipment-log-activity" element={<EquipmentLogActivity/> } />
+        <Route path="/log-activity" element={<LogActivity/> } />
+
+        <Route path="/teacher-dashboard/teacher-create-bundle" element={<TeacherBundleCart/> } />
+        <Route path="/student-dashboard/bundle-list" element={<StudentBundleList/> } />
+        <Route path="/student-dashboard/bundle-list/:id" element={<StudentBundleRequest/> } />
+
+        <Route path="/teacher-dashboard/bundle-list" element={<BundleList/> } />
+        <Route path="/teacher-dashboard/bundle-list/:id" element={<BundleView/> } />
       </Routes>
     </BrowserRouter>
   );

@@ -48,8 +48,7 @@ function AdminDashboard() {
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             <li><Link className="dropdown-item" to="/staff-list">Staff List</Link></li>
                             <li><Link className="dropdown-item" to="/teacher-list">Teacher List</Link> </li>
-                            <li><Link className="dropdown-item" to="/chemicals-log-activity">Chemicals Log Activity</Link> </li>
-                            <li><Link className="dropdown-item" to="/equipment-log-activity">Equipment Log Activity</Link> </li>
+                            <li><Link className="dropdown-item" to="/log-activity">Log Activity</Link> </li>
                         </ul>
                     </div>
                 </div>
