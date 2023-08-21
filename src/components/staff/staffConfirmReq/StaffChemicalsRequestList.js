@@ -4,16 +4,23 @@ import React, { useState, useEffect } from 'react'
 
 function StaffChemicalsRequestList() {
     const [chemicalsReq, setChemicalsReq] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
 
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
         getChemicalsRequest();
-    }, []);
+    }, [searchQuery]);
 
     const getChemicalsRequest = async () => {
         const response = await axios.get("http://localhost:3001/chemicals-request-list");
-        setChemicalsReq(response.data);
+        const filteredChemicalsReq = response.data.filter(chemicalsReq => {
+            return (
+                chemicalsReq.Student_Id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                chemicalsReq.Chem_Id.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        });
+        setChemicalsReq(filteredChemicalsReq);
     };
 
     const deleteChemicalsRequest = async (id) => {
@@ -30,9 +37,18 @@ function StaffChemicalsRequestList() {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-GB', options);
     };
+
     return (
         <div className='container-fluid'>
             <h1>Student Chemicals Request List</h1>
+            <input
+                type="text"
+                className="form-control"
+                placeholder="Search by Student_Id or Chem_Id"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
+
             <table className="table table-striped">
                 <thead>
                     <tr>
@@ -68,7 +84,7 @@ function StaffChemicalsRequestList() {
                             <td>{formatDate(chemicalsReq.createdAt)}</td>
                             <td>
                                 <div className="d-grid gap-2 d-sm-flex">
-                                    <Link to={`/staff-dashboard/staff-chemicals-request/${chemicalsReq.Chem_Request_Id}`} className="btn btn-primary">Edit</Link>
+                                    <Link to={`/staff-dashboard/staff-chemicals-request/${chemicalsReq.Chem_Request_Id}`} className="btn btn-primary">View more</Link>
                                     <button onClick={() => deleteChemicalsRequest(chemicalsReq.Chem_Request_Id)} className="btn btn-outline-danger">Delete</button>
                                 </div>
                             </td>

@@ -19,6 +19,8 @@ function StaffEquipmentRequest() {
     const [staffId, setStaffId] = useState("");
     const [staffIdInputValue, setStaffIdInputValue] = useState("");
 
+    const [isRejectButtonClicked, setIsRejectButtonClicked] = useState(false);
+
     const { id } = useParams();
     const navigate = useNavigate();
     const [scannedText, setScannedText] = useState("");
@@ -78,7 +80,7 @@ function StaffEquipmentRequest() {
         const newQuantity = Quantity - Release_Quantity;
 
         try {
-            const equipmentListResponse = await axios.get(`http://localhost:3001/equipment-list/${Equipment_Id}`, {
+            const equipmentListResponse = await axios.patch(`http://localhost:3001/equipment-list/${Equipment_Id}`, {
                 Quantity: newQuantity
             });
 
@@ -94,12 +96,12 @@ function StaffEquipmentRequest() {
                     Request_Status,
                     Request_Comment
                 };
-                const equipmentRequestResponse = await axios.put(`http://localhost:3001/equipment-request-list/${id}`, requestData);
+                const equipmentRequestResponse = await axios.patch(`http://localhost:3001/equipment-request-list/${id}`, requestData);
 
                 if (equipmentRequestResponse.data.Error) {
                     alert(equipmentRequestResponse.data.Error);
                 } else {
-                    navigate("/staff-equipment-request-list");
+                    navigate("/staff-dashboard");
                 }
             }
         } catch (error) {
@@ -211,14 +213,6 @@ function StaffEquipmentRequest() {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="Release_Quantity" className="form-label">Release Quantity</label>
-                    <input type="text" className="form-control" id="Release_Quantity" placeholder="Enter Release Quantity" required value={Release_Quantity}
-                        onChange={(e) => {
-                            setRelease_Quantity(e.target.value);
-                        }}
-                    />
-                </div>
-                <div className="mb-3">
                     <label htmlFor="Remaining_Quantity" className="form-label">Remaining Quantity</label>
                     <input
                         type="number"
@@ -229,6 +223,14 @@ function StaffEquipmentRequest() {
                         value={Quantity}
                         onChange={(e) => {
                             setQuantity(e.target.value);
+                        }}
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="Release_Quantity" className="form-label">Release Quantity</label>
+                    <input type="text" className="form-control" id="Release_Quantity" placeholder="Enter Release Quantity" required value={Release_Quantity}
+                        onChange={(e) => {
+                            setRelease_Quantity(e.target.value);
                         }}
                     />
                 </div>
@@ -245,29 +247,78 @@ function StaffEquipmentRequest() {
                         }}
                     />
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="Request_Status" className="form-label">Request Status</label>
-                    <select className="form-select" id="Request_Status" required value={Request_Status || ''}
-                        onChange={(e) => {
-                            setRequest_Status(e.target.value);
+
+                <div className="d-flex">
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                        onClick={() => {
+                            setRequest_Status("Confirmed");
                         }}
                     >
-                        <option value="">Select Request Status</option>
-                        <option value="Success">Success</option>
-                        <option value="Failed">Failed</option>
-                    </select>
-                </div>
-
-                <div className="mb-3">
-                    <label htmlFor="Request_Comment" className="form-label">Request Comment</label>
-                    <input type="text" className="form-control" id="Request_Comment" placeholder="Enter Request Comment" value={Request_Comment}
-                        onChange={(e) => {
-                            setRequest_Comment(e.target.value);
+                        Confirmed
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-outline-secondary mx-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#rejectModal"
+                        onClick={() => {
+                            setIsRejectButtonClicked(true); // Set the flag to indicate the Reject button is clicked
                         }}
-                        required={Request_Status === "Cancel"}
-                    />
+                    >
+                        Rejected Chemicals Request
+                    </button>
+
+                    <div className="modal fade" id="rejectModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Rejected Comment</h5>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div className="modal-body">
+                                    <label htmlFor="Request_Comment" className="form-label">Rejected Comment</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="Request_Comment"
+                                        placeholder="Enter Request Comment"
+                                        required={isRejectButtonClicked} // Make the input required only when Reject button is clicked
+                                        value={Request_Comment}
+                                        onChange={(e) => {
+                                            setRequest_Comment(e.target.value);
+                                        }}
+                                    />
+                                </div>
+                                <div className="modal-footer">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        data-bs-dismiss="modal"
+                                        onClick={() => {
+                                            setRequest_Comment(""); // Clear the comment input field
+                                            setIsRejectButtonClicked(false); // Reset the flag when modal is closed
+                                        }}
+                                    >
+                                        Close
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                        onClick={() => {
+                                            setRequest_Status("Rejected");
+                                            setIsRejectButtonClicked(false); // Reset the flag when modal is closed
+                                        }}
+                                        data-bs-dismiss="modal"
+                                    >
+                                        Save changes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" className="btn btn-primary">Update Equipment Request</button>
             </form>
         </div>
     )

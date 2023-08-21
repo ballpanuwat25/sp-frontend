@@ -4,16 +4,23 @@ import React, { useState, useEffect } from 'react'
 
 function StaffEquipmentRequestList() {
     const [equipmentReq, setEquipmentReq] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
 
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
         getEquipmentRequest();
-    }, []);
+    }, [searchQuery]);
 
     const getEquipmentRequest = async () => {
         const response = await axios.get("http://localhost:3001/equipment-request-list");
-        setEquipmentReq(response.data);
+        const filteredEquipmentReq = response.data.filter(equipmentReq => {
+            return (
+                equipmentReq.Student_Id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                equipmentReq.Equipment_Id.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        });
+        setEquipmentReq(filteredEquipmentReq);
     };
 
     const deleteEquipmentRequest = async (id) => {
@@ -34,6 +41,13 @@ function StaffEquipmentRequestList() {
     return (
         <div className='container-fluid'>
             <h1>Student Equipment Request List</h1>
+            <input
+                type="text"
+                className="form-control"
+                placeholder="Search by Student_Id or Chem_Id"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+            />
             <table className="table table-striped">
                 <thead>
                     <tr>
@@ -65,7 +79,7 @@ function StaffEquipmentRequestList() {
                             <td>{formatDate(equipmentReq.createdAt)}</td>
                             <td>
                                 <div className="d-grid gap-2 d-sm-flex">
-                                    <Link to={`/staff-dashboard/staff-equipment-request/${equipmentReq.Equipment_Request_Id}`} className="btn btn-primary">Edit</Link>
+                                    <Link to={`/staff-dashboard/staff-equipment-request/${equipmentReq.Equipment_Request_Id}`} className="btn btn-primary">View more</Link>
                                     <button onClick={() => deleteEquipmentRequest(equipmentReq.Equipment_Request_Id)} className="btn btn-outline-danger">Delete</button>
                                 </div>
                             </td>

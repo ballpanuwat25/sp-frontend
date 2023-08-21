@@ -58,7 +58,7 @@ function LogActivity() {
     return (
         <div className="container-fluid">
             <div className='d-flex justify-content-between align-items-center'>
-                <h2>Chemicals Log Activity</h2>
+                <h2>Log Activity</h2>
                 <div className='input-group w-25'>
                     <input
                         type="date"

@@ -37,12 +37,12 @@ function ChemicalsStockList() {
         };
       }
     });
-  
+
     // Convert the object of unique chemicals to an array of objects
     let processedChemicals = Object.keys(uniqueChemicals).map((Chem_Id) => {
       // Find the corresponding chemicalsDetail based on Chem_Id
       const detail = chemicalsDetail.find((detail) => detail.Chem_Id === Chem_Id);
-  
+
       // Set Counting_Unit based on Chem_State
       let Counting_Unit;
       if (detail) {
@@ -50,12 +50,12 @@ function ChemicalsStockList() {
           detail.Chem_State === "Solid"
             ? "g"
             : detail.Chem_State === "Liquid"
-            ? "ml"
-            : "N/A";
+              ? "ml"
+              : "N/A";
       } else {
         Counting_Unit = "N/A";
       }
-  
+
       return {
         Chem_Id,
         Chem_Name: detail ? detail.Chem_Name : "N/A",
@@ -65,21 +65,21 @@ function ChemicalsStockList() {
         Chem_State: detail ? detail.Chem_State : "N/A",
       };
     });
-  
+
     // Filter chemicals based on the searchFilter (Chem_State)
     if (searchFilter !== "All") {
       processedChemicals = processedChemicals.filter(
         (chemical) => chemical.Chem_State === searchFilter
       );
     }
-  
+
     // Filter chemicals based on the searchTerm (Chem_Name)
     if (searchTerm.trim() !== "") {
       processedChemicals = processedChemicals.filter((chemical) =>
         chemical.Chem_Name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-  
+
     return processedChemicals;
   };
 
@@ -90,6 +90,19 @@ function ChemicalsStockList() {
   const handleSearchInputChange = (event) => {
     setSearchTerm(event.target.value);
   };
+
+  const getRemainingQuantityColor = (remainingQuantity, packageSize) => {
+    if (remainingQuantity == 0) {
+      return "table-danger"; // Mark chemicals with no remaining quantity as red
+    } else if (remainingQuantity <= 0.25 * packageSize) {
+      return "table-warning"; // Mark chemicals with remaining quantity below 25% as yellow
+    } else if (remainingQuantity <= 0.5 * packageSize) {
+      return "table-info"; // Mark chemicals with remaining quantity below 50% as blue
+    } else if (remainingQuantity >= 0.75 * packageSize) {
+      return "table-success"; // Mark chemicals with remaining quantity below 75% as green
+    }
+    return ""; // Default styling
+  };  
 
   return (
     <div className="container-fluid">
@@ -125,7 +138,7 @@ function ChemicalsStockList() {
         </thead>
         <tbody>
           {processChemicalsData().map((chemical, index) => (
-            <tr key={index}>
+            <tr key={index} className={getRemainingQuantityColor(chemical.Remaining_Quantity, chemical.Package_Size)}>
               <td> {index + 1} </td>
               <td> {chemical.Chem_Id} </td>
               <td> {chemical.Chem_Name} </td>
