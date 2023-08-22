@@ -1,23 +1,30 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 import Home from './components/Home.js';
 
+//------------------------------------------------------------ Admin ------------------------------------------------------------//
 import AdminLogin from './components/admin/adminLogin/AdminLogin.js';
 import AdminRegister from './components/admin/adminLogin/AdminRegister.js';
 import AdminForgetPassword from './components/admin/adminLogin/AdminForgetPassword.js';
 import AdminDashboard from './components/admin/AdminDashboard.js';
 import AdminProfile from './components/admin/adminLogin/AdminProfile';
 
+import AddStaff from './components/admin/staffCrud/AddStaff.js';
+import EditStaff from './components/admin/staffCrud/EditStaff.js';
+import StaffList from './components/admin/staffCrud/StaffList.js';
+
+import AddTeacher from './components/admin/teacherCrud/AddTeacher.js';
+import EditTeacher from './components/admin/teacherCrud/EditTeacher.js';
+import TeacherList from './components/admin/teacherCrud/TeacherList.js';
+
+import LogActivity from './components/admin/logActivity/logActivity.js';
+
+//------------------------------------------------------------ Staff ------------------------------------------------------------//
 import StaffLogin from './components/staff/staffLogin/StaffLogin.js';
 import StaffRegister from './components/staff/staffLogin/StaffRegister.js';
 import StaffForgetPassword from './components/staff/staffLogin/StaffForgetPassword.js';
 import StaffDashboard from './components/staff/StaffDashboard.js';
 import StaffProfile from './components/staff/staffLogin/StaffProfile';
-
-import AddStaff from './components/admin/staffCrud/AddStaff.js';
-import EditStaff from './components/admin/staffCrud/EditStaff.js';
-import StaffList from './components/admin/staffCrud/StaffList.js';
 
 import AddChemicals from './components/staff/chemicalsCrud/AddChemicals.js';
 import EditChemicals from './components/staff/chemicalsCrud/EditChemicals.js';
@@ -37,16 +44,28 @@ import AddEquipmentCategory from './components/staff/equipmentCategory/AddEquipm
 import EditEquipmentCategory from './components/staff/equipmentCategory/EditEquipmentCategory.js';
 import EquipmentCategoryList from './components/staff/equipmentCategory/EquipmentCategoryList.js';
 
+import StaffChemicalsRequest from './components/staff/staffConfirmReq/StaffChemicalsRequest.js';
+import StaffChemicalsRequestList from './components/staff/staffConfirmReq/StaffChemicalsRequestList.js';
+
+import StaffEquipmentRequest from './components/staff/staffConfirmReq/StaffEquipmentRequest.js';
+import StaffEquipmentRequestList from './components/staff/staffConfirmReq/StaffEquipmentRequestList.js';
+
+//------------------------------------------------------------ Teacher ------------------------------------------------------------//
 import TeacherLogin from './components/teacher/teacherLogin/TeacherLogin.js';
 import TeacherRegister from './components/teacher/teacherLogin/TeacherRegister.js';
 import TeacherForgetPassword from './components/teacher/teacherLogin/TeacherForgetPassword.js';
 import TeacherDashboard from './components/teacher/TeacherDashboard.js';
 import TeacherProfile from './components/teacher/teacherLogin/TeacherProfile';
 
-import AddTeacher from './components/admin/teacherCrud/AddTeacher.js';
-import EditTeacher from './components/admin/teacherCrud/EditTeacher.js';
-import TeacherList from './components/admin/teacherCrud/TeacherList.js';
+import TeacherChemicalsRequest from './components/teacher/teacherManageReq/TeacherChemicalsRequest.js';
+import TeacherEquipmentRequest from './components/teacher/teacherManageReq/TeacherEquipmentRequest.js';
 
+import TeacherBundleCart from './components/teacher/teacherCreateBundle/TeacherBundleCart.js';
+
+import BundleList from './components/teacher/teacherCreateBundle/BundleList.js';
+import BundleView from './components/teacher/teacherCreateBundle/BundleView.js';
+
+//------------------------------------------------------------ Student ------------------------------------------------------------//
 import StudentLogin from './components/student/studentLogin/StudentLogin.js';
 import StudentRegister from './components/student/studentLogin/StudentRegister.js';
 import StudentForgetPassword from './components/student/studentLogin/StudentForgetPassword.js';
@@ -61,44 +80,45 @@ import StudentEquipmentList from './components/student/studentEquipmentReq/Stude
 import StudentEquipmentCart from './components/student/studentEquipmentReq/StudentEquipmentCart.js';
 import StudentEquipmentRequest from './components/student/studentEquipmentReq/StudentEquipmentRequest.js';
 
-import TeacherChemicalsRequest from './components/teacher/teacherManageReq/TeacherChemicalsRequest.js';
-import TeacherEquipmentRequest from './components/teacher/teacherManageReq/TeacherEquipmentRequest.js';
-
-import StaffChemicalsRequest from './components/staff/staffConfirmReq/StaffChemicalsRequest.js';
-import StaffChemicalsRequestList from './components/staff/staffConfirmReq/StaffChemicalsRequestList.js';
-import StaffEquipmentRequest from './components/staff/staffConfirmReq/StaffEquipmentRequest.js';
-import StaffEquipmentRequestList from './components/staff/staffConfirmReq/StaffEquipmentRequestList.js';
-
-import LogActivity from './components/admin/logActivity/logActivity.js';
-
-import TeacherBundleCart from './components/teacher/teacherCreateBundle/TeacherBundleCart.js';
-
-import BundleList from './components/teacher/teacherCreateBundle/BundleList.js';
-import BundleView from './components/teacher/teacherCreateBundle/BundleView.js';
-
 import StudentBundleRequest from './components/student/studentBundleReq/StudentBundleRequest.js';
 import StudentBundleList from './components/student/studentBundleReq/StudentBundleList.js';
+
+import StudentGoogleRegister from './components/student/studentGoogleLogin/StudentGoogleRegister.js';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home/> } />
+        
+        {/* -------------------------------------------------------- Admin -------------------------------------------------------- */}
         <Route path="/admin-login" element={<AdminLogin/> } />
         <Route path="/admin-register" element={<AdminRegister/> } />
         <Route path="/admin-forget-password" element={<AdminForgetPassword/> } />
         <Route path="/admin-dashboard" element={<AdminDashboard/> } />
         <Route path="/admin-profile" element={<AdminProfile/> } />
 
+        <Route path="/log-activity" element={<LogActivity/> } />
+
+        <Route path="/staff-list" element={<StaffList/> } />
+        <Route path="/staff-list/add-staff" element={<AddStaff/> } />
+        <Route path="/staff-list/edit-staff/:id" element={<EditStaff/> } />
+
+        <Route path="/teacher-list" element={<TeacherList/> } />
+        <Route path="/teacher-list/add-teacher" element={<AddTeacher/> } />
+        <Route path="/teacher-list/edit-teacher/:id" element={<EditTeacher/> } />
+
+        {/* -------------------------------------------------------- Staff -------------------------------------------------------- */}
         <Route path="/staff-login" element={<StaffLogin/> } />
         <Route path="/staff-register" element={<StaffRegister/> } />
         <Route path="/staff-forget-password" element={<StaffForgetPassword/> } />
         <Route path="/staff-dashboard" element={<StaffDashboard/> } />
         <Route path="/staff-profile" element={<StaffProfile/> } />
 
-        <Route path="/staff-list" element={<StaffList/> } />
-        <Route path="/staff-list/add-staff" element={<AddStaff/> } />
-        <Route path="/staff-list/edit-staff/:id" element={<EditStaff/> } />
+        <Route path="/staff-dashboard/staff-chemicals-request/:id" element={<StaffChemicalsRequest/> } />
+        <Route path="/staff-dashboard/staff-chemicals-request-list" element={<StaffChemicalsRequestList/> } />
+        <Route path="/staff-dashboard/staff-equipment-request/:id" element={<StaffEquipmentRequest/> } />
+        <Route path="/staff-dashboard/staff-equipment-request-list" element={<StaffEquipmentRequestList/> } />
 
         <Route path="/chemicals-list" element={<ChemicalsList/> } />
         <Route path="/chemicals-list/add-chemicals" element={<AddChemicals/> } />
@@ -118,16 +138,21 @@ function App() {
         <Route path="/equipmentCategory-list/add-equipmentCategory" element={<AddEquipmentCategory/> } />
         <Route path="/equipmentCategory-list/edit-equipmentCategory/:id" element={<EditEquipmentCategory/> } />
 
+        {/* -------------------------------------------------------- Teacher -------------------------------------------------------- */}
         <Route path="/teacher-login" element={<TeacherLogin/> } />
         <Route path="/teacher-register" element={<TeacherRegister/> } />
         <Route path="/teacher-forget-password" element={<TeacherForgetPassword/> } />
         <Route path="/teacher-dashboard" element={<TeacherDashboard/> } />
         <Route path="/teacher-profile" element={<TeacherProfile/> } />
 
-        <Route path="/teacher-list" element={<TeacherList/> } />
-        <Route path="/teacher-list/add-teacher" element={<AddTeacher/> } />
-        <Route path="/teacher-list/edit-teacher/:id" element={<EditTeacher/> } />
+        <Route path="/teacher-dashboard/teacher-chemicals-request" element={<TeacherChemicalsRequest/> } />
+        <Route path="/teacher-dashboard/teacher-equipment-request" element={<TeacherEquipmentRequest/> } />
 
+        <Route path="/teacher-dashboard/bundle-list" element={<BundleList/> } />
+        <Route path="/teacher-dashboard/bundle-list/:id" element={<BundleView/> } />
+        <Route path="/teacher-dashboard/teacher-create-bundle" element={<TeacherBundleCart/> } />
+
+        {/* -------------------------------------------------------- Student -------------------------------------------------------- */}
         <Route path="/student-login" element={<StudentLogin/> } />
         <Route path="/student-register" element={<StudentRegister/> } />
         <Route path="/student-forget-password" element={<StudentForgetPassword/> } />
@@ -140,25 +165,13 @@ function App() {
         <Route path="/student-dashboard/student-equipment-request" element={<StudentEquipmentRequest/> } />
         <Route path="/student-dashboard/student-equipment-list" element={<StudentEquipmentList/> } />
 
-        <Route path="/teacher-dashboard/teacher-chemicals-request" element={<TeacherChemicalsRequest/> } />
-        <Route path="/teacher-dashboard/teacher-equipment-request" element={<TeacherEquipmentRequest/> } />
-
-        <Route path="/staff-dashboard/staff-chemicals-request/:id" element={<StaffChemicalsRequest/> } />
-        <Route path="/staff-dashboard/staff-chemicals-request-list" element={<StaffChemicalsRequestList/> } />
-        <Route path="/staff-dashboard/staff-equipment-request/:id" element={<StaffEquipmentRequest/> } />
-        <Route path="/staff-dashboard/staff-equipment-request-list" element={<StaffEquipmentRequestList/> } />
-
         <Route path="/student-dashboard/student-chemicals-cart" element={<StudentChemicalsCart/> } />
         <Route path="/student-dashboard/student-equipment-cart" element={<StudentEquipmentCart/> } />
 
-        <Route path="/log-activity" element={<LogActivity/> } />
-
-        <Route path="/teacher-dashboard/teacher-create-bundle" element={<TeacherBundleCart/> } />
         <Route path="/student-dashboard/bundle-list" element={<StudentBundleList/> } />
         <Route path="/student-dashboard/bundle-list/:id" element={<StudentBundleRequest/> } />
 
-        <Route path="/teacher-dashboard/bundle-list" element={<BundleList/> } />
-        <Route path="/teacher-dashboard/bundle-list/:id" element={<BundleView/> } />
+        <Route path="/student-google-register" element={<StudentGoogleRegister/> } />
       </Routes>
     </BrowserRouter>
   );

@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
-function StudentRegister() {
+function StudentGoogleRegister() {
     const [user, setUser] = useState({});
     const [values, setValues] = useState({
         Student_Id: "",
@@ -22,7 +22,13 @@ function StudentRegister() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                navigate("/student-login");
+                axios.post("http://localhost:3001/student-login", values).then((response) => {
+                    if (response.data.Error) {
+                        alert(response.data.Error);
+                    } else {
+                        navigate("/student-dashboard");
+                    }
+                });
             }
         });
     };
@@ -46,7 +52,7 @@ function StudentRegister() {
 
     return (
         <div className='container-fluid'>
-            <h1>Student Signup</h1>
+            <h1>Student Information</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="id" className="form-label">Student ID</label>
@@ -108,13 +114,10 @@ function StudentRegister() {
                     />
                 </div>
 
-                <button type="submit" className="btn btn-primary w-100 mb-3">Create Account</button>
-                <div className="btn-group w-100" role="group">
-                    <Link to="/student-login" className='btn btn-outline-success w-100'>Login</Link>
-                </div>
+                <button type="submit" className="btn btn-primary w-100 mb-3">Continue</button>
             </form>
         </div>
     )
 }
 
-export default StudentRegister
+export default StudentGoogleRegister

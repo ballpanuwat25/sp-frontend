@@ -20,14 +20,38 @@ const BarcodeScanner = ({ onScannedTextChange }) => {
               type: "LiveStream",
               target: scannerRef.current,
               constraints: {
-                width: 640,
-                height: 480,
                 facingMode: "environment" // or user for the front camera
               }
             },
+            locator: {
+              halfSample: true,
+              patchSize: "large", // x-small, small, medium, large, x-large
+              debug: {
+                showCanvas: true,
+                showPatches: false,
+                showFoundPatches: false,
+                showSkeleton: false,
+                showLabels: false,
+                showPatchLabels: false,
+                showRemainingPatchLabels: false,
+                boxFromPatches: {
+                  showTransformed: true,
+                  showTransformedBox: true,
+                  showBB: true
+                }
+              }
+            },
+            numOfWorkers: 4,
             decoder: {
-              readers: ["code_128_reader"] // You can add more supported formats here
-            }
+              readers: ["code_128_reader"], // You can add more supported formats here
+              debug: {
+                drawBoundingBox: false,
+                showFrequency: false,
+                drawScanline: true,
+                showPattern: true
+              }
+            },
+            locate: true
           },
           (err) => {
             if (err) {
@@ -143,10 +167,12 @@ const BarcodeScanner = ({ onScannedTextChange }) => {
               <button
                 type="button"
                 className="btn btn-secondary"
+                onClick={() => window.location.reload()}
                 data-bs-dismiss="modal"
               >
                 Close
               </button>
+
               <button
                 type="button"
                 className="btn btn-primary"
