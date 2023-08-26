@@ -68,7 +68,6 @@ function StudentEquipmentList() {
             Equipment_Id: equipId,
         });
 
-        setSelectedEquipmentId({ Equipment_Id: equipId });
         localStorage.setItem('equipmentCart', JSON.stringify(cartData));
     };
 

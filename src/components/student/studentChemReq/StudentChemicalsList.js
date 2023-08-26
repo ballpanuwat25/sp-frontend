@@ -67,7 +67,6 @@ function StudentChemicalsList() {
             Chem_Id: chemId,
         });
 
-        setSelectedChemicalsId({ Chem_Id: chemId });
         localStorage.setItem('chemicalsCart', JSON.stringify(cartData));
     };
 
