@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 
 function ChemicalsStockList() {
   const [chemicals, setChemicals] = useState([]);
@@ -102,7 +103,7 @@ function ChemicalsStockList() {
       return "table-success"; // Mark chemicals with remaining quantity below 75% as green
     }
     return ""; // Default styling
-  };  
+  };
 
   return (
     <div className="container-fluid">
@@ -134,6 +135,7 @@ function ChemicalsStockList() {
             <th scope="col">Total Quantity</th>
             <th scope="col">Counting Unit</th>
             <th scope="col">Chemicals State</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -146,6 +148,9 @@ function ChemicalsStockList() {
               <td> {chemical.Package_Size} </td>
               <td> {chemical.Counting_Unit} </td>
               <td> {chemical.Chem_State} </td>
+              <td>
+                <Link className="btn btn-primary btn-sm" to={`./${chemical.Chem_Id}`} >View</Link>
+              </td>
             </tr>
           ))}
         </tbody>
