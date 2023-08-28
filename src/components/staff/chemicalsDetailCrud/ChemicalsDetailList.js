@@ -3,28 +3,7 @@ import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react'
 
 function ChemicalsDetailList() {
-    const [staffId, setStaffId] = useState("");
-    const [logActivity, setLogActivity] = useState({
-        LogActivity_Id: "",
-        LogActivity_Name: "",
-        Chem_Id: "",
-        Staff_Id: "",
-    });
-    
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
-
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
-        axios.get("http://localhost:3001/staff").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setStaffId(response.data.staffId);
-                setLogActivity({ ...logActivity, Staff_Id: response.data.staffId });
-            }
-        });
-    }, [logActivity]);
 
     useEffect(() => {
         getChemicalsDetail();
@@ -39,11 +18,8 @@ function ChemicalsDetailList() {
         }
     };
     
-
-    const deleteChemicalsDetail = async (id, chemId) => {
+    const deleteChemicalsDetail = async (id) => {
         try {
-            const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Chemicals", Chem_Id: chemId, Staff_Id: staffId };
-            await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
             await axios.delete(`http://localhost:3001/chemicalsDetail-list/${id}`)
             getChemicalsDetail();
         } catch (error) {

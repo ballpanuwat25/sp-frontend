@@ -100,7 +100,7 @@ function LogActivity() {
                             <td> {logActivity.LogActivity_Id} </td>
                             <td> {logActivity.Staff_Id} </td>
                             <td> {logActivity.LogActivity_Name} </td>
-                            <td> {logActivity.Chem_Id || logActivity.Equipment_Id} </td>
+                            <td> {logActivity.Chem_Bottle_Id || logActivity.Equipment_Id} </td>
                             <td> {formatDate(logActivity.createdAt)} </td>
                             <td> {formatDate(logActivity.updatedAt)} </td>
                             <td>

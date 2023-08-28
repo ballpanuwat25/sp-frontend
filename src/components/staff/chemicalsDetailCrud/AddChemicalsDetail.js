@@ -1,16 +1,8 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function AddChemicalsDetail() {
-    const [staffId, setStaffId] = useState("");
-    const [logActivity, setLogActivity] = useState({
-        LogActivity_Id: "",
-        LogActivity_Name: "",
-        Chem_Id: "",
-        Staff_Id: "",
-    });
-
     const [chemicalsDetail, setChemicalsDetail] = useState({
         Chem_Id: "",
         Chem_Name: "",
@@ -24,18 +16,6 @@ function AddChemicalsDetail() {
     });
 
     const navigate = useNavigate();
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
-        axios.get("http://localhost:3001/staff").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setStaffId(response.data.staffId);
-                setLogActivity({ ...logActivity, Staff_Id: response.data.staffId });
-            }
-        });
-    }, [logActivity]);
 
     const saveChemicalsDetail = async (e) => {
         e.preventDefault();
@@ -48,9 +28,7 @@ function AddChemicalsDetail() {
                 alert("Chem_Id already exists. Please enter a different Chem_Id.");
                 return;
             }
-    
-            const updatedLogActivity = { ...logActivity, LogActivity_Name: "Add Chemicals", Chem_Id: Chem_Id };
-            await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
+
             await axios.post("http://localhost:3001/chemicalsDetail-list", chemicalsDetail);
             
             alert("Chemicals added successfully");
@@ -63,16 +41,6 @@ function AddChemicalsDetail() {
     return (
         <div className='container-fluid'>
             <form onSubmit={saveChemicalsDetail}>
-
-                <div className='mb-3'>
-                    <label htmlFor='Staff_Id' className='form-label'>Staff_Id</label>
-                    <input type='text'
-                        className='form-control'
-                        placeholder='Enter Staff Id'
-                        defaultValue={staffId}
-                        readOnly
-                    />
-                </div>
 
                 <div className="mb-3">
                     <label htmlFor="Chem_Id" className="form-label">Chemicals Id</label>

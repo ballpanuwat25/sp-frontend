@@ -69,6 +69,7 @@ function EquipmentList() {
                             <th scope="col">Quantity</th>
                             <th scope="col">Location</th>
                             <th scope="col">Price</th>
+                            <th scope="col">Fixed Cost</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -82,6 +83,7 @@ function EquipmentList() {
                                 <td> {equipment.Quantity} </td>
                                 <td> {equipment.Location} </td>
                                 <td> {equipment.Price} </td>
+                                <td> {equipment.Fixed_Cost} </td>
                                 <td>
                                     <div className="d-grid gap-2 d-sm-flex">
                                         <Link to={`edit-equipment/${equipment.Equipment_Id}`} className="btn btn-success me-2">Edit</Link>

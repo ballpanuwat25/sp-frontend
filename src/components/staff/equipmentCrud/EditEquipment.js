@@ -17,6 +17,9 @@ function EditEquipment() {
     const [Quantity, setQuantity] = useState("");
     const [Location, setLocation] = useState("");
     const [Price, setPrice] = useState("");
+    const [Fixed_Cost, setFixed_Cost] = useState("");
+
+    const [initialFixedCost, setInitialFixedCost] = useState(0);
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -47,20 +50,28 @@ function EditEquipment() {
         setQuantity(equipment.Quantity);
         setLocation(equipment.Location);
         setPrice(equipment.Price);
-    }
+        setFixed_Cost(equipment.Fixed_Cost);
+
+        setInitialFixedCost(parseFloat(equipment.Fixed_Cost)); // Store initial Fixed_Cost value
+    };
 
     const updateEquipment = async (e) => {
         e.preventDefault();
+        const updatedFixedCost = initialFixedCost + parseFloat(Fixed_Cost);
+
         const response = await axios.patch(`http://localhost:3001/equipment-list/${id}`, {
             Equipment_Id,
             Equipment_Category_Id,
             Equipment_Name,
             Quantity,
             Location,
-            Price
+            Price,
+            Fixed_Cost: updatedFixedCost, // Use the calculated updated Fixed_Cost value
         });
+
         const updatedLogActivity = { ...logActivity, LogActivity_Name: "Update Equipment", Equipment_Id: Equipment_Id };
         await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
+
         if (response.data.Error) {
             alert(response.data.Error);
         } else {
@@ -71,7 +82,7 @@ function EditEquipment() {
     return (
         <div className="container-fluid">
             <form onSubmit={updateEquipment}>
-                
+
                 <div className='mb-3'>
                     <label htmlFor='Staff_Id' className='form-label'>Staff_Id</label>
                     <input type='text'
@@ -139,6 +150,20 @@ function EditEquipment() {
                             setPrice(e.target.value);
                         }}
                         value={Price}
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="Fixed_Cost" className="form-label">Fixed Cost</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        id="Fixed_Cost"
+                        placeholder="Enter Fixed Cost"
+                        required
+                        onChange={(e) => {
+                            setFixed_Cost(e.target.value);
+                        }}
                     />
                 </div>
 

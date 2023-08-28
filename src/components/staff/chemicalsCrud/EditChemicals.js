@@ -3,6 +3,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditChemicals() {
+    const [staffId, setStaffId] = useState("");
+    const [logActivity, setLogActivity] = useState({
+        LogActivity_Id: "",
+        LogActivity_Name: "",
+        Chem_Bottle_Id: "",
+        Staff_Id: "",
+    });
+
     const [Chem_Bottle_Id, setChem_Bottle_Id] = useState("");
     const [Chem_Id, setChem_Id] = useState("");
     const [Package_Size, setPackage_Size] = useState("");
@@ -10,11 +18,23 @@ function EditChemicals() {
     const [Counting_Unit, setCounting_Unit] = useState("");
     const [Location, setLocation] = useState("");
     const [Price, setPrice] = useState("");
-    
+
     const { id } = useParams();
-    
+
     const navigate = useNavigate();
-    
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        axios.get("http://localhost:3001/staff").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffId(response.data.staffId);
+                setLogActivity({ ...logActivity, Staff_Id: response.data.staffId });
+            }
+        });
+    }, [logActivity]);
+
     useEffect(() => {
         getChemicalsById()
         // eslint-disable-next-line
@@ -43,6 +63,8 @@ function EditChemicals() {
             Location,
             Price,
         });
+        const updatedLogActivity = { ...logActivity, LogActivity_Name: "Updated Chemicals", Chem_Bottle_Id: Chem_Bottle_Id };
+        await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
         if (response.data.Error) {
             alert(response.data.Error);
         } else {
@@ -53,6 +75,16 @@ function EditChemicals() {
     return (
         <div className="container-fluid">
             <form onSubmit={updateChemicals}>
+                <div className='mb-3'>
+                    <label htmlFor='Staff_Id' className='form-label'>Staff_Id</label>
+                    <input type='text'
+                        className='form-control'
+                        placeholder='Enter Staff Id'
+                        defaultValue={staffId}
+                        readOnly
+                    />
+                </div>
+
                 <div className="mb-3">
                     <label htmlFor="Chem_Bottle_Id" className="form-label">Chemicals Bottle Id</label>
                     <input type="text" className="form-control" id="Chem_Bottle_Id" placeholder="Enter Chemicals Bottle Id" required
@@ -62,7 +94,7 @@ function EditChemicals() {
                         }}
                     />
                 </div>
-                
+
                 <div className="mb-3">
                     <label htmlFor="Chem_Id" className="form-label">Chemicals Id</label>
                     <input type="text" className="form-control" id="Chem_Id" placeholder="Enter Chemicals Id" required
@@ -95,7 +127,7 @@ function EditChemicals() {
 
                 <div className="mb-3">
                     <label htmlFor="Counting_Unit" className="form-label">Counting Unit</label>
-                    <input type="text" className="form-control" id="Counting_Unit" placeholder="Enter Counting Unit" 
+                    <input type="text" className="form-control" id="Counting_Unit" placeholder="Enter Counting Unit"
                         value={Counting_Unit}
                         onChange={(e) => {
                             setCounting_Unit(e.target.value);

@@ -1,10 +1,18 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import BarcodeScanner from '../barcode/BarcodeScanner';
 
 function AddChemicals() {
+    const [staffId, setStaffId] = useState("");
+    const [logActivity, setLogActivity] = useState({
+        LogActivity_Id: "",
+        LogActivity_Name: "",
+        Chem_Bottle_Id: "",
+        Staff_Id: "",
+    });
+
     const [chemicals, setChemicals] = useState({
         Chem_Bottle_Id: "",
         Chem_Id: "",
@@ -15,13 +23,39 @@ function AddChemicals() {
         Price: "",
     });
 
-    const [scannedText, setScannedText] = useState("");
     const navigate = useNavigate();
+    axios.defaults.withCredentials = true;
+
+    const [scannedText, setScannedText] = useState("");
+
+    useEffect(() => {
+        axios.get("http://localhost:3001/staff").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffId(response.data.staffId);
+                setLogActivity({ ...logActivity, Staff_Id: response.data.staffId });
+            }
+        });
+    }, [logActivity]);
 
     const saveChemicals = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:3001/chemicals-list", (chemicals));
+            const { Chem_Bottle_Id } = chemicals;
+
+            // Check if Chem_Id already exists
+            const chemBottleIdExists = await axios.get(`http://localhost:3001/chemicals-list/${Chem_Bottle_Id}`);
+            if (chemBottleIdExists.data) {
+                alert("Chem_Id already exists. Please enter a different Chem_Bottle_Id.");
+                return;
+            }
+
+            const updatedLogActivity = { ...logActivity, LogActivity_Name: "Add Chemicals", Chem_Bottle_Id: Chem_Bottle_Id };
+            await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
+            await axios.post("http://localhost:3001/chemicals-list", chemicals);
+
+            alert("Chemicals added successfully");
             navigate("/chemicals-list");
         } catch (err) {
             console.log(err);
@@ -39,6 +73,16 @@ function AddChemicals() {
     return (
         <div className='container-fluid'>
             <form onSubmit={saveChemicals}>
+                <div className='mb-3'>
+                    <label htmlFor='Staff_Id' className='form-label'>Staff_Id</label>
+                    <input type='text'
+                        className='form-control'
+                        placeholder='Enter Staff Id'
+                        defaultValue={staffId}
+                        readOnly
+                    />
+                </div>
+
                 <div className="mb-3">
                     <label htmlFor="Chem_Bottle_Id" className="form-label">Chemicals Bottle Id</label>
                     <div className="input-group">

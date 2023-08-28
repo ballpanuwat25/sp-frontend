@@ -17,6 +17,27 @@ function ChemicalsList() {
     const [barcode, setBarcode] = useState("Barcode Content");
     const barcodeRef = useRef(null);
 
+    const [staffId, setStaffId] = useState("");
+    const [logActivity, setLogActivity] = useState({
+        LogActivity_Id: "",
+        LogActivity_Name: "",
+        Chem_Bottle_Id: "",
+        Staff_Id: "",
+    });
+
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        axios.get("http://localhost:3001/staff").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffId(response.data.staffId);
+                setLogActivity({ ...logActivity, Staff_Id: response.data.staffId });
+            }
+        });
+    }, [logActivity]);
+
     useEffect(() => {
         getChemicals();
         getChemicalsDetail();
@@ -34,6 +55,8 @@ function ChemicalsList() {
 
     const deleteChemicals = async (id) => {
         try {
+            const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Chemicals", Chem_Bottle_Id: id, Staff_Id: staffId };
+            await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
             await axios.delete(`http://localhost:3001/chemicals-list/${id}`)
             getChemicals();
         } catch (error) {

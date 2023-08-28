@@ -10,13 +10,15 @@ function AddEquipment() {
         Equipment_Id: "",
         Staff_Id: "",
     });
+    
     const [equipment, setEquipment] = useState({
         Equipment_Id: "",
         Equipment_Category_Id: "",
         Equipment_Name: "",
         Quantity: "",
         Location: "",
-        Price: ""
+        Price: "",
+        Fixed_Cost: ""
     });
 
     const navigate = useNavigate();
@@ -119,6 +121,15 @@ function AddEquipment() {
                     <input type="number" className="form-control" id="Price" placeholder="Enter Price" required
                         onChange={(e) => {
                             setEquipment({ ...equipment, Price: e.target.value });
+                        }}
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="Fixed_Cost" className="form-label">Fixed Cost</label>
+                    <input type="number" className="form-control" id="Fixed_Cost" placeholder="Enter Fixed Cost"
+                        onChange={(e) => {
+                            setEquipment({ ...equipment, Fixed_Cost: e.target.value });
                         }}
                     />
                 </div>

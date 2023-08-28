@@ -1,12 +1,27 @@
-import axios from "axios";
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import axios from 'axios';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import { saveAs } from 'file-saver';
+import ExcelJS from 'exceljs'; // Import exceljs library
+import { Link } from 'react-router-dom';
 
 function ChemicalsStockList() {
   const [chemicals, setChemicals] = useState([]);
   const [chemicalsDetail, setChemicalsDetail] = useState([]);
   const [searchFilter, setSearchFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [exportData, setExportData] = useState([]);
+
+  useEffect(() => {
+    // Filter the data and set it to the exportData state
+    const filteredData = processChemicalsData().filter(chemical => {
+      const remainingPercentage = (chemical.Remaining_Quantity / chemical.Package_Size) * 100;
+      return remainingPercentage < 25;
+    });
+    setExportData(filteredData);
+  }, []);
 
   useEffect(() => {
     getChemicals();
@@ -105,6 +120,77 @@ function ChemicalsStockList() {
     return ""; // Default styling
   };
 
+  const exportToPDF = () => {
+    const unit = "pt";
+    const size = "A4";
+    const orientation = "landscape";
+  
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+  
+    doc.setFontSize(15);
+  
+    const title = "Chemicals Stock Report";
+    const headers = [
+      "No", "Chemicals Id", "Chemicals Name", "Remaining Quantity", "Total Quantity", "Counting Unit", "Chemicals State"
+    ];
+  
+    const data = exportData.map((chemical, index) => [
+      index + 1,
+      chemical.Chem_Id,
+      chemical.Chem_Name,
+      chemical.Remaining_Quantity,
+      chemical.Package_Size,
+      chemical.Counting_Unit,
+      chemical.Chem_State
+    ]);
+  
+    // Ensure data rows match the headers configuration
+    const content = {
+      startY: 50,
+      head: [headers], // Wrap headers array in another array
+      body: data
+    };
+  
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save("chemicals_stock.pdf");
+  };
+  
+
+  const exportToExcel = () => {
+    const filteredData = processChemicalsData().filter(chemical => {
+      const remainingPercentage = (chemical.Remaining_Quantity / chemical.Package_Size) * 100;
+      return remainingPercentage < 25;
+    });
+  
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('ChemicalsStock');
+  
+    // Add headers to the worksheet
+    const headers = ['No', 'Chemicals Id', 'Chemicals Name', 'Remaining Quantity', 'Total Quantity', 'Counting Unit', 'Chemicals State'];
+    worksheet.addRow(headers);
+  
+    // Add data rows to the worksheet
+    filteredData.forEach((chemical, index) => {
+      worksheet.addRow([
+        index + 1,
+        chemical.Chem_Id,
+        chemical.Chem_Name,
+        chemical.Remaining_Quantity,
+        chemical.Package_Size,
+        chemical.Counting_Unit,
+        chemical.Chem_State,
+      ]);
+    });
+  
+    // Save the workbook to a Blob
+    workbook.xlsx.writeBuffer().then(buffer => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, 'chemicals_stock.xlsx');
+    });
+  };  
+
   return (
     <div className="container-fluid">
       <div className='d-flex justify-content-between align-items-center'>
@@ -125,7 +211,16 @@ function ChemicalsStockList() {
           />
         </div>
       </div>
-      <table className="table table-striped">
+      <div>
+        <button className="btn btn-success me-2" onClick={exportToExcel}>
+          Export to Excel
+        </button>
+
+        <button className="btn btn-danger" onClick={exportToPDF}>
+          Export to PDF
+        </button>
+      </div>
+      <table className="table table-striped" id="stock-table">
         <thead>
           <tr>
             <th scope="col">No</th>
