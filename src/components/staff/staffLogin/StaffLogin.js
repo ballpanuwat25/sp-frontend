@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
-function StaffLogin() {
+function StaffLogin({ login }) {
     const [values, setValues] = useState({
         Staff_Username: "",
         Staff_Password: "",
@@ -17,6 +17,7 @@ function StaffLogin() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
+                login();
                 navigate("/staff-dashboard");
             }
         });

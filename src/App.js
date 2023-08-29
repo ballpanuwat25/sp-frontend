@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './components/Home.js';
 
 //------------------------------------------------------------ Admin ------------------------------------------------------------//
@@ -87,93 +87,121 @@ import StudentBundleList from './components/student/studentBundleReq/StudentBund
 import StudentGoogleRegister from './components/student/studentGoogleLogin/StudentGoogleRegister.js';
 
 function App() {
+  const [adminLoggedIn, setAdminLoggedIn] = useState(null);
+  const [staffLoggedIn, setStaffLoggedIn] = useState(null);
+  const [teacherLoggedIn, setTeacherLoggedIn] = useState(null);
+
+  const handleAdminLogIn = () => {
+    setAdminLoggedIn(true);
+  }
+
+  const handleAdminLogOut = () => {
+    setAdminLoggedIn(false);
+  }
+
+  const handleStaffLogIn = () => {
+    setStaffLoggedIn(true);
+  }
+
+  const handleStaffLogOut = () => {
+    setStaffLoggedIn(false);
+  }
+
+  const handleTeacherLogIn = () => {
+    setTeacherLoggedIn(true);
+  }
+
+  const handleTeacherLogOut = () => {
+    setTeacherLoggedIn(false);
+  }
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home/> } />
         
         {/* -------------------------------------------------------- Admin -------------------------------------------------------- */}
-        <Route path="/admin-login" element={<AdminLogin/> } />
+        <Route path="/admin-login" element={ adminLoggedIn ? <Navigate to="admin-dashboard" /> : <AdminLogin login={handleAdminLogIn} /> } />
         <Route path="/admin-register" element={<AdminRegister/> } />
         <Route path="/admin-forget-password" element={<AdminForgetPassword/> } />
-        <Route path="/admin-dashboard" element={<AdminDashboard/> } />
-        <Route path="/admin-profile" element={<AdminProfile/> } />
+        <Route path="/admin-dashboard" element={ adminLoggedIn ? <AdminDashboard logout={handleAdminLogOut} /> : <Navigate to="/" /> } />
+        <Route path="/admin-profile" element={ adminLoggedIn ? <AdminProfile/> : <Navigate to="/" /> } />
 
-        <Route path="/log-activity" element={<LogActivity/> } />
+        <Route path="/log-activity" element={ adminLoggedIn ? <LogActivity/> : <Navigate to="/" /> } />
 
-        <Route path="/staff-list" element={<StaffList/> } />
-        <Route path="/staff-list/add-staff" element={<AddStaff/> } />
-        <Route path="/staff-list/edit-staff/:id" element={<EditStaff/> } />
+        <Route path="/staff-list" element={ adminLoggedIn ? <StaffList/> : <Navigate to="/" /> } />
+        <Route path="/staff-list/add-staff" element={ adminLoggedIn ? <AddStaff/> : <Navigate to="/" /> } />
+        <Route path="/staff-list/edit-staff/:id" element={ adminLoggedIn ? <EditStaff/> : <Navigate to="/" /> } />
 
-        <Route path="/teacher-list" element={<TeacherList/> } />
-        <Route path="/teacher-list/add-teacher" element={<AddTeacher/> } />
-        <Route path="/teacher-list/edit-teacher/:id" element={<EditTeacher/> } />
+        <Route path="/teacher-list" element={ adminLoggedIn ? <TeacherList/> : <Navigate to="/" /> } />
+        <Route path="/teacher-list/add-teacher" element={ adminLoggedIn ? <AddTeacher/> : <Navigate to="/" /> } />
+        <Route path="/teacher-list/edit-teacher/:id" element={ adminLoggedIn ? <EditTeacher/> : <Navigate to="/" /> } />
 
         {/* -------------------------------------------------------- Staff -------------------------------------------------------- */}
-        <Route path="/staff-login" element={<StaffLogin/> } />
-        <Route path="/staff-register" element={<StaffRegister/> } />
-        <Route path="/staff-forget-password" element={<StaffForgetPassword/> } />
-        <Route path="/staff-dashboard" element={<StaffDashboard/> } />
-        <Route path="/staff-profile" element={<StaffProfile/> } />
+        <Route path="/staff-login" element={ staffLoggedIn ? <Navigate to="/staff-dashboard" /> : <StaffLogin login={handleStaffLogIn}/> } />
+        <Route path="/staff-register" element={ <StaffRegister/> } />
+        <Route path="/staff-forget-password" element={ <StaffForgetPassword/> } />
+        <Route path="/staff-dashboard" element={ staffLoggedIn ? <StaffDashboard logout={handleStaffLogOut} /> : <Navigate to="/" /> } />
+        <Route path="/staff-profile" element={ staffLoggedIn ? <StaffProfile/> : <Navigate to="/" /> } />
 
-        <Route path="/staff-dashboard/staff-chemicals-request/:id" element={<StaffChemicalsRequest/> } />
-        <Route path="/staff-dashboard/staff-chemicals-request-list" element={<StaffChemicalsRequestList/> } />
-        <Route path="/staff-dashboard/staff-equipment-request/:id" element={<StaffEquipmentRequest/> } />
-        <Route path="/staff-dashboard/staff-equipment-request-list" element={<StaffEquipmentRequestList/> } />
+        <Route path="/staff-dashboard/staff-chemicals-request/:id" element={ staffLoggedIn ? <StaffChemicalsRequest/> : <Navigate to="/" /> } />
+        <Route path="/staff-dashboard/staff-chemicals-request-list" element={ staffLoggedIn ? <StaffChemicalsRequestList/> : <Navigate to="/" /> } />
+        <Route path="/staff-dashboard/staff-equipment-request/:id" element={ staffLoggedIn ? <StaffEquipmentRequest/> : <Navigate to="/" /> } />
+        <Route path="/staff-dashboard/staff-equipment-request-list" element={ staffLoggedIn ? <StaffEquipmentRequestList/> : <Navigate to="/" /> } />
 
-        <Route path="/chemicals-list" element={<ChemicalsList/> } />
-        <Route path="/chemicals-list/add-chemicals" element={<AddChemicals/> } />
-        <Route path="/chemicals-list/edit-chemicals/:id" element={<EditChemicals/> } />
+        <Route path="/chemicals-list" element={ staffLoggedIn ? <ChemicalsList/> : <Navigate to="/" /> } />
+        <Route path="/chemicals-list/add-chemicals" element={ staffLoggedIn ? <AddChemicals/> : <Navigate to="/" /> } />
+        <Route path="/chemicals-list/edit-chemicals/:id" element={ staffLoggedIn ? <EditChemicals/> : <Navigate to="/" /> } />
 
-        <Route path="/chemicals-stock" element={<ChemicalsStockList/> } />
-        <Route path="/chemicals-stock/:id" element={<ChemicalsStockById/> } />
+        <Route path="/chemicals-stock" element={ staffLoggedIn ?<ChemicalsStockList/> : <Navigate to="/" /> } />
+        <Route path="/chemicals-stock/:id" element={ staffLoggedIn ?<ChemicalsStockById/> : <Navigate to="/" /> } />
 
-        <Route path="/chemicalsDetail-list" element={<ChemicalsDetailList/> } />
-        <Route path="/chemicalsDetail-list/add-chemicalsDetail" element={<AddChemicalsDetail/> } />
-        <Route path="/chemicalsDetail-list/edit-chemicalsDetail/:id" element={<EditChemicalsDetail/> } />
+        <Route path="/chemicalsDetail-list" element={ staffLoggedIn ? <ChemicalsDetailList/> : <Navigate to="/" /> } />
+        <Route path="/chemicalsDetail-list/add-chemicalsDetail" element={ staffLoggedIn ? <AddChemicalsDetail/> : <Navigate to="/" /> } />
+        <Route path="/chemicalsDetail-list/edit-chemicalsDetail/:id" element={ staffLoggedIn ? <EditChemicalsDetail/> : <Navigate to="/" /> } />
 
-        <Route path="/equipment-list" element={<EquipmentList/> } />
-        <Route path="/equipment-list/add-equipment" element={<AddEquipment/> } />
-        <Route path="/equipment-list/edit-equipment/:id" element={<EditEquipment/> } />
+        <Route path="/equipment-list" element={ staffLoggedIn ? <EquipmentList/> : <Navigate to="/" /> } />
+        <Route path="/equipment-list/add-equipment" element={ staffLoggedIn ? <AddEquipment/> : <Navigate to="/" /> } />
+        <Route path="/equipment-list/edit-equipment/:id" element={ staffLoggedIn ? <EditEquipment/> : <Navigate to="/" /> } />
 
-        <Route path="/equipmentCategory-list" element={<EquipmentCategoryList/> } />
-        <Route path="/equipmentCategory-list/add-equipmentCategory" element={<AddEquipmentCategory/> } />
-        <Route path="/equipmentCategory-list/edit-equipmentCategory/:id" element={<EditEquipmentCategory/> } />
+        <Route path="/equipmentCategory-list" element={ staffLoggedIn ? <EquipmentCategoryList/> : <Navigate to="/" /> } />
+        <Route path="/equipmentCategory-list/add-equipmentCategory" element={ staffLoggedIn ? <AddEquipmentCategory/> : <Navigate to="/" /> } />
+        <Route path="/equipmentCategory-list/edit-equipmentCategory/:id" element={ staffLoggedIn ? <EditEquipmentCategory/> : <Navigate to="/" /> } />
 
         {/* -------------------------------------------------------- Teacher -------------------------------------------------------- */}
-        <Route path="/teacher-login" element={<TeacherLogin/> } />
+        <Route path="/teacher-login" element={ teacherLoggedIn ? <Navigate to="teacher-dashboard" /> : <TeacherLogin login={handleTeacherLogIn} /> } />
         <Route path="/teacher-register" element={<TeacherRegister/> } />
         <Route path="/teacher-forget-password" element={<TeacherForgetPassword/> } />
-        <Route path="/teacher-dashboard" element={<TeacherDashboard/> } />
-        <Route path="/teacher-profile" element={<TeacherProfile/> } />
+        <Route path="/teacher-dashboard" element={ teacherLoggedIn ? <TeacherDashboard logout={handleTeacherLogOut} /> : <Navigate to="/" /> } />
+        <Route path="/teacher-profile" element={ teacherLoggedIn ? <TeacherProfile/> : <Navigate to="/" /> } />
 
-        <Route path="/teacher-dashboard/teacher-chemicals-request" element={<TeacherChemicalsRequest/> } />
-        <Route path="/teacher-dashboard/teacher-equipment-request" element={<TeacherEquipmentRequest/> } />
+        <Route path="/teacher-dashboard/teacher-chemicals-request" element={ teacherLoggedIn ? <TeacherChemicalsRequest/> : <Navigate to="/" /> } />
+        <Route path="/teacher-dashboard/teacher-equipment-request" element={ teacherLoggedIn ? <TeacherEquipmentRequest/> : <Navigate to="/" /> } />
 
-        <Route path="/teacher-dashboard/bundle-list" element={<BundleList/> } />
-        <Route path="/teacher-dashboard/bundle-list/:id" element={<BundleView/> } />
-        <Route path="/teacher-dashboard/teacher-create-bundle" element={<TeacherBundleCart/> } />
+        <Route path="/teacher-dashboard/bundle-list" element={ teacherLoggedIn ? <BundleList/> : <Navigate to="/" /> } />
+        <Route path="/teacher-dashboard/bundle-list/:id" element={ teacherLoggedIn ? <BundleView/> : <Navigate to="/" /> } />
+        <Route path="/teacher-dashboard/teacher-create-bundle" element={ teacherLoggedIn ? <TeacherBundleCart/> : <Navigate to="/" /> } />
 
         {/* -------------------------------------------------------- Student -------------------------------------------------------- */}
-        <Route path="/student-login" element={<StudentLogin/> } />
-        <Route path="/student-register" element={<StudentRegister/> } />
-        <Route path="/student-forget-password" element={<StudentForgetPassword/> } />
-        <Route path="/student-dashboard" element={<StudentDashboard/> } />
-        <Route path="/student-profile" element={<StudentProfile/> } />
+        <Route path="/student-login" element={<StudentLogin/>} />
+        <Route path="/student-register" element={<StudentRegister/>} />
+        <Route path="/student-forget-password" element={<StudentForgetPassword/>} />
+        <Route path="/student-dashboard" element={<StudentDashboard/>} />
+        <Route path="/student-profile" element={<StudentProfile/>} />
 
-        <Route path="/student-dashboard/student-chemicals-request" element={<StudentChemicalsRequest/> } />
-        <Route path="/student-dashboard/student-chemicals-list" element={<StudentChemicalsList/> } />
+        <Route path="/student-dashboard/student-chemicals-request" element={<StudentChemicalsRequest/>} />
+        <Route path="/student-dashboard/student-chemicals-list" element={<StudentChemicalsList/>} />
 
-        <Route path="/student-dashboard/student-equipment-request" element={<StudentEquipmentRequest/> } />
-        <Route path="/student-dashboard/student-equipment-list" element={<StudentEquipmentList/> } />
+        <Route path="/student-dashboard/student-equipment-request" element={<StudentEquipmentRequest/>} />
+        <Route path="/student-dashboard/student-equipment-list" element={<StudentEquipmentList/>} />
 
-        <Route path="/student-dashboard/student-chemicals-cart" element={<StudentChemicalsCart/> } />
-        <Route path="/student-dashboard/student-equipment-cart" element={<StudentEquipmentCart/> } />
+        <Route path="/student-dashboard/student-chemicals-cart" element={<StudentChemicalsCart/>} />
+        <Route path="/student-dashboard/student-equipment-cart" element={<StudentEquipmentCart/>} />
 
-        <Route path="/student-dashboard/bundle-list" element={<StudentBundleList/> } />
-        <Route path="/student-dashboard/bundle-list/:id" element={<StudentBundleRequest/> } />
+        <Route path="/student-dashboard/bundle-list" element={<StudentBundleList/>} />
+        <Route path="/student-dashboard/bundle-list/:id" element={<StudentBundleRequest/>} />
 
-        <Route path="/student-google-register" element={<StudentGoogleRegister/> } />
+        <Route path="/student-google-register" element={<StudentGoogleRegister/>} />
       </Routes>
     </BrowserRouter>
   );

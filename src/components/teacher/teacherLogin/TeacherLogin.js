@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
-function TeacherLogin() {
+function TeacherLogin({ login }) {
     const [values, setValues] = useState({
         Teacher_Username: "",
         Teacher_Password: "",
@@ -17,6 +17,7 @@ function TeacherLogin() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
+                login();
                 navigate("/teacher-dashboard");
             }
         });

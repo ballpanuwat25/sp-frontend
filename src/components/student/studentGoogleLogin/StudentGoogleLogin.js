@@ -6,10 +6,6 @@ import { useNavigate } from 'react-router-dom';
 function StudentGoogleLogin() {
     const navigate = useNavigate();
     const [user, setUser] = useState({});
-    const [values, setValues] = useState({
-        Student_Email: "",
-        Student_Password: "",
-    });
 
     async function handleCallbackResponse(response) {
         var userObject = jwt_decode(response.credential);
@@ -47,7 +43,6 @@ function StudentGoogleLogin() {
             }
         } catch (error) {
             console.error('Error checking email:', error);
-            // Handle error appropriately, e.g., show an error message to the user
         }
     }
 

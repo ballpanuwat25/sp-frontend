@@ -1,16 +1,15 @@
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import React from 'react'
+import React from 'react';
 
-import StaffChemicalsRequestList from "./staffConfirmReq/StaffChemicalsRequestList.js";
-
-function StaffDashboard() {
+function StaffDashboard({ logout }) {
 
     const handleLogout = () => {
         axios.get("http://localhost:3001/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
+                logout();
                 window.location.href = "/";
             }
         });

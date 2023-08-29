@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import ChemicalsBundleList from './teacherCreateBundle/ChemicalsBundleList';
 import EquipmentBundleList from './teacherCreateBundle/EquipmentBundleList';
 
-function TeacherDashboard() {
+function TeacherDashboard({ logout }) {
     const [teacherUsername, setTeacherUsername] = useState("");
 
     axios.defaults.withCredentials = true;
@@ -25,6 +25,7 @@ function TeacherDashboard() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
+                logout();
                 window.location.href = "/";
             }
         });

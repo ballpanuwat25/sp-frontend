@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-function AdminDashboard() {
+function AdminDashboard({ logout }) {
     const [adminName, setAdminName] = useState("");
     const [adminUsername, setAdminUsername] = useState("");
     const [adminPassword, setAdminPassword] = useState("");
@@ -27,6 +27,7 @@ function AdminDashboard() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
+                logout();
                 window.location.href = "/";
             }
         });

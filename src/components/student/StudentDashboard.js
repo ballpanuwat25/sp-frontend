@@ -35,10 +35,10 @@ function StudentDashboard() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                navigate("/");
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_email');
                 localStorage.removeItem('user_picture');
+                navigate("/");
             }
         });
     };
