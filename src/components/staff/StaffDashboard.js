@@ -1,8 +1,10 @@
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
 
 function StaffDashboard({ logout }) {
+    const navigate = useNavigate();
+    axios.defaults.withCredentials = true;
 
     const handleLogout = () => {
         axios.get("http://localhost:3001/staff-logout").then((response) => {
@@ -10,7 +12,7 @@ function StaffDashboard({ logout }) {
                 alert(response.data.Error);
             } else {
                 logout();
-                window.location.href = "/";
+                navigate("/");
             }
         });
     };

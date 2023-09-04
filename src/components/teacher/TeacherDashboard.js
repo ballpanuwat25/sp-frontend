@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 import ChemicalsBundleList from './teacherCreateBundle/ChemicalsBundleList';
@@ -9,6 +9,7 @@ function TeacherDashboard({ logout }) {
     const [teacherUsername, setTeacherUsername] = useState("");
 
     axios.defaults.withCredentials = true;
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get("http://localhost:3001/teacher").then((response) => {
@@ -26,7 +27,7 @@ function TeacherDashboard({ logout }) {
                 alert(response.data.Error);
             } else {
                 logout();
-                window.location.href = "/";
+                navigate("/");
             }
         });
     };

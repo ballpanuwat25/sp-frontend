@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 function AdminDashboard({ logout }) {
@@ -9,6 +9,8 @@ function AdminDashboard({ logout }) {
     const [adminTel, setAdminTel] = useState("");
 
     axios.defaults.withCredentials = true;
+    const navigate = useNavigate();
+
     useEffect(() => {
         axios.get("http://localhost:3001/admin").then((response) => {
             if (response.data.Error) {
@@ -28,7 +30,7 @@ function AdminDashboard({ logout }) {
                 alert(response.data.Error);
             } else {
                 logout();
-                window.location.href = "/";
+                navigate("/");
             }
         });
     };
@@ -61,6 +63,7 @@ function AdminDashboard({ logout }) {
             <h5>AdminTel: {adminTel}</h5>
         </div>
     )
+
 }
 
 export default AdminDashboard
