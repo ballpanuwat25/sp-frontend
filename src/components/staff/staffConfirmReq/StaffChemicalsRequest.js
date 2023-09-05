@@ -47,11 +47,21 @@ function StaffChemicalsRequest() {
     };
 
     const getChemicalsById = async () => {
-        const response = await axios.get(`http://localhost:3001/chemicals-list/${Chem_Bottle_Id}`);
-        const chemicals = response.data;
-        setChem_Bottle_Id(chemicals.Chem_Bottle_Id);
-        setRemaining_Quantity(chemicals.Remaining_Quantity);
-    }
+        try {
+            const response = await axios.get(`http://localhost:3001/chemicals-list/${Chem_Bottle_Id}`);
+            const chemicals = response.data;
+            
+            if (chemicals) {
+                setChem_Bottle_Id(chemicals.Chem_Bottle_Id);
+                setRemaining_Quantity(chemicals.Remaining_Quantity);
+            } else {
+                // Handle the case where chemicals is null or undefined
+                console.error("Chemicals data is null or undefined");
+            }
+        } catch (error) {
+            console.error("Error fetching chemicals data:", error);
+        }
+    }    
 
     const getChemicalsRequestById = async () => {
         const result = await axios.get(`http://localhost:3001/chemicals-request-list/${id}`);
@@ -159,7 +169,7 @@ function StaffChemicalsRequest() {
             <form onSubmit={updateChemicalsRequest}>
                 <div className="mb-3">
                     <label htmlFor="Chem_Request_Id" className="form-label">Chemicals Request Id</label>
-                    <input type="text" className="form-control" id="Chem_Request_Id" placeholder="Enter Chemicals Request Id" required value={Chem_Request_Id}
+                    <input type="text" className="form-control" id="Chem_Request_Id" placeholder="Enter Chemicals Request Id" required={isRejectButtonClicked} value={Chem_Request_Id}
                         onChange={(e) => {
                             setChem_Request_Id(e.target.value);
                         }}
@@ -167,7 +177,7 @@ function StaffChemicalsRequest() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="Chem_Id" className="form-label">Chemicals Id</label>
-                    <input type="text" className="form-control" id="Chem_Id" placeholder="Enter Chemicals Id" required value={Chem_Id}
+                    <input type="text" className="form-control" id="Chem_Id" placeholder="Enter Chemicals Id" required={isRejectButtonClicked} value={Chem_Id}
                         onChange={(e) => {
                             setChem_Id(e.target.value);
                         }}
@@ -189,7 +199,7 @@ function StaffChemicalsRequest() {
                             className="form-control"
                             id="Chem_Bottle_Id"
                             placeholder="Enter Chemicals Bottle Id"
-                            required
+                            required={isRejectButtonClicked}
                             value={Chem_Bottle_Id}
                             onChange={(e) => {
                                 setChem_Bottle_Id(e.target.value);
@@ -226,7 +236,7 @@ function StaffChemicalsRequest() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="Requested_Quantity" className="form-label">Requested Quantity</label>
-                    <input type="text" className="form-control" id="Requested_Quantity" placeholder="Enter Requested Quantity" required value={Requested_Quantity}
+                    <input type="text" className="form-control" id="Requested_Quantity" placeholder="Enter Requested Quantity" required={isRejectButtonClicked} value={Requested_Quantity}
                         onChange={(e) => {
                             setRequested_Quantity(e.target.value);
                         }}
@@ -239,7 +249,7 @@ function StaffChemicalsRequest() {
                         className="form-control"
                         id="Remaining_Quantity"
                         placeholder="Enter Remaining Quantity"
-                        required
+                        required={isRejectButtonClicked}
                         value={Remaining_Quantity}
                         onChange={(e) => {
                             setRemaining_Quantity(e.target.value);
@@ -248,7 +258,7 @@ function StaffChemicalsRequest() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="Release_Quantity" className="form-label">Release Quantity</label>
-                    <input type="text" className="form-control" id="Release_Quantity" placeholder="Enter Release Quantity" required value={Release_Quantity}
+                    <input type="text" className="form-control" id="Release_Quantity" placeholder="Enter Release Quantity" required={isRejectButtonClicked} value={Release_Quantity}
                         onChange={(e) => {
                             setRelease_Quantity(e.target.value);
                         }}
@@ -256,7 +266,7 @@ function StaffChemicalsRequest() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="Counting_Unit" className="form-label">Counting Unit</label>
-                    <input type="text" className="form-control" id="Counting_Unit" placeholder="Enter Counting Unit" required value={Counting_Unit}
+                    <input type="text" className="form-control" id="Counting_Unit" placeholder="Enter Counting Unit" required={isRejectButtonClicked} value={Counting_Unit}
                         onChange={(e) => {
                             setCounting_Unit(e.target.value);
                         }}

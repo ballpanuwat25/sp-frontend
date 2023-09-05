@@ -147,7 +147,7 @@ function StaffEquipmentRequest() {
             <form onSubmit={updateEquipmentRequest}>
                 <div className="mb-3">
                     <label htmlFor="Equipment_Request_Id" className="form-label">Equipment Request Id</label>
-                    <input type="text" className="form-control" id="Equipment_Request_Id" placeholder="Enter Equipment Request Id" required value={Equipment_Request_Id}
+                    <input type="text" className="form-control" id="Equipment_Request_Id" placeholder="Enter Equipment Request Id" required={isRejectButtonClicked} value={Equipment_Request_Id}
                         onChange={(e) => {
                             setEquipment_Request_Id(e.target.value);
                         }}
@@ -169,7 +169,7 @@ function StaffEquipmentRequest() {
                             className="form-control"
                             id="Equipment_Id"
                             placeholder="Enter Equipment Id"
-                            required
+                            required={isRejectButtonClicked}
                             value={Equipment_Id}
                             onChange={(e) => {
                                 setEquipment_Id(e.target.value);
@@ -206,7 +206,7 @@ function StaffEquipmentRequest() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="Requested_Quantity" className="form-label">Requested Quantity</label>
-                    <input type="text" className="form-control" id="Requested_Quantity" placeholder="Enter Requested Quantity" required value={Requested_Quantity}
+                    <input type="text" className="form-control" id="Requested_Quantity" placeholder="Enter Requested Quantity" required={isRejectButtonClicked} value={Requested_Quantity}
                         onChange={(e) => {
                             setRequested_Quantity(e.target.value);
                         }}
@@ -219,7 +219,7 @@ function StaffEquipmentRequest() {
                         className="form-control"
                         id="Quantity"
                         placeholder="Enter Remaining Quantity"
-                        required
+                        required={isRejectButtonClicked}
                         value={Quantity}
                         onChange={(e) => {
                             setQuantity(e.target.value);
@@ -228,7 +228,7 @@ function StaffEquipmentRequest() {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="Release_Quantity" className="form-label">Release Quantity</label>
-                    <input type="text" className="form-control" id="Release_Quantity" placeholder="Enter Release Quantity" required value={Release_Quantity}
+                    <input type="text" className="form-control" id="Release_Quantity" placeholder="Enter Release Quantity" required={isRejectButtonClicked} value={Release_Quantity}
                         onChange={(e) => {
                             setRelease_Quantity(e.target.value);
                         }}

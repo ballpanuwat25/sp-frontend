@@ -6,7 +6,9 @@ function StaffChemicalsRequestList() {
     const [chemicalsReq, setChemicalsReq] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
-    axios.defaults.withCredentials = true;
+    const [selectedIds, setSelectedIds] = useState([]);
+
+    const [Request_Comment, setRequest_Comment] = useState("");
 
     useEffect(() => {
         getChemicalsRequest();
@@ -23,6 +25,18 @@ function StaffChemicalsRequestList() {
         setChemicalsReq(filteredChemicalsReq);
     };
 
+    const updateChemicalsRequestStatus = async (id, status, comment) => {
+        try {
+            const data = {
+                Request_Status: status,
+                Request_Comment: comment,
+            };
+            await axios.patch(`http://localhost:3001/chemicals-request-list/${id}`, data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const deleteChemicalsRequest = async (id) => {
         try {
             await axios.delete(`http://localhost:3001/chemicals-request-list/${id}`)
@@ -38,9 +52,46 @@ function StaffChemicalsRequestList() {
         return date.toLocaleDateString('en-GB', options);
     };
 
+
+    const handleCheckboxChange = (id) => {
+        if (selectedIds.includes(id)) {
+            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+        } else {
+            setSelectedIds([...selectedIds, id]);
+        }
+    }
+
+    const handleDeclineChecked = async () => {
+        try {
+            const promises = selectedIds.map((id) =>
+                updateChemicalsRequestStatus(id, "Rejected", Request_Comment) // Set status to "Rejected" for all selected items
+            );
+
+            await Promise.all(promises); // Wait for all requests to complete
+            setSelectedIds([]); // Clear selectedIds after declining
+            setRequest_Comment(""); // Clear the comment after successful decline
+            getChemicalsRequest(); // Refresh the chemicals request list after declining
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div className='container-fluid'>
             <h1>Student Chemicals Request List</h1>
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button onClick={handleDeclineChecked} className="btn btn-outline-danger">Decline Checked</button>
+            </div>
+            <div className="mb-3">
+                <label htmlFor="Request_Comment" className="form-label">Decline Comment</label>
+                <textarea
+                    className="form-control"
+                    id="Request_Comment"
+                    rows="3"
+                    value={Request_Comment}
+                    onChange={(e) => setRequest_Comment(e.target.value)}
+                ></textarea>
+            </div>
             <input
                 type="text"
                 className="form-control"
@@ -52,6 +103,7 @@ function StaffChemicalsRequestList() {
             <table className="table table-striped">
                 <thead>
                     <tr>
+                        <th scope="col">Check</th>
                         <th scope="col">Chemicals Request Id</th>
                         <th scope="col">Student Id</th>
                         <th scope="col">Chem Id</th>
@@ -70,6 +122,18 @@ function StaffChemicalsRequestList() {
                 <tbody>
                     {chemicalsReq.map((chemicalsReq) => (
                         <tr key={chemicalsReq.Chem_Request_Id}>
+                            <td>
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value={chemicalsReq.Chem_Request_Id}
+                                        id={`flexCheckDefault-${chemicalsReq.Chem_Request_Id}`}
+                                        checked={selectedIds.includes(chemicalsReq.Chem_Request_Id)}
+                                        onChange={() => handleCheckboxChange(chemicalsReq.Chem_Request_Id)}
+                                    />
+                                </div>
+                            </td>
                             <td> {chemicalsReq.Chem_Request_Id} </td>
                             <td> {chemicalsReq.Student_Id} </td>
                             <td> {chemicalsReq.Chem_Id} </td>

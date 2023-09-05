@@ -5,8 +5,8 @@ import React, { useState, useEffect } from 'react'
 function StaffEquipmentRequestList() {
     const [equipmentReq, setEquipmentReq] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-
-    axios.defaults.withCredentials = true;
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [Request_Comment, setRequest_Comment] = useState("");
 
     useEffect(() => {
         getEquipmentRequest();
@@ -14,14 +14,43 @@ function StaffEquipmentRequestList() {
 
     const getEquipmentRequest = async () => {
         const response = await axios.get("http://localhost:3001/equipment-request-list");
-        const filteredEquipmentReq = response.data.filter(equipmentReq => {
-            return (
-                equipmentReq.Student_Id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                equipmentReq.Equipment_Id.toLowerCase().includes(searchQuery.toLowerCase())
-            );
-        });
-        setEquipmentReq(filteredEquipmentReq);
+        setEquipmentReq(response.data);
     };
+
+    const handleCheckboxChange = (id) => {
+        if (selectedIds.includes(id)) {
+            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+        } else {
+            setSelectedIds([...selectedIds, id]);
+        }
+    }
+
+    const handleDeclineChecked = async () => {
+        try {
+            const promises = selectedIds.map((id) =>
+                declineEquipmentRequest(id, Request_Comment)
+            );
+
+            await Promise.all(promises); // Wait for all requests to complete
+            setSelectedIds([]); // Clear selectedIds after declining
+            setRequest_Comment(""); // Clear the comment after successful decline
+            getEquipmentRequest(); // Refresh the equipment request list after declining
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const declineEquipmentRequest = async (id, comment) => {
+        try {
+            const data = {
+                Request_Status: "Declined",
+                Request_Comment: comment,
+            };
+            await axios.patch(`http://localhost:3001/equipment-request-list/${id}`, data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const deleteEquipmentRequest = async (id) => {
         try {
@@ -41,6 +70,19 @@ function StaffEquipmentRequestList() {
     return (
         <div className='container-fluid'>
             <h1>Student Equipment Request List</h1>
+            <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button onClick={handleDeclineChecked} className="btn btn-outline-danger">Decline Checked</button>
+            </div>
+            <div className="mb-3">
+                <label htmlFor="Request_Comment" className="form-label">Decline Comment</label>
+                <textarea
+                    className="form-control"
+                    id="Request_Comment"
+                    rows="3"
+                    value={Request_Comment}
+                    onChange={(e) => setRequest_Comment(e.target.value)}
+                ></textarea>
+            </div>
             <input
                 type="text"
                 className="form-control"
@@ -51,6 +93,7 @@ function StaffEquipmentRequestList() {
             <table className="table table-striped">
                 <thead>
                     <tr>
+                        <th scope="col">Check</th>
                         <th scope="col">Equipment Request Id</th>
                         <th scope="col">Student Id</th>
                         <th scope="col">Equipment Id</th>
@@ -67,6 +110,18 @@ function StaffEquipmentRequestList() {
                 <tbody>
                     {equipmentReq.map((equipmentReq) => (
                         <tr key={equipmentReq.Equipment_Request_Id}>
+                            <td>
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        value={equipmentReq.Equipment_Request_Id}
+                                        id={`flexCheckDefault-${equipmentReq.Equipment_Request_Id}`}
+                                        checked={selectedIds.includes(equipmentReq.Equipment_Request_Id)}
+                                        onChange={() => handleCheckboxChange(equipmentReq.Equipment_Request_Id)}
+                                    />
+                                </div>
+                            </td>
                             <td> {equipmentReq.Equipment_Request_Id} </td>
                             <td> {equipmentReq.Student_Id} </td>
                             <td> {equipmentReq.Equipment_Id} </td>
