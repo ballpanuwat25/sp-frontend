@@ -15,7 +15,7 @@ function StaffChemicalsRequestList() {
     }, [searchQuery]);
 
     const getChemicalsRequest = async () => {
-        const response = await axios.get("http://localhost:3001/chemicals-request-list");
+        const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
         const filteredChemicalsReq = response.data.filter(chemicalsReq => {
             return (
                 chemicalsReq.Student_Id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -31,7 +31,7 @@ function StaffChemicalsRequestList() {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`http://localhost:3001/chemicals-request-list/${id}`, data);
+            await axios.patch(`https://special-problem.onrender.com/chemicals-request-list/${id}`, data);
         } catch (error) {
             console.log(error);
         }
@@ -39,7 +39,7 @@ function StaffChemicalsRequestList() {
 
     const deleteChemicalsRequest = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/chemicals-request-list/${id}`)
+            await axios.delete(`https://special-problem.onrender.com/chemicals-request-list/${id}`)
             getChemicalsRequest();
         } catch (error) {
             console.log(error)

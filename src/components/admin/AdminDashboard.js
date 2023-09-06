@@ -12,7 +12,7 @@ function AdminDashboard({ logout }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:3001/admin").then((response) => {
+        axios.get("https://special-problem.onrender.com/admin").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -25,7 +25,7 @@ function AdminDashboard({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/admin-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

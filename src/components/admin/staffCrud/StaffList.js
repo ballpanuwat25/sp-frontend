@@ -10,13 +10,13 @@ const StaffList = () => {
     }, []);
 
     const getStaffs = async () => {
-        const response = await axios.get("http://localhost:3001/staff-list");
+        const response = await axios.get("https://special-problem.onrender.com/staff-list");
         setStaffs(response.data);
     };
 
     const deleteStaff = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/staff-list/${id}`)
+            await axios.delete(`https://special-problem.onrender.com/staff-list/${id}`)
             getStaffs();
         } catch (error) {
             console.log(error)

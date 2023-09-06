@@ -18,7 +18,7 @@ function StaffProfile() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -35,12 +35,12 @@ function StaffProfile() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/staff-forget-password", values).then((response) => {
+        axios.post("https://special-problem.onrender.com/staff-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("http://localhost:3001/staff-logout").then((response) => {
+                axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {

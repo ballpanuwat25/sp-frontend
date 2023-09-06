@@ -12,7 +12,7 @@ function TeacherDashboard({ logout }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:3001/teacher").then((response) => {
+        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -22,7 +22,7 @@ function TeacherDashboard({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/teacher-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

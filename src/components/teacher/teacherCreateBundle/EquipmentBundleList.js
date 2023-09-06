@@ -16,7 +16,7 @@ function EquipmentBundleList() {
     const [selectedEquipmentId, setSelectedEquipmentId] = useState(null);
 
     useEffect(() => {
-        axios.get("http://localhost:3001/teacher").then((response) => {
+        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -37,7 +37,7 @@ function EquipmentBundleList() {
     }, [equipment]);
 
     const getEquipment = async () => {
-        const response = await axios.get("http://localhost:3001/equipment-list");
+        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
         setEquipment(response.data);
     }
 

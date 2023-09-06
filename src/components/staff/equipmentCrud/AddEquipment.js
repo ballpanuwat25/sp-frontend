@@ -25,7 +25,7 @@ function AddEquipment() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -40,15 +40,15 @@ function AddEquipment() {
         try {
             const { Equipment_Id } = equipment;
 
-            const equipmentIdExists = await axios.get(`http://localhost:3001/equipment-list/${Equipment_Id}`);
+            const equipmentIdExists = await axios.get(`https://special-problem.onrender.com/equipment-list/${Equipment_Id}`);
             if (equipmentIdExists.data) {
                 alert("Equipment Id already exists. Please enter a different Equipment Id.");
                 return;
             }
 
             const updatedLogActivity = { ...logActivity, LogActivity_Name: "Add Equipment", Equipment_Id: Equipment_Id };
-            await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
-            await axios.post("http://localhost:3001/equipment-list", (equipment));
+            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
+            await axios.post("https://special-problem.onrender.com/equipment-list", (equipment));
 
             alert("Equipment added successfully");
             navigate("/equipment-list");

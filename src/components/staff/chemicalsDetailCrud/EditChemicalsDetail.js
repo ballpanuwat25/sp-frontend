@@ -22,7 +22,7 @@ function EditChemicalsDetail() {
     }, [])
 
     const getChemicalsDetailById = async () => {
-        const response = await axios.get(`http://localhost:3001/chemicalsDetail-list/${id}`);
+        const response = await axios.get(`https://special-problem.onrender.com/chemicalsDetail-list/${id}`);
         const chemicalsDetail = response.data;
         setChem_Id(chemicalsDetail.Chem_Id);
         setChem_Name(chemicalsDetail.Chem_Name);
@@ -37,7 +37,7 @@ function EditChemicalsDetail() {
 
     const updateChemicalsDetail = async (e) => {
         e.preventDefault();
-        const response = await axios.patch(`http://localhost:3001/chemicalsDetail-list/${id}`, {
+        const response = await axios.patch(`https://special-problem.onrender.com/chemicalsDetail-list/${id}`, {
             Chem_Id,
             Chem_Name,
             Chem_CAS,

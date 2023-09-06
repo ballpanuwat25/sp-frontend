@@ -10,13 +10,13 @@ function EquipmentListCategory() {
     }, []);
 
     const getEquipmentCategory = async () => {
-        const response = await axios.get("http://localhost:3001/equipmentCategory-list");
+        const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
         setEquipmentCategory(response.data);
     }
 
     const deleteEquipmentCategory = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/equipmentCategory-list/${id}`)
+            await axios.delete(`https://special-problem.onrender.com/equipmentCategory-list/${id}`)
             getEquipmentCategory();
         } catch (error) {
             console.log(error)

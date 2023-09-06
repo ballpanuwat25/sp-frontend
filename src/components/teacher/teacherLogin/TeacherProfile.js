@@ -18,7 +18,7 @@ function TeacherProfile() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/teacher").then((response) => {
+        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -35,12 +35,12 @@ function TeacherProfile() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/teacher-forget-password", values).then((response) => {
+        axios.post("https://special-problem.onrender.com/teacher-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("http://localhost:3001/teacher-logout").then((response) => {
+                axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {

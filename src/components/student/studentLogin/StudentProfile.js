@@ -18,7 +18,7 @@ function StudentProfile() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/student").then((response) => {
+        axios.get("https://special-problem.onrender.com/student").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -35,12 +35,12 @@ function StudentProfile() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/student-forget-password", values).then((response) => {
+        axios.post("https://special-problem.onrender.com/student-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("http://localhost:3001/student-logout").then((response) => {
+                axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {

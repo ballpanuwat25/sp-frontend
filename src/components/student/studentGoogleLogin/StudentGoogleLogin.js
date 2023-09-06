@@ -14,7 +14,7 @@ function StudentGoogleLogin() {
         localStorage.setItem('user_picture', userObject.picture);
         setUser(userObject);
         try {
-            const apiUrl = 'http://localhost:3001/student-list';
+            const apiUrl = 'https://special-problem.onrender.com/student-list';
             const response = await axios.get(apiUrl);
             const students = response.data;
     
@@ -26,7 +26,7 @@ function StudentGoogleLogin() {
                 console.log('Matching student:', matchingStudent);
     
                 // Make the POST request with email and password
-                const postResponse = await axios.post("http://localhost:3001/student-login", {
+                const postResponse = await axios.post("https://special-problem.onrender.com/student-login", {
                     Student_Email: matchingStudent.Student_Email,
                     Student_Password: matchingStudent.Student_Password
                 });

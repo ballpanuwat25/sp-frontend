@@ -23,13 +23,13 @@ function AddChemicalsDetail() {
             const { Chem_Id } = chemicalsDetail;
     
             // Check if Chem_Id already exists
-            const chemIdExists = await axios.get(`http://localhost:3001/chemicalsDetail-list/${Chem_Id}`);
+            const chemIdExists = await axios.get(`https://special-problem.onrender.com/chemicalsDetail-list/${Chem_Id}`);
             if (chemIdExists.data) {
                 alert("Chem_Id already exists. Please enter a different Chem_Id.");
                 return;
             }
 
-            await axios.post("http://localhost:3001/chemicalsDetail-list", chemicalsDetail);
+            await axios.post("https://special-problem.onrender.com/chemicalsDetail-list", chemicalsDetail);
             
             alert("Chemicals added successfully");
             navigate("/chemicalsDetail-list");

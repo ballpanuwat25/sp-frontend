@@ -35,7 +35,7 @@ function StaffChemicalsRequest() {
 
     const getStaffId = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/staff");
+            const response = await axios.get("https://special-problem.onrender.com/staff");
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -48,7 +48,7 @@ function StaffChemicalsRequest() {
 
     const getChemicalsById = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/chemicals-list/${Chem_Bottle_Id}`);
+            const response = await axios.get(`https://special-problem.onrender.com/chemicals-list/${Chem_Bottle_Id}`);
             const chemicals = response.data;
             
             if (chemicals) {
@@ -64,7 +64,7 @@ function StaffChemicalsRequest() {
     }    
 
     const getChemicalsRequestById = async () => {
-        const result = await axios.get(`http://localhost:3001/chemicals-request-list/${id}`);
+        const result = await axios.get(`https://special-problem.onrender.com/chemicals-request-list/${id}`);
         setChem_Request_Id(result.data.Chem_Request_Id);
         setChem_Id(result.data.Chem_Id);
         setChem_Bottle_Id(result.data.Chem_Bottle_Id);
@@ -98,7 +98,7 @@ function StaffChemicalsRequest() {
 
         try {
             // Make the API call to update the chemicals-list
-            const chemicalsListResponse = await axios.patch(`http://localhost:3001/chemicals-list/${Chem_Bottle_Id}`, {
+            const chemicalsListResponse = await axios.patch(`https://special-problem.onrender.com/chemicals-list/${Chem_Bottle_Id}`, {
                 Remaining_Quantity: newRemaining_Quantity,
             });
 
@@ -117,7 +117,7 @@ function StaffChemicalsRequest() {
                     Request_Status,
                     Request_Comment,
                 };
-                const chemicalsRequestResponse = await axios.patch(`http://localhost:3001/chemicals-request-list/${id}`, requestData);
+                const chemicalsRequestResponse = await axios.patch(`https://special-problem.onrender.com/chemicals-request-list/${id}`, requestData);
 
                 if (chemicalsRequestResponse.data.Error) {
                     alert(chemicalsRequestResponse.data.Error);
@@ -148,7 +148,7 @@ function StaffChemicalsRequest() {
     const handleQuery = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:3001/chemicals-list/${Chem_Bottle_Id}`
+                `https://special-problem.onrender.com/chemicals-list/${Chem_Bottle_Id}`
             );
             const chemicals = response.data;
 

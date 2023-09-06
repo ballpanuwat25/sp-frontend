@@ -36,7 +36,7 @@ function BundleView() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:3001/student").then((response) => {
+        axios.get("https://special-problem.onrender.com/student").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -60,9 +60,9 @@ function BundleView() {
 
     const fetchData = async () => {
         try {
-            const bundleResponse = await axios.get(`http://localhost:3001/bundle-list/${id}`);
-            const chemicalsResponse = await axios.get("http://localhost:3001/chemicalsDetail-list");
-            const equipmentResponse = await axios.get("http://localhost:3001/equipment-list");
+            const bundleResponse = await axios.get(`https://special-problem.onrender.com/bundle-list/${id}`);
+            const chemicalsResponse = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+            const equipmentResponse = await axios.get("https://special-problem.onrender.com/equipment-list");
 
             setBundles(bundleResponse.data);
             setChemicals(chemicalsResponse.data);
@@ -100,9 +100,9 @@ function BundleView() {
 
             await Promise.all(allRequests.map((requestData) => {
                 if (requestData.Chem_Id) {
-                    return axios.post("http://localhost:3001/chemicals-request-list", requestData);
+                    return axios.post("https://special-problem.onrender.com/chemicals-request-list", requestData);
                 } else if (requestData.Equipment_Id) {
-                    return axios.post("http://localhost:3001/equipment-request-list", requestData);
+                    return axios.post("https://special-problem.onrender.com/equipment-request-list", requestData);
                 }
                 // You can add more conditions if needed
             }));

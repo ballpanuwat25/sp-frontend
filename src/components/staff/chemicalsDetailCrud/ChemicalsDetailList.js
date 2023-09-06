@@ -11,7 +11,7 @@ function ChemicalsDetailList() {
 
     const getChemicalsDetail = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
+            const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
             setChemicalsDetail(response.data); // Make sure response.data is an array
         } catch (error) {
             console.log(error);
@@ -20,7 +20,7 @@ function ChemicalsDetailList() {
     
     const deleteChemicalsDetail = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/chemicalsDetail-list/${id}`)
+            await axios.delete(`https://special-problem.onrender.com/chemicalsDetail-list/${id}`)
             getChemicalsDetail();
         } catch (error) {
             console.log(error)

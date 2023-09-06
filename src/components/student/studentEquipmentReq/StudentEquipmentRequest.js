@@ -35,7 +35,7 @@ function StudentEquipmentRequest() {
     }, [equipmentReq]);
 
     useEffect(() => {
-        axios.get("http://localhost:3001/student").then((response) => {
+        axios.get("https://special-problem.onrender.com/student").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -46,7 +46,7 @@ function StudentEquipmentRequest() {
     }, []);
 
     const getEquipmentRequest = async () => {
-        const response = await axios.get("http://localhost:3001/equipment-request-list");
+        const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
         setEquipmentReq(response.data);
     };
 

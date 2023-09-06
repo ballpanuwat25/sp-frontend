@@ -28,7 +28,7 @@ function StudentEquipmentList() {
 
     const getEquipmentRequest = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/equipment-request-list");
+            const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
             setEquipmentReq(response.data);
             findMostRequestedEquipIds(response.data, 3);
         } catch (error) {
@@ -73,7 +73,7 @@ function StudentEquipmentList() {
 
     const getChemicalsRequest = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/chemicals-request-list");
+            const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
             findMostRequestedChemIds(response.data, 3);
         } catch (error) {
             console.error("Error fetching chemicals request:", error);
@@ -116,7 +116,7 @@ function StudentEquipmentList() {
     };
 
     useEffect(() => {
-        axios.get("http://localhost:3001/student").then((response) => {
+        axios.get("https://special-problem.onrender.com/student").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -137,7 +137,7 @@ function StudentEquipmentList() {
     }, [equipment]);
 
     const getEquipment = async () => {
-        const response = await axios.get("http://localhost:3001/equipment-list");
+        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
         setEquipment(response.data);
     }
 

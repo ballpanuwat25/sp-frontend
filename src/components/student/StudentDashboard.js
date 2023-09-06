@@ -16,7 +16,7 @@ function StudentDashboard() {
 
     axios.defaults.withCredentials = true;
     useEffect(() => {
-        axios.get("http://localhost:3001/student").then((response) => {
+        axios.get("https://special-problem.onrender.com/student").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -31,7 +31,7 @@ function StudentDashboard() {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/student-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

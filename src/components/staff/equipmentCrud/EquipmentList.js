@@ -16,7 +16,7 @@ function EquipmentList() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -32,7 +32,7 @@ function EquipmentList() {
 
     const getEquipment = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/equipment-list");
+            const response = await axios.get("https://special-problem.onrender.com/equipment-list");
             setEquipment(response.data);
         } catch (error) {
             console.log(error);
@@ -42,8 +42,8 @@ function EquipmentList() {
     const deleteEquipment = async (id) => {
             try {
                 const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Equipment", Equipment_Id: id, Staff_Id: staffId };
-                await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
-                await axios.delete(`http://localhost:3001/equipment-list/${id}`)
+                await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
+                await axios.delete(`https://special-problem.onrender.com/equipment-list/${id}`)
                 getEquipment();
             } catch (error) {
                 console.log(error)

@@ -25,7 +25,7 @@ function EditChemicals() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -41,7 +41,7 @@ function EditChemicals() {
     }, [])
 
     const getChemicalsById = async () => {
-        const response = await axios.get(`http://localhost:3001/chemicals-list/${id}`);
+        const response = await axios.get(`https://special-problem.onrender.com/chemicals-list/${id}`);
         const chemicals = response.data;
         setChem_Bottle_Id(chemicals.Chem_Bottle_Id);
         setChem_Id(chemicals.Chem_Id);
@@ -54,7 +54,7 @@ function EditChemicals() {
 
     const updateChemicals = async (e) => {
         e.preventDefault();
-        const response = await axios.patch(`http://localhost:3001/chemicals-list/${id}`, {
+        const response = await axios.patch(`https://special-problem.onrender.com/chemicals-list/${id}`, {
             Chem_Bottle_Id,
             Chem_Id,
             Package_Size,
@@ -64,7 +64,7 @@ function EditChemicals() {
             Price,
         });
         const updatedLogActivity = { ...logActivity, LogActivity_Name: "Updated Chemicals", Chem_Bottle_Id: Chem_Bottle_Id };
-        await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
+        await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
         if (response.data.Error) {
             alert(response.data.Error);
         } else {
