@@ -15,7 +15,11 @@ function TeacherEquipmentRequest() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
+        axios.get("https://backup-test.onrender.com/teacher", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
+            },
+        }).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -29,7 +33,7 @@ function TeacherEquipmentRequest() {
     }, []);
 
     const getEquipmentRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
+        const response = await axios.get("https://backup-test.onrender.com/equipment-request-list");
         setEquipmentReq(response.data);
     };
 
@@ -65,7 +69,7 @@ function TeacherEquipmentRequest() {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`https://special-problem.onrender.com/equipment-request-list/${id}`, data);
+            await axios.patch(`https://backup-test.onrender.com/equipment-request-list/${id}`, data);
             getEquipmentRequest();
         } catch (err) {
             console.log(err);
@@ -105,7 +109,7 @@ function TeacherEquipmentRequest() {
     const filteredEquipmentReq = filterEquipmentReq(equipmentReq);
 
     useEffect(() => {
-        setTeacherIdSearch(teacherId); 
+        setTeacherIdSearch(teacherId);
     }, [teacherId]);
 
     return (

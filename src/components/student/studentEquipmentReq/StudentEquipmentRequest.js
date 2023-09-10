@@ -35,7 +35,11 @@ function StudentEquipmentRequest() {
     }, [equipmentReq]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/student").then((response) => {
+        axios.get("https://backup-test.onrender.com/student", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
+            },
+        }).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -46,7 +50,7 @@ function StudentEquipmentRequest() {
     }, []);
 
     const getEquipmentRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
+        const response = await axios.get("https://backup-test.onrender.com/equipment-request-list");
         setEquipmentReq(response.data);
     };
 

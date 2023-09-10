@@ -25,7 +25,11 @@ function AddEquipment() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff").then((response) => {
+        axios.get("https://backup-test.onrender.com/staff", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+            },
+        }).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -40,15 +44,15 @@ function AddEquipment() {
         try {
             const { Equipment_Id } = equipment;
 
-            const equipmentIdExists = await axios.get(`https://special-problem.onrender.com/equipment-list/${Equipment_Id}`);
+            const equipmentIdExists = await axios.get(`https://backup-test.onrender.com/equipment-list/${Equipment_Id}`);
             if (equipmentIdExists.data) {
                 alert("Equipment Id already exists. Please enter a different Equipment Id.");
                 return;
             }
 
             const updatedLogActivity = { ...logActivity, LogActivity_Name: "Add Equipment", Equipment_Id: Equipment_Id };
-            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
-            await axios.post("https://special-problem.onrender.com/equipment-list", (equipment));
+            await axios.post("https://backup-test.onrender.com/log-activity", updatedLogActivity);
+            await axios.post("https://backup-test.onrender.com/equipment-list", (equipment));
 
             alert("Equipment added successfully");
             navigate("/equipment-list");

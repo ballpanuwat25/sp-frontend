@@ -2,12 +2,14 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-function TeacherProfile() {
-    const [teacherId, setTeacherId] = useState("");
-    const [teacherFirstName, setTeacherFirstName] = useState("");
-    const [teacherLastName, setTeacherLastName] = useState("");
-    const [teacherUsername, setTeacherUsername] = useState("");
-    const [teacherPassword, setTeacherPassword] = useState("");
+function TeacherProfile({ logout }) {
+    const [teacherInfo, setTeacherInfo] = useState({
+        teacherId: "",
+        teacherFirstName: "",
+        teacherLastName: "",
+        teacherUsername: "",
+        teacherPassword: "",
+    });
 
     const [values, setValues] = useState({
         Teacher_Username: "",
@@ -18,32 +20,37 @@ function TeacherProfile() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setTeacherId(response.data.teacherId);
-                setTeacherFirstName(response.data.teacherFirstName);
-                setTeacherLastName(response.data.teacherLastName);
-                setTeacherUsername(response.data.teacherUsername);
-                setTeacherPassword(response.data.teacherPassword);
-                setValues({ ...values, Teacher_Username: response.data.teacherUsername });
-            }
-        });
-        // eslint-disable-next-line
+        axios.get("https://backup-test.onrender.com/teacher", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Teacher Request Error:", response.data.Error);
+                } else {
+                    setTeacherInfo(response.data);
+                    setValues({ ...values, Teacher_Username: response.data.teacherUsername });
+                }
+            })
+            .catch((error) => {
+                console.error("Teacher Request Failed:", error);
+            });
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://special-problem.onrender.com/teacher-forget-password", values).then((response) => {
+        axios.post("https://backup-test.onrender.com/teacher-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
+                axios.get("https://backup-test.onrender.com/teacher-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {
+                        logout();
+                        localStorage.removeItem('teacherToken');
                         navigate("/teacher-login");
                     }
                 });
@@ -54,11 +61,11 @@ function TeacherProfile() {
     return (
         <div className="container-fluid">
             <h1>Teacher Profile</h1> <hr />
-            <h5>TeacherId: {teacherId}</h5>
-            <h5>TeacherFName: {teacherFirstName}</h5>
-            <h5>TeacherLName: {teacherLastName}</h5>
-            <h5>TeacherUsername: {teacherUsername}</h5>
-            <h5>TeacherPassword: {teacherPassword}</h5> <hr />
+            <h5>TeacherId: {teacherInfo.teacherId}</h5>
+            <h5>TeacherFName: {teacherInfo.teacherFirstName}</h5>
+            <h5>TeacherLName: {teacherInfo.teacherLastName}</h5>
+            <h5>TeacherUsername: {teacherInfo.teacherUsername}</h5>
+            <h5>TeacherPassword: {teacherInfo.teacherPassword}</h5> <hr />
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -67,7 +74,7 @@ function TeacherProfile() {
                         type="text"
                         className="form-control"
                         placeholder='username'
-                        defaultValue={teacherUsername}
+                        defaultValue={teacherInfo.teacherUsername}
                     />
                 </div>
 

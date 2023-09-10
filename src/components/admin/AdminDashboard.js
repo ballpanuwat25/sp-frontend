@@ -3,33 +3,41 @@ import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 function AdminDashboard({ logout }) {
-    const [adminName, setAdminName] = useState("");
-    const [adminUsername, setAdminUsername] = useState("");
-    const [adminPassword, setAdminPassword] = useState("");
-    const [adminTel, setAdminTel] = useState("");
+    const [adminInfo, setAdminInfo] = useState({
+        adminName: "",
+        adminUsername: "",
+        adminPassword: "",
+        adminTel: "",
+    });
 
     axios.defaults.withCredentials = true;
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/admin").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setAdminName(response.data.adminName);
-                setAdminUsername(response.data.adminUsername);
-                setAdminPassword(response.data.adminPassword);
-                setAdminTel(response.data.adminTel);
-            }
-        });
+        axios.get("https://backup-test.onrender.com/admin", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Admin Request Error:", response.data.Error);
+                } else {
+                    setAdminInfo(response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Admin Request Failed:", error);
+            });
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
+        axios.get("https://backup-test.onrender.com/admin-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 logout();
+                localStorage.removeItem('adminToken');
                 navigate("/");
             }
         });
@@ -43,7 +51,6 @@ function AdminDashboard({ logout }) {
                     <button className='btn btn-danger' onClick={handleLogout}>Logout</button>
                     <Link to="/admin-profile" className='btn btn-primary ms-2 me-2'>Profile</Link>
                     <div className="dropdown">
-                        {/* eslint-disable-next-line */}
                         <button className="btn btn-outline-primary dropdown-toggle" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                             User Mangement
                         </button>
@@ -57,10 +64,10 @@ function AdminDashboard({ logout }) {
                 </div>
             </div> <hr />
 
-            <h5>AdminName: {adminName}</h5>
-            <h5>AdminUsername: {adminUsername}</h5>
-            <h5>AdminPassword: {adminPassword}</h5>
-            <h5>AdminTel: {adminTel}</h5>
+            <h5>AdminName: {adminInfo.adminName}</h5>
+            <h5>AdminUsername: {adminInfo.adminUsername}</h5>
+            <h5>AdminPassword: {adminInfo.adminPassword}</h5>
+            <h5>AdminTel: {adminInfo.adminTel}</h5>
         </div>
     )
 

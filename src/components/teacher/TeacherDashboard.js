@@ -12,21 +12,30 @@ function TeacherDashboard({ logout }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setTeacherUsername(response.data.teacherUsername);
-            }
-        });
+        axios.get("https://backup-test.onrender.com/teacher", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Teacher Request Error:", response.data.Error);
+                } else {
+                    setTeacherUsername(response.data.teacherUsername);
+                }
+            })
+            .catch((error) => {
+                console.error("Teacher Request Failed:", error);
+            });
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
+        axios.get("https://backup-test.onrender.com/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 logout();
+                localStorage.removeItem('teacherToken');
                 navigate("/");
             }
         });

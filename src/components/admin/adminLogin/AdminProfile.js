@@ -2,10 +2,12 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-function AdminProfile() {
-    const [adminName, setAdminName] = useState("");
-    const [adminUsername, setAdminUsername] = useState("");
-    const [adminPassword, setAdminPassword] = useState("");
+function AdminProfile({ logout }) {
+    const [adminInfo, setAdminInfo] = useState({
+        adminName: "",
+        adminUsername: "",
+        adminPassword: "",
+    });
 
     const [values, setValues] = useState({
         Admin_Username: "",
@@ -16,30 +18,37 @@ function AdminProfile() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/admin").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setAdminName(response.data.adminName);
-                setAdminUsername(response.data.adminUsername);
-                setAdminPassword(response.data.adminPassword);
-                setValues({ ...values, Admin_Username: response.data.adminUsername });
-            }
-        });
-        // eslint-disable-next-line
+        axios.get("https://backup-test.onrender.com/admin", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Admin Request Error:", response.data.Error);
+                } else {
+                    setAdminInfo(response.data);
+                    setValues({ ...values, Admin_Username: response.data.adminUsername });
+                }
+            })
+            .catch((error) => {
+                console.error("Admin Request Failed:", error);
+            });
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://special-problem.onrender.com/admin-forget-password", values).then((response) => {
+        axios.post("https://backup-test.onrender.com/admin-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
+                axios.get("https://backup-test.onrender.com/admin-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {
+                        logout();
+                        localStorage.removeItem('adminToken');
                         navigate("/admin-login");
                     }
                 });
@@ -50,9 +59,9 @@ function AdminProfile() {
     return (
         <div className="container-fluid">
             <h1>Admin Profile</h1> <hr />
-            <h5>AdminName: {adminName}</h5>
-            <h5>AdminUsername: {adminUsername}</h5>
-            <h5>AdminPassword: {adminPassword}</h5> <hr />
+            <h5>AdminName: {adminInfo.adminName}</h5>
+            <h5>AdminUsername: {adminInfo.adminUsername}</h5>
+            <h5>AdminPassword: {adminInfo.adminPassword}</h5> <hr />
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -61,7 +70,7 @@ function AdminProfile() {
                         type="text"
                         className="form-control"
                         placeholder='username'
-                        defaultValue={adminUsername}
+                        defaultValue={adminInfo.adminName}
                     />
                 </div>
 

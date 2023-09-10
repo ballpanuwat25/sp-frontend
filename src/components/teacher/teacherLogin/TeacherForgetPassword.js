@@ -14,7 +14,7 @@ function TeacherForgetPassword() {
     const handleSubmit = (e) => {
         e.preventDefault();
     
-        axios.post("https://special-problem.onrender.com/teacher-forget-password", values).then((response) => {
+        axios.post("https://backup-test.onrender.com/teacher-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

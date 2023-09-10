@@ -2,12 +2,14 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-function StaffProfile() {
-    const [staffId, setStaffId] = useState("");
-    const [staffFirstName, setStaffFirstName] = useState("");
-    const [staffLastName, setStaffLastName] = useState("");
-    const [staffUsername, setStaffUsername] = useState("");
-    const [staffPassword, setStaffPassword] = useState("");
+function StaffProfile({ logout }) {
+    const [staffInfo, setStaffInfo] = useState({    
+        staffId: "",
+        staffFirstName: "",
+        staffLastName: "",
+        staffUsername: "",
+        staffPassword: "",
+    });
 
     const [values, setValues] = useState({
         Staff_Username: "",
@@ -18,32 +20,37 @@ function StaffProfile() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setStaffId(response.data.staffId);
-                setStaffFirstName(response.data.staffFirstName);
-                setStaffLastName(response.data.staffLastName);
-                setStaffUsername(response.data.staffUsername);
-                setStaffPassword(response.data.staffPassword);
-                setValues({ ...values, Staff_Username: response.data.staffUsername });
-            }
-        });
-        // eslint-disable-next-line
+        axios.get("https://backup-test.onrender.com/staff", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Staff Request Error:", response.data.Error);
+                } else {
+                    setStaffInfo(response.data);
+                    setValues({ ...values, Staff_Username: response.data.staffUsername });
+                }
+            })
+            .catch((error) => {
+                console.error("Staff Request Failed:", error);
+            });
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://special-problem.onrender.com/staff-forget-password", values).then((response) => {
+        axios.post("https://backup-test.onrender.com/staff-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+                axios.get("https://backup-test.onrender.com/staff-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {
+                        logout();
+                        localStorage.removeItem('staffToken');
                         navigate("/staff-login");
                     }
                 });
@@ -54,11 +61,11 @@ function StaffProfile() {
     return (
         <div className="container-fluid">
             <h1>Staff Profile</h1> <hr />
-            <h5>StaffId: {staffId}</h5>
-            <h5>StaffFName: {staffFirstName}</h5>
-            <h5>StaffLName: {staffLastName}</h5>
-            <h5>StaffUsername: {staffUsername}</h5>
-            <h5>StaffPassword: {staffPassword}</h5> <hr />
+            <h5>StaffId: {staffInfo.staffId}</h5>
+            <h5>StaffFName: {staffInfo.staffFirstName}</h5>
+            <h5>StaffLName: {staffInfo.staffLastName}</h5>
+            <h5>StaffUsername: {staffInfo.staffUsername}</h5>
+            <h5>StaffPassword: {staffInfo.staffPassword}</h5> <hr />
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -67,7 +74,7 @@ function StaffProfile() {
                         type="text"
                         className="form-control"
                         placeholder='username'
-                        defaultValue={staffUsername}
+                        defaultValue={staffInfo.staffUsername}
                     />
                 </div>
 

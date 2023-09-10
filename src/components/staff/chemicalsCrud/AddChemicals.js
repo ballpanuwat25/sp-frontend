@@ -29,7 +29,11 @@ function AddChemicals() {
     const [scannedText, setScannedText] = useState("");
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff").then((response) => {
+        axios.get("https://backup-test.onrender.com/staff", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+            },
+        }).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -45,15 +49,15 @@ function AddChemicals() {
             const { Chem_Bottle_Id } = chemicals;
 
             // Check if Chem_Id already exists
-            const chemBottleIdExists = await axios.get(`https://special-problem.onrender.com/chemicals-list/${Chem_Bottle_Id}`);
+            const chemBottleIdExists = await axios.get(`https://backup-test.onrender.com/chemicals-list/${Chem_Bottle_Id}`);
             if (chemBottleIdExists.data) {
                 alert("Chem_Id already exists. Please enter a different Chem_Bottle_Id.");
                 return;
             }
 
             const updatedLogActivity = { ...logActivity, LogActivity_Name: "Add Chemicals", Chem_Bottle_Id: Chem_Bottle_Id };
-            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
-            await axios.post("https://special-problem.onrender.com/chemicals-list", chemicals);
+            await axios.post("https://backup-test.onrender.com/log-activity", updatedLogActivity);
+            await axios.post("https://backup-test.onrender.com/chemicals-list", chemicals);
 
             alert("Chemicals added successfully");
             navigate("/chemicals-list");

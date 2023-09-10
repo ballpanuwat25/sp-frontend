@@ -40,7 +40,7 @@ function StudentChemicalsCart() {
                     Request_Room: item.Request_Room,
                     Teacher_Id: item.Teacher_Id,
                 };
-                await axios.post("https://special-problem.onrender.com/chemicals-request-list", requestData);
+                await axios.post("https://backup-test.onrender.com/chemicals-request-list", requestData);
             }
 
             // Clear localStorage

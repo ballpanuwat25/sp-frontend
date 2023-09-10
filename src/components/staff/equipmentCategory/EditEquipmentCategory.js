@@ -16,7 +16,7 @@ function EditEquipmentCategory() {
     }, [])
 
     const getEquipmentCategoryById = async () => {
-        const response = await axios.get(`https://special-problem.onrender.com/equipmentCategory-list/${id}`);
+        const response = await axios.get(`https://backup-test.onrender.com/equipmentCategory-list/${id}`);
         const equipment = response.data;
         setEquipment_Category_Id(equipment.Equipment_Category_Id);
         setEquipment_Category_Name(equipment.Equipment_Category_Name);
@@ -24,7 +24,7 @@ function EditEquipmentCategory() {
 
     const updateEquipmentCategory = async (e) => {
         e.preventDefault();
-        const response = await axios.patch(`https://special-problem.onrender.com/equipmentCategory-list/${id}`, {
+        const response = await axios.patch(`https://backup-test.onrender.com/equipmentCategory-list/${id}`, {
             Equipment_Category_Id,
             Equipment_Category_Name,
         });

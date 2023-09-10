@@ -13,14 +13,21 @@ function TeacherLogin({ login }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://special-problem.onrender.com/teacher-login", values).then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                login();
-                navigate("/teacher-dashboard");
-            }
-        });
+        axios.post("https://backup-test.onrender.com/teacher-login", values)
+            .then((response) => {
+                console.log(response);
+                if (response.data.Error) {
+                    alert(response.data.Error);
+                } else {
+                    const token = response.data.token;
+                    localStorage.setItem("teacherToken", token);
+                    login();
+                    navigate("/teacher-dashboard");
+                }
+            })
+            .catch((error) => {
+                console.error("Axios Error:", error);
+            });
     };
 
     return (

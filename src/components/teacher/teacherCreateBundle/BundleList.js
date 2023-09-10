@@ -21,17 +21,25 @@ function BundleList() {
     }, [bundleList]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setTeacherId(response.data.teacherId);
-            }
-        });
+        axios.get("https://backup-test.onrender.com/teacher", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Teacher Request Error:", response.data.Error);
+                } else {
+                    setTeacherId(response.data.teacherId);
+                }
+            })
+            .catch((error) => {
+                console.error("Teacher Request Failed:", error);
+            });
     }, []);
 
     const getBundleList = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/bundle-list");
+        const response = await axios.get("https://backup-test.onrender.com/bundle-list");
         setBundleList(response.data);
     }
 
@@ -104,7 +112,7 @@ function BundleList() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/bundle-list/${id}`);
+            await axios.delete(`https://backup-test.onrender.com/bundle-list/${id}`);
             alert("Bundle deleted successfully");
             getBundleList();
         } catch (err) {

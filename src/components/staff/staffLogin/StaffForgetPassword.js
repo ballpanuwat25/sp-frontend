@@ -14,7 +14,7 @@ function StaffForgetPassword() {
     const handleSubmit = (e) => {
         e.preventDefault();
     
-        axios.post("https://special-problem.onrender.com/staff-forget-password", values).then((response) => {
+        axios.post("https://backup-test.onrender.com/staff-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

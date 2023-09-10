@@ -5,39 +5,45 @@ import StudentChemicalsList from './studentChemReq/StudentChemicalsList';
 import StudentEquipmentList from './studentEquipmentReq/StudentEquipmentList';
 
 function StudentDashboard() {
-    const [studentId, setStudentId] = useState("");
-    const [studentFirstName, setStudentFirstName] = useState("");
-    const [studentLastName, setStudentLastName] = useState("");
-    const [studentEmail, setStudentEmail] = useState("");
-    const [studentPassword, setStudentPassword] = useState("");
-    const [studentTel, setStudentTel] = useState("");
+    const [studentInfo, setStudentInfo] = useState({
+        studentId: "",
+        studentFirstName: "",
+        studentLastName: "",
+        studentEmail: "",
+        studentPassword: "",
+        studentTel: "",
+    });
 
     const navigate = useNavigate();
 
     axios.defaults.withCredentials = true;
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/student").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setStudentId(response.data.studentId);
-                setStudentFirstName(response.data.studentFirstName);
-                setStudentLastName(response.data.studentLastName);
-                setStudentEmail(response.data.studentEmail);
-                setStudentPassword(response.data.studentPassword);
-                setStudentTel(response.data.studentTel);
-            }
-        });
+        axios.get("https://backup-test.onrender.com/student", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Student Request Error:", response.data.Error);
+                } else {
+                    setStudentInfo(response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Student Request Failed:", error);
+            });
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
+        axios.get("https://backup-test.onrender.com/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 localStorage.removeItem('user_name');
                 localStorage.removeItem('user_email');
                 localStorage.removeItem('user_picture');
+                localStorage.removeItem('studentToken');
                 navigate("/");
             }
         });
@@ -51,11 +57,11 @@ function StudentDashboard() {
                         <h2>Student Dashboard</h2>
                         <hr />
                         <div>
-                            <h5>StudentId: {studentId}</h5>
-                            <h5>Name: {studentFirstName} {studentLastName}</h5>
-                            <h5>Email: {studentEmail}</h5>
-                            <h5>Password: {studentPassword}</h5>
-                            <h5>Tel: {studentTel}</h5>
+                            <h5>StudentId: {studentInfo.studentId}</h5>
+                            <h5>Name: {studentInfo.studentFirstName} {studentInfo.studentLastName}</h5>
+                            <h5>Email: {studentInfo.studentEmail}</h5>
+                            <h5>Password: {studentInfo.studentPassword}</h5>
+                            <h5>Tel: {studentInfo.studentTel}</h5>
                         </div>
                         <hr />
                         <div className="dropdown">

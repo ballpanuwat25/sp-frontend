@@ -10,13 +10,13 @@ const TeacherList = () => {
     }, []);
 
     const getTeachers = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/teacher-list");
+        const response = await axios.get("https://backup-test.onrender.com/teacher-list");
         setTeachers(response.data);
     };
 
     const deleteTeacher = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/teacher-list/${id}`)
+            await axios.delete(`https://backup-test.onrender.com/teacher-list/${id}`)
             getTeachers();
         } catch (error) {
             console.log(error)

@@ -16,13 +16,13 @@ function LogActivity() {
     }, [logActivity]);
 
     const getLogActivity = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/log-activity");
+        const response = await axios.get("https://backup-test.onrender.com/log-activity");
         setLogActivity(response.data);
     }
 
     const deleteLogActivity = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/log-activity/${id}`)
+            await axios.delete(`https://backup-test.onrender.com/log-activity/${id}`)
             getLogActivity();
         } catch (error) {
             console.log(error)

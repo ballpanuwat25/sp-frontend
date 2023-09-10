@@ -3,11 +3,13 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 function StudentProfile() {
-    const [studentId, setStudentId] = useState("");
-    const [studentFirstName, setStudentFirstName] = useState("");
-    const [studentLastName, setStudentLastName] = useState("");
-    const [studentEmail, setStudentEmail] = useState("");
-    const [studentPassword, setStudentPassword] = useState("");
+    const [studentInfo, setStudentInfo] = useState({
+        studentId: "",
+        studentFirstName: "",
+        studentLastName: "",
+        studentEmail: "",
+        studentPassword: "",
+    });
 
     const [values, setValues] = useState({
         Student_Email: "",
@@ -18,32 +20,36 @@ function StudentProfile() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/student").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setStudentId(response.data.studentId);
-                setStudentFirstName(response.data.studentFirstName);
-                setStudentLastName(response.data.studentLastName);
-                setStudentEmail(response.data.studentEmail);
-                setStudentPassword(response.data.studentPassword);
-                setValues({ ...values, Student_Email: response.data.studentEmail });
-            }
-        });
-        // eslint-disable-next-line
+        axios.get("https://backup-test.onrender.com/student", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Student Request Error:", response.data.Error);
+                } else {
+                    setStudentInfo(response.data);
+                    setValues({ ...values, Student_Email: response.data.studentEmail });
+                }
+            })
+            .catch((error) => {
+                console.error("Student Request Failed:", error);
+            });
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://special-problem.onrender.com/student-forget-password", values).then((response) => {
+        axios.post("https://backup-test.onrender.com/student-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
+                axios.get("https://backup-test.onrender.com/student-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {
+                        localStorage.removeItem('studentToken');
                         navigate("/student-login");
                     }
                 });
@@ -54,11 +60,11 @@ function StudentProfile() {
     return (
         <div className="container-fluid">
             <h1>Student Profile</h1> <hr />
-            <h5>StudentId: {studentId}</h5>
-            <h5>StudentFName: {studentFirstName}</h5>
-            <h5>StudentLName: {studentLastName}</h5>
-            <h5>StudentEmail: {studentEmail}</h5>
-            <h5>StudentPassword: {studentPassword}</h5> <hr />
+            <h5>StudentId: {studentInfo.studentId}</h5>
+            <h5>StudentFName: {studentInfo.studentFirstName}</h5>
+            <h5>StudentLName: {studentInfo.studentLastName}</h5>
+            <h5>StudentEmail: {studentInfo.studentEmail}</h5>
+            <h5>StudentPassword: {studentInfo.studentPassword}</h5> <hr />
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -67,7 +73,7 @@ function StudentProfile() {
                         type="text"
                         className="form-control"
                         placeholder='email'
-                        defaultValue={studentEmail}
+                        defaultValue={studentInfo.studentEmail}
                     />
                 </div>
 

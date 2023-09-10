@@ -7,11 +7,12 @@ function StaffDashboard({ logout }) {
     axios.defaults.withCredentials = true;
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get("https://backup-test.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 logout();
+                localStorage.removeItem('staffToken');
                 navigate("/");
             }
         });

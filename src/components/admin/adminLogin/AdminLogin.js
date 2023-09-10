@@ -13,14 +13,21 @@ function AdminLogin({ login }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://special-problem.onrender.com/admin-login", values).then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                login();
-                navigate("/admin-dashboard");
-            }
-        });
+        axios.post("https://backup-test.onrender.com/admin-login", values)
+            .then((response) => {
+                console.log(response);
+                if (response.data.Error) {
+                    alert(response.data.Error);
+                } else {
+                    const token = response.data.token;
+                    localStorage.setItem("adminToken", token);
+                    login();
+                    navigate("/admin-dashboard");
+                }
+            })
+            .catch((error) => {
+                console.error("Axios Error:", error);
+            });
     };
 
     return (

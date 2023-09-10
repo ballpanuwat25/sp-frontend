@@ -13,14 +13,21 @@ function StaffLogin({ login }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://special-problem.onrender.com/staff-login", values).then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                login();
-                navigate("/staff-dashboard");
-            }
-        });
+        axios.post("https://backup-test.onrender.com/staff-login", values)
+            .then((response) => {
+                console.log(response);
+                if (response.data.Error) {
+                    alert(response.data.Error);
+                } else {
+                    const token = response.data.token;
+                    localStorage.setItem("staffToken", token);
+                    login();
+                    navigate("/staff-dashboard");
+                }
+            })
+            .catch((error) => {
+                console.error("Axios Error:", error);
+            });
     };
 
     return (

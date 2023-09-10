@@ -38,7 +38,11 @@ function StudentBundleRequest() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/student").then((response) => {
+        axios.get("https://backup-test.onrender.com/student", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
+            },
+        }).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -62,9 +66,9 @@ function StudentBundleRequest() {
 
     const fetchData = async () => {
         try {
-            const bundleResponse = await axios.get(`https://special-problem.onrender.com/bundle-list/${id}`);
-            const chemicalsResponse = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
-            const equipmentResponse = await axios.get("https://special-problem.onrender.com/equipment-list");
+            const bundleResponse = await axios.get(`https://backup-test.onrender.com/bundle-list/${id}`);
+            const chemicalsResponse = await axios.get("https://backup-test.onrender.com/chemicalsDetail-list");
+            const equipmentResponse = await axios.get("https://backup-test.onrender.com/equipment-list");
 
             setBundles(bundleResponse.data);
             setChemicals(chemicalsResponse.data);
@@ -103,9 +107,9 @@ function StudentBundleRequest() {
 
             await Promise.all(allRequests.map((requestData) => {
                 if (requestData.Chem_Id) {
-                    return axios.post("https://special-problem.onrender.com/chemicals-request-list", requestData);
+                    return axios.post("https://backup-test.onrender.com/chemicals-request-list", requestData);
                 } else if (requestData.Equipment_Id) {
-                    return axios.post("https://special-problem.onrender.com/equipment-request-list", requestData);
+                    return axios.post("https://backup-test.onrender.com/equipment-request-list", requestData);
                 }
                 // You can add more conditions if needed
             }));

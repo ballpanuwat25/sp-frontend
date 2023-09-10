@@ -18,11 +18,11 @@ function StudentGoogleRegister() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://special-problem.onrender.com/student-register", values).then((response) => {
+        axios.post("https://backup-test.onrender.com/student-register", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                axios.post("https://special-problem.onrender.com/student-login", values).then((response) => {
+                axios.post("https://backup-test.onrender.com/student-login", values).then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {

@@ -10,12 +10,16 @@ function TeacherChemicalsRequest() {
     const [selectedIds, setSelectedIds] = useState([]);
 
     const [studentIdSearch, setStudentIdSearch] = useState("");
-    const [teacherIdSearch, setTeacherIdSearch] = useState(""); 
+    const [teacherIdSearch, setTeacherIdSearch] = useState("");
 
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
+        axios.get("https://backup-test.onrender.com/teacher", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
+            },
+        }).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -29,7 +33,7 @@ function TeacherChemicalsRequest() {
     }, []);
 
     const getChemicalsRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
+        const response = await axios.get("https://backup-test.onrender.com/chemicals-request-list");
         setChemicalsReq(response.data);
     };
 
@@ -65,7 +69,7 @@ function TeacherChemicalsRequest() {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`https://special-problem.onrender.com/chemicals-request-list/${id}`, data);
+            await axios.patch(`https://backup-test.onrender.com/chemicals-request-list/${id}`, data);
             getChemicalsRequest(); // Refresh the chemicals request list after updating status
         } catch (error) {
             console.log(error);

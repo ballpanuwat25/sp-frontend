@@ -16,7 +16,7 @@ function StudentBundleList() {
     }, [bundleList]);
 
     const getBundleList = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/bundle-list");
+        const response = await axios.get("https://backup-test.onrender.com/bundle-list");
         setBundleList(response.data);
     }
 

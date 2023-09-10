@@ -13,7 +13,7 @@ function StaffEquipmentRequestList() {
     }, [searchQuery]);
 
     const getEquipmentRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
+        const response = await axios.get("https://backup-test.onrender.com/equipment-request-list");
         setEquipmentReq(response.data);
     };
 
@@ -46,7 +46,7 @@ function StaffEquipmentRequestList() {
                 Request_Status: "Declined",
                 Request_Comment: comment,
             };
-            await axios.patch(`https://special-problem.onrender.com/equipment-request-list/${id}`, data);
+            await axios.patch(`https://backup-test.onrender.com/equipment-request-list/${id}`, data);
         } catch (error) {
             console.log(error);
         }
@@ -54,7 +54,7 @@ function StaffEquipmentRequestList() {
 
     const deleteEquipmentRequest = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`)
+            await axios.delete(`https://backup-test.onrender.com/equipment-request-list/${id}`)
             getEquipmentRequest();
         } catch (error) {
             console.log(error)
