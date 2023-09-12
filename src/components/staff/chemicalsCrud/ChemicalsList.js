@@ -28,7 +28,7 @@ function ChemicalsList() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/staff", {
+        axios.get("http://localhost:3001/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -48,20 +48,20 @@ function ChemicalsList() {
     }, []);
 
     const getChemicals = async () => {
-        const response = await axios.get("https://backup-test.onrender.com/chemicals-list");
+        const response = await axios.get("http://localhost:3001/chemicals-list");
         setChemicals(response.data);
     }
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("https://backup-test.onrender.com/chemicalsDetail-list");
+        const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
         setChemicalsDetail(response.data);
     }
 
     const deleteChemicals = async (id) => {
         try {
             const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Chemicals", Chem_Bottle_Id: id, Staff_Id: staffId };
-            await axios.post("https://backup-test.onrender.com/log-activity", updatedLogActivity);
-            await axios.delete(`https://backup-test.onrender.com/chemicals-list/${id}`)
+            await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
+            await axios.delete(`http://localhost:3001/chemicals-list/${id}`)
             getChemicals();
         } catch (error) {
             console.log(error)

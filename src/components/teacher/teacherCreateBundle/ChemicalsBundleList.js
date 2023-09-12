@@ -16,7 +16,7 @@ function ChemicalsBundleList() {
     const [selectedChemicalsId, setSelectedChemicalsId] = useState(null);
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/teacher").then((response) => {
+        axios.get("http://localhost:3001/teacher").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -37,7 +37,7 @@ function ChemicalsBundleList() {
     }, [chemicalsDetail]);
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("https://backup-test.onrender.com/chemicalsDetail-list");
+        const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
         setChemicalsDetail(response.data);
     }
 

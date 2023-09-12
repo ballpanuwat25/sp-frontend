@@ -13,7 +13,7 @@ function TeacherLogin({ login }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://backup-test.onrender.com/teacher-login", values)
+        axios.post("http://localhost:3001/teacher-login", values)
             .then((response) => {
                 console.log(response);
                 if (response.data.Error) {

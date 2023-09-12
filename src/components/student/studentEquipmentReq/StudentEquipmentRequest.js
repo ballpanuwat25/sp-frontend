@@ -35,7 +35,7 @@ function StudentEquipmentRequest() {
     }, [equipmentReq]);
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/student", {
+        axios.get("http://localhost:3001/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -50,7 +50,7 @@ function StudentEquipmentRequest() {
     }, []);
 
     const getEquipmentRequest = async () => {
-        const response = await axios.get("https://backup-test.onrender.com/equipment-request-list");
+        const response = await axios.get("http://localhost:3001/equipment-request-list");
         setEquipmentReq(response.data);
     };
 

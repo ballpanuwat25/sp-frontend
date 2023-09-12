@@ -21,7 +21,7 @@ function BundleList() {
     }, [bundleList]);
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/teacher", {
+        axios.get("http://localhost:3001/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -39,7 +39,7 @@ function BundleList() {
     }, []);
 
     const getBundleList = async () => {
-        const response = await axios.get("https://backup-test.onrender.com/bundle-list");
+        const response = await axios.get("http://localhost:3001/bundle-list");
         setBundleList(response.data);
     }
 
@@ -112,7 +112,7 @@ function BundleList() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://backup-test.onrender.com/bundle-list/${id}`);
+            await axios.delete(`http://localhost:3001/bundle-list/${id}`);
             alert("Bundle deleted successfully");
             getBundleList();
         } catch (err) {

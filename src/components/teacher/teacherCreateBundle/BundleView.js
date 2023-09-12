@@ -36,7 +36,7 @@ function BundleView() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/student", {
+        axios.get("http://localhost:3001/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -64,9 +64,9 @@ function BundleView() {
 
     const fetchData = async () => {
         try {
-            const bundleResponse = await axios.get(`https://backup-test.onrender.com/bundle-list/${id}`);
-            const chemicalsResponse = await axios.get("https://backup-test.onrender.com/chemicalsDetail-list");
-            const equipmentResponse = await axios.get("https://backup-test.onrender.com/equipment-list");
+            const bundleResponse = await axios.get(`http://localhost:3001/bundle-list/${id}`);
+            const chemicalsResponse = await axios.get("http://localhost:3001/chemicalsDetail-list");
+            const equipmentResponse = await axios.get("http://localhost:3001/equipment-list");
 
             setBundles(bundleResponse.data);
             setChemicals(chemicalsResponse.data);
@@ -104,9 +104,9 @@ function BundleView() {
 
             await Promise.all(allRequests.map((requestData) => {
                 if (requestData.Chem_Id) {
-                    return axios.post("https://backup-test.onrender.com/chemicals-request-list", requestData);
+                    return axios.post("http://localhost:3001/chemicals-request-list", requestData);
                 } else if (requestData.Equipment_Id) {
-                    return axios.post("https://backup-test.onrender.com/equipment-request-list", requestData);
+                    return axios.post("http://localhost:3001/equipment-request-list", requestData);
                 }
                 // You can add more conditions if needed
             }));

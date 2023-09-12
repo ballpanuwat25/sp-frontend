@@ -12,7 +12,7 @@ function TeacherDashboard({ logout }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/teacher", {
+        axios.get("http://localhost:3001/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -30,7 +30,7 @@ function TeacherDashboard({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://backup-test.onrender.com/teacher-logout").then((response) => {
+        axios.get("http://localhost:3001/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

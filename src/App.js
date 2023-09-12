@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Home from './components/Home.js';
+import Home from './components/home/Home.js';
 
 //------------------------------------------------------------ Admin ------------------------------------------------------------//
 import AdminLogin from './components/admin/adminLogin/AdminLogin.js';

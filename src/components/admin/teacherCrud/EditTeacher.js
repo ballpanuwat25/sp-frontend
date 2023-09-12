@@ -19,7 +19,7 @@ function EditTeacher() {
     }, [])
 
     const getTeachersById = async () => {
-        const response = await axios.get(`https://backup-test.onrender.com/teacher-list/${id}`);
+        const response = await axios.get(`http://localhost:3001/teacher-list/${id}`);
         const teacher = response.data;
         setTeacher_FName(teacher.Teacher_FName);
         setTeacher_LName(teacher.Teacher_LName);
@@ -30,7 +30,7 @@ function EditTeacher() {
 
     const updateTeacher = async (e) => {
         e.preventDefault();
-        const response = await axios.patch(`https://backup-test.onrender.com/teacher-list/${id}`, {
+        const response = await axios.patch(`http://localhost:3001/teacher-list/${id}`, {
             Teacher_FName,
             Teacher_LName,
             Teacher_Username,

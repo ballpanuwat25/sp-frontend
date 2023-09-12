@@ -16,7 +16,7 @@ function EquipmentBundleList() {
     const [selectedEquipmentId, setSelectedEquipmentId] = useState(null);
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/teacher", {
+        axios.get("http://localhost:3001/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -41,7 +41,7 @@ function EquipmentBundleList() {
     }, [equipment]);
 
     const getEquipment = async () => {
-        const response = await axios.get("https://backup-test.onrender.com/equipment-list");
+        const response = await axios.get("http://localhost:3001/equipment-list");
         setEquipment(response.data);
     }
 

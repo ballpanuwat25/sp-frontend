@@ -38,7 +38,7 @@ function StudentEquipmentCart() {
                     Request_Room: item.Request_Room,
                     Teacher_Id: item.Teacher_Id,
                 };
-                await axios.post("https://backup-test.onrender.com/equipment-request-list", requestData);
+                await axios.post("http://localhost:3001/equipment-request-list", requestData);
             }
 
             // Clear localStorage

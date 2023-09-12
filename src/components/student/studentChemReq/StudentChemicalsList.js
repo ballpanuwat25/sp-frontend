@@ -27,7 +27,7 @@ function StudentChemicalsList() {
 
     const getChemicalsRequest = async () => {
         try {
-            const response = await axios.get("https://backup-test.onrender.com/chemicals-request-list");
+            const response = await axios.get("http://localhost:3001/chemicals-request-list");
             setChemicalsReq(response.data);
             findMostRequestedChemIds(response.data, 3);
         } catch (error) {
@@ -72,7 +72,7 @@ function StudentChemicalsList() {
 
     const getEquipmentRequest = async () => {
         try {
-            const response = await axios.get("https://backup-test.onrender.com/equipment-request-list");
+            const response = await axios.get("http://localhost:3001/equipment-request-list");
             findMostRequestedEquipIds(response.data, 3);
         } catch (error) {
             console.error("Error fetching equipment request:", error);
@@ -114,7 +114,7 @@ function StudentChemicalsList() {
     };
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/student", {
+        axios.get("http://localhost:3001/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -139,7 +139,7 @@ function StudentChemicalsList() {
     }, [chemicalsDetail]);
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("https://backup-test.onrender.com/chemicalsDetail-list");
+        const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
         setChemicalsDetail(response.data);
     }
 

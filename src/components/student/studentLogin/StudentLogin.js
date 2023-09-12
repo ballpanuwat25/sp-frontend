@@ -15,7 +15,7 @@ function StudentLogin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("https://backup-test.onrender.com/student-login", values)
+    axios.post("http://localhost:3001/student-login", values)
       .then((response) => {
         console.log(response);
         if (response.data.Error) {

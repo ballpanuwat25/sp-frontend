@@ -13,7 +13,7 @@ function AddEquipmentCategory() {
     const saveEquipmentCategory = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("https://backup-test.onrender.com/equipmentCategory-list", (equipmentCategory));
+            await axios.post("http://localhost:3001/equipmentCategory-list", (equipmentCategory));
             navigate("/equipmentCategory-list");
         } catch (err) {
             console.log(err);

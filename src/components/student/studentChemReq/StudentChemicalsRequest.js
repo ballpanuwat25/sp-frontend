@@ -35,7 +35,7 @@ function StudentChemicalsRequest() {
     }, [chemicalsReq]);
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/student", {
+        axios.get("http://localhost:3001/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -50,7 +50,7 @@ function StudentChemicalsRequest() {
     }, []);
 
     const getChemicalsRequest = async () => {
-        const response = await axios.get("https://backup-test.onrender.com/chemicals-request-list");
+        const response = await axios.get("http://localhost:3001/chemicals-request-list");
         setChemicalsReq(response.data);
     };
 

@@ -20,7 +20,7 @@ function StaffProfile({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/staff", {
+        axios.get("http://localhost:3001/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -40,12 +40,12 @@ function StaffProfile({ logout }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://backup-test.onrender.com/staff-forget-password", values).then((response) => {
+        axios.post("http://localhost:3001/staff-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("https://backup-test.onrender.com/staff-logout").then((response) => {
+                axios.get("http://localhost:3001/staff-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {

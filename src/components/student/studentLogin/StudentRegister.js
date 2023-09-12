@@ -18,7 +18,7 @@ function StudentRegister() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://backup-test.onrender.com/student-register", values).then((response) => {
+        axios.post("http://localhost:3001/student-register", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

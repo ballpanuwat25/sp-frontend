@@ -17,7 +17,7 @@ function AddTeacher() {
     const saveTeacher = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("https://backup-test.onrender.com/teacher-list", (teacher));
+            await axios.post("http://localhost:3001/teacher-list", (teacher));
             navigate("/teacher-list");
         } catch (err) {
             console.log(err);

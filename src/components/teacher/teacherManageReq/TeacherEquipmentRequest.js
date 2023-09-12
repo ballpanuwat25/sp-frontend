@@ -15,7 +15,7 @@ function TeacherEquipmentRequest() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/teacher", {
+        axios.get("http://localhost:3001/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -33,7 +33,7 @@ function TeacherEquipmentRequest() {
     }, []);
 
     const getEquipmentRequest = async () => {
-        const response = await axios.get("https://backup-test.onrender.com/equipment-request-list");
+        const response = await axios.get("http://localhost:3001/equipment-request-list");
         setEquipmentReq(response.data);
     };
 
@@ -69,7 +69,7 @@ function TeacherEquipmentRequest() {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`https://backup-test.onrender.com/equipment-request-list/${id}`, data);
+            await axios.patch(`http://localhost:3001/equipment-request-list/${id}`, data);
             getEquipmentRequest();
         } catch (err) {
             console.log(err);

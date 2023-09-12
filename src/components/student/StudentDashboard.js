@@ -18,7 +18,7 @@ function StudentDashboard() {
 
     axios.defaults.withCredentials = true;
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/student", {
+        axios.get("http://localhost:3001/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -36,7 +36,7 @@ function StudentDashboard() {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://backup-test.onrender.com/student-logout").then((response) => {
+        axios.get("http://localhost:3001/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

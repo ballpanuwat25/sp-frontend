@@ -29,12 +29,12 @@ function ChemicalsStockList() {
   }, []);
 
   const getChemicals = async () => {
-    const response = await axios.get("https://backup-test.onrender.com/chemicals-list");
+    const response = await axios.get("http://localhost:3001/chemicals-list");
     setChemicals(response.data);
   }
 
   const getChemicalsDetail = async () => {
-    const response = await axios.get("https://backup-test.onrender.com/chemicalsDetail-list");
+    const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
     setChemicalsDetail(response.data);
   }
 

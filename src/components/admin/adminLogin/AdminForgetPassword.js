@@ -14,7 +14,7 @@ function AdminForgetPassword() {
     const handleSubmit = (e) => {
         e.preventDefault();
     
-        axios.post("https://backup-test.onrender.com/admin-forget-password", values).then((response) => {
+        axios.post("http://localhost:3001/admin-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

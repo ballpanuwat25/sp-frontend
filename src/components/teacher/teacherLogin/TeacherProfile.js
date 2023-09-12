@@ -20,7 +20,7 @@ function TeacherProfile({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/teacher", {
+        axios.get("http://localhost:3001/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -40,12 +40,12 @@ function TeacherProfile({ logout }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://backup-test.onrender.com/teacher-forget-password", values).then((response) => {
+        axios.post("http://localhost:3001/teacher-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("https://backup-test.onrender.com/teacher-logout").then((response) => {
+                axios.get("http://localhost:3001/teacher-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {

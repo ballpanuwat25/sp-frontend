@@ -17,7 +17,7 @@ function AddStaff() {
     const saveStaff = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("https://backup-test.onrender.com/staff-list", (staff));
+            await axios.post("http://localhost:3001/staff-list", (staff));
             navigate("/staff-list");
         } catch (err) {
             console.log(err);

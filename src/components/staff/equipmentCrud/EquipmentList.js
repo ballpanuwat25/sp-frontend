@@ -16,7 +16,7 @@ function EquipmentList() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/staff", {
+        axios.get("http://localhost:3001/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -36,7 +36,7 @@ function EquipmentList() {
 
     const getEquipment = async () => {
         try {
-            const response = await axios.get("https://backup-test.onrender.com/equipment-list");
+            const response = await axios.get("http://localhost:3001/equipment-list");
             setEquipment(response.data);
         } catch (error) {
             console.log(error);
@@ -46,8 +46,8 @@ function EquipmentList() {
     const deleteEquipment = async (id) => {
             try {
                 const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Equipment", Equipment_Id: id, Staff_Id: staffId };
-                await axios.post("https://backup-test.onrender.com/log-activity", updatedLogActivity);
-                await axios.delete(`https://backup-test.onrender.com/equipment-list/${id}`)
+                await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
+                await axios.delete(`http://localhost:3001/equipment-list/${id}`)
                 getEquipment();
             } catch (error) {
                 console.log(error)

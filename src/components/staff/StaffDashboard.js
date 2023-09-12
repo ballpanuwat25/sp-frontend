@@ -7,7 +7,7 @@ function StaffDashboard({ logout }) {
     axios.defaults.withCredentials = true;
 
     const handleLogout = () => {
-        axios.get("https://backup-test.onrender.com/staff-logout").then((response) => {
+        axios.get("http://localhost:3001/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

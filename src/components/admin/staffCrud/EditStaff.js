@@ -19,7 +19,7 @@ function EditStaff() {
     }, [])
 
     const getStaffsById = async () => {
-        const response = await axios.get(`https://backup-test.onrender.com/staff-list/${id}`);
+        const response = await axios.get(`http://localhost:3001/staff-list/${id}`);
         const staff = response.data;
         setStaff_FName(staff.Staff_FName);
         setStaff_LName(staff.Staff_LName);
@@ -30,7 +30,7 @@ function EditStaff() {
 
     const updateStaff = async (e) => {
         e.preventDefault();
-        const response = await axios.patch(`https://backup-test.onrender.com/staff-list/${id}`, {
+        const response = await axios.patch(`http://localhost:3001/staff-list/${id}`, {
             Staff_FName,
             Staff_LName,
             Staff_Username,

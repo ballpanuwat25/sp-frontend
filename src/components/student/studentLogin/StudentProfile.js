@@ -20,7 +20,7 @@ function StudentProfile() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://backup-test.onrender.com/student", {
+        axios.get("http://localhost:3001/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -40,12 +40,12 @@ function StudentProfile() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("https://backup-test.onrender.com/student-forget-password", values).then((response) => {
+        axios.post("http://localhost:3001/student-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("https://backup-test.onrender.com/student-logout").then((response) => {
+                axios.get("http://localhost:3001/student-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {

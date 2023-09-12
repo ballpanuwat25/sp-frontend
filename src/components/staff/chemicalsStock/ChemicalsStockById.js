@@ -8,7 +8,7 @@ function ChemicalsStockById() {
 
     const getChemicalsByChemId = async (chemId) => {
         try {
-            const response = await axios.get(`https://backup-test.onrender.com/chemicals-list/chemid/${chemId}`);
+            const response = await axios.get(`http://localhost:3001/chemicals-list/chemid/${chemId}`);
             setChemicals(response.data);
         } catch (error) {
             console.log(error);
