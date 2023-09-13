@@ -5,7 +5,7 @@ import './Home.css'
 function Home() {
     return (
         <div className='container-fluid vh-100'>
-            <main className='home px-4'>
+            <main className='home'>
                 <nav className='home__header mt-1'>
                     <Header />
                 </nav>
@@ -13,8 +13,8 @@ function Home() {
                 <div className='home__container pb-4'>
                     <div className='home__container home__container--left'>
                         <div className='home__text'>
-                            <h1>Chemicals & <br /> Equipment</h1>
-                            <p>Get all your laboratory chemicals & equipment here</p>
+                            <h1 className='home__title mb-4'>Chemicals & <br /> Equipment</h1>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nibh tortor, lacinia sit amet eleifend nec, sodales a nisi. Vivamus ante est, ullamcorper blandit consectetur eget,</p>
                             <button className='btn btn-primary'>Get Started</button>
                         </div>
                     </div>
@@ -39,6 +39,10 @@ function Home() {
                         </div>
                     </div>
                 </div>
+
+                <footer className='home__footer'>
+                    <p>© 2023 Panuwat Pisavong | All rights reserved.</p>
+                </footer>
             </main>
         </div>
     )
