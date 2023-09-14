@@ -1,0 +1,47 @@
+.header__button {
+    color: #006C68;
+    font-weight: 600;
+    font-size: 18px;
+    
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.header__button--hover {
+    line-height: 2;
+    position: relative;
+}
+
+.header__button--hover::before {
+    content: '';
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    background-color:#006C68;
+    position: absolute;
+    bottom: -.25rem;
+    right: 0;
+    transition: right .4s, width .4s, left .4s;
+}
+
+.header__button--hover:hover{
+    color: #006C68;
+}
+
+.header__button--hover:hover::before {
+    width: 100%;
+    left: 0;
+}
+
+.header__button--signup {
+    border: 2px solid #006C68;
+    padding: 6px 12px;
+    
+    color: #006C68;
+    transition: background-color 0.4s, color 0.4s;
+}
+
+.header__button--signup:hover {
+    background-color: #006C68;
+    color: white;
+}

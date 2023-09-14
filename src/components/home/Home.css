@@ -5,11 +5,7 @@
 
     display: grid;
     grid:
-        "header header header" 0.125fr 
-        "content content content" 1.125fr 
-        "content content content" 1.125fr
-        "footer footer footer" 0.125fr
-        / 1fr 1fr 1fr;
+        "header header header" 0.125fr "content content content" 1.125fr "content content content" 1.125fr "footer footer footer" 0.125fr / 1fr 1fr 1fr;
     gap: 8px;
 }
 
@@ -23,17 +19,44 @@
 }
 
 .home__container--left {
-    flex: 0.4;
+    flex: 0.5;
     align-items: center;
 }
 
+.home__text {
+    margin-top: -5rem;
+}
+
 .home__title {
-    font-size: 5.5rem;
+    font-size: 72px;
     font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    color: #006C68;
+}
+
+.home__subtitle {
+    font-size: 18px;
+    font-weight: 400;
+    color: #006C68;
+}
+
+.home__cta {
+    color: white;
+    font-weight: 600;
+
+    background-color: #006C68;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 10px;
+}
+
+.home__cta:hover {
+    color: white;
+    background-color: #00908B;
 }
 
 .home__container--right {
-    flex: 0.6;
+    flex: 0.5;
     align-items: center;
 }
 
@@ -47,9 +70,10 @@
 .home__spline {
     position: absolute;
     text-align: center;
+    overflow: hidden;
 
     border-radius: 15px;
-    border: 1px solid black;
+    box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, 0.1);
 }
 
 .home__spline--microscope {
@@ -84,21 +108,52 @@
 .home__spline--marquee {
     width: 200px;
     height: 70px;
-    background-color: khaki;
 
-    bottom: 75px;
+    color: #00908B;
+    font-weight: 600;
+
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    top: 638px;
     right: 300px;
 
     z-index: 1;
+
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    overflow: hidden;
+}
+
+.marquee__text {
+    font-weight: 700;
+    letter-spacing: 4px;
 }
 
 .home__spline--icon {
     width: 100px;
     height: 60px;
-    background-color: lightgreen;
+
+    color: #00908B;
+    font-size: 2.25rem;
+    font-weight: 700;
+
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
 
     top: 320px;
     right: 0px;
+}
+
+.fa-react {
+    animation: spin 5s linear infinite;
 }
 
 .home__footer {
@@ -106,5 +161,124 @@
     justify-content: center;
     align-items: center;
 
+    color: #006C68;
+
     grid-area: footer;
+}
+
+.wave-menu {
+    border-radius: 50px;
+    width: 200px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    transition: ease 0.2s;
+    position: relative;
+}
+
+.wave-menu li {
+    list-style: none;
+    height: 30px;
+    width: 3px;
+    border-radius: 10px;
+    background: #00908B;
+    margin: 0 6px;
+    padding: 0;
+    animation-name: wave1;
+    animation-duration: 0.3s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    transition: ease 0.2s;
+}
+
+.wave-menu li:nth-child(2) {
+    animation-name: wave2;
+    animation-delay: 0.2s;
+}
+
+.wave-menu li:nth-child(3) {
+    animation-name: wave3;
+    animation-delay: 0.23s;
+    animation-duration: 0.4s;
+}
+
+.wave-menu li:nth-child(4) {
+    animation-name: wave4;
+    animation-delay: 0.1s;
+    animation-duration: 0.3s;
+}
+
+.wave-menu li:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+.wave-menu li:nth-child(6) {
+    animation-name: wave2;
+    animation-duration: 0.5s;
+}
+
+.wave-menu li:nth-child(8) {
+    animation-name: wave4;
+    animation-delay: 0.4s;
+    animation-duration: 0.25s;
+}
+
+.wave-menu li:nth-child(9) {
+    animation-name: wave3;
+    animation-delay: 0.15s;
+}
+
+@keyframes wave1 {
+    from {
+        transform: scaleY(1);
+    }
+
+    to {
+        transform: scaleY(0.5);
+    }
+}
+
+@keyframes wave2 {
+    from {
+        transform: scaleY(0.3);
+    }
+
+    to {
+        transform: scaleY(0.6);
+    }
+}
+
+@keyframes wave3 {
+    from {
+        transform: scaleY(0.6);
+    }
+
+    to {
+        transform: scaleY(0.8);
+    }
+}
+
+@keyframes wave4 {
+    from {
+        transform: scaleY(0.2);
+    }
+
+    to {
+        transform: scaleY(0.5);
+    }
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-360deg);
+    }
 }

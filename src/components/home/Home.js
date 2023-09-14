@@ -2,6 +2,8 @@ import Header from '../header/Header'
 import React from 'react'
 import './Home.css'
 
+import Spline from '@splinetool/react-spline';
+
 function Home() {
     return (
         <div className='container-fluid vh-100'>
@@ -13,28 +15,40 @@ function Home() {
                 <div className='home__container pb-4'>
                     <div className='home__container home__container--left'>
                         <div className='home__text'>
-                            <h1 className='home__title mb-4'>Chemicals & <br /> Equipment</h1>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nibh tortor, lacinia sit amet eleifend nec, sodales a nisi. Vivamus ante est, ullamcorper blandit consectetur eget,</p>
-                            <button className='btn btn-primary'>Get Started</button>
+                            <h1 className='home__title mb-4'>Empowering <br/> Tomorrow's Innovators
+                            </h1>
+                            <p className="home__subtitle mb-3">Seamlessly bridge the gap between student ingenuity and academic resources through our <br/> Chemical Disbursement System. Your graduation project, your convenience, our commitment.</p>
+                            <button className='home__cta btn px-4'>Get Started</button>
                         </div>
                     </div>
 
                     <div className='home__container home__container--right'>
                         <div className='home__splineGroup'>
                             <div className='home__spline home__spline--microscope'>
-                                microscopes
+                                <Spline scene="https://prod.spline.design/7G8JsiZc4woQ6kF9/scene.splinecode" />
                             </div>
                             <div className='home__spline home__spline--glassware'>
-                                glassware
+                                <Spline scene="https://prod.spline.design/YS-FsYmftyzMwzpp/scene.splinecode" />
                             </div>
                             <div className='home__spline home__spline--molecular'>
-                                molecular
+                                <Spline scene="https://prod.spline.design/pvcvM6ZGPyhHxIAD/scene.splinecode" />
                             </div>
-                            <div className='home__spline home__spline--marquee'>
-                                marquee
+                            <div className='home__spline home__spline--marquee d-flex align-items-center justify-content-center'>
+                                <ul class="wave-menu">
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
                             </div>
                             <div className='home__spline home__spline--icon'>
-                                icon
+                                <i class="fa-brands fa-react"></i>
                             </div>
                         </div>
                     </div>
