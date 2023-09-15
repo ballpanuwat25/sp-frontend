@@ -15,10 +15,11 @@ function Home() {
                 <div className='home__container pb-4'>
                     <div className='home__container home__container--left'>
                         <div className='home__text'>
-                            <h1 className='home__title mb-4'>Empowering <br/> Tomorrow's Innovators
+                            <h1 className='home__title mb-4'>Empowering <br /> Tomorrow's Innovators
                             </h1>
-                            <p className="home__subtitle mb-3">Seamlessly bridge the gap between student ingenuity and academic resources through our <br/> Chemical Disbursement System. Your graduation project, your convenience, our commitment.</p>
-                            <button className='home__cta btn px-4'>Get Started</button>
+                            <p className="home__subtitle mb-3">Seamlessly bridge the gap between student ingenuity and academic resources through our Chemical Disbursement System. Your graduation project, your convenience, our commitment.</p>
+                            <button className='home__cta btn px-4 me-3'>Get Started</button>
+                            <button className='home__cta home__cta--faq btn px-4'><span className='faq__highlight'>Frequently asked questions</span></button>
                         </div>
                     </div>
 

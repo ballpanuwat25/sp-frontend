@@ -28,7 +28,7 @@
 }
 
 .home__title {
-    font-size: 72px;
+    font-size: 66px;
     font-weight: bold;
     font-family: 'Montserrat', sans-serif;
     color: #006C68;
@@ -37,7 +37,7 @@
 .home__subtitle {
     font-size: 18px;
     font-weight: 400;
-    color: #006C68;
+    color: #202020;
 }
 
 .home__cta {
@@ -53,6 +53,38 @@
 .home__cta:hover {
     color: white;
     background-color: #00908B;
+}
+
+.home__cta--faq {
+    color: #006C68;
+    background-color: transparent;
+}
+
+.home__cta--faq:hover {
+    color: #00908B;
+    background-color: transparent;
+}
+
+.faq__highlight {
+    line-height: 2;
+    position: relative;
+}
+
+.faq__highlight::before {
+    content: '';
+    width: 0;
+    height: 2px;
+    border-radius: 2px;
+    background-color: #00908B;
+    position: absolute;
+    bottom: -.25rem;
+    right: 0;
+    transition: right .4s, width .4s, left .4s;
+}
+
+.faq__highlight:hover::before {
+    width: 100%;
+    left: 0;
 }
 
 .home__container--right {
@@ -81,7 +113,7 @@
     height: 300px;
     background-color: bisque;
 
-    top: 50px;
+    top: 30px;
     right: 50px;
 }
 
@@ -90,7 +122,7 @@
     height: 300px;
     background-color: coral;
 
-    top: 250px;
+    top: 230px;
     right: 450px;
 
     z-index: 1;
@@ -101,7 +133,7 @@
     height: 300px;
     background-color: cornflowerblue;
 
-    top: 375px;
+    top: 355px;
     right: 125px;
 }
 
@@ -118,7 +150,7 @@
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
 
-    top: 638px;
+    top: 618px;
     right: 300px;
 
     z-index: 1;
@@ -127,11 +159,6 @@
     justify-content: start;
     align-items: center;
     overflow: hidden;
-}
-
-.marquee__text {
-    font-weight: 700;
-    letter-spacing: 4px;
 }
 
 .home__spline--icon {
@@ -148,7 +175,7 @@
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
 
-    top: 320px;
+    top: 300px;
     right: 0px;
 }
 
@@ -280,5 +307,570 @@
 
     100% {
         transform: rotate(-360deg);
+    }
+}
+
+@media screen and (max-width: 1750px) {
+    .home {
+        padding: 0 45px;
+    }
+}
+
+@media screen and (max-width: 1650px) {
+    .home {
+        padding: 0 15px;
+    }
+}
+
+@media screen and (max-width: 1580px) {
+    .home__title {
+        font-size: 56px;
+    }
+}
+
+@media screen and (max-width: 1550px) {
+    .home__spline--microscope {
+        width: 450px;
+
+        top: 50px;
+        right: 30px;
+    }
+
+    .home__spline--glassware {
+        top: 275px;
+        right: 415px;
+    }
+
+    .home__spline--molecular {
+        top: 375px;
+        right: 90px;
+    }
+
+    .home__spline--marquee {
+        top: 638px;
+        right: 285px;
+    }
+
+    .home__spline--icon {
+        width: 70px;
+        height: 60px;
+
+        top: 320px;
+        right: 0px;
+    }
+}
+
+@media screen and (max-width: 1450px) {
+    .home__container--left {
+        padding: 0 25px 0 0;
+    }
+}
+
+@media screen and (max-width: 1400px) {
+    .home__title {
+        font-size: 50px;
+    }
+
+    .home__container--left {
+        padding: 0 100px 0 0;
+    }
+}
+
+@media screen and (max-width: 1350px) {
+    .home__spline--microscope {
+        width: 360px;
+        height: 240px;
+
+        top: 105px;
+        right: 30px;
+    }
+
+    .home__spline--glassware {
+        width: 200px;
+        height: 240px;
+
+        top: 305px;
+        right: 350px;
+    }
+
+    .home__spline--molecular {
+        width: 240px;
+        height: 240px;
+
+        top: 365px;
+        right: 90px;
+    }
+
+    .home__spline--marquee {
+        width: 160px;
+        height: 60px;
+
+        top: 575px;
+        right: 245px;
+    }
+
+    .wave-menu {
+        width: 150px;
+    }
+
+    .home__spline--icon {
+        width: 70px;
+        height: 60px;
+
+        top: 315px;
+        right: 0px;
+    }
+
+    .home__container--left {
+        padding: 0 25px 0 0;
+    }
+}
+
+@media screen and (max-width: 1250px) {
+    .home {
+        padding: 0 50px;
+    }
+
+    .home__title {
+        font-size: 44px;
+    }
+
+    .mb-4 {
+        margin-bottom: 10px !important;
+    }
+
+    .home__container {
+        flex-direction: column;
+    }
+
+    .home__container--left {
+        padding-right: 180px;
+        flex: 0;
+    }
+
+    .home__container--right {
+        flex: 1;
+    }
+
+    .home__text {
+        margin-top: 0;
+    }
+
+    .home__title {
+        font-size: 46px;
+        margin-top: 32px;
+    }
+
+    .home__spline--microscope {
+        width: 345px;
+        height: 230px;
+
+        top: 10px;
+        right: 345px;
+    }
+
+    .home__spline--glassware {
+        width: 192px;
+        height: 230px;
+
+        top: 150px;
+        right: 635px;
+    }
+
+    .home__spline--molecular {
+        width: 350px;
+        height: 192px;
+
+        top: 255px;
+        right: 270px;
+    }
+
+    .home__spline--marquee {
+        width: 128px;
+        height: 48px;
+
+        border-radius: 5px;
+
+        top: 420px;
+        right: 210px;
+    }
+
+    .home__spline--icon {
+        width: 70px;
+        height: 60px;
+
+        top: 125px;
+        right: 795px;
+
+        z-index: 2;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .home__spline--microscope {
+        right: 325px;
+    }
+
+    .home__spline--glassware {
+        right: 615px;
+    }
+
+    .home__spline--molecular {
+        right: 250px;
+    }
+
+    .home__spline--marquee {
+        right: 190px;
+    }
+
+    .home__spline--icon {
+        right: 775px;
+    }
+}
+
+@media screen and (max-width: 1150px) {
+    .home__spline--microscope {
+        right: 305px;
+    }
+
+    .home__spline--glassware {
+        right: 595px;
+    }
+
+    .home__spline--molecular {
+        right: 230px;
+    }
+
+    .home__spline--marquee {
+        right: 170px;
+    }
+
+    .home__spline--icon {
+        right: 755px;
+    }
+}
+
+@media screen and (max-width: 1050px) {
+    .home__container--left {
+        padding-right: 115px;
+    }
+
+    .home__spline--microscope {
+        right: 285px;
+    }
+
+    .home__spline--glassware {
+        right: 575px;
+    }
+
+    .home__spline--molecular {
+        right: 210px;
+    }
+
+    .home__spline--marquee {
+        right: 150px;
+    }
+
+    .home__spline--icon {
+        right: 735px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .home__subtitle {
+        font-size: 14px;
+    }
+
+    .home__cta {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .home__spline--microscope {
+        right: 245px;
+    }
+
+    .home__spline--glassware {
+        right: 535px;
+    }
+
+    .home__spline--molecular {
+        right: 170px;
+    }
+
+    .home__spline--marquee {
+        right: 110px;
+    }
+
+    .home__spline--icon {
+        right: 695px;
+    }
+}
+
+@media screen and (max-width: 950px) {
+    .home__spline--microscope {
+        right: 225px;
+    }
+
+    .home__spline--glassware {
+        right: 515px;
+    }
+
+    .home__spline--molecular {
+        right: 150px;
+    }
+
+    .home__spline--marquee {
+        right: 90px;
+    }
+
+    .home__spline--icon {
+        right: 675px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .home__spline--microscope {
+        right: 205px;
+    }
+
+    .home__spline--glassware {
+        right: 495px;
+    }
+
+    .home__spline--molecular {
+        right: 130px;
+    }
+
+    .home__spline--marquee {
+        right: 70px;
+    }
+
+    .home__spline--icon {
+        right: 655px;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .home__spline--microscope {
+        width: 276px;
+        height: 184px;
+
+        top: 30px;
+        right: 185px;
+    }
+
+    .home__spline--glassware {
+        width: 153px;
+        height: 184px;
+
+        top: 170px;
+        right: 415px;
+    }
+
+    .home__spline--molecular {
+        width: 184px;
+        height: 184px;
+
+        top: 245px;
+        right: 200px;
+    }
+
+    .home__spline--marquee {
+        width: 100px;
+        height: 38px;
+
+        top: 410px;
+        right: 150px;
+    }
+
+    .home__spline--icon {
+        width: 70px;
+        height: 60px;
+
+        top: 140px;
+        right: 535px;
+    }
+
+    .home__title {
+        margin-top: 16px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .home__container--left{
+        padding-right: 55px;
+    }
+
+    .home__spline--microscope {
+        right: 165px;
+    }
+
+    .home__spline--glassware {
+        right: 395px;
+    }
+
+    .home__spline--molecular {
+        right: 180px;
+    }
+
+    .home__spline--marquee {
+        right: 130px;
+    }
+
+    .home__spline--icon {
+        right: 515px;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .home__title {
+        font-size: 32px;
+    }
+
+    .home__spline--microscope {
+        right: 145px;
+    }
+
+    .home__spline--glassware {
+        right: 375px;
+    }
+
+    .home__spline--molecular {
+        right: 160px;
+    }
+
+    .home__spline--marquee {
+        right: 110px;
+    }
+
+    .home__spline--icon {
+        right: 495px;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .home__spline--microscope {
+        right: 105px;
+    }
+
+    .home__spline--glassware {
+        right: 335px;
+    }
+
+    .home__spline--molecular {
+        right: 120px;
+    }
+
+    .home__spline--marquee {
+        right: 70px;
+    }
+
+    .home__spline--icon {
+        right: 455px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .home__spline--microscope {
+        right: 75px;
+    }
+
+    .home__spline--glassware {
+        right: 305px;
+    }
+
+    .home__spline--molecular {
+        right: 90px;
+    }
+
+    .home__spline--marquee {
+        right: 40px;
+    }
+
+    .home__spline--icon {
+        right: 425px;
+    }
+}
+
+@media screen and (max-width: 625px) {
+    .home__spline--microscope {
+        right: 55px;
+    }
+
+    .home__spline--glassware {
+        right: 285px;
+    }
+
+    .home__spline--molecular {
+        right: 70px;
+    }
+
+    .home__spline--marquee {
+        right: 20px;
+    }
+
+    .home__spline--icon {
+        right: 405px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .home {
+        padding: 0 25px;
+    }
+
+    .home__text {
+        margin-top: 20px;
+    }
+
+    .home__container--left {
+        padding-right: 0;
+    }
+
+    .home__spline--microscope {
+        right: 55px;
+    }
+
+    .home__spline--glassware {
+        right: 285px;
+    }
+
+    .home__spline--molecular {
+        right: 70px;
+    }
+
+    .home__spline--marquee {
+        right: 20px;
+    }
+
+    .home__spline--icon {
+        right: 405px;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .home__footer {
+        font-size: 14px;
+    }
+    
+    .home__spline--microscope {
+        right: 50px;
+    }
+
+    .home__spline--glassware {
+        right: 270px;
+    }
+
+    .home__spline--molecular {
+        right: 55px;
+    }
+
+    .home__spline--marquee {
+        right: 15px;
+    }
+
+    .home__spline--icon {
+        right: 380px;
     }
 }

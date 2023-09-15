@@ -1,6 +1,6 @@
 .header__button {
     color: #006C68;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 18px;
     
     border-radius: 5px;
@@ -44,4 +44,20 @@
 .header__button--signup:hover {
     background-color: #006C68;
     color: white;
+}
+
+.fa-bars {
+    font-size: 32px;
+    color: #006C68;
+    display: none;
+}
+
+@media screen and (max-width: 1250px) {
+    .header__button {
+        display: none;
+    }
+
+    .fa-bars {
+        display: block;
+    }
 }
