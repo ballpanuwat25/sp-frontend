@@ -7,6 +7,10 @@
     grid:
         "header header header" 0.125fr "content content content" 1.125fr "content content content" 1.125fr "footer footer footer" 0.125fr / 1fr 1fr 1fr;
     gap: 8px;
+
+    background-image: url(../assets/background1.png);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .home__header {
@@ -32,6 +36,8 @@
     font-weight: bold;
     font-family: 'Montserrat', sans-serif;
     color: #006C68;
+
+    margin-bottom: 16px;
 }
 
 .home__subtitle {
@@ -111,7 +117,7 @@
 .home__spline--microscope {
     width: 500px;
     height: 300px;
-    background-color: bisque;
+    background-color: white;
 
     top: 30px;
     right: 50px;
@@ -120,7 +126,7 @@
 .home__spline--glassware {
     width: 250px;
     height: 300px;
-    background-color: coral;
+    background-color: white;
 
     top: 230px;
     right: 450px;
@@ -131,7 +137,7 @@
 .home__spline--molecular {
     width: 300px;
     height: 300px;
-    background-color: cornflowerblue;
+    background-color: white;
 
     top: 355px;
     right: 125px;
@@ -433,10 +439,7 @@
 
     .home__title {
         font-size: 44px;
-    }
-
-    .mb-4 {
-        margin-bottom: 10px !important;
+        margin-bottom: 10px;
     }
 
     .home__container {
@@ -698,7 +701,7 @@
 }
 
 @media screen and (max-width: 800px) {
-    .home__container--left{
+    .home__container--left {
         padding-right: 55px;
     }
 
@@ -853,7 +856,7 @@
     .home__footer {
         font-size: 14px;
     }
-    
+
     .home__spline--microscope {
         right: 50px;
     }
@@ -872,5 +875,130 @@
 
     .home__spline--icon {
         right: 380px;
+    }
+}
+
+@media screen and (max-width: 525px) {
+    .home__splineGroup {
+        width: 100%;
+        display: flex;
+        position: unset;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .home__spline--microscope {
+        width: 400px;
+        height: 400px;
+
+        top: auto;
+        right: auto;
+    }
+
+    .home__spline--glassware {
+        display: none;
+    }
+
+    .home__spline--molecular {
+        display: none;
+    }
+
+    .home__spline--marquee,
+    .wave-menu {
+        display: none !important;
+    }
+
+    .home__spline--icon {
+        display: none;
+    }
+}
+
+@media screen and (max-width:475px) {
+    .pb-4 {
+        padding-bottom: 0 !important;
+    }
+
+    .px-4 {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    .me-3 {
+        margin-right: 0 !important;
+    }
+
+    .home__title {
+        font-size: 28px;
+    }
+
+    .home__subtitle {
+        font-size: 12px;
+    }
+
+    .home__cta {
+        font-size: 12px;
+    }
+
+    .home__spline--microscope {
+        width: 300px;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .home__title {
+        font-size: 24px;
+    }
+
+    .home__footer {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .home__spline--microscope {
+        width: 250px;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .home__title {
+        font-size: 20px;
+    }
+
+    .home__subtitle {
+        font-size: 8px;
+    }
+}
+
+@media screen and (max-height: 800px) {
+    .home__spline--microscope {
+        width: 275px;
+        height: 300px;
+    }
+}
+
+@media screen and (max-height: 700px) {
+    .home__spline--microscope {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+@media screen and (max-height: 600px) {
+    .home__container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .home__title {
+        font-size: 50px;
+    }
+
+    .home__container--right {
+        display: none;
     }
 }

@@ -6,8 +6,6 @@
     box-sizing: border-box;
 }
 
-body {
-    background-image: url(./components/assets/background1.png);
-    background-repeat: no-repeat;
-    background-size: cover;
+.container-fluid {
+    padding: 0;
 }

@@ -3,6 +3,8 @@ import jwt_decode from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import '../../login/Login.css'
+
 function StudentGoogleLogin() {
     const navigate = useNavigate();
     const [user, setUser] = useState({});
@@ -55,7 +57,13 @@ function StudentGoogleLogin() {
 
         google.accounts.id.renderButton(
             document.getElementById("signInDiv"),
-            { theme: "outline", size: "Large" }
+            {
+                theme: "outline",
+                size: "large",
+                text: "Continue with Google",
+                shape: "rectangular",
+                width: "300px",
+            }
         );
 
         google.accounts.id.prompt();

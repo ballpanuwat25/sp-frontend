@@ -22,13 +22,30 @@ function Header() {
                 <i className="fa-solid fa-bars" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"></i>
 
                 <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                    <div className="offcanvas-header">
-                        <h5 className="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+                    <div className="offcanvas-header d-flex justify-content-end">
                         <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div className="offcanvas-body">
-                        <div>
-                            Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+                        <div className='d-flex flex-column align-items-center'>
+                            <div className='header__links'>
+                                <Link to="/" className='header__link header__button--hover mt-3 '>Home</Link>
+                            </div>
+
+                            <div className='header__links'>
+                                <Link to="/" className='header__link header__button--hover'>About</Link>
+                            </div>
+
+                            <div className='header__links'>
+                                <Link to="/" className='header__link header__button--hover'>Contact</Link>
+                            </div>
+
+                            <div className='header__links'>
+                                <Link to="/student-login" className='header__link header__button--hover'>Log in</Link>
+                            </div>
+
+                            <div className='header__links'>
+                                <Link to="/student-register" className='header__link header__button--hover'>Sign up</Link>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,167 @@
+.login__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(../assets/background1.png);
+    background-size: cover;
+    height: 100%;
+}
+
+.login__card {
+    width: 450px;
+    height: 500px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login__header {
+    margin: 65px 0 25px 0;
+    color: #006C68;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: block;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.login__inputBox {
+    position: relative;
+    width: 300px;
+}
+
+.login__inputBox--email {
+    margin: 0 0 25px 0;
+}
+
+.login__inputBox--password {
+    margin: 0 0 5px 0;
+}
+
+.login__inputBox input {
+    width: 100%;
+    padding: 6px;
+    outline: none;
+    border: none;
+    color: #006C68;
+    font-size: 1em;
+    background: transparent;
+    border: 2px solid #006C68;
+    transition: 0.1s;
+    border-radius: 8px;
+}
+
+.login__inputBox span {
+    margin-top: 5px;
+    position: absolute;
+    left: 0;
+    transform: translateY(-4px);
+    margin-left: 10px;
+    padding: 10px;
+    pointer-events: none;
+    font-size: 12px;
+    color: #006C68;
+    text-transform: uppercase;
+    transition: 0.5s;
+    letter-spacing: 3px;
+    border-radius: 8px;
+}
+
+.login__inputBox--email input:valid~span,
+.login__inputBox--email input:focus~span {
+    transform: translateX(200px) translateY(-15px);
+    font-size: 0.8em;
+    padding: 5px 10px;
+    background: #006C68;
+    letter-spacing: 0.2em;
+    color: #fff;
+    border: 2px;
+}
+
+.login__inputBox--password input:valid~span,
+.login__inputBox--password input:focus~span {
+    transform: translateX(160px) translateY(-15px);
+    font-size: 0.8em;
+    padding: 5px 10px;
+    background: #006C68;
+    letter-spacing: 0.2em;
+    color: #fff;
+    border: 2px;
+}
+
+.login__inputBox input:valid,
+.login__inputBox input:focus {
+    border: 2px solid #006C68;
+    border-radius: 8px;
+}
+
+.login__btn {
+    width: 300px;
+    padding: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background: #006C68;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.login__text {
+    color: #000;
+    font-size: 0.8em;
+    margin-bottom: 15px;
+}
+
+.login__forgetPassword {
+    width: 300px;
+    display: flex;
+    justify-content: end;
+    margin-bottom: 5px;
+}
+
+.forgetPassword__text {
+    color: #00000065;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.5s;
+}
+
+.register__text {
+    color: #006C68;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: underline;
+    transition: 0.5s;
+}
+
+.register__text:hover {
+    color: #006C68;
+}
+
+#signInDiv {
+    margin-bottom: 15px;
+}
+
+@media screen and (max-width: 525px) {
+    .login__card {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .login__inputBox {
+        width: 270px;
+    }
+
+    .login__btn {
+        width: 270px;
+    }
+}

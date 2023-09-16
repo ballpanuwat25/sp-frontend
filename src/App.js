@@ -84,8 +84,6 @@ import StudentEquipmentRequest from './components/student/studentEquipmentReq/St
 import StudentBundleRequest from './components/student/studentBundleReq/StudentBundleRequest.js';
 import StudentBundleList from './components/student/studentBundleReq/StudentBundleList.js';
 
-import StudentGoogleRegister from './components/student/studentGoogleLogin/StudentGoogleRegister.js';
-
 function App() {
   const [adminLoggedIn, setAdminLoggedIn] = useState(
     localStorage.getItem('adminIsLoggedIn') === 'true'
@@ -212,8 +210,6 @@ function App() {
 
         <Route path="/student-dashboard/bundle-list" element={<StudentBundleList />} />
         <Route path="/student-dashboard/bundle-list/:id" element={<StudentBundleRequest />} />
-
-        <Route path="/student-google-register" element={<StudentGoogleRegister />} />
       </Routes>
     </BrowserRouter>
   );

@@ -2,7 +2,7 @@
     color: #006C68;
     font-weight: 500;
     font-size: 18px;
-    
+
     border-radius: 5px;
     text-decoration: none;
 }
@@ -17,14 +17,14 @@
     width: 0;
     height: 2px;
     border-radius: 2px;
-    background-color:#006C68;
+    background-color: #006C68;
     position: absolute;
     bottom: -.25rem;
     right: 0;
     transition: right .4s, width .4s, left .4s;
 }
 
-.header__button--hover:hover{
+.header__button--hover:hover {
     color: #006C68;
 }
 
@@ -36,7 +36,7 @@
 .header__button--signup {
     border: 2px solid #006C68;
     padding: 6px 12px;
-    
+
     color: #006C68;
     transition: background-color 0.4s, color 0.4s;
 }
@@ -46,10 +46,53 @@
     color: white;
 }
 
+.header__links {
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 50px;
+}
+
+.header__link {
+    color: #006C68;
+    text-decoration: none;
+    width: 100%;
+}
+
+.header__btnGroup {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fa-chevron-right {
+    color: #006C68;
+}
+
 .fa-bars {
     font-size: 32px;
     color: #006C68;
     display: none;
+}
+
+.offcanvas {
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(34, 141, 147, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    padding: 15px 25px;
+}
+
+.offcanvas-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.modal-backdrop.show {
+    opacity: 0;
 }
 
 @media screen and (max-width: 1250px) {
@@ -59,5 +102,22 @@
 
     .fa-bars {
         display: block;
+    }
+}
+
+@media screen and (max-width: 525px) {
+    .header__logo {
+        width: 59px;
+        height: 43px;
+    }
+
+    .fa-bars {
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .offcanvas {
+        width: 100%;
     }
 }

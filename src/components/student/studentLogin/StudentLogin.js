@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import StudentGoogleLogin from '../studentGoogleLogin/StudentGoogleLogin';
+import '../../login/Login.css'
 
 function StudentLogin() {
   const [values, setValues] = useState({
@@ -32,39 +33,42 @@ function StudentLogin() {
   };
 
   return (
-    <div className='container-fluid d-flex justify-content-center align-items-center vh-100'>
-      <form className='form-control w-50' onSubmit={handleSubmit}>
-        <h3 className='mb-3'>Student Login</h3>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder='email'
-            onChange={(e) => setValues({ ...values, Student_Email: e.target.value })}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            placeholder='password'
-            onChange={(e) => setValues({ ...values, Student_Password: e.target.value })}
-          />
-        </div>
+    <div className='container-fluid vh-100'>
+      <main className='login__container'>
+        <form className='login__card' onSubmit={handleSubmit}>
+          <h3 className='login__header'>Student Login</h3>
 
-        <button type="submit" className="btn btn-primary w-100 mb-2">Login</button>
-        <div className='d-flex justify-content-between align-items-center w-100 gap-2'>
-          <Link to="/student-register" className="btn btn-outline-primary w-100">Register</Link>
-          <Link to="/student-forget-password" className="btn btn-outline-primary w-100">Forget Password</Link>
-        </div>
+          <div className='login__inputBox login__inputBox--email'>
+            <input
+              type="text"
+              required
+              onChange={(e) => setValues({ ...values, Student_Email: e.target.value })}
+            />
+            <span>Email</span>
+          </div>
 
-        <hr />
-        <div className='d-flex justify-content-center align-items-center mb-2'>
+          <div className='login__inputBox login__inputBox--password'>
+            <input
+              type="password"
+              required
+              onChange={(e) => setValues({ ...values, Student_Password: e.target.value })}
+            />
+            <span>Password</span>
+          </div>
+
+          <div className='login__forgetPassword'>
+            <Link className='forgetPassword__text' to="/student-forget-password">Forget Password</Link>
+          </div>
+
+          <button type="submit" className='login__btn'>Login</button>
+
+          <div className='login__text'>Or Sign In With</div>
+
           <StudentGoogleLogin />
-        </div>
-      </form>
+          
+          <div className='login__text'>Don't have an account? <Link to="/student-register" className='register__text'>Register</Link></div>
+        </form>
+      </main>
     </div>
   )
 }
