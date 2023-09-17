@@ -1,4 +1,4 @@
-.login__container {
+.form__container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,9 +7,7 @@
     height: 100%;
 }
 
-.login__card {
-    width: 450px;
-    height: 500px;
+.form__card {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -19,7 +17,7 @@
     align-items: center;
 }
 
-.login__header {
+.form__header {
     margin: 65px 0 25px 0;
     color: #006C68;
     text-transform: uppercase;
@@ -29,20 +27,48 @@
     font-size: 30px;
 }
 
-.login__inputBox {
+.form__card--login {
+    width: 450px;
+    height: 500px;
+}
+
+.form__card--adminlogin {
+    width: 450px;
+    height: 400px;
+}
+
+.form__card--signup {
+    width: 450px;
+    height: 650px;
+}
+
+.form__card--forgetpassword {
+    width: 450px;
+    height: 390px;
+}
+
+.form__inputBox {
     position: relative;
     width: 300px;
 }
 
-.login__inputBox--email {
+.form__inputBox--id,
+.form__inputBox--fname,
+.form__inputBox--lname,
+.form__inputBox--username,
+.form__inputBox--email {
     margin: 0 0 25px 0;
 }
 
-.login__inputBox--password {
+.form__inputBox--password {
     margin: 0 0 5px 0;
 }
 
-.login__inputBox input {
+.form__inputBox--tel {
+    margin: 20px 0 25px 0;
+}
+
+.form__inputBox input {
     width: 100%;
     padding: 6px;
     outline: none;
@@ -55,7 +81,7 @@
     border-radius: 8px;
 }
 
-.login__inputBox span {
+.form__inputBox span {
     margin-top: 5px;
     position: absolute;
     left: 0;
@@ -71,9 +97,11 @@
     border-radius: 8px;
 }
 
-.login__inputBox--email input:valid~span,
-.login__inputBox--email input:focus~span {
-    transform: translateX(200px) translateY(-15px);
+.form__inputBox--id input:valid~span,
+.form__inputBox--id input:focus~span,
+.form__inputBox--fname input:valid~span,
+.form__inputBox--fname input:focus~span {
+    transform: translateX(153px) translateY(-15px);
     font-size: 0.8em;
     padding: 5px 10px;
     background: #006C68;
@@ -82,8 +110,8 @@
     border: 2px;
 }
 
-.login__inputBox--password input:valid~span,
-.login__inputBox--password input:focus~span {
+.form__inputBox--username input:valid~span,
+.form__inputBox--username input:focus~span {
     transform: translateX(160px) translateY(-15px);
     font-size: 0.8em;
     padding: 5px 10px;
@@ -93,13 +121,57 @@
     border: 2px;
 }
 
-.login__inputBox input:valid,
-.login__inputBox input:focus {
+.form__inputBox--lname input:valid~span,
+.form__inputBox--lname input:focus~span {
+    transform: translateX(157px) translateY(-15px);
+    font-size: 0.8em;
+    padding: 5px 10px;
+    background: #006C68;
+    letter-spacing: 0.2em;
+    color: #fff;
+    border: 2px;
+}
+
+.form__inputBox--email input:valid~span,
+.form__inputBox--email input:focus~span {
+    transform: translateX(199px) translateY(-15px);
+    font-size: 0.8em;
+    padding: 5px 10px;
+    background: #006C68;
+    letter-spacing: 0.2em;
+    color: #fff;
+    border: 2px;
+}
+
+.form__inputBox--password input:valid~span,
+.form__inputBox--password input:focus~span {
+    transform: translateX(160px) translateY(-15px);
+    font-size: 0.8em;
+    padding: 5px 10px;
+    background: #006C68;
+    letter-spacing: 0.2em;
+    color: #fff;
+    border: 2px;
+}
+
+.form__inputBox--tel input:valid~span,
+.form__inputBox--tel input:focus~span {
+    transform: translateX(220px) translateY(-15px);
+    font-size: 0.8em;
+    padding: 5px 10px;
+    background: #006C68;
+    letter-spacing: 0.2em;
+    color: #fff;
+    border: 2px;
+}
+
+.form__inputBox input:valid,
+.form__inputBox input:focus {
     border: 2px solid #006C68;
     border-radius: 8px;
 }
 
-.login__btn {
+.form__btn {
     width: 300px;
     padding: 10px;
     font-size: 1em;
@@ -112,13 +184,17 @@
     margin-bottom: 15px;
 }
 
-.login__text {
+.form__btn--forgetpassword {
+    margin-top: 20px;
+}
+
+.form__text {
     color: #000;
     font-size: 0.8em;
     margin-bottom: 15px;
 }
 
-.login__forgetPassword {
+.form__forgetPassword {
     width: 300px;
     display: flex;
     justify-content: end;
@@ -133,7 +209,11 @@
     transition: 0.5s;
 }
 
-.register__text {
+.forgetPassword__text:hover {
+    color: #006C68;
+}
+
+.form__subtext {
     color: #006C68;
     font-size: 1em;
     font-weight: 600;
@@ -141,7 +221,7 @@
     transition: 0.5s;
 }
 
-.register__text:hover {
+.form__subtext:hover {
     color: #006C68;
 }
 
@@ -150,18 +230,18 @@
 }
 
 @media screen and (max-width: 525px) {
-    .login__card {
+    .form__card {
         width: 100%;
         height: 100%;
     }
 }
 
 @media screen and (max-width: 375px) {
-    .login__inputBox {
+    .form__inputBox {
         width: 270px;
     }
 
-    .login__btn {
+    .form__btn {
         width: 270px;
     }
 }

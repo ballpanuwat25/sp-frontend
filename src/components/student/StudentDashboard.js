@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import StudentChemicalsList from './studentChemReq/StudentChemicalsList';
-import StudentEquipmentList from './studentEquipmentReq/StudentEquipmentList';
+import StudentChemicalsList from './studentReq/studentChemReq/StudentChemicalsList';
+
+import '../cssElement/Dashboard.css'
+import logo from '../assets/logo.png';
 
 function StudentDashboard() {
     const [studentInfo, setStudentInfo] = useState({
@@ -50,43 +52,38 @@ function StudentDashboard() {
     };
 
     return (
-        <div className='container-fluid'>
-            <div className='row'>
-                <nav id='sidebar' className='col-md-3 col-lg-2 d-md-block bg-light sidebar vh-100'>
-                    <div className='position-sticky'>
-                        <h2>Student Dashboard</h2>
-                        <hr />
-                        <div>
-                            <h5>StudentId: {studentInfo.studentId}</h5>
-                            <h5>Name: {studentInfo.studentFirstName} {studentInfo.studentLastName}</h5>
-                            <h5>Email: {studentInfo.studentEmail}</h5>
-                            <h5>Password: {studentInfo.studentPassword}</h5>
-                            <h5>Tel: {studentInfo.studentTel}</h5>
-                        </div>
-                        <hr />
-                        <div className="dropdown">
-                            <button className="btn btn-secondary dropdown-toggle mb-2 w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown button
-                            </button>
-                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><Link to="./student-chemicals-request" className="dropdown-item">Chemicals Request List</Link></li>
-                                <li><Link to="./student-chemicals-cart" className="dropdown-item">Chemicals Cart</Link></li>
-                                <li><Link to="./student-equipment-request" className="dropdown-item">Equipment Request List</Link></li>
-                                <li><Link to="./student-equipment-cart" className="dropdown-item">Equipment Cart</Link></li>
-                                <li><Link to="./bundle-list" className='dropdown-item'>Bundle List</Link> </li>
-                            </ul>
-                        </div>
-                        <div className='d-flex justify-content-between align-items-center'>
-                            <Link to="/student-profile" className='btn btn-outline-primary me-2 w-100'>Profile</Link>
-                            <button className='btn btn-outline-danger w-100' onClick={handleLogout}>Logout</button>
-                        </div>
+        <div className='container-fluid vh-100'>
+            <div className='dashboard__container'>
+                <aside className='sidebar'>
+                    <div className='sidebar__header'>
+                        <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
+                        <div className='sidebar__title std__name'>Welcome, {studentInfo.studentFirstName}</div>
                     </div>
-                </nav>
+                    <div className='sidebar__body'>
+                        <Link to="/student-dashboard" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-house" /> <div className='sidebar__item--active'>Dashboard</div></Link>
+                        <Link to="./student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> List</Link>
+                        <Link to="./bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="./student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-cart-shopping" /> Cart</Link>
+                        <Link to="./student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-clock-rotate-left" /> History</Link>
+                        <Link to="/student-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                    </div>
+                    <div className='sidebar__footer'>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                    </div>
+                </aside>
 
-                <main className='col-md-9 ms-sm-auto col-lg-10 px-md-4'>
+                <main className='dashboard__content'>
                     <StudentChemicalsList />
-                    <StudentEquipmentList />
                 </main>
+
+                <footer className='footer'>
+                    <Link to="/student-dashboard" className='footer__item footer__item--active'><i class="fa-solid fa-house" /></Link>
+                    <Link to="./student-chemicals-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
+                    <Link to="./bundle-list" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="./student-chemicals-cart" className='footer__item'> <i class="fa-solid fa-cart-shopping" /></Link>
+                    <Link to="./student-chemicals-request" className='footer__item'> <i class="fa-solid fa-clock-rotate-left" /></Link>
+                    <Link to="/student-profile" className='footer__item'> <i class="fa-solid fa-user" /></Link>
+                </footer>
             </div>
         </div>
     )

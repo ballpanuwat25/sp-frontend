@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import StudentGoogleLogin from '../studentGoogleLogin/StudentGoogleLogin';
-import '../../login/Login.css'
+import '../../cssElement/Form.css'
 
 function StudentLogin() {
   const [values, setValues] = useState({
@@ -34,11 +34,11 @@ function StudentLogin() {
 
   return (
     <div className='container-fluid vh-100'>
-      <main className='login__container'>
-        <form className='login__card' onSubmit={handleSubmit}>
-          <h3 className='login__header'>Student Login</h3>
+      <main className='form__container'>
+        <form className='form__card form__card--login' onSubmit={handleSubmit}>
+          <h3 className='form__header'>Student Login</h3>
 
-          <div className='login__inputBox login__inputBox--email'>
+          <div className='form__inputBox form__inputBox--email'>
             <input
               type="text"
               required
@@ -47,7 +47,7 @@ function StudentLogin() {
             <span>Email</span>
           </div>
 
-          <div className='login__inputBox login__inputBox--password'>
+          <div className='form__inputBox form__inputBox--password'>
             <input
               type="password"
               required
@@ -56,17 +56,17 @@ function StudentLogin() {
             <span>Password</span>
           </div>
 
-          <div className='login__forgetPassword'>
+          <div className='form__forgetPassword'>
             <Link className='forgetPassword__text' to="/student-forget-password">Forget Password</Link>
           </div>
 
-          <button type="submit" className='login__btn'>Login</button>
+          <button type="submit" className='form__btn'>Login</button>
 
-          <div className='login__text'>Or Sign In With</div>
+          <div className='form__text'>Or Sign In With</div>
 
           <StudentGoogleLogin />
           
-          <div className='login__text'>Don't have an account? <Link to="/student-register" className='register__text'>Register</Link></div>
+          <div className='form__text'>Don't have an account? <Link to="/student-register" className='form__subtext'>Register</Link></div>
         </form>
       </main>
     </div>

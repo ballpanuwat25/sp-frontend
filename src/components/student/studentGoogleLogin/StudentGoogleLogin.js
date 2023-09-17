@@ -3,7 +3,7 @@ import jwt_decode from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import '../../login/Login.css'
+import '../../cssElement/Form.css'
 
 function StudentGoogleLogin() {
     const navigate = useNavigate();

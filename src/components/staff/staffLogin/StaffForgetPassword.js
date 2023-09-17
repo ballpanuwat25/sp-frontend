@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import '../../cssElement/Form.css'
+
 function StaffForgetPassword() {
     const [values, setValues] = useState({
         Staff_Username: "",
@@ -13,7 +15,7 @@ function StaffForgetPassword() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
+
         axios.post("http://localhost:3001/staff-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
@@ -24,31 +26,31 @@ function StaffForgetPassword() {
     };
 
     return (
-        <div className='container-fluid'>
-            <h1>Staff Forget Password</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="username" className="form-label">Username</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder='username'
-                        onChange={(e) => setValues({ ...values, Staff_Username: e.target.value })}
-                    />
-                </div>
+        <div className='container-fluid vh-100'>
+            <main className='form__container'>
+                <form className='form__card form__card--forgetpassword' onSubmit={handleSubmit}>
+                    <h3 className='form__header'>Forget Password</h3>
+                    <div className='form__inputBox form__inputBox--username'>
+                        <input
+                            type="text"
+                            required
+                            onChange={(e) => setValues({ ...values, Staff_Username: e.target.value })}
+                        />
+                        <span>Username</span>
+                    </div>
 
-                <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder='password'
-                        onChange={(e) => setValues({ ...values, Staff_Password: e.target.value })}
-                    />
-                </div>
+                    <div className='form__inputBox form__inputBox--password'>
+                        <input
+                            type="password"
+                            required
+                            onChange={(e) => setValues({ ...values, Staff_Password: e.target.value })}
+                        />
+                        <span>Password</span>
+                    </div>
 
-                <button type="submit" className="btn btn-primary w-100 mb-3">Submit</button>
-            </form>
+                    <button type="submit" className='form__btn form__btn--forgetpassword'>Submit</button>
+                </form>
+            </main>
         </div>
     )
 }

@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
+import '../../cssElement/Form.css'
+
 function TeacherLogin({ login }) {
     const [values, setValues] = useState({
         Teacher_Username: "",
@@ -31,35 +33,34 @@ function TeacherLogin({ login }) {
     };
 
     return (
-        <div className='container-fluid d-flex justify-content-center align-items-center vh-100'>
-            <form className='form-control w-50' onSubmit={handleSubmit}>
-                <h1>Teacher Login</h1>
-                <div className="mb-3">
-                    <label htmlFor="username" className="form-label">Username</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder='username'
-                        onChange={(e) => setValues({ ...values, Teacher_Username: e.target.value })}
-                    />
-                </div>
+        <div className='container-fluid vh-100'>
+            <main className='form__container'>
+                <form className='form__card form__card--adminlogin' onSubmit={handleSubmit}>
+                    <h3 className='form__header'>Teacher Login</h3>
+                    <div className='form__inputBox form__inputBox--username'>
+                        <input
+                            type="text"
+                            required
+                            onChange={(e) => setValues({ ...values, Teacher_Username: e.target.value })}
+                        />
+                        <span>Username</span>
+                    </div>
 
-                <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder='password'
-                        onChange={(e) => setValues({ ...values, Teacher_Password: e.target.value })}
-                    />
-                </div>
+                    <div className='form__inputBox form__inputBox--password'>
+                        <input
+                            type="password"
+                            required
+                            onChange={(e) => setValues({ ...values, Teacher_Password: e.target.value })}
+                        />
+                        <span>Password</span>
+                    </div>
 
-                <button type="submit" className="btn btn-primary w-100 mb-2">Login</button>
-                <div className="btn-group w-100 mb-2" role="group">
-                    <Link to="/teacher-register" className='btn btn-outline-success w-100 me-2'>Create Account</Link>
-                    <Link to="/teacher-forget-password" className='btn btn-outline-warning w-100'>Forgot password</Link>
-                </div>
-            </form>
+                    <div className='form__forgetPassword'>
+                        <Link to="/teacher-forget-password" className='forgetPassword__text'>Forgot password</Link>
+                    </div>
+                    <button type="submit" className='form__btn'>Login</button>
+                </form>
+            </main>
         </div>
     )
 }

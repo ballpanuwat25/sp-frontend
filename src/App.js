@@ -73,16 +73,18 @@ import StudentForgetPassword from './components/student/studentLogin/StudentForg
 import StudentDashboard from './components/student/StudentDashboard.js';
 import StudentProfile from './components/student/studentLogin/StudentProfile';
 
-import StudentChemicalsList from './components/student/studentChemReq/StudentChemicalsList.js';
-import StudentChemicalsCart from './components/student/studentChemReq/StudentChemicalsCart.js';
-import StudentChemicalsRequest from './components/student/studentChemReq/StudentChemicalsRequest.js';
+import StudentChemicalsList from './components/student/studentReq/studentChemReq/StudentChemicalsList.js';
+import StudentChemicalsCart from './components/student/studentReq/studentChemReq/StudentChemicalsCart.js';
+import StudentChemicalsRequest from './components/student/studentReq/studentChemReq/StudentChemicalsRequest.js';
 
-import StudentEquipmentList from './components/student/studentEquipmentReq/StudentEquipmentList.js';
-import StudentEquipmentCart from './components/student/studentEquipmentReq/StudentEquipmentCart.js';
-import StudentEquipmentRequest from './components/student/studentEquipmentReq/StudentEquipmentRequest.js';
+import StudentEquipmentList from './components/student/studentReq/studentEquipmentReq/StudentEquipmentList.js';
+import StudentEquipmentCart from './components/student/studentReq/studentEquipmentReq/StudentEquipmentCart.js';
+import StudentEquipmentRequest from './components/student/studentReq/studentEquipmentReq/StudentEquipmentRequest.js';
 
 import StudentBundleRequest from './components/student/studentBundleReq/StudentBundleRequest.js';
 import StudentBundleList from './components/student/studentBundleReq/StudentBundleList.js';
+
+import StudentGoogleRegister from './components/student/studentGoogleLogin/StudentGoogleRegister.js';
 
 function App() {
   const [adminLoggedIn, setAdminLoggedIn] = useState(
@@ -210,6 +212,8 @@ function App() {
 
         <Route path="/student-dashboard/bundle-list" element={<StudentBundleList />} />
         <Route path="/student-dashboard/bundle-list/:id" element={<StudentBundleRequest />} />
+
+        <Route path="/student-google-register" element={<StudentGoogleRegister />} />
       </Routes>
     </BrowserRouter>
   );
