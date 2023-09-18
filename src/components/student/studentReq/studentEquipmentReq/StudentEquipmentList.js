@@ -1,9 +1,26 @@
 import axios from "axios";
 import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
+
+import '../css/StudentRequest.css'
+import '../../../cssElement/Table.css'
+import '../../../cssElement/Form.css'
+import '../../../cssElement/Dashboard.css'
+
+import logo from '../../../assets/logo.png';
 
 function StudentEquipmentList() {
-    const [studentId, setStudentId] = useState("");
+    const [studentInfo, setStudentInfo] = useState({
+        studentId: "",
+        studentFirstName: "",
+        studentLastName: "",
+        studentEmail: "",
+        studentPassword: "",
+        studentTel: "",
+    });
+
     const [equipment, setEquipment] = useState([]);
+    const [equipmentCategory, setEquipmentCategory] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredEquipment, setFilteredEquipment] = useState([]);
@@ -19,11 +36,14 @@ function StudentEquipmentList() {
     const [equipmentReq, setEquipmentReq] = useState([]);
     const [mostRequestedEquipIds, setMostRequestedEquipIds] = useState([]);
 
-    const [mostRequestedChemIds, setMostRequestedChemIds] = useState([]);
+    const navigate = useNavigate();
+
+    axios.defaults.withCredentials = true;
 
     useEffect(() => {
         getEquipmentRequest();
-        getChemicalsRequest();
+
+        getEquipmentCategory();
     }, []);
 
     const getEquipmentRequest = async () => {
@@ -56,63 +76,19 @@ function StudentEquipmentList() {
         const cartData = JSON.parse(localStorage.getItem('equipmentCart')) || [];
 
         // Check if the selected equipment are already in the cart
-        const existingEquipment = cartData.find(item => item.Student_Id === studentId && item.Equipment_Id === equipId);
+        const existingEquipment = cartData.find(item => item.Student_Id === studentInfo.studentId && item.Equipment_Id === equipId);
 
         if (existingEquipment) {
             alert('This equipment is already in your cart');
             return;
-        } 
-        
+        }
+
         cartData.push({
-            Student_Id: studentId,
+            Student_Id: studentInfo.studentId,
             Equipment_Id: equipId,
         });
 
         localStorage.setItem('equipmentCart', JSON.stringify(cartData));
-    };
-
-    const getChemicalsRequest = async () => {
-        try {
-            const response = await axios.get("http://localhost:3001/chemicals-request-list");
-            findMostRequestedChemIds(response.data, 3);
-        } catch (error) {
-            console.error("Error fetching chemicals request:", error);
-        }
-    };
-
-    const findMostRequestedChemIds = (data, n) => {
-        const chemIdCounts = {};
-
-        data.forEach(request => {
-            const chemId = request.Chem_Id;
-            chemIdCounts[chemId] = (chemIdCounts[chemId] || 0) + 1;
-        });
-
-        const sortedChemIds = Object.keys(chemIdCounts).sort((a, b) => chemIdCounts[b] - chemIdCounts[a]);
-
-        const mostRequestedIds = sortedChemIds.slice(0, n);
-
-        setMostRequestedChemIds(mostRequestedIds);
-    };
-
-    const addChemToCartFromOffcanvas = (chemId) => {
-        // Get the existing cart data from localStorage (if any)
-        const cartData = JSON.parse(localStorage.getItem('chemicalsCart')) || [];
-
-        // Check if the selected chemicals are already in the cart
-        const existingChemical = cartData.find(item => item.Student_Id === studentId && item.Chem_Id === chemId);
-
-        if (existingChemical) {
-            alert('This chemical is already in your cart');
-            return;
-        } else {
-            cartData.push({
-                Student_Id: studentId,
-                Chem_Id: chemId,
-            });
-
-            localStorage.setItem('chemicalsCart', JSON.stringify(cartData));
-        };
     };
 
     useEffect(() => {
@@ -124,11 +100,10 @@ function StudentEquipmentList() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                const fetchedStudentId = response.data.studentId;
-                setStudentId(fetchedStudentId);
+                setStudentInfo(response.data);
                 setEquipmentRequest({
                     ...equipmentRequest,
-                    Student_Id: fetchedStudentId,
+                    Student_Id: response.data.studentId,
                     Equipment_Id: selectedEquipmentId,
                 });
             }
@@ -145,12 +120,17 @@ function StudentEquipmentList() {
         setEquipment(response.data);
     }
 
+    const getEquipmentCategory = async () => {
+        const response = await axios.get("http://localhost:3001/equipmentCategory-list");
+        setEquipmentCategory(response.data);
+    }
+
     const addToCart = (Equipment_Id) => {
         // Get the existing cart data from localStorage (if any)
         const cartData = JSON.parse(localStorage.getItem('equipmentCart')) || [];
 
         // Check if the selected equipment are already in the cart
-        const existingEquipment = cartData.find(item => item.Student_Id === studentId && item.Equipment_Id === Equipment_Id);
+        const existingEquipment = cartData.find(item => item.Student_Id === studentInfo.studentId && item.Equipment_Id === Equipment_Id);
 
         if (existingEquipment) {
             // If the selected equipment are already in the cart, update the quantity (optional)
@@ -158,7 +138,7 @@ function StudentEquipmentList() {
         } else {
             // If the selected equipment are not in the cart, add them as a new item
             cartData.push({
-                Student_Id: studentId,
+                Student_Id: studentInfo.studentId,
                 Equipment_Id,
                 Requested_Quantity: equipmentRequest.Requested_Quantity,
             });
@@ -180,109 +160,158 @@ function StudentEquipmentList() {
         setFilteredEquipment(filterEquipment);
     }
 
+    const user_picture = localStorage.getItem('user_picture') ? <img src={localStorage.getItem('user_picture')} alt="user" className='user__avatar' /> : <i class="fa-solid fa-circle-user" />;
+    const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
+
+    const handleLogout = () => {
+        axios.get("http://localhost:3001/student-logout").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_email');
+                localStorage.removeItem('user_picture');
+                localStorage.removeItem('studentToken');
+                navigate("/");
+            }
+        });
+    };
+
+    const findEquipmentNameById = (equipId) => {
+        const selectedEquipment = equipment.find((equip) => equip.Equipment_Id === equipId);
+        return selectedEquipment ? selectedEquipment.Equipment_Name : "";
+    };
+
     return (
-        <div className="container-fluid">
-            <div className='d-flex justify-content-between align-items-center'>
-                <h2>Equipment List</h2>
-                <form className="d-flex">
-                    <input
-                        className="form-control me-2"
-                        type="search"
-                        placeholder="Search"
-                        aria-label="Search"
-                        value={searchQuery}
-                        onChange={handleSearch} // Use the handleSearch function on input change
-                    />
-                    <button className="btn btn-outline-success" type="submit">
-                        Search
-                    </button>
-                </form>
-            </div>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">No</th>
-                        <th scope="col">Equipment Name</th>
-                        <th scope="col">Equipment Category Id</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredEquipment.map((equipment, index) => {
-                        const uniqueEquipIdTypes = [...new Set(equipmentReq.map(request => request.Equipment_Id))];
+        <div className='container-fluid vh-100'>
+            <div className='dashboard__container'>
+                <aside className='sidebar'>
+                    <div className='sidebar__header'>
+                        <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
+                        <div className='sidebar__title std__name'>Welcome, {studentInfo.studentFirstName}</div>
+                    </div>
+                    <div className='sidebar__body'>
+                        <Link to="./student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>
+                        <Link to="./bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="./student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-cart-shopping" /> Cart</Link>
+                        <Link to="./student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-clock-rotate-left" /> History</Link>
+                        <Link to="/student-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                    </div>
+                    <div className='sidebar__footer'>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                    </div>
+                </aside>
 
-                        const isOffCanvasEnabled = uniqueEquipIdTypes.length >= 2;
+                <main className='dashboard__content'>
+                    <div className='component__header'>
+                        <div className='component__headerGroup component__headerGroup--left'>
+                            <i class='fa-solid fa-magnifying-glass'></i>
+                            <input
+                                type="search"
+                                className='component__search'
+                                placeholder="ค้นหาด้วยชื่อ"
+                                value={searchQuery}
+                                onChange={handleSearch}
+                            />
+                        </div>
 
-                        return (
-                            <tr key={index}>
-                                <td> {index + 1} </td>
-                                <td> {equipment.Equipment_Name} </td>
-                                <td> {equipment.Equipment_Category_Id} </td>
-                                <td>
-                                    <div className="d-grid gap-2 d-sm-flex">
-                                        <button
-                                            className="btn btn-primary"
-                                            onClick={() => addToCart(equipment.Equipment_Id)}
-                                            data-bs-toggle={isOffCanvasEnabled ? "offcanvas" : ""}
-                                            data-bs-target={isOffCanvasEnabled ? "#offcanvasWithBackdrop2" : ""}
-                                            aria-controls="offcanvasWithBackdrop"
-                                        >
-                                            add to cart
-                                        </button>
+                        <div className='component__headerGroup component__headerGroup--right'>
+                            <div>{user_picture}</div>
+                            <div>{user_email}</div>
+                        </div>
+                    </div>
 
-                                        {isOffCanvasEnabled && (
-                                            <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasWithBackdrop2" aria-labelledby="offcanvasWithBackdropLabel">
-                                                <div className="offcanvas-header">
-                                                    <h3 className="offcanvas-title" id="offcanvasWithBackdropLabel">{selectedEquipmentId.Equipment_Id} is added to cart</h3>
-                                                    <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                                                </div> <hr />
-                                                <div className="offcanvas-body">
-                                                    {selectedEquipmentId && (
-                                                        <div>
-                                                            <h5> Equipment Suggestions </h5>
-                                                            <ul>
-                                                                {mostRequestedEquipIds.map((equipId, index) => (
-                                                                    selectedEquipmentId.Equipment_Id !== equipId && (
-                                                                        <li key={index}>
-                                                                            {equipId}
-                                                                            <button
-                                                                                className="btn btn-primary ms-2 mb-2"
-                                                                                onClick={() => addEquipToCartFromOffcanvas(equipId)}
-                                                                            >
-                                                                                add to cart
-                                                                            </button>
-                                                                        </li>
-                                                                    )
-                                                                ))}
-                                                            </ul>
+                    <div className='table-responsive'>
+                        <div className='table__tabs'>
+                            <Link to="/student-dashboard/student-chemicals-list" className='table__tab table__tab--chemicals table__tab--unactive'>สารเคมี</Link>
+                            <Link className='table__tab table__tab--equipment table__tab--active'>ครุภัณฑ์</Link>
+                        </div>
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Equipment Name</th>
+                                    <th scope="col">Equipment Category</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredEquipment.map((equipment, index) => {
+                                    const uniqueEquipIdTypes = [...new Set(equipmentReq.map(request => request.Equipment_Id))];
 
+                                    const isOffCanvasEnabled = uniqueEquipIdTypes.length >= 2;
+                                    const category = equipmentCategory.find(category => category.Equipment_Category_Id === equipment.Equipment_Category_Id);
+
+                                    return (
+                                        <tr key={index} className="active-row">
+                                            <td> {index + 1} </td>
+                                            <td> {equipment.Equipment_Name} </td>
+                                            <td> {category ? category.Equipment_Category_Name : 'N/A'} </td>
+                                            <td>
+                                                <div>
+                                                    <button
+                                                        onClick={() => addToCart(equipment.Equipment_Id)}
+                                                        data-bs-toggle={isOffCanvasEnabled ? "offcanvas" : ""}
+                                                        data-bs-target={isOffCanvasEnabled ? "#offcanvasWithBackdrop2" : ""}
+                                                        aria-controls="offcanvasWithBackdrop"
+                                                    >
+                                                        <i class="fa-solid fa-circle-plus" />
+                                                    </button>
+
+                                                    {isOffCanvasEnabled && (
+                                                        <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasWithBackdrop2" aria-labelledby="offcanvasWithBackdropLabel">
+                                                            <div className="offcanvas-header">
+                                                                <div>
+                                                                    <h3 className="offcanvas-title" id="offcanvasWithBackdropLabel">
+                                                                        {findEquipmentNameById(selectedEquipmentId.Equipment_Id)} is added to cart
+                                                                    </h3>
+                                                                    <p>go to cart</p>
+                                                                </div>
+                                                                <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                            </div> <hr />
+                                                            <div className="offcanvas-body">
+                                                                {selectedEquipmentId && (
+                                                                    <div>
+                                                                        <h5> Equipment Suggestions </h5>
+                                                                        <ul className="offcanvas__lists">
+                                                                            {mostRequestedEquipIds.map((equipId, index) => (
+                                                                                selectedEquipmentId.Equipment_Id !== equipId && (
+                                                                                    <li className="offcanvas__item" key={index}>
+                                                                                        {equipId}
+                                                                                        <button
+                                                                                            className="offcanvas__button"
+                                                                                            onClick={() => addEquipToCartFromOffcanvas(equipId)}
+                                                                                        >
+                                                                                            add to cart
+                                                                                        </button>
+                                                                                    </li>
+                                                                                )
+                                                                            ))}
+                                                                        </ul>
+
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     )}
-                                                    <hr />
-                                                    <h5> Chemicals Suggestions </h5>
-                                                    <ul>
-                                                        {mostRequestedChemIds.map((chemId, index) => (
-                                                            <li key={index}>
-                                                                {chemId}
-                                                                <button
-                                                                    className="btn btn-primary ms-2 mb-2"
-                                                                    onClick={() => addChemToCartFromOffcanvas(chemId)}
-                                                                >
-                                                                    add to cart
-                                                                </button>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
                                                 </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+
+                <footer className='footer'>
+                    <Link to="./student-chemicals-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
+                    <Link to="./bundle-list" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="./student-chemicals-cart" className='footer__item'> <i class="fa-solid fa-cart-shopping" /></Link>
+                    <Link to="./student-chemicals-request" className='footer__item'> <i class="fa-solid fa-clock-rotate-left" /></Link>
+                    <Link to="/student-profile" className='footer__item'> <i class="fa-solid fa-user" /></Link>
+                </footer>
+            </div>
         </div>
     )
 }

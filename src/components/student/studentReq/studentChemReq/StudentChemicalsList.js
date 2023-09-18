@@ -1,11 +1,23 @@
 import axios from "axios";
 import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 
-import '../../../cssElement/Table.css'
 import '../css/StudentRequest.css'
+import '../../../cssElement/Table.css'
+import '../../../cssElement/Form.css'
+import '../../../cssElement/Dashboard.css'
+
+import logo from '../../../assets/logo.png';
 
 function StudentChemicalsList() {
-    const [studentId, setStudentId] = useState("");
+    const [studentInfo, setStudentInfo] = useState({
+        studentId: "",
+        studentFirstName: "",
+        studentLastName: "",
+        studentEmail: "",
+        studentPassword: "",
+        studentTel: "",
+    });
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -21,18 +33,19 @@ function StudentChemicalsList() {
     const [chemicalsReq, setChemicalsReq] = useState([]);
     const [mostRequestedChemIds, setMostRequestedChemIds] = useState([]);
 
-    const [mostRequestedEquipIds, setMostRequestedEquipIds] = useState([]);
+    const navigate = useNavigate();
+
+    axios.defaults.withCredentials = true;
 
     useEffect(() => {
         getChemicalsRequest();
-        getEquipmentRequest();
     }, []);
 
     const getChemicalsRequest = async () => {
         try {
             const response = await axios.get("http://localhost:3001/chemicals-request-list");
             setChemicalsReq(response.data);
-            findMostRequestedChemIds(response.data, 3);
+            findMostRequestedChemIds(response.data, 10);
         } catch (error) {
             console.error("Error fetching chemicals request:", error);
         }
@@ -58,7 +71,7 @@ function StudentChemicalsList() {
         const cartData = JSON.parse(localStorage.getItem('chemicalsCart')) || [];
 
         // Check if the selected chemicals are already in the cart
-        const existingChemical = cartData.find(item => item.Student_Id === studentId && item.Chem_Id === chemId);
+        const existingChemical = cartData.find(item => item.Student_Id === studentInfo.studentId && item.Chem_Id === chemId);
 
         if (existingChemical) {
             alert('This chemical is already in your cart');
@@ -66,54 +79,11 @@ function StudentChemicalsList() {
         }
 
         cartData.push({
-            Student_Id: studentId,
+            Student_Id: studentInfo.studentId,
             Chem_Id: chemId,
         });
 
         localStorage.setItem('chemicalsCart', JSON.stringify(cartData));
-    };
-
-    const getEquipmentRequest = async () => {
-        try {
-            const response = await axios.get("http://localhost:3001/equipment-request-list");
-            findMostRequestedEquipIds(response.data, 3);
-        } catch (error) {
-            console.error("Error fetching equipment request:", error);
-        }
-    };
-
-    const findMostRequestedEquipIds = (data, n) => {
-        const equipIdCounts = {};
-
-        data.forEach(request => {
-            const equipId = request.Equipment_Id;
-            equipIdCounts[equipId] = (equipIdCounts[equipId] || 0) + 1;
-        });
-
-        const sortedEquipIds = Object.keys(equipIdCounts).sort((a, b) => equipIdCounts[b] - equipIdCounts[a]);
-
-        const mostRequestedIds = sortedEquipIds.slice(0, n);
-
-        setMostRequestedEquipIds(mostRequestedIds);
-    };
-
-    const addEquipToCartFromOffcanvas = (equipId) => {
-        // Get the existing cart data from localStorage (if any)
-        const cartData = JSON.parse(localStorage.getItem('equipmentCart')) || [];
-
-        // Check if the selected equipment are already in the cart
-        const existingEquipment = cartData.find(item => item.Student_Id === studentId && item.Equipment_Id === equipId);
-
-        if (existingEquipment) {
-            alert('This equipment is already in your cart');
-        } else {
-            cartData.push({
-                Student_Id: studentId,
-                Equipment_Id: equipId,
-            });
-        }
-
-        localStorage.setItem('equipmentCart', JSON.stringify(cartData));
     };
 
     useEffect(() => {
@@ -125,11 +95,10 @@ function StudentChemicalsList() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                const fetchedStudentId = response.data.studentId;
-                setStudentId(fetchedStudentId);
+                setStudentInfo(response.data);
                 setChemicalsRequest({
                     ...chemicalsRequest,
-                    Student_Id: fetchedStudentId,
+                    Student_Id: response.data.studentId,
                     Chem_Id: selectedChemicalsId,
                 });
             }
@@ -151,13 +120,13 @@ function StudentChemicalsList() {
         const cartData = JSON.parse(localStorage.getItem('chemicalsCart')) || [];
 
         // Check if the selected chemicals are already in the cart
-        const existingChemical = cartData.find(item => item.Student_Id === studentId && item.Chem_Id === Chem_Id);
+        const existingChemical = cartData.find(item => item.Student_Id === studentInfo.studentId && item.Chem_Id === Chem_Id);
 
         if (existingChemical) {
             alert('This chemical is already in your cart');
         } else {
             cartData.push({
-                Student_Id: studentId,
+                Student_Id: studentInfo.studentId,
                 Chem_Id,
             });
         }
@@ -178,118 +147,176 @@ function StudentChemicalsList() {
         setFilteredChemicals(filteredChemicals);
     };
 
+    const user_picture = localStorage.getItem('user_picture') ? <img src={localStorage.getItem('user_picture')} alt="user" className='user__avatar' /> : <i class="fa-solid fa-circle-user" />;
+    const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
+
+    const handleLogout = () => {
+        axios.get("http://localhost:3001/student-logout").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                localStorage.removeItem('user_name');
+                localStorage.removeItem('user_email');
+                localStorage.removeItem('user_picture');
+                localStorage.removeItem('studentToken');
+                navigate("/");
+            }
+        });
+    };
+
+    const findChemicalNameById = (chemId) => {
+        const selectedChemical = chemicalsDetail.find((chemical) => chemical.Chem_Id === chemId);
+        return selectedChemical ? selectedChemical.Chem_Name : "";
+    };
+
     return (
-        <div className='container-fluid'>
-            <div className='component__header'>
-                <input
-                    className="form-control"
-                    type="search"
-                    placeholder="Search"
-                    value={searchQuery}
-                    onChange={handleSearch}
-                />
+        <div className='container-fluid vh-100'>
+            <div className='dashboard__container'>
+                <aside className='sidebar'>
+                    <div className='sidebar__header'>
+                        <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
+                        <div className='sidebar__title std__name'>Welcome, {studentInfo.studentFirstName}</div>
+                    </div>
+                    <div className='sidebar__body'>
+                        <Link to="./student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>
+                        <Link to="./bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="./student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-cart-shopping" /> Cart</Link>
+                        <Link to="./student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-clock-rotate-left" /> History</Link>
+                        <Link to="/student-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                    </div>
+                    <div className='sidebar__footer'>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                    </div>
+                </aside>
 
-                <div className='component__header--group'>
-                    <div>User pic</div>
-                    <div>User email</div>
-                </div>
-            </div>
-            <div className="table-responsive">
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Chemicals Name</th>
-                            <th scope="col">Chemicals CAS</th>
-                            <th scope="col">Chemicals UN</th>
-                            <th scope="col">Chemicals Type</th>
-                            <th scope="col">Chemicals Grade</th>
-                            <th scope="col">Chemicals State</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredChemicals.map((chemicalsDetail, index) => {
-                            // Filter the chemicalsReq list to find unique Chem_Id types
-                            const uniqueChemIdTypes = [...new Set(chemicalsReq.map(request => request.Chem_Id))];
+                <main className='dashboard__content'>
+                    <div className='component__header'>
+                        <div className='component__headerGroup component__headerGroup--left'>
+                            <i class='fa-solid fa-magnifying-glass'></i>
+                            <input
+                                type="search"
+                                className='component__search'
+                                placeholder="ค้นหาด้วยชื่อ"
+                                value={searchQuery}
+                                onChange={handleSearch}
+                            />
+                        </div>
 
-                            // Check if the number of unique Chem_Id types is less than 3
-                            const isOffCanvasEnabled = uniqueChemIdTypes.length >= 3;
+                        <div className='component__headerGroup component__headerGroup--right'>
+                            <div>{user_picture}</div>
+                            <div>{user_email}</div>
+                        </div>
+                    </div>
 
-                            return (
-                                <tr key={index} className="active-row">
-                                    <td> {index + 1} </td>
-                                    <td> {chemicalsDetail.Chem_Name} </td>
-                                    <td> {chemicalsDetail.Chem_CAS} </td>
-                                    <td> {chemicalsDetail.Chem_UN} </td>
-                                    <td> {chemicalsDetail.Chem_Type} </td>
-                                    <td> {chemicalsDetail.Chem_Grade} </td>
-                                    <td> {chemicalsDetail.Chem_State} </td>
-                                    <td>
-                                        <div className="d-grid gap-2 d-sm-flex">
-                                            <button
-                                                className="btn btn-primary"
-                                                onClick={() => addToCart(chemicalsDetail.Chem_Id)}
-                                                data-bs-toggle={isOffCanvasEnabled ? "offcanvas" : ""}
-                                                data-bs-target={isOffCanvasEnabled ? "#offcanvasWithBackdrop1" : ""}
-                                                aria-controls="offcanvasWithBackdrop"
-                                            >
-                                                add to cart
-                                            </button>
-
-                                            {isOffCanvasEnabled && (
-                                                <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasWithBackdrop1" aria-labelledby="offcanvasWithBackdropLabel">
-                                                    <div className="offcanvas-header">
-                                                        <h3 className="offcanvas-title" id="offcanvasWithBackdropLabel">{selectedChemicalsId.Chem_Id} is added to cart</h3>
-                                                        <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                                                    </div> <hr />
-                                                    <div className="offcanvas-body">
-                                                        {selectedChemicalsId && (
-                                                            <div>
-                                                                <h5> Chemicals Suggestions </h5>
-                                                                <ul>
-                                                                    {mostRequestedChemIds.map((chemId, index) => (
-                                                                        selectedChemicalsId.Chem_Id !== chemId && (
-                                                                            <li key={index}>
-                                                                                {chemId}
-                                                                                <button
-                                                                                    className="btn btn-primary ms-2 mb-2"
-                                                                                    onClick={() => addChemToCartFromOffcanvas(chemId)}
-                                                                                >
-                                                                                    add to cart
-                                                                                </button>
-                                                                            </li>
-                                                                        )
-                                                                    ))}
-                                                                </ul>
-
-                                                            </div>
-                                                        )}
-                                                        <hr />
-                                                        <h5> Equipment Suggestions </h5>
-                                                        <ul>
-                                                            {mostRequestedEquipIds.map((equipId, index) => (
-                                                                <li key={index}>
-                                                                    {equipId}
-                                                                    <button
-                                                                        className="btn btn-primary ms-2 mb-2"
-                                                                        onClick={() => addEquipToCartFromOffcanvas(equipId)}
-                                                                    >
-                                                                        add to cart
-                                                                    </button>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </td>
+                    <div className='table-responsive'>
+                        <div className='table__tabs'>
+                            <Link className='table__tab table__tab--chemicals table__tab--active'>สารเคมี</Link>
+                            <Link to="/student-dashboard/student-equipment-list" className='table__tab table__tab--equipment table__tab--unactive'>ครุภัณฑ์</Link>
+                        </div>
+                        <table className='table table-striped'>
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Chemicals Name</th>
+                                    <th scope="col">Chemicals CAS</th>
+                                    <th scope="col">Chemicals UN</th>
+                                    <th scope="col">Chemicals Type</th>
+                                    <th scope="col">Chemicals Grade</th>
+                                    <th scope="col">Chemicals State</th>
+                                    <th scope="col">Add to Cart</th>
                                 </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                                {filteredChemicals.map((chemicalsDetail, index) => {
+                                    // Filter the chemicalsReq list to find unique Chem_Id types
+                                    const uniqueChemIdTypes = [...new Set(chemicalsReq.map(request => request.Chem_Id))];
+
+                                    const isOffCanvasEnabled = uniqueChemIdTypes.length >= 3;
+
+                                    return (
+                                        <tr key={index} className="active-row">
+                                            <td> {index + 1} </td>
+                                            <td> {chemicalsDetail.Chem_Name} </td>
+                                            <td> {chemicalsDetail.Chem_CAS} </td>
+                                            <td> {chemicalsDetail.Chem_UN} </td>
+                                            <td> {chemicalsDetail.Chem_Type} </td>
+                                            <td> {chemicalsDetail.Chem_Grade} </td>
+                                            <td> {chemicalsDetail.Chem_State} </td>
+                                            <td>
+                                                <div>
+                                                    <button
+                                                        onClick={() => addToCart(chemicalsDetail.Chem_Id)}
+                                                        data-bs-toggle={isOffCanvasEnabled ? "offcanvas" : ""}
+                                                        data-bs-target={isOffCanvasEnabled ? "#offcanvasWithBackdrop1" : ""}
+                                                        aria-controls="offcanvasWithBackdrop"
+                                                    >
+                                                        <i class="fa-solid fa-circle-plus" />
+                                                    </button>
+
+                                                    {isOffCanvasEnabled && (
+                                                        <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasWithBackdrop1" aria-labelledby="offcanvasWithBackdropLabel">
+                                                            <div className="offcanvas-header">
+                                                                <div>
+                                                                    <h3 className="offcanvas-title" id="offcanvasWithBackdropLabel">
+                                                                        {findChemicalNameById(selectedChemicalsId.Chem_Id)} is added to cart
+                                                                        <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                                    </h3>
+                                                                </div>
+                                                                <p>go to cart</p>
+                                                            </div> <hr />
+                                                            <div className="offcanvas-body">
+                                                                {selectedChemicalsId && (
+                                                                    <div>
+                                                                        <h5> Chemicals Suggestions </h5>
+                                                                        <ul className="offcanvas__lists">
+                                                                            {mostRequestedChemIds.map((chemId, index) => (
+                                                                                selectedChemicalsId.Chem_Id !== chemId && (
+                                                                                    <li className="offcanvas__item" key={index}>
+                                                                                        {findChemicalNameById(chemId)}
+                                                                                        <button
+                                                                                            className="offcanvas__button"
+                                                                                            onClick={() => addChemToCartFromOffcanvas(chemId)}
+                                                                                        >
+                                                                                            <i class="fa-solid fa-circle-plus" />
+                                                                                            <div className="offcanvas__button-text">
+                                                                                                add to cart
+                                                                                            </div>
+                                                                                        </button>
+                                                                                    </li>
+                                                                                )
+                                                                            ))}
+                                                                        </ul>
+
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+
+                <footer className='footer'>
+                    <Link to="./student-chemicals-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
+                    <Link to="./bundle-list" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="./student-chemicals-cart" className='footer__item'> <i class="fa-solid fa-cart-shopping" /></Link>
+                    <Link to="./student-chemicals-request" className='footer__item'> <i class="fa-solid fa-clock-rotate-left" /></Link>
+                    <div className="dropup">
+                        <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user" />
+                        </button>
+                        <ul class="dropdown-menu">
+                            <Link to="/student-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        </ul>
+                    </div>
+                </footer>
             </div>
         </div>
     )

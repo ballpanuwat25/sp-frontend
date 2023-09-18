@@ -3,12 +3,42 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    height: 60px;
+    margin-top: -8px;
+    border-bottom: 1px solid #006C68;
 }
 
-.component__header--group {
-    width: 50%;
+.component__headerGroup {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     align-items: center;
+}
+
+.component__headerGroup--left {
+    width: 100%;
+    justify-content: start;
+}
+
+.component__headerGroup--right {
+    justify-content: space-between;
+}
+
+.user__avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.user__email {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #006C68;
+}
+
+.fa-magnifying-glass {
+    color: #006C68;
+    font-size: 16px;
+    margin-right: 15px;
 }

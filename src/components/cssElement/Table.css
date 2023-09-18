@@ -1,38 +1,103 @@
 table {
     border-collapse: collapse;
-    margin: 25px 0;
     font-size: 0.9em;
-    min-width: 400px;
-    border-radius: 5px 5px 0 0;
+    color: #006C68;
+    
+    border-start-end-radius: 15px;
+    border-end-start-radius: 15px;
+    border-end-end-radius: 15px;
+
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 table thead tr {
-    background-color: #009879;
-    color: #ffffff;
+    background-color: #006C68;
+    color: #fff;
     text-align: left;
     font-weight: bold;
 }
 
 table th,
 table td {
-    padding: 12px 15px;
+    padding: 20px 15px !important;
 }
 
-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+table tbody tr:nth-of-type(odd) td {
+    background-color: #ffffff;
+    color: #006C68;
+}
+
+table tbody tr:nth-of-type(even) td div button i {
+    color: #fff;
 }
 
 table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
-}
-
-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
+    background-color: #238F8B;
 }
 
 table tbody tr.active-row {
     font-weight: bold;
-    color: #009879;
+    color: #fff;
+}
+
+table thead tr th,
+table tbody tr td {
+    white-space: nowrap;
+}
+
+.table>:not(caption)>*>* {
+    box-shadow: none;
+}
+
+.table__tabs {
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+}
+
+.table__tab {
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Noto Sans Thai', sans-serif;
+    letter-spacing: 1px;
+}
+
+.table__tab--active {
+    color: #ffffff;
+    background-color: #006C68;
+
+    border-start-end-radius: 10px;
+    border-start-start-radius: 10px;
+}
+
+.table__tab--active:hover {
+    color: #ffffff;
+    background-color: #006C68;
+}
+
+.table__tab--unactive {
+    color: #ffffff;
+    background-color: #006c69d8;
+
+    border-start-end-radius: 10px;
+    border-start-start-radius: 10px;
+}
+
+.table__tab--unactive:hover {
+    color: #ffffff;
+    background-color: #006C68;
+}
+
+.table__tab--chemicals {
+    padding: 8px 20px;
+}
+
+.table__tab--equipment {
+    padding: 8px 20px;
+}
+
+.fa-circle-plus {
+    font-size: 20px;
+    color: #006c69d8;
 }

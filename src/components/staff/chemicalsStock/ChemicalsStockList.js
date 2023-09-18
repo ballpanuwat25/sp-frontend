@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 function ChemicalsStockList() {
   const [chemicals, setChemicals] = useState([]);
   const [chemicalsDetail, setChemicalsDetail] = useState([]);
+  
   const [searchFilter, setSearchFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
