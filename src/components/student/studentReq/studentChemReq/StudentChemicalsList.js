@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
-import '../css/StudentRequest.css'
 import '../../../cssElement/Table.css'
 import '../../../cssElement/Form.css'
 import '../../../cssElement/Dashboard.css'
@@ -18,6 +17,7 @@ function StudentChemicalsList() {
         studentPassword: "",
         studentTel: "",
     });
+
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -178,10 +178,10 @@ function StudentChemicalsList() {
                         <div className='sidebar__title std__name'>Welcome, {studentInfo.studentFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="./student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>
-                        <Link to="./bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
-                        <Link to="./student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-cart-shopping" /> Cart</Link>
-                        <Link to="./student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-clock-rotate-left" /> History</Link>
+                        <Link to="/student-dashboard/student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>
+                        <Link to="/student-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="/student-dashboard/student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-cart-shopping" /> Cart</Link>
+                        <Link to="/student-dashboard/student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-clock-rotate-left" /> History</Link>
                         <Link to="/student-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
@@ -210,20 +210,21 @@ function StudentChemicalsList() {
 
                     <div className='table-responsive'>
                         <div className='table__tabs'>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>สารเคมี</Link>
-                            <Link to="/student-dashboard/student-equipment-list" className='table__tab table__tab--equipment table__tab--unactive'>ครุภัณฑ์</Link>
+                            <Link className='table__tab table__tab--chemicals table__tab--active'>รายการสารเคมี</Link>
+                            <Link to="/student-dashboard/student-equipment-list" className='table__tab table__tab--equipment table__tab--unactive'>รายการครุภัณฑ์</Link>
                         </div>
+                        
                         <table className='table table-striped'>
                             <thead>
                                 <tr>
-                                    <th scope="col">No</th>
+                                    <th scope="col">#</th>
                                     <th scope="col">Chemicals Name</th>
                                     <th scope="col">Chemicals CAS</th>
                                     <th scope="col">Chemicals UN</th>
                                     <th scope="col">Chemicals Type</th>
                                     <th scope="col">Chemicals Grade</th>
                                     <th scope="col">Chemicals State</th>
-                                    <th scope="col">Add to Cart</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -249,25 +250,25 @@ function StudentChemicalsList() {
                                                         data-bs-toggle={isOffCanvasEnabled ? "offcanvas" : ""}
                                                         data-bs-target={isOffCanvasEnabled ? "#offcanvasWithBackdrop1" : ""}
                                                         aria-controls="offcanvasWithBackdrop"
+                                                        className="table__button thai--font"
                                                     >
                                                         <i class="fa-solid fa-circle-plus" />
+                                                        เพิ่มลงตระกร้า
                                                     </button>
 
                                                     {isOffCanvasEnabled && (
                                                         <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasWithBackdrop1" aria-labelledby="offcanvasWithBackdropLabel">
                                                             <div className="offcanvas-header">
-                                                                <div>
-                                                                    <h3 className="offcanvas-title" id="offcanvasWithBackdropLabel">
-                                                                        {findChemicalNameById(selectedChemicalsId.Chem_Id)} is added to cart
-                                                                        <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                                                                    </h3>
+                                                                <button type="button" className="btn-close text-reset offcanvas-close--button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                                <div className="offcanvas--title">
+                                                                    {findChemicalNameById(selectedChemicalsId.Chem_Id)} <p className="offcanvas__title--highlight">ถูกเพิ่มลงตระกร้าสารเคมีแล้ว</p>
                                                                 </div>
-                                                                <p>go to cart</p>
-                                                            </div> <hr />
+                                                                <Link to="/student-dashboard/student-chemicals-cart" className="offcanvas--link">ไปที่ตระกร้าสารเคมี</Link>
+                                                            </div>
                                                             <div className="offcanvas-body">
                                                                 {selectedChemicalsId && (
                                                                     <div>
-                                                                        <h5> Chemicals Suggestions </h5>
+                                                                        <h5 className="thai--font"> สารเคมีแนะนำ </h5>
                                                                         <ul className="offcanvas__lists">
                                                                             {mostRequestedChemIds.map((chemId, index) => (
                                                                                 selectedChemicalsId.Chem_Id !== chemId && (
@@ -278,7 +279,7 @@ function StudentChemicalsList() {
                                                                                             onClick={() => addChemToCartFromOffcanvas(chemId)}
                                                                                         >
                                                                                             <i class="fa-solid fa-circle-plus" />
-                                                                                            <div className="offcanvas__button-text">
+                                                                                            <div className="offcanvas__button-text offcanvas__button-text--hover">
                                                                                                 add to cart
                                                                                             </div>
                                                                                         </button>
@@ -303,10 +304,10 @@ function StudentChemicalsList() {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="./student-chemicals-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
-                    <Link to="./bundle-list" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
-                    <Link to="./student-chemicals-cart" className='footer__item'> <i class="fa-solid fa-cart-shopping" /></Link>
-                    <Link to="./student-chemicals-request" className='footer__item'> <i class="fa-solid fa-clock-rotate-left" /></Link>
+                    <Link to="/student-dashboard/student-chemicals-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
+                    <Link to="/student-dashboard/bundle-list" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="/student-dashboard/student-chemicals-cart" className='footer__item'> <i class="fa-solid fa-cart-shopping" /></Link>
+                    <Link to="/student-dashboard/student-chemicals-request" className='footer__item'> <i class="fa-solid fa-clock-rotate-left" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-user" />

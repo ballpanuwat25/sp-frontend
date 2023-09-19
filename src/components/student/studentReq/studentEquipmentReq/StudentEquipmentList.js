@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
-import '../css/StudentRequest.css'
 import '../../../cssElement/Table.css'
 import '../../../cssElement/Form.css'
 import '../../../cssElement/Dashboard.css'
@@ -191,10 +190,10 @@ function StudentEquipmentList() {
                         <div className='sidebar__title std__name'>Welcome, {studentInfo.studentFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="./student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>
-                        <Link to="./bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
-                        <Link to="./student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-cart-shopping" /> Cart</Link>
-                        <Link to="./student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-clock-rotate-left" /> History</Link>
+                        <Link to="/student-dashboard/student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>
+                        <Link to="/student-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="/student-dashboard/student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-cart-shopping" /> Cart</Link>
+                        <Link to="/student-dashboard/student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-clock-rotate-left" /> History</Link>
                         <Link to="/student-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
@@ -223,13 +222,13 @@ function StudentEquipmentList() {
 
                     <div className='table-responsive'>
                         <div className='table__tabs'>
-                            <Link to="/student-dashboard/student-chemicals-list" className='table__tab table__tab--chemicals table__tab--unactive'>สารเคมี</Link>
-                            <Link className='table__tab table__tab--equipment table__tab--active'>ครุภัณฑ์</Link>
+                            <Link to="/student-dashboard/student-chemicals-list" className='table__tab table__tab--chemicals table__tab--unactive'>รายการสารเคมี</Link>
+                            <Link className='table__tab table__tab--equipment table__tab--active'>รายการครุภัณฑ์</Link>
                         </div>
                         <table className="table table-striped">
                             <thead>
                                 <tr>
-                                    <th scope="col">No</th>
+                                    <th scope="col">#</th>
                                     <th scope="col">Equipment Name</th>
                                     <th scope="col">Equipment Category</th>
                                     <th scope="col"></th>
@@ -254,25 +253,25 @@ function StudentEquipmentList() {
                                                         data-bs-toggle={isOffCanvasEnabled ? "offcanvas" : ""}
                                                         data-bs-target={isOffCanvasEnabled ? "#offcanvasWithBackdrop2" : ""}
                                                         aria-controls="offcanvasWithBackdrop"
+                                                        className="table__button thai--font"
                                                     >
                                                         <i class="fa-solid fa-circle-plus" />
+                                                        เพิ่มลงตระกร้า
                                                     </button>
 
                                                     {isOffCanvasEnabled && (
                                                         <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasWithBackdrop2" aria-labelledby="offcanvasWithBackdropLabel">
                                                             <div className="offcanvas-header">
-                                                                <div>
-                                                                    <h3 className="offcanvas-title" id="offcanvasWithBackdropLabel">
-                                                                        {findEquipmentNameById(selectedEquipmentId.Equipment_Id)} is added to cart
-                                                                    </h3>
-                                                                    <p>go to cart</p>
+                                                                <button type="button" className="btn-close text-reset offcanvas-close--button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                                <div className="offcanvas--title">
+                                                                    {findEquipmentNameById(selectedEquipmentId.Equipment_Id)} <p className="offcanvas__title--highlight">ถูกเพิ่มลงตระกร้าครุภัณฑ์แล้ว</p>
                                                                 </div>
-                                                                <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                                                            </div> <hr />
+                                                                <Link to="/student-dashboard/student-equipment-cart" className="offcanvas--link">ไปที่ตระกร้าครุภัณฑ์</Link>
+                                                            </div>
                                                             <div className="offcanvas-body">
                                                                 {selectedEquipmentId && (
                                                                     <div>
-                                                                        <h5> Equipment Suggestions </h5>
+                                                                        <h5 className="thai--font"> ครุภัณฑ์แนะนำ </h5>
                                                                         <ul className="offcanvas__lists">
                                                                             {mostRequestedEquipIds.map((equipId, index) => (
                                                                                 selectedEquipmentId.Equipment_Id !== equipId && (
@@ -282,7 +281,10 @@ function StudentEquipmentList() {
                                                                                             className="offcanvas__button"
                                                                                             onClick={() => addEquipToCartFromOffcanvas(equipId)}
                                                                                         >
-                                                                                            add to cart
+                                                                                            <i class="fa-solid fa-circle-plus" />
+                                                                                            <div className="offcanvas__button-text offcanvas__button-text--hover">
+                                                                                                add to cart
+                                                                                            </div>
                                                                                         </button>
                                                                                     </li>
                                                                                 )
@@ -305,10 +307,10 @@ function StudentEquipmentList() {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="./student-chemicals-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
-                    <Link to="./bundle-list" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
-                    <Link to="./student-chemicals-cart" className='footer__item'> <i class="fa-solid fa-cart-shopping" /></Link>
-                    <Link to="./student-chemicals-request" className='footer__item'> <i class="fa-solid fa-clock-rotate-left" /></Link>
+                    <Link to="/student-dashboard/student-chemicals-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
+                    <Link to="/student-dashboard/bundle-list" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="/student-dashboard/student-chemicals-cart" className='footer__item'> <i class="fa-solid fa-cart-shopping" /></Link>
+                    <Link to="/student-dashboard/student-chemicals-request" className='footer__item'> <i class="fa-solid fa-clock-rotate-left" /></Link>
                     <Link to="/student-profile" className='footer__item'> <i class="fa-solid fa-user" /></Link>
                 </footer>
             </div>

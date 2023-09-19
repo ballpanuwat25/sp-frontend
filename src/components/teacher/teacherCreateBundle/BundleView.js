@@ -119,7 +119,7 @@ function BundleView() {
 
     return (
         <div className="container-fluid">
-            <h2>Bundle Details</h2>
+            <h2>Teacher Bundle Details</h2>
             {isLoading ? (
                 <p>Loading...</p>
             ) : (
