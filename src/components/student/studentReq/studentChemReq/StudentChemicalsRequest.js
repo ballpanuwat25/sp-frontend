@@ -80,16 +80,16 @@ function StudentChemicalsRequest() {
 
     const getStatusIcon = (status) => {
         switch (status) {
-          case 'Approve':
-            return 'fa-solid fa-circle-check';
-          case 'Decline':
-            return 'fa-solid fa-circle-xmark';
-          case 'Pending':
-            return 'fa-regular fa-clock'; 
-          default:
-            return ''
+            case 'Approve':
+                return 'fa-solid fa-circle-check';
+            case 'Decline':
+                return 'fa-solid fa-circle-xmark';
+            case 'Pending':
+                return 'fa-regular fa-clock';
+            default:
+                return ''
         }
-      };      
+    };
 
     return (
         <div className='container-fluid vh-100'>
@@ -114,7 +114,7 @@ function StudentChemicalsRequest() {
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
-                            <i class='fa-solid fa-magnifying-glass'></i>
+                            <i class="fa-solid fa-ban"/>
                             <input
                                 type="text"
                                 readOnly

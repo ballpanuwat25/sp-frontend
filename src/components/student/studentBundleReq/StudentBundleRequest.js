@@ -149,6 +149,9 @@ function StudentBundleRequest() {
         });
     };
 
+    const user_picture = localStorage.getItem('user_picture') ? <img src={localStorage.getItem('user_picture')} alt="user" className='user__avatar' /> : <i class="fa-solid fa-circle-user" />;
+    const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
+
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
@@ -176,6 +179,14 @@ function StudentBundleRequest() {
                         </div>
                     ) : (
                         <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left' />
+
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <div>{user_picture}</div>
+                                    <div>{user_email}</div>
+                                </div>
+                            </div>
                             <div className='table-responsive'>
                                 <div className='table__tabs'>
                                     <div className='table__tab table__tab--chemicals table__tab--active'>รายละเอียดของกลุ่มสารเคมีและครุภัณฑ์</div>

@@ -260,3 +260,47 @@
     padding-top: 3px;
     color: #006C68;
 }
+
+/* ========================================================= Profile Input ========================================================= */
+
+.profile__form {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.profile__label {
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: #006C68;
+}
+
+.profile__input {
+    border: 2px solid #006C68;
+    border-radius: 5px;
+    outline: none;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    padding-top: 5px;
+    padding-bottom: 2px;
+    color: #006C68;
+    text-transform: uppercase;
+    width: 100%;
+    text-indent: 10px;
+}
+
+.profile__input--readonly {
+    border: none;
+}
+
+.profile__button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #006C68;
+    color: #fff;
+}

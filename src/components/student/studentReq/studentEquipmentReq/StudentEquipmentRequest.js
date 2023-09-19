@@ -114,7 +114,7 @@ function StudentEquipmentRequest() {
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
-                            <i class='fa-solid fa-magnifying-glass'></i>
+                            <i class='fa-solid fa-ban'></i>
                             <input
                                 type="text"
                                 readOnly

@@ -94,6 +94,9 @@ function StudentEquipmentCart() {
         });
     }, []);
 
+    const user_picture = localStorage.getItem('user_picture') ? <img src={localStorage.getItem('user_picture')} alt="user" className='user__avatar' /> : <i class="fa-solid fa-circle-user" />;
+    const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
+
     const handleLogout = () => {
         axios.get("http://localhost:3001/student-logout").then((response) => {
             if (response.data.Error) {
@@ -133,6 +136,14 @@ function StudentEquipmentCart() {
                         <p>Nothing in cart.</p>
                     ) : (
                         <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left' />
+
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <div>{user_picture}</div>
+                                    <div>{user_email}</div>
+                                </div>
+                            </div>
                             <div className='table-responsive'>
                                 <div className='table__tabs'>
                                     <Link to="/student-dashboard/student-chemicals-cart" className='table__tab table__tab--chemicals table__tab--unactive'>ตระกร้าสารเคมี</Link>
