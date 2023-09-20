@@ -14,12 +14,12 @@ table thead tr {
     background-color: #006C68;
     color: #fff;
     text-align: left;
-    font-weight: bold;
 }
 
 table th,
 table td {
     padding: 20px 15px !important;
+    font-family: 'Noto Sans Thai', sans-serif;
 }
 
 table tbody tr:nth-of-type(odd) td {
@@ -49,6 +49,10 @@ table tbody tr.active-row {
 table thead tr th,
 table tbody tr td {
     white-space: nowrap;
+}
+
+table tbody tr {
+    font-weight: 400 !important;
 }
 
 .table__tabs {
@@ -185,4 +189,36 @@ select {
 .fa-clock,
 .fa-square-minus {
     margin-right: 10px;
+}
+
+.add--btn {
+    width: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit--btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #006C68;
+    color: #fff;
+    text-decoration: none;
+}
+
+.delete--btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.edit--btn:hover {
+    background-color: #025855;
+}
+
+.delete--btn:hover,
+.edit--btn:hover {
+    color: #fff !important;
+    text-decoration: none;
 }

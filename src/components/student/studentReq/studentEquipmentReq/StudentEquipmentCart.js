@@ -125,6 +125,7 @@ function StudentEquipmentCart() {
                         <Link to="/student-dashboard/student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-cart-shopping" /> <div className='sidebar__item--active'>Cart</div></Link>
                         <Link to="/student-dashboard/student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-clock-rotate-left" /> History</Link>
                         <Link to="/student-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                        <Link to="/student-dashboard/student-view-teacher" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-users" /> Teacher</Link>
                     </div>
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
@@ -256,6 +257,7 @@ function StudentEquipmentCart() {
                         </button>
                         <ul class="dropdown-menu">
                             <Link to="/student-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                            <Link to="/student-dashboard/student-view-teacher" className='dropdown-menu__item dropdown-menu__item--hover'> <i class="fa-solid fa-users" /> Teacher</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

@@ -39,6 +39,15 @@
     text-transform: uppercase;
 }
 
+.admin__name {
+    color: #006C68;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: end;
+}
+
 .sidebar__body {
     margin-top: 15px;
     padding-left: 18px;
@@ -129,6 +138,10 @@
 .fa-user,
 .fa-arrow-right-from-bracket {
     margin-right: 15px;
+}
+
+.fa-users {
+    margin-right: 10px;
 }
 
 .footer {
@@ -332,6 +345,20 @@
     margin-right: 15px;
 }
 
+.fa-circle-user {
+    color: #006C68;
+    font-size: 28px;
+    margin-right: 10px;
+}
+
+.username--text {
+    color: #006C68;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
 @media screen and (min-width: 875px) {
     .footer {
         display: none;
@@ -377,6 +404,7 @@
     .fa-cart-shopping,
     .fa-clock-rotate-left,
     .fa-user,
+    .fa-users,
     .fa-arrow-right-from-bracket {
         margin: 0;
     }

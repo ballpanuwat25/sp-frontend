@@ -1,11 +1,10 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
 import '../../cssElement/Form.css'
 
 function StudentRegister() {
-    const [user, setUser] = useState({});
     const [values, setValues] = useState({
         Student_Id: "",
         Student_FName: "",
@@ -28,23 +27,6 @@ function StudentRegister() {
             }
         });
     };
-
-    useEffect(() => {
-        const storedUserName = localStorage.getItem('user_name');
-        const storedUserEmail = localStorage.getItem('user_email');
-        const storedUserPicture = localStorage.getItem('user_picture');
-
-        if (storedUserName && storedUserEmail && storedUserPicture) {
-            setUser({
-                name: storedUserName,
-                email: storedUserEmail,
-                picture: storedUserPicture,
-            });
-            setValues({
-                Student_Email: storedUserEmail,
-            });
-        }
-    }, []);
 
     return (
         <div className='container-fluid vh-100'>
@@ -83,7 +65,7 @@ function StudentRegister() {
                         <input
                             type="text"
                             required
-                            defaultValue={user.email}
+                            onChange={(e) => setValues({ ...values, Student_Email: e.target.value })}
                         />
                         <span>Email</span>
                     </div>

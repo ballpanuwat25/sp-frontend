@@ -86,6 +86,8 @@ import StudentBundleList from './components/student/studentBundleReq/StudentBund
 
 import StudentGoogleRegister from './components/student/studentGoogleLogin/StudentGoogleRegister.js';
 
+import StudentViewTeacher from './components/student/studentViewTeacher/StudentViewTeacher.js';
+
 function App() {
   const [adminLoggedIn, setAdminLoggedIn] = useState(
     localStorage.getItem('adminIsLoggedIn') === 'true'
@@ -212,6 +214,8 @@ function App() {
 
         <Route path="/student-dashboard/bundle-list" element={<StudentBundleList />} />
         <Route path="/student-dashboard/bundle-list/:id" element={<StudentBundleRequest />} />
+
+        <Route path="/student-dashboard/student-view-teacher" element={<StudentViewTeacher />} />
 
         <Route path="/student-google-register" element={<StudentGoogleRegister />} />
       </Routes>

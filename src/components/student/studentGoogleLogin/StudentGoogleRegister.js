@@ -51,71 +51,70 @@ function StudentGoogleRegister() {
     }, []);
 
     return (
-        <div className='container-fluid'>
-            <h1>Student Information</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="id" className="form-label">Student ID</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder='student id'
-                        onChange={(e) => setValues({ ...values, Student_Id: e.target.value })}
-                    />
-                </div>
+        <div className='container-fluid vh-100'>
+            <main className='form__container'>
+                <form className='form__card form__card--signup' onSubmit={handleSubmit}>
+                    <h3 className='form__header'>Information</h3>
 
-                <div className="mb-3">
-                    <label htmlFor="name" className="form-label">First Name</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder='first name'
-                        onChange={(e) => setValues({ ...values, Student_FName: e.target.value })}
-                    />
-                </div>
+                    <div className='form__inputBox form__inputBox--id'>
+                        <input
+                            type="text"
+                            required
+                            onChange={(e) => setValues({ ...values, Student_Id: e.target.value })}
+                        />
+                        <span>Student Id</span>
+                    </div>
 
-                <div className="mb-3">
-                    <label htmlFor="name" className="form-label">Last Name</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder='last name'
-                        onChange={(e) => setValues({ ...values, Student_LName: e.target.value })}
-                    />
-                </div>
+                    <div className='form__inputBox form__inputBox--fname'>
+                        <input
+                            type="text"
+                            required
+                            onChange={(e) => setValues({ ...values, Student_FName: e.target.value })}
+                        />
+                        <span>First Name</span>
+                    </div>
 
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder='email'
-                        defaultValue={user.email}
-                    />
-                </div>
+                    <div className='form__inputBox form__inputBox--lname'>
+                        <input
+                            type="text"
+                            required
+                            onChange={(e) => setValues({ ...values, Student_LName: e.target.value })}
+                        />
+                        <span>Last Name</span>
+                    </div>
 
-                <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        placeholder='password'
-                        onChange={(e) => setValues({ ...values, Student_Password: e.target.value })}
-                    />
-                </div>
+                    <div className='form__inputBox form__inputBox--email'>
+                        <input
+                            type="text"
+                            required
+                            defaultValue={user.email}
+                        />
+                        <span>Email</span>
+                    </div>
 
-                <div className="mb-3">
-                    <label htmlFor="tel" className="form-label">Tel</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder='tel'
-                        onChange={(e) => setValues({ ...values, Student_Tel: e.target.value })}
-                    />
-                </div>
+                    <div className='form__inputBox form__inputBox--password'>
+                        <input
+                            type="password"
+                            required
+                            onChange={(e) => setValues({ ...values, Student_Password: e.target.value })}
+                        />
+                        <span>Password</span>
+                    </div>
 
-                <button type="submit" className="btn btn-primary w-100 mb-3">Continue</button>
-            </form>
+                    <div className='form__inputBox form__inputBox--tel'>
+                        <input
+                            type="text"
+                            required
+                            onChange={(e) => setValues({ ...values, Student_Tel: e.target.value })}
+                        />
+                        <span>Tel</span>
+                    </div>
+
+                    <button type="submit" className='form__btn'>Create Account</button>
+                    <div className='form__text thai--font'>กรุณาใส่ข้อมูลก่อนเข้าสู่ระบบ</div>
+                </form>
+            </main>
+
         </div>
     )
 }
