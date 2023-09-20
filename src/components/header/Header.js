@@ -6,7 +6,7 @@ import logo from '../assets/logo.png';
 
 function Header() {
     return (
-        <div className='header d-flex justify-content-between align-items-center mt-4'>
+        <div className='header d-flex justify-content-between align-items-center mt-4 mb-4'>
             <img src={logo} alt="logo" className='header__logo' width={69} height={53} />
 
             <div className='header__buttonsCenter'>

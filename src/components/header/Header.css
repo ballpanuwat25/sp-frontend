@@ -1,3 +1,7 @@
+.header {
+    padding-right: 75px !important;
+}
+
 .header__button {
     color: #006C68;
     font-weight: 500;
@@ -86,6 +90,12 @@
 
     .fa-bars {
         display: block;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .header {
+        padding-right: 25px !important;
     }
 }
 

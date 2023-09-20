@@ -1,16 +1,14 @@
 .home {
     width: 100%;
     height: 100%;
-    padding: 0 75px;
+    padding-left: 75px;
 
     display: grid;
     grid:
         "header header header" 0.125fr "content content content" 1.125fr "content content content" 1.125fr "footer footer footer" 0.125fr / 1fr 1fr 1fr;
     gap: 8px;
 
-    background-image: url(../assets/background1.png);
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: #fff;
 }
 
 .home__header {
@@ -20,30 +18,41 @@
 .home__container {
     grid-area: content;
     display: flex;
+    padding-bottom: 5px;
 }
 
 .home__container--left {
-    flex: 0.5;
-    align-items: center;
+    width: 500px;
+    padding-right: 20px;
+    margin-top: 100px;
 }
 
-.home__text {
-    margin-top: -5rem;
+.home__highlight {
+    padding: 5px 10px;
+    background-color: #b4d2d1;
+    color: #006c4f;
+    font-weight: 500;
+    width: fit-content;
+    border-radius: 5px;
 }
 
 .home__title {
-    font-size: 66px;
-    font-weight: bold;
+    font-size:36px;
+    font-weight: 700;
     font-family: 'Montserrat', sans-serif;
+    letter-spacing: 1px;
     color: #006C68;
 
+    letter-spacing: 2px;
     margin-bottom: 16px;
 }
 
 .home__subtitle {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
-    color: #202020;
+
+    padding-right: 50px;
+    color: #006C68;
 }
 
 .home__cta {
@@ -51,8 +60,7 @@
     font-weight: 600;
 
     background-color: #006C68;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding: 10px 15px;
     border-radius: 10px;
 }
 
@@ -94,99 +102,28 @@
 }
 
 .home__container--right {
-    flex: 0.5;
+    flex: 1;
     align-items: center;
 }
 
-.home__splineGroup {
+.home__background {
     width: 100%;
     height: 100%;
 
-    position: relative;
-}
-
-.home__spline {
-    position: absolute;
-    text-align: center;
-    overflow: hidden;
-
-    border-radius: 15px;
-    box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, 0.1);
-}
-
-.home__spline--microscope {
-    width: 500px;
-    height: 300px;
-    background-color: white;
-
-    top: 30px;
-    right: 50px;
-}
-
-.home__spline--glassware {
-    width: 250px;
-    height: 300px;
-    background-color: white;
-
-    top: 230px;
-    right: 450px;
-
-    z-index: 1;
-}
-
-.home__spline--molecular {
-    width: 300px;
-    height: 300px;
-    background-color: white;
-
-    top: 355px;
-    right: 125px;
-}
-
-.home__spline--marquee {
-    width: 200px;
-    height: 70px;
-
-    color: #00908B;
-    font-weight: 600;
-
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-
-    top: 618px;
-    right: 300px;
-
-    z-index: 1;
-
     display: flex;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
+
+    background-image: url(../assets/background1.png);
+    background-size: cover;
+    background-position: center;
+
+    border-start-start-radius: 25px;
+    border-end-start-radius: 25px;
+    border: 2px solid #006C68;
+    border-right: none;
+
     overflow: hidden;
-}
-
-.home__spline--icon {
-    width: 100px;
-    height: 60px;
-
-    color: #00908B;
-    font-size: 2.25rem;
-    font-weight: 700;
-
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-
-    top: 300px;
-    right: 0px;
-}
-
-.fa-react {
-    animation: spin 5s linear infinite;
 }
 
 .home__footer {
@@ -197,808 +134,56 @@
     color: #006C68;
 
     grid-area: footer;
+    margin-right: 25px;
 }
 
-.wave-menu {
-    border-radius: 50px;
-    width: 200px;
-    height: 45px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    transition: ease 0.2s;
-    position: relative;
-}
-
-.wave-menu li {
-    list-style: none;
-    height: 30px;
-    width: 3px;
-    border-radius: 10px;
-    background: #00908B;
-    margin: 0 6px;
-    padding: 0;
-    animation-name: wave1;
-    animation-duration: 0.3s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-    transition: ease 0.2s;
-}
-
-.wave-menu li:nth-child(2) {
-    animation-name: wave2;
-    animation-delay: 0.2s;
-}
-
-.wave-menu li:nth-child(3) {
-    animation-name: wave3;
-    animation-delay: 0.23s;
-    animation-duration: 0.4s;
-}
-
-.wave-menu li:nth-child(4) {
-    animation-name: wave4;
-    animation-delay: 0.1s;
-    animation-duration: 0.3s;
-}
-
-.wave-menu li:nth-child(5) {
-    animation-delay: 0.5s;
-}
-
-.wave-menu li:nth-child(6) {
-    animation-name: wave2;
-    animation-duration: 0.5s;
-}
-
-.wave-menu li:nth-child(8) {
-    animation-name: wave4;
-    animation-delay: 0.4s;
-    animation-duration: 0.25s;
-}
-
-.wave-menu li:nth-child(9) {
-    animation-name: wave3;
-    animation-delay: 0.15s;
-}
-
-@keyframes wave1 {
-    from {
-        transform: scaleY(1);
-    }
-
-    to {
-        transform: scaleY(0.5);
-    }
-}
-
-@keyframes wave2 {
-    from {
-        transform: scaleY(0.3);
-    }
-
-    to {
-        transform: scaleY(0.6);
-    }
-}
-
-@keyframes wave3 {
-    from {
-        transform: scaleY(0.6);
-    }
-
-    to {
-        transform: scaleY(0.8);
-    }
-}
-
-@keyframes wave4 {
-    from {
-        transform: scaleY(0.2);
-    }
-
-    to {
-        transform: scaleY(0.5);
-    }
-}
-
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(-360deg);
-    }
-}
-
-@media screen and (max-width: 1750px) {
-    .home {
-        padding: 0 45px;
-    }
-}
-
-@media screen and (max-width: 1650px) {
-    .home {
-        padding: 0 15px;
-    }
-}
-
-@media screen and (max-width: 1580px) {
-    .home__title {
-        font-size: 56px;
-    }
-}
-
-@media screen and (max-width: 1550px) {
-    .home__spline--microscope {
-        width: 450px;
-
-        top: 50px;
-        right: 30px;
-    }
-
-    .home__spline--glassware {
-        top: 275px;
-        right: 415px;
-    }
-
-    .home__spline--molecular {
-        top: 375px;
-        right: 90px;
-    }
-
-    .home__spline--marquee {
-        top: 638px;
-        right: 285px;
-    }
-
-    .home__spline--icon {
-        width: 70px;
-        height: 60px;
-
-        top: 320px;
-        right: 0px;
-    }
-}
-
-@media screen and (max-width: 1450px) {
-    .home__container--left {
-        padding: 0 25px 0 0;
-    }
-}
-
-@media screen and (max-width: 1400px) {
-    .home__title {
-        font-size: 50px;
-    }
-
-    .home__container--left {
-        padding: 0 100px 0 0;
-    }
-}
-
-@media screen and (max-width: 1350px) {
-    .home__spline--microscope {
-        width: 360px;
-        height: 240px;
-
-        top: 105px;
-        right: 30px;
-    }
-
-    .home__spline--glassware {
-        width: 200px;
-        height: 240px;
-
-        top: 305px;
-        right: 350px;
-    }
-
-    .home__spline--molecular {
-        width: 240px;
-        height: 240px;
-
-        top: 365px;
-        right: 90px;
-    }
-
-    .home__spline--marquee {
-        width: 160px;
-        height: 60px;
-
-        top: 575px;
-        right: 245px;
-    }
-
-    .wave-menu {
-        width: 150px;
-    }
-
-    .home__spline--icon {
-        width: 70px;
-        height: 60px;
-
-        top: 315px;
-        right: 0px;
-    }
-
-    .home__container--left {
-        padding: 0 25px 0 0;
-    }
-}
-
-@media screen and (max-width: 1250px) {
-    .home {
-        padding: 0 50px;
-    }
-
-    .home__title {
-        font-size: 44px;
-        margin-bottom: 10px;
-    }
-
+@media screen and (max-width: 1024px) {
     .home__container {
         flex-direction: column;
     }
 
     .home__container--left {
-        padding-right: 180px;
-        flex: 0;
-    }
-
-    .home__container--right {
-        flex: 1;
-    }
-
-    .home__text {
+        padding-right: 0;
+        margin-bottom: 20px;
         margin-top: 0;
     }
 
-    .home__title {
-        font-size: 46px;
-        margin-top: 32px;
-    }
-
-    .home__spline--microscope {
-        width: 345px;
-        height: 230px;
-
-        top: 10px;
-        right: 345px;
-    }
-
-    .home__spline--glassware {
-        width: 192px;
-        height: 230px;
-
-        top: 150px;
-        right: 635px;
-    }
-
-    .home__spline--molecular {
-        width: 350px;
-        height: 192px;
-
-        top: 255px;
-        right: 270px;
-    }
-
-    .home__spline--marquee {
-        width: 128px;
-        height: 48px;
-
-        border-radius: 5px;
-
-        top: 420px;
-        right: 210px;
-    }
-
-    .home__spline--icon {
-        width: 70px;
-        height: 60px;
-
-        top: 125px;
-        right: 795px;
-
-        z-index: 2;
-    }
-}
-
-@media screen and (max-width: 1200px) {
-    .home__spline--microscope {
-        right: 325px;
-    }
-
-    .home__spline--glassware {
-        right: 615px;
-    }
-
-    .home__spline--molecular {
-        right: 250px;
-    }
-
-    .home__spline--marquee {
-        right: 190px;
-    }
-
-    .home__spline--icon {
-        right: 775px;
-    }
-}
-
-@media screen and (max-width: 1150px) {
-    .home__spline--microscope {
-        right: 305px;
-    }
-
-    .home__spline--glassware {
-        right: 595px;
-    }
-
-    .home__spline--molecular {
-        right: 230px;
-    }
-
-    .home__spline--marquee {
-        right: 170px;
-    }
-
-    .home__spline--icon {
-        right: 755px;
-    }
-}
-
-@media screen and (max-width: 1050px) {
     .home__container--left {
-        padding-right: 115px;
-    }
-
-    .home__spline--microscope {
-        right: 285px;
-    }
-
-    .home__spline--glassware {
-        right: 575px;
-    }
-
-    .home__spline--molecular {
-        right: 210px;
-    }
-
-    .home__spline--marquee {
-        right: 150px;
-    }
-
-    .home__spline--icon {
-        right: 735px;
-    }
-}
-
-@media screen and (max-width: 1000px) {
-    .home__subtitle {
-        font-size: 14px;
-    }
-
-    .home__cta {
-        font-size: 14px;
-        margin-bottom: 16px;
-    }
-
-    .home__spline--microscope {
-        right: 245px;
-    }
-
-    .home__spline--glassware {
-        right: 535px;
-    }
-
-    .home__spline--molecular {
-        right: 170px;
-    }
-
-    .home__spline--marquee {
-        right: 110px;
-    }
-
-    .home__spline--icon {
-        right: 695px;
-    }
-}
-
-@media screen and (max-width: 950px) {
-    .home__spline--microscope {
-        right: 225px;
-    }
-
-    .home__spline--glassware {
-        right: 515px;
-    }
-
-    .home__spline--molecular {
-        right: 150px;
-    }
-
-    .home__spline--marquee {
-        right: 90px;
-    }
-
-    .home__spline--icon {
-        right: 675px;
-    }
-}
-
-@media screen and (max-width: 900px) {
-    .home__spline--microscope {
-        right: 205px;
-    }
-
-    .home__spline--glassware {
-        right: 495px;
-    }
-
-    .home__spline--molecular {
-        right: 130px;
-    }
-
-    .home__spline--marquee {
-        right: 70px;
-    }
-
-    .home__spline--icon {
-        right: 655px;
-    }
-}
-
-@media screen and (max-width: 850px) {
-    .home__spline--microscope {
-        width: 276px;
-        height: 184px;
-
-        top: 30px;
-        right: 185px;
-    }
-
-    .home__spline--glassware {
-        width: 153px;
-        height: 184px;
-
-        top: 170px;
-        right: 415px;
-    }
-
-    .home__spline--molecular {
-        width: 184px;
-        height: 184px;
-
-        top: 245px;
-        right: 200px;
-    }
-
-    .home__spline--marquee {
-        width: 100px;
-        height: 38px;
-
-        top: 410px;
-        right: 150px;
-    }
-
-    .home__spline--icon {
-        width: 70px;
-        height: 60px;
-
-        top: 140px;
-        right: 535px;
-    }
-
-    .home__title {
-        margin-top: 16px;
-    }
-}
-
-@media screen and (max-width: 800px) {
-    .home__container--left {
-        padding-right: 55px;
-    }
-
-    .home__spline--microscope {
-        right: 165px;
-    }
-
-    .home__spline--glassware {
-        right: 395px;
-    }
-
-    .home__spline--molecular {
-        right: 180px;
-    }
-
-    .home__spline--marquee {
-        right: 130px;
-    }
-
-    .home__spline--icon {
-        right: 515px;
-    }
-}
-
-@media screen and (max-width: 750px) {
-    .home__title {
-        font-size: 32px;
-    }
-
-    .home__spline--microscope {
-        right: 145px;
-    }
-
-    .home__spline--glassware {
-        right: 375px;
-    }
-
-    .home__spline--molecular {
-        right: 160px;
-    }
-
-    .home__spline--marquee {
-        right: 110px;
-    }
-
-    .home__spline--icon {
-        right: 495px;
-    }
-}
-
-@media screen and (max-width: 700px) {
-    .home__spline--microscope {
-        right: 105px;
-    }
-
-    .home__spline--glassware {
-        right: 335px;
-    }
-
-    .home__spline--molecular {
-        right: 120px;
-    }
-
-    .home__spline--marquee {
-        right: 70px;
-    }
-
-    .home__spline--icon {
-        right: 455px;
-    }
-}
-
-@media screen and (max-width: 650px) {
-    .home__spline--microscope {
-        right: 75px;
-    }
-
-    .home__spline--glassware {
-        right: 305px;
-    }
-
-    .home__spline--molecular {
-        right: 90px;
-    }
-
-    .home__spline--marquee {
-        right: 40px;
-    }
-
-    .home__spline--icon {
-        right: 425px;
-    }
-}
-
-@media screen and (max-width: 625px) {
-    .home__spline--microscope {
-        right: 55px;
-    }
-
-    .home__spline--glassware {
-        right: 285px;
-    }
-
-    .home__spline--molecular {
-        right: 70px;
-    }
-
-    .home__spline--marquee {
-        right: 20px;
-    }
-
-    .home__spline--icon {
-        right: 405px;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .home {
-        padding: 0 25px;
-    }
-
-    .home__text {
-        margin-top: 20px;
-    }
-
-    .home__container--left {
-        padding-right: 0;
-    }
-
-    .home__spline--microscope {
-        right: 55px;
-    }
-
-    .home__spline--glassware {
-        right: 285px;
-    }
-
-    .home__spline--molecular {
-        right: 70px;
-    }
-
-    .home__spline--marquee {
-        right: 20px;
-    }
-
-    .home__spline--icon {
-        right: 405px;
-    }
-}
-
-@media screen and (max-width: 550px) {
-    .home__footer {
-        font-size: 14px;
-    }
-
-    .home__spline--microscope {
-        right: 50px;
-    }
-
-    .home__spline--glassware {
-        right: 270px;
-    }
-
-    .home__spline--molecular {
-        right: 55px;
-    }
-
-    .home__spline--marquee {
-        right: 15px;
-    }
-
-    .home__spline--icon {
-        right: 380px;
-    }
-}
-
-@media screen and (max-width: 525px) {
-    .home__splineGroup {
         width: 100%;
-        display: flex;
-        position: unset;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .home__spline--microscope {
-        width: 400px;
-        height: 400px;
-
-        top: auto;
-        right: auto;
-    }
-
-    .home__spline--glassware {
-        display: none;
-    }
-
-    .home__spline--molecular {
-        display: none;
-    }
-
-    .home__spline--marquee,
-    .wave-menu {
-        display: none !important;
-    }
-
-    .home__spline--icon {
-        display: none;
     }
 }
 
-@media screen and (max-width:475px) {
-    .pb-4 {
-        padding-bottom: 0 !important;
+@media screen and (max-width: 768px) {
+    .home {
+        padding-left: 25px;
     }
+}
 
-    .px-4 {
-        padding-left: 12px !important;
-        padding-right: 12px !important;
-    }
-
-    .me-3 {
-        margin-right: 0 !important;
-    }
-
+@media screen and (max-width: 500px) {
     .home__title {
         font-size: 28px;
     }
 
-    .home__subtitle {
-        font-size: 12px;
+    .home__highlight,
+    .home__subtitle,
+    .home__cta,
+    .home__footer {
+        font-size: 14px;
     }
 
-    .home__cta {
-        font-size: 12px;
-    }
-
-    .home__spline--microscope {
-        width: 300px;
-        height: 400px;
-    }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 390px) {
     .home__title {
         font-size: 24px;
     }
 
-    .home__footer {
+    .home__subtitle,
+    .home__cta {
         font-size: 12px;
-    }
-}
-
-@media screen and (max-width: 375px) {
-    .home__spline--microscope {
-        width: 250px;
-        height: 400px;
-    }
-}
-
-@media screen and (max-width: 350px) {
-    .home__title {
-        font-size: 20px;
     }
 
     .home__subtitle {
-        font-size: 8px;
-    }
-}
-
-@media screen and (max-height: 800px) {
-    .home__spline--microscope {
-        width: 275px;
-        height: 300px;
-    }
-}
-
-@media screen and (max-height: 700px) {
-    .home__spline--microscope {
-        width: 250px;
-        height: 250px;
-    }
-}
-
-@media screen and (max-height: 600px) {
-    .home__container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-    }
-
-    .home__title {
-        font-size: 50px;
-    }
-
-    .home__container--right {
-        display: none;
+        padding-right: 25px;
     }
 }
