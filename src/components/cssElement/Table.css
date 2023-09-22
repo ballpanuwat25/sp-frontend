@@ -27,12 +27,12 @@ table tbody tr:nth-of-type(odd) td {
     color: #006C68;
 }
 
-table tbody tr:nth-of-type(even) td div button i,
+table tbody tr:nth-of-type(even) td div button .fa-circle-plus,
 table tbody tr:nth-of-type(even) td div button {
     color: #fff;
 }
 
-table tbody tr:nth-of-type(odd) td div button i,
+table tbody tr:nth-of-type(odd) td div button .fa-circle-plus,
 table tbody tr:nth-of-type(odd) td div button {
     color: #006C68;
 }
@@ -105,6 +105,14 @@ table tbody tr {
 .fa-circle-plus,
 .fa-eye {
     margin-right: 10px;
+}
+
+table tbody tr:nth-of-type(even) td .table__button {
+    color: #fff !important;
+}
+
+table tbody tr:nth-of-type(even) td .table__button::before {
+    background-color: #fff;
 }
 
 .table__button {
@@ -202,7 +210,7 @@ select {
     padding: 5px 10px;
     border-radius: 5px;
     background-color: #006C68;
-    color: #fff;
+    color: #fff !important;
     text-decoration: none;
 }
 

@@ -1,8 +1,23 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+
+import '../../cssElement/Table.css'
+import '../../cssElement/Form.css'
+import '../../cssElement/Dashboard.css'
+
+import logo from '../../assets/logo.png';
 
 function TeacherChemicalsRequest() {
-    const [teacherId, setTeacherId] = useState("");
+    const [teacherInfo, setTeacherInfo] = useState({
+        teacherId: "",
+        teacherFirstName: "",
+        teacherLastName: "",
+        teacherUsername: "",
+        teacherPassword: "",
+        teacherTel: "",
+    });
+
     const [chemicalsReq, setChemicalsReq] = useState([]);
 
     const [Request_Comment, setRequest_Comment] = useState("");
@@ -23,7 +38,7 @@ function TeacherChemicalsRequest() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                setTeacherId(response.data.teacherId);
+                setTeacherInfo(response.data);
             }
         });
     }, []);
@@ -77,9 +92,15 @@ function TeacherChemicalsRequest() {
     }
 
     const handleCheckAll = () => {
-        const allIds = chemicalsReq.map((req) => req.Chem_Request_Id);
-        setSelectedIds(allIds);
-    }
+        if (selectedIds.length === chemicalsReq.length) {
+            // If all checkboxes are already checked, uncheck them all
+            setSelectedIds([]);
+        } else {
+            // Otherwise, check all checkboxes
+            const allIds = chemicalsReq.map((req) => req.Chem_Request_Id);
+            setSelectedIds(allIds);
+        }
+    };
 
     const handleApproveChecked = () => {
         selectedIds.forEach((id) => approveChemicalsRequest(id));
@@ -109,126 +130,216 @@ function TeacherChemicalsRequest() {
     const filteredChemicalsReq = filterChemicalsReq(chemicalsReq);
 
     useEffect(() => {
-        setTeacherIdSearch(teacherId); // Set teacherIdSearch with the value from API response
-    }, [teacherId]);
+        setTeacherIdSearch(teacherInfo.teacherId); // Set teacherIdSearch with the value from API response
+    }, [teacherInfo.teacherId]);
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        axios.get("http://localhost:3001/teacher-logout").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                localStorage.removeItem('teacherToken');
+                navigate("/");
+            }
+        });
+    };
+
+    const [chemicalsDetail, setChemicalsDetail] = useState([]);
+
+    useEffect(() => {
+        getChemicalsDetail();
+    }, []);
+
+    const getChemicalsDetail = async () => {
+        const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
+        setChemicalsDetail(response.data);
+    };
+
+    const findChemNameById = (chemId) => {
+        const chem = chemicalsDetail.find((chem) => chem.Chem_Id === chemId);
+        return chem ? chem.Chem_Name : "";
+    }
+    
+    const getStatusIcon = (status) => {
+        switch (status) {
+            case 'Approve':
+                return 'fa-solid fa-circle-check';
+            case 'Decline':
+                return 'fa-solid fa-circle-xmark';
+            case 'Pending':
+                return 'fa-regular fa-clock';
+            default:
+                return ''
+        }
+    };
 
     return (
-        <div className="container-fluid">
-            <div className="d-flex justify-content-between align-items-center">
-                <h1>TeacherId: {teacherId} Chemicals Request</h1>
-                <div>
-                    <button className="btn btn-warning me-2" onClick={handleCheckAll}>
-                        Check ALL
-                    </button>
-                    <button className="btn btn-success" onClick={handleApproveChecked}>
-                        Approved by Checked
-                    </button>
-                    <div className="mb-3">
-                        <label htmlFor="studentIdSearch" className="form-label">Search by Student Id</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="studentIdSearch"
-                            placeholder="Enter Student Id"
-                            value={studentIdSearch}
-                            onChange={(e) => setStudentIdSearch(e.target.value)}
-                        />
+        <div className='container-fluid vh-100'>
+            <div className='dashboard__container'>
+                <aside className='sidebar'>
+                    <div className='sidebar__header'>
+                        <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
+                        <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="teacherIdSearch" className="form-label">Search by Teacher Id</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="teacherIdSearch"
-                            placeholder="Enter Teacher Id"
-                            value={teacherIdSearch}
-                            onChange={(e) => setTeacherIdSearch(e.target.value)}
-                            readOnly
-                        />
+                    <div className='sidebar__body'>
+                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='sidebar__item--active'>Request</div></Link>
+                        <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> List</Link>
+                        <Link to="/teacher-dashboard/teacher-create-bundle" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
                     </div>
-                </div>
-            </div>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Check</th>
-                        <th scope="col">Student Id</th>
-                        <th scope="col">Chem Id</th>
-                        <th scope="col">Requested Quantity</th>
-                        <th scope="col">Counting Unit</th>
-                        <th scope="col">Teacher Id</th>
-                        <th scope="col">Request Status</th>
-                        <th scope="col">Request Purpose</th>
-                        <th scope="col">Request Room</th>
-                        <th scope="col">Request Date</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredChemicalsReq.map((chemicalsReq) => (
-                        <tr key={chemicalsReq.Chem_Request_Id}>
-                            <td>
-                                <div className="form-check">
-                                    <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        value={chemicalsReq.Chem_Request_Id}
-                                        id={`flexCheckDefault-${chemicalsReq.Chem_Request_Id}`}
-                                        checked={selectedIds.includes(chemicalsReq.Chem_Request_Id)}
-                                        onChange={() => handleCheckboxChange(chemicalsReq.Chem_Request_Id)}
-                                    />
-                                </div>
-                            </td>
-                            <td> {chemicalsReq.Student_Id} </td>
-                            <td> {chemicalsReq.Chem_Id} </td>
-                            <td> {chemicalsReq.Requested_Quantity} </td>
-                            <td> {chemicalsReq.Counting_Unit} </td>
-                            <td> {chemicalsReq.Teacher_Id} </td>
-                            <td> {chemicalsReq.Request_Status} </td>
-                            <td> {chemicalsReq.Request_Purpose} </td>
-                            <td> {chemicalsReq.Request_Room} </td>
-                            <td>{formatDate(chemicalsReq.createdAt)}</td>
-                            <td>
-                                <div className="d-grid gap-2 d-sm-flex">
-                                    <button onClick={() => approveChemicalsRequest(chemicalsReq.Chem_Request_Id)} className="btn btn-success mx-1">Approve</button>
-                                    <button
-                                        className="btn btn-danger mx-1"
-                                        data-bs-toggle="modal" data-bs-target={`#exampleModal-${chemicalsReq.Chem_Request_Id}`}
-                                        onClick={() => setActiveRequestId(chemicalsReq.Chem_Request_Id)}
-                                    >
-                                        Decline
-                                    </button>
+                    <div className='sidebar__footer'>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                    </div>
+                </aside>
 
-                                    <div className="modal fade" id={`exampleModal-${chemicalsReq.Chem_Request_Id}`} tabIndex="-1" aria-labelledby={`exampleModalLabel-${chemicalsReq.Chem_Request_Id}`} aria-hidden="true">
-                                        <div className="modal-dialog">
-                                            <div className="modal-content">
-                                                <div className="modal-header">
-                                                    <h5 className="modal-title" id="exampleModalLabel">Decline Reason</h5>
-                                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div className="modal-body">
-                                                    <div className="mb-3">
-                                                        <label htmlFor="Request_Comment" className="form-label">Request Comment</label>
-                                                        <input type="text" className="form-control" id="Request_Comment" placeholder="Enter Request Comment" value={Request_Comment} required
-                                                            onChange={(e) => {
-                                                                setRequest_Comment(e.target.value);
-                                                            }}
-                                                        />
+                <main className='dashboard__content'>
+                    <div className='component__header'>
+                        <div className='component__headerGroup component__headerGroup--left'>
+                            <i class='fa-solid fa-magnifying-glass'></i>
+                            <input
+                                type="search"
+                                className='component__search'
+                                placeholder="ค้นหาด้วยรหัสนิสิต"
+                                value={studentIdSearch}
+                                id="studentIdSearch"
+                                onChange={(e) => setStudentIdSearch(e.target.value)}
+                            />
+                            <input
+                                type="search"
+                                className='disable'
+                                id="teacherIdSearch"
+                                value={teacherIdSearch}
+                                onChange={(e) => setTeacherIdSearch(e.target.value)}
+                                readOnly
+                            />
+                        </div>
+
+                        <div className='component__headerGroup component__headerGroup--right'>
+                            <i class="fa-solid fa-circle-user" />
+                            <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='table__tabs'>
+                            <Link className='table__tab table__tab--chemicals table__tab--active'>คำขอเบิกสารเคมี</Link>
+                            <Link to="/teacher-dashboard/teacher-equipment-request" className='table__tab table__tab--equipment table__tab--unactive'>คำขอเบิกครุภัณฑ์</Link>
+                        </div>
+
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        <input
+                                            type="checkbox"
+                                            className="form-check-input"
+                                            checked={selectedIds.length === chemicalsReq.length}
+                                            onChange={handleCheckAll}
+                                        />
+                                    </th>
+                                    <th scope="col">รหัสนิสิต</th>
+                                    <th scope="col">สารเคมี</th>
+                                    <th scope="col">ปริมาณที่ขอ</th>
+                                    <th scope="col">หน่วยนับ</th>
+                                    <th scope="col">สถานะคำขอ</th>
+                                    <th scope="col">วัตถุประสงค์</th>
+                                    <th scope="col">นำไปใช้ห้อง</th>
+                                    <th scope="col">วันที่ส่งคำขอ</th>
+                                    <th scope="col">
+                                        <button className="buttonTab-btn thai--font" onClick={handleApproveChecked}>
+                                            อนุมัติจากที่เลือก
+                                        </button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredChemicalsReq.map((chemicalsReq) => (
+                                    <tr key={chemicalsReq.Chem_Request_Id} className="active-row">
+                                        <td>
+                                            <div className="form-check">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    value={chemicalsReq.Chem_Request_Id}
+                                                    id={`flexCheckDefault-${chemicalsReq.Chem_Request_Id}`}
+                                                    checked={selectedIds.includes(chemicalsReq.Chem_Request_Id)}
+                                                    onChange={() => handleCheckboxChange(chemicalsReq.Chem_Request_Id)}
+                                                />
+                                            </div>
+                                        </td>
+                                        <td> {chemicalsReq.Student_Id} </td>
+                                        <td> {findChemNameById(chemicalsReq.Chem_Id)} </td>
+                                        <td> {chemicalsReq.Requested_Quantity} </td>
+                                        <td> {chemicalsReq.Counting_Unit} </td>
+                                        <td> <i className={`${getStatusIcon(chemicalsReq.Request_Status)}`} /> {chemicalsReq.Request_Status}</td>
+                                        <td> {chemicalsReq.Request_Purpose} </td>
+                                        <td> {chemicalsReq.Request_Room} </td>
+                                        <td>{formatDate(chemicalsReq.createdAt)}</td>
+                                        <td>
+                                            <div className="d-grid gap-2 d-sm-flex">
+                                                <button onClick={() => approveChemicalsRequest(chemicalsReq.Chem_Request_Id)} className="edit--btn">
+                                                    <i className='fa-solid fa-circle-check' />
+                                                    อนุมัติ
+                                                </button>
+                                                <button
+                                                    className="delete--btn btn-danger"
+                                                    data-bs-toggle="modal" data-bs-target={`#exampleModal-${chemicalsReq.Chem_Request_Id}`}
+                                                    onClick={() => setActiveRequestId(chemicalsReq.Chem_Request_Id)}
+                                                >
+                                                    <i className='fa-solid fa-circle-xmark' />
+                                                    ปฏิเสธ
+                                                </button>
+
+                                                <div className="modal fade" id={`exampleModal-${chemicalsReq.Chem_Request_Id}`} tabIndex="-1" aria-labelledby={`exampleModalLabel-${chemicalsReq.Chem_Request_Id}`} aria-hidden="true">
+                                                    <div className="modal-dialog">
+                                                        <div className="modal-content">
+                                                            <div className="modal-header">
+                                                                <h5 className="modal-title" id="exampleModalLabel">เหตุผลในการปฏิเสธ</h5>
+                                                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div className="modal-body">
+                                                                <div className="mb-3">
+                                                                    <label htmlFor="Request_Comment" className="form-label">รายละเอียด</label>
+                                                                    <input type="text" className="form-control" id="Request_Comment" placeholder="เช่น สารเคมีหมด ฯลฯ" value={Request_Comment} required
+                                                                        onChange={(e) => {
+                                                                            setRequest_Comment(e.target.value);
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="modal-footer">
+                                                                <button type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal">Close</button>
+                                                                <button onClick={declineChemicalsRequest} type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal">Save changes</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div className="modal-footer">
-                                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button onClick={declineChemicalsRequest} type="button" className="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
-                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+                
+                <footer className='footer'>
+                    <Link to="/teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
+                    <Link to="/teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
+                    <Link to="/teacher-dashboard/teacher-create-bundle" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
+                    <div className="dropup">
+                        <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user" />
+                        </button>
+                        <ul class="dropdown-menu">
+                            <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        </ul>
+                    </div>
+                </footer>
+            </div>
         </div>
     )
 }

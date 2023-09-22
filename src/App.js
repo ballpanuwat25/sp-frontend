@@ -66,6 +66,9 @@ import TeacherBundleCart from './components/teacher/teacherCreateBundle/TeacherB
 import BundleList from './components/teacher/teacherCreateBundle/BundleList.js';
 import BundleView from './components/teacher/teacherCreateBundle/BundleView.js';
 
+import ChemicalsBundleList from './components/teacher/teacherCreateBundle/ChemicalsBundleList.js';
+import EquipmentBundleList from './components/teacher/teacherCreateBundle/EquipmentBundleList.js';
+
 //------------------------------------------------------------ Student ------------------------------------------------------------//
 import StudentLogin from './components/student/studentLogin/StudentLogin.js';
 import StudentRegister from './components/student/studentLogin/StudentRegister.js';
@@ -195,6 +198,9 @@ function App() {
         <Route path="/teacher-dashboard/bundle-list" element={teacherLoggedIn ? <BundleList /> : <Navigate to="/" />} />
         <Route path="/teacher-dashboard/bundle-list/:id" element={teacherLoggedIn ? <BundleView /> : <Navigate to="/" />} />
         <Route path="/teacher-dashboard/teacher-create-bundle" element={teacherLoggedIn ? <TeacherBundleCart /> : <Navigate to="/" />} />
+
+        <Route path="teacher-dashboard/chemicals-bundle-list" element={<ChemicalsBundleList/>} />
+        <Route path="teacher-dashboard/equipment-bundle-list" element={<EquipmentBundleList/>} />
 
         {/* -------------------------------------------------------- Student -------------------------------------------------------- */}
         <Route path="/student-login" element={<StudentLogin />} />

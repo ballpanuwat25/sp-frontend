@@ -127,7 +127,7 @@ const TeacherList = ({ logout }) => {
                         </div>
                     </div>
 
-                    <div className='table-responsive'>
+                    <div >
                         <div className='table__tabs'>
                             <Link to="/staff-list" className='table__tab table__tab--chemicals table__tab--unactive'>เจ้าหน้าที่</Link>
                             <Link className='table__tab table__tab--chemicals table__tab--active'>อาจารย์</Link>

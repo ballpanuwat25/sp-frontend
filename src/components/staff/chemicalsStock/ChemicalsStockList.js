@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { saveAs } from 'file-saver';
 import ExcelJS from 'exceljs'; // Import exceljs library
 import { Link } from 'react-router-dom';
+import { useReactToPrint } from "react-to-print"; // Import useReactToPrint hook
 
 function ChemicalsStockList() {
   const [chemicals, setChemicals] = useState([]);
   const [chemicalsDetail, setChemicalsDetail] = useState([]);
-  
+
   const [searchFilter, setSearchFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -121,57 +122,19 @@ function ChemicalsStockList() {
     return ""; // Default styling
   };
 
-  const exportToPDF = () => {
-    const unit = "pt";
-    const size = "A4";
-    const orientation = "landscape";
-  
-    const marginLeft = 40;
-    const doc = new jsPDF(orientation, unit, size);
-  
-    doc.setFontSize(15);
-  
-    const title = "Chemicals Stock Report";
-    const headers = [
-      "No", "Chemicals Id", "Chemicals Name", "Remaining Quantity", "Total Quantity", "Counting Unit", "Chemicals State"
-    ];
-  
-    const data = exportData.map((chemical, index) => [
-      index + 1,
-      chemical.Chem_Id,
-      chemical.Chem_Name,
-      chemical.Remaining_Quantity,
-      chemical.Package_Size,
-      chemical.Counting_Unit,
-      chemical.Chem_State
-    ]);
-  
-    // Ensure data rows match the headers configuration
-    const content = {
-      startY: 50,
-      head: [headers], // Wrap headers array in another array
-      body: data
-    };
-  
-    doc.text(title, marginLeft, 40);
-    doc.autoTable(content);
-    doc.save("chemicals_stock.pdf");
-  };
-  
-
   const exportToExcel = () => {
     const filteredData = processChemicalsData().filter(chemical => {
       const remainingPercentage = (chemical.Remaining_Quantity / chemical.Package_Size) * 100;
       return remainingPercentage < 25;
     });
-  
+
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('ChemicalsStock');
-  
+
     // Add headers to the worksheet
     const headers = ['No', 'Chemicals Id', 'Chemicals Name', 'Remaining Quantity', 'Total Quantity', 'Counting Unit', 'Chemicals State'];
     worksheet.addRow(headers);
-  
+
     // Add data rows to the worksheet
     filteredData.forEach((chemical, index) => {
       worksheet.addRow([
@@ -184,13 +147,20 @@ function ChemicalsStockList() {
         chemical.Chem_State,
       ]);
     });
-  
+
     // Save the workbook to a Blob
     workbook.xlsx.writeBuffer().then(buffer => {
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       saveAs(blob, 'chemicals_stock.xlsx');
     });
-  };  
+  };
+
+  const conponentPDF = useRef();
+
+  const generatePDF = useReactToPrint({
+    content: () => conponentPDF.current,
+    documentTitle: "Chemicals Stock",
+  });
 
   return (
     <div className="container-fluid">
@@ -217,40 +187,42 @@ function ChemicalsStockList() {
           Export to Excel
         </button>
 
-        <button className="btn btn-danger" onClick={exportToPDF}>
+        <button className="btn btn-danger" onClick={generatePDF}>
           Export to PDF
         </button>
       </div>
-      <table className="table table-striped" id="stock-table">
-        <thead>
-          <tr>
-            <th scope="col">No</th>
-            <th scope="col">Chemicals Id</th>
-            <th scope="col">Chemicals Name</th>
-            <th scope="col">Remaining Quantity</th>
-            <th scope="col">Total Quantity</th>
-            <th scope="col">Counting Unit</th>
-            <th scope="col">Chemicals State</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {processChemicalsData().map((chemical, index) => (
-            <tr key={index} className={getRemainingQuantityColor(chemical.Remaining_Quantity, chemical.Package_Size)}>
-              <td> {index + 1} </td>
-              <td> {chemical.Chem_Id} </td>
-              <td> {chemical.Chem_Name} </td>
-              <td> {chemical.Remaining_Quantity} </td>
-              <td> {chemical.Package_Size} </td>
-              <td> {chemical.Counting_Unit} </td>
-              <td> {chemical.Chem_State} </td>
-              <td>
-                <Link className="btn btn-primary btn-sm" to={`./${chemical.Chem_Id}`} >View</Link>
-              </td>
+      <div ref={conponentPDF} style={{ width: '100%' }}>
+        <table className="table table-striped" id="stock-table">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Chemicals Id</th>
+              <th scope="col">Chemicals Name</th>
+              <th scope="col">Remaining Quantity</th>
+              <th scope="col">Total Quantity</th>
+              <th scope="col">Counting Unit</th>
+              <th scope="col">Chemicals State</th>
+              <th scope="col">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {processChemicalsData().map((chemical, index) => (
+              <tr key={index} className={getRemainingQuantityColor(chemical.Remaining_Quantity, chemical.Package_Size)}>
+                <td> {index + 1} </td>
+                <td> {chemical.Chem_Id} </td>
+                <td> {chemical.Chem_Name} </td>
+                <td> {chemical.Remaining_Quantity} </td>
+                <td> {chemical.Package_Size} </td>
+                <td> {chemical.Counting_Unit} </td>
+                <td> {chemical.Chem_State} </td>
+                <td>
+                  <Link className="btn btn-primary btn-sm" to={`./${chemical.Chem_Id}`} >View</Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

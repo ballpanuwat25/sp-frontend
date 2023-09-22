@@ -1,8 +1,22 @@
-import axios from "axios";
-import React, { useState, useEffect } from 'react'
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
-function ChemicalsBundleList() {
-    const [teacherId, setTeacherId] = useState("");
+import '../../cssElement/Table.css'
+import '../../cssElement/Form.css'
+import '../../cssElement/Dashboard.css'
+
+import logo from '../../assets/logo.png';
+
+function ChemicalsBundleList({ logout }) {
+    const [teacherInfo, setTeacherInfo] = useState({
+        teacherId: "",
+        teacherFirstName: "",
+        teacherLastName: "",
+        teacherUsername: "",
+        teacherPassword: "",
+        teacherTel: "",
+    });
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState("");
@@ -20,11 +34,10 @@ function ChemicalsBundleList() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                const fetchedTeacherId = response.data.teacherId;
-                setTeacherId(fetchedTeacherId);
+                setTeacherInfo(response.data);
                 setBundle({
                     ...bundle,
-                    Teacher_Id: fetchedTeacherId,
+                    Teacher_Id: response.data.teacherId,
                     Chem_Id: selectedChemicalsId,
                 });
             }
@@ -44,13 +57,13 @@ function ChemicalsBundleList() {
     const addToCart = (Chem_Id) => {
         const cartData = JSON.parse(localStorage.getItem('bundleCart')) || [];
 
-        const existingChemical = cartData.find(item => item.Teacher_Id === teacherId && item.Chem_Id === Chem_Id);
+        const existingChemical = cartData.find(item => item.Teacher_Id === teacherInfo.teacherId && item.Chem_Id === Chem_Id);
 
         if (existingChemical) {
             alert('This chemical is already in your cart');
         } else {
             cartData.push({
-                Teacher_Id: teacherId,
+                Teacher_Id: teacherInfo.teacherId,
                 Chem_Id,
             });
         }
@@ -67,59 +80,119 @@ function ChemicalsBundleList() {
         });
 
         setFilteredChemicals(filteredChemicals);
-    
+
+    };
+
+    axios.defaults.withCredentials = true;
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        axios.get("http://localhost:3001/teacher-logout").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                logout();
+                localStorage.removeItem('teacherToken');
+                navigate("/");
+            }
+        });
     };
 
     return (
-        <div className="container-fluid">
-            <div className='d-flex justify-content-between align-items-center'>
-                <h2>Teacher Chemicals List</h2>
-                <form className="d-flex">
-                    <input
-                        className="form-control me-2"
-                        type="search"
-                        placeholder="Search"
-                        aria-label="Search"
-                        value={searchQuery}
-                        onChange={handleSearch} // Use the handleSearch function on input change
-                    />
-                    <button className="btn btn-outline-success" type="submit">
-                        Search
-                    </button>
-                </form>
+        <div className='container-fluid vh-100'>
+            <div className='dashboard__container'>
+                <aside className='sidebar'>
+                    <div className='sidebar__header'>
+                        <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
+                        <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
+                    </div>
+                    <div className='sidebar__body'>
+                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> Request</Link>
+                        <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>
+                        <Link to="/teacher-dashboard/teacher-create-bundle" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                    </div>
+                    <div className='sidebar__footer'>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                    </div>
+                </aside>
+
+                <main className='dashboard__content'>
+                    <div className='component__header'>
+                        <div className='component__headerGroup component__headerGroup--left'>
+                            <i class='fa-solid fa-magnifying-glass'></i>
+                            <input
+                                type="search"
+                                className='component__search'
+                                placeholder="ค้นหาด้วยชื่อ"
+                                value={searchQuery}
+                                onChange={handleSearch}
+                            />
+                        </div>
+
+                        <div className='component__headerGroup component__headerGroup--right'>
+                            <i class="fa-solid fa-circle-user" />
+                            <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
+                        </div>
+                    </div>
+
+                    <div >
+                        <div className='table__tabs'>
+                            <Link className='table__tab table__tab--chemicals table__tab--active'>รายการสารเคมี</Link>
+                            <Link to="/teacher-dashboard/equipment-bundle-list" className='table__tab table__tab--equipment table__tab--unactive'>รายการครุภัณฑ์</Link>
+                        </div>
+
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Chemicals Name</th>
+                                    <th scope="col">Chemicals CAS</th>
+                                    <th scope="col">Chemicals UN</th>
+                                    <th scope="col">Chemicals Type</th>
+                                    <th scope="col">Chemicals Grade</th>
+                                    <th scope="col">Chemicals State</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredChemicals.map((chemicalsDetail, index) => (
+                                    <tr key={index} className="active-row">
+                                        <td> {index + 1} </td>
+                                        <td> {chemicalsDetail.Chem_Name} </td>
+                                        <td> {chemicalsDetail.Chem_CAS} </td>
+                                        <td> {chemicalsDetail.Chem_UN} </td>
+                                        <td> {chemicalsDetail.Chem_Type} </td>
+                                        <td> {chemicalsDetail.Chem_Grade} </td>
+                                        <td> {chemicalsDetail.Chem_State} </td>
+                                        <td>
+                                            <button className="table__button thai--font" onClick={() => addToCart(chemicalsDetail.Chem_Id)}>
+                                                <i class="fa-solid fa-circle-plus" />
+                                                เพิ่มสารเคมี
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+
+                <footer className='footer'>
+                    <Link to="/teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
+                    <Link to="/teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
+                    <Link to="/teacher-dashboard/teacher-create-bundle" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
+                    <div className="dropup">
+                        <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user" />
+                        </button>
+                        <ul class="dropdown-menu">
+                            <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        </ul>
+                    </div>
+                </footer>
             </div>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">No</th>
-                        <th scope="col">Chemicals Name</th>
-                        <th scope="col">Chemicals CAS</th>
-                        <th scope="col">Chemicals UN</th>
-                        <th scope="col">Chemicals Type</th>
-                        <th scope="col">Chemicals Grade</th>
-                        <th scope="col">Chemicals State</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredChemicals.map((chemicalsDetail, index) => (
-                        <tr key={index}>
-                            <td> {index + 1} </td>
-                            <td> {chemicalsDetail.Chem_Name} </td>
-                            <td> {chemicalsDetail.Chem_CAS} </td>
-                            <td> {chemicalsDetail.Chem_UN} </td>
-                            <td> {chemicalsDetail.Chem_Type} </td>
-                            <td> {chemicalsDetail.Chem_Grade} </td>
-                            <td> {chemicalsDetail.Chem_State} </td>
-                            <td>
-                                <div className="d-grid gap-2 d-sm-flex">
-                                    <button className="btn btn-primary" onClick={() => addToCart(chemicalsDetail.Chem_Id)}>add to cart</button>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         </div>
     )
 }

@@ -131,7 +131,7 @@ function StudentEquipmentRequest() {
                         </div>
                     </div>
 
-                    <div className='table-responsive'>
+                    <div >
                         <div className='table__tabs'>
                             <Link to="/student-dashboard/student-chemicals-request" className='table__tab table__tab--chemicals table__tab--unactive'>ประวัติการเบิกสารเคมี</Link>
                             <Link className='table__tab table__tab--equipment table__tab--active'>ประวัติการเบิกครุภัณฑ์</Link>

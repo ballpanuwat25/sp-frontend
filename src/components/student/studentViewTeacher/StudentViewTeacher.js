@@ -125,7 +125,7 @@ const StudentViewTeacher = () => {
                             </div>
                         </div>
 
-                        <div className='table-responsive'>
+                        <div >
                             <div className='table__tabs'>
                                 <Link className='table__tab table__tab--chemicals table__tab--active'>รายชื่ออาจารย์</Link>
                             </div>

@@ -340,3 +340,24 @@
     background-color: #006C68;
     color: #fff;
 }
+
+.modal-header {
+    background-color: #006C68;
+    color: #fff;
+}
+
+.modal-btn {
+    color: #fff !important;
+}
+
+.buttonTab-btn {
+    color: #006C68 !important;
+    background-color: #fff !important;
+    border-radius: 5px;
+    padding: 5px 10px;
+    width: 100%;
+}
+
+.buttonTab-btn:hover {
+    background-color: #ddd !important;
+}

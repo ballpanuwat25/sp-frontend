@@ -145,7 +145,7 @@ function StudentEquipmentCart() {
                                     <div>{user_email}</div>
                                 </div>
                             </div>
-                            <div className='table-responsive'>
+                            <div >
                                 <div className='table__tabs'>
                                     <Link to="/student-dashboard/student-chemicals-cart" className='table__tab table__tab--chemicals table__tab--unactive'>ตระกร้าสารเคมี</Link>
                                     <Link className='table__tab table__tab--equipment table__tab--active'>ตระกร้าครุภัณฑ์</Link>

@@ -127,7 +127,7 @@ const StaffList = ({ logout }) => {
                         </div>
                     </div>
 
-                    <div className='table-responsive'>
+                    <div >
                         <div className='table__tabs'>
                             <Link className='table__tab table__tab--chemicals table__tab--active'>เจ้าหน้าที่</Link>
                             <Link to="/teacher-list" className='table__tab table__tab--chemicals table__tab--unactive'>อาจารย์</Link>

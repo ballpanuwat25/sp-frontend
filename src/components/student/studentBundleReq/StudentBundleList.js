@@ -185,7 +185,7 @@ function StudentBundleList() {
                         </div>
                     </div>
 
-                    <div className='table-responsive'>
+                    <div >
                         <div className='table__tabs'>
                             <Link className='table__tab table__tab--chemicals table__tab--active'>กลุ่มสารเคมีและครุภัณฑ์</Link>
                         </div>
@@ -193,10 +193,10 @@ function StudentBundleList() {
                             <thead>
                                 <tr>
                                     <th scope='col'>#</th>
-                                    <th scope='col'>Bundle Name</th>
-                                    <th scope='col'>Bundle Description</th>
-                                    <th scope='col'>Created By</th>
-                                    <th scope='col'>Created At</th>
+                                    <th scope='col'>ชื่อ</th>
+                                    <th scope='col'>รายละเอียด</th>
+                                    <th scope='col'>สร้างโดย</th>
+                                    <th scope='col'>สร้างเมื่อ</th>
                                     <th scope='col'></th>
                                 </tr>
                             </thead>
