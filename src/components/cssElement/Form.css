@@ -361,3 +361,11 @@
 .buttonTab-btn:hover {
     background-color: #ddd !important;
 }
+
+.buttonTab-reject-btn {
+    color: #fe0000 !important;
+    background-color: #fff !important;
+    border-radius: 5px;
+    padding: 5px 10px;
+    width: 100%;
+}

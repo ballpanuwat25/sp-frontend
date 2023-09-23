@@ -185,7 +185,7 @@ function TeacherEquipmentRequest({ logout }) {
                         <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='sidebar__item--active'>Request</div></Link>
+                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'>Request</div></Link>
                         <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> List</Link>
                         <Link to="/teacher-dashboard/teacher-create-bundle" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
                         <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>

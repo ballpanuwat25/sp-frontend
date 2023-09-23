@@ -34,6 +34,7 @@ import AddChemicalsDetail from './components/staff/chemicalsDetailCrud/AddChemic
 import EditChemicalsDetail from './components/staff/chemicalsDetailCrud/EditChemicalsDetail.js';
 import ChemicalsDetailList from './components/staff/chemicalsDetailCrud/ChemicalsDetailList.js';
 
+import ChemicalsStockFilter from './components/staff/chemicalsStock/ChemicalsStockFilter.js';
 import ChemicalsStockList from './components/staff/chemicalsStock/ChemicalsStockList.js';
 import ChemicalsStockById from './components/staff/chemicalsStock/ChemicalsStockById.js';
 
@@ -170,6 +171,7 @@ function App() {
         <Route path="/chemicals-list/add-chemicals" element={staffLoggedIn ? <AddChemicals /> : <Navigate to="/" />} />
         <Route path="/chemicals-list/edit-chemicals/:id" element={staffLoggedIn ? <EditChemicals /> : <Navigate to="/" />} />
 
+        <Route path="/chemicalsStock-filter" element={staffLoggedIn ? <ChemicalsStockFilter /> : <Navigate to="/" />} />
         <Route path="/chemicals-stock" element={staffLoggedIn ? <ChemicalsStockList /> : <Navigate to="/" />} />
         <Route path="/chemicals-stock/:id" element={staffLoggedIn ? <ChemicalsStockById /> : <Navigate to="/" />} />
 

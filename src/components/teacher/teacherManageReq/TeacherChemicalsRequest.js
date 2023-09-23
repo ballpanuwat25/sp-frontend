@@ -184,7 +184,7 @@ function TeacherChemicalsRequest() {
                         <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='sidebar__item--active'>Request</div></Link>
+                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'>Request</div></Link>
                         <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> List</Link>
                         <Link to="/teacher-dashboard/teacher-create-bundle" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
                         <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
@@ -197,7 +197,7 @@ function TeacherChemicalsRequest() {
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
-                            <i class='fa-solid fa-magnifying-glass'></i>
+                            <i class='fa-solid fa-magnifying-glass'/>
                             <input
                                 type="search"
                                 className='component__search'
@@ -301,7 +301,7 @@ function TeacherChemicalsRequest() {
                                                             </div>
                                                             <div className="modal-body">
                                                                 <div className="mb-3">
-                                                                    <label htmlFor="Request_Comment" className="form-label">รายละเอียด</label>
+                                                                    <label htmlFor="Request_Comment" className="form-label">หมายเหตุ*</label>
                                                                     <input type="text" className="form-control" id="Request_Comment" placeholder="เช่น สารเคมีหมด ฯลฯ" value={Request_Comment} required
                                                                         onChange={(e) => {
                                                                             setRequest_Comment(e.target.value);
@@ -310,8 +310,8 @@ function TeacherChemicalsRequest() {
                                                                 </div>
                                                             </div>
                                                             <div className="modal-footer">
-                                                                <button type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal">Close</button>
-                                                                <button onClick={declineChemicalsRequest} type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal">Save changes</button>
+                                                                <button onClick={declineChemicalsRequest} type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal"> <i className='fa-solid fa-circle-check' />ยืนยัน</button>
+                                                                <button type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal"><i className='fa-solid fa-circle-xmark' /> ยกเลิก</button>
                                                             </div>
                                                         </div>
                                                     </div>

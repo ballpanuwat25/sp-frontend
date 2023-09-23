@@ -1,8 +1,14 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import BarcodeScanner from "../barcode/BarcodeScanner";
+
+import '../../cssElement/Table.css'
+import '../../cssElement/Form.css'
+import '../../cssElement/Dashboard.css'
+
+import logo from '../../assets/logo.png';
 
 function StaffEquipmentRequest() {
     const [Equipment_Request_Id, setEquipment_Request_Id] = useState("");
@@ -38,7 +44,7 @@ function StaffEquipmentRequest() {
                     Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
                 },
             });
-            
+
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -146,185 +152,271 @@ function StaffEquipmentRequest() {
         }
     };
 
+    const [staffInfo, setStaffInfo] = useState({
+        staffId: "",
+        staffFirstName: "",
+        staffLastName: "",
+        staffUsername: "",
+        staffPassword: "",
+        staffTel: "",
+    });
+
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        axios.get("http://localhost:3001/staff", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+            },
+        }).then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffInfo(response.data);
+            }
+        });
+    }, []);
+
+    const handleLogout = () => {
+        axios.get("http://localhost:3001/staff-logout").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                localStorage.removeItem('staffToken');
+                navigate("/");
+            }
+        });
+    };
+
     return (
-        <div className="container-fluid">
-            <h1>Staff Equipment Request</h1>
-            <form onSubmit={updateEquipmentRequest}>
-                <div className="mb-3">
-                    <label htmlFor="Equipment_Request_Id" className="form-label">Equipment Request Id</label>
-                    <input type="text" className="form-control" id="Equipment_Request_Id" placeholder="Enter Equipment Request Id" required={isRejectButtonClicked} value={Equipment_Request_Id}
-                        onChange={(e) => {
-                            setEquipment_Request_Id(e.target.value);
-                        }}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="Equipment_Id" className="form-label">Find Equipment Id</label>
-                    <div className="input-group">
-                        <button
-                            className="btn btn-outline-secondary"
-                            type="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                        >
-                            Scan
-                        </button>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="Equipment_Id"
-                            placeholder="Enter Equipment Id"
-                            required={isRejectButtonClicked}
-                            value={Equipment_Id}
-                            onChange={(e) => {
-                                setEquipment_Id(e.target.value);
-                            }}
-                        />
-                        <button
-                            className="btn btn-outline-secondary"
-                            type="button"
-                            onClick={handleQuery}
-                        >
-                            Query
-                        </button>
+        <div className='container-fluid vh-100'>
+            <div className='dashboard__container'>
+                <aside className='sidebar'>
+                    <div className='sidebar__header'>
+                        <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
+                        <div className='sidebar__title admin__name'>Welcome, {staffInfo.staffFirstName}</div>
                     </div>
 
-                    <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div className="modal-dialog modal-dialog-centered">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div className="modal-body">
-                                    <BarcodeScanner onScannedTextChange={handleScannedTextChange} />
-                                </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" className="btn btn-primary" onClick={handleApplyButtonClick} data-bs-dismiss="modal">
-                                        Apply
-                                    </button>
+                    <div className='sidebar__body'>
+                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
+                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-toolbox" />Equipment</Link>
+                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask-vial" /> Stock</Link>
+                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-user" /> Profile</Link>
+                    </div>
+
+                    <div className='sidebar__footer'>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                    </div>
+                </aside>
+
+                <main className='dashboard__content'>
+                    <div className='component__header'>
+                        <div className='component__headerGroup component__headerGroup--left'>
+
+                        </div>
+
+                        <div className='component__headerGroup component__headerGroup--right'>
+                            <i class="fa-solid fa-circle-user" />
+                            <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                        </div>
+                    </div>
+
+                    <form onSubmit={updateEquipmentRequest}>
+                        <div className="mb-3">
+                            <label htmlFor="Staff_Id" className="profile__label">รหัสเจ้าหน้าที่</label>
+                            <input
+                                type="text"
+                                className="profile__input profile__input--readonly"
+                                id="Staff_Id"
+                                placeholder="Enter Staff Id"
+                                value={staffIdInputValue}
+                                onChange={(e) => {
+                                    setStaffIdInputValue(e.target.value);
+                                }}
+                                readOnly
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="Equipment_Id" className="profile__label">รหัสครุภัณฑ์</label>
+                            <div className="input-group">
+                                <button
+                                    className="btn btn-outline-secondary"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal"
+                                >
+                                    Scan
+                                </button>
+                                <input
+                                    type="text"
+                                    className="form-control form-control-scan"
+                                    id="Equipment_Id"
+                                    placeholder="Enter Equipment Id"
+                                    required={isRejectButtonClicked}
+                                    value={Equipment_Id}
+                                    onChange={(e) => {
+                                        setEquipment_Id(e.target.value);
+                                    }}
+                                />
+                                <button
+                                    className="btn btn-outline-secondary"
+                                    type="button"
+                                    onClick={handleQuery}
+                                >
+                                    Query
+                                </button>
+                            </div>
+
+                            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div className="modal-dialog modal-dialog-centered">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <BarcodeScanner onScannedTextChange={handleScannedTextChange} />
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn edit--btn modal-btn" onClick={handleApplyButtonClick} data-bs-dismiss="modal">
+                                                <i className='fa-solid fa-circle-check' />
+                                                ยืนยัน
+                                            </button>
+                                            <button type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal"><i className='fa-solid fa-circle-xmark' />ยกเลิก</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="Requested_Quantity" className="form-label">Requested Quantity</label>
-                    <input type="text" className="form-control" id="Requested_Quantity" placeholder="Enter Requested Quantity" required={isRejectButtonClicked} value={Requested_Quantity}
-                        onChange={(e) => {
-                            setRequested_Quantity(e.target.value);
-                        }}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="Remaining_Quantity" className="form-label">Remaining Quantity</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="Quantity"
-                        placeholder="Enter Remaining Quantity"
-                        required={isRejectButtonClicked}
-                        value={Quantity}
-                        onChange={(e) => {
-                            setQuantity(e.target.value);
-                        }}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="Release_Quantity" className="form-label">Release Quantity</label>
-                    <input type="text" className="form-control" id="Release_Quantity" placeholder="Enter Release Quantity" required={isRejectButtonClicked} value={Release_Quantity}
-                        onChange={(e) => {
-                            setRelease_Quantity(e.target.value);
-                        }}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="Staff_Id" className="form-label">Staff Id</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="Staff_Id"
-                        placeholder="Enter Staff Id"
-                        value={staffIdInputValue}
-                        onChange={(e) => {
-                            setStaffIdInputValue(e.target.value);
-                        }}
-                    />
-                </div>
 
-                <div className="d-flex">
-                    <button
-                        type="submit"
-                        className="btn btn-primary"
-                        onClick={() => {
-                            setRequest_Status("Confirmed");
-                        }}
-                    >
-                        Confirmed
-                    </button>
-                    <button
-                        type="button"
-                        className="btn btn-outline-secondary mx-2"
-                        data-bs-toggle="modal"
-                        data-bs-target="#rejectModal"
-                        onClick={() => {
-                            setIsRejectButtonClicked(true); // Set the flag to indicate the Reject button is clicked
-                        }}
-                    >
-                        Rejected Chemicals Request
-                    </button>
+                        <div className="mb-3">
+                            <label htmlFor="Remaining_Quantity" className="profile__label">จำนวนที่เหลือ</label>
+                            <input
+                                type="number"
+                                className="profile__input"
+                                id="Quantity"
+                                placeholder="Enter Remaining Quantity"
+                                required={isRejectButtonClicked}
+                                value={Quantity}
+                                onChange={(e) => {
+                                    setQuantity(e.target.value);
+                                }}
+                            />
+                        </div>
 
-                    <div className="modal fade" id="rejectModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div className="modal-dialog">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">Rejected Comment</h5>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div className="modal-body">
-                                    <label htmlFor="Request_Comment" className="form-label">Rejected Comment</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="Request_Comment"
-                                        placeholder="Enter Request Comment"
-                                        required={isRejectButtonClicked} // Make the input required only when Reject button is clicked
-                                        value={Request_Comment}
-                                        onChange={(e) => {
-                                            setRequest_Comment(e.target.value);
-                                        }}
-                                    />
-                                </div>
-                                <div className="modal-footer">
-                                    <button
-                                        type="button"
-                                        className="btn btn-secondary"
-                                        data-bs-dismiss="modal"
-                                        onClick={() => {
-                                            setRequest_Comment(""); // Clear the comment input field
-                                            setIsRejectButtonClicked(false); // Reset the flag when modal is closed
-                                        }}
-                                    >
-                                        Close
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="btn btn-primary"
-                                        onClick={() => {
-                                            setRequest_Status("Rejected");
-                                            setIsRejectButtonClicked(false); // Reset the flag when modal is closed
-                                        }}
-                                        data-bs-dismiss="modal"
-                                    >
-                                        Save changes
-                                    </button>
+                        <div className="mb-3">
+                            <label htmlFor="Requested_Quantity" className="profile__label">จำนวนที่ขอ</label>
+                            <input type="text" className="profile__input" id="Requested_Quantity" required={isRejectButtonClicked} value={Requested_Quantity}
+                                onChange={(e) => {
+                                    setRequested_Quantity(e.target.value);
+                                }}
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="Release_Quantity" className="profile__label">จำนวนที่จ่าย</label>
+                            <input type="text" className="profile__input" id="Release_Quantity" placeholder="Enter Release Quantity" required={isRejectButtonClicked} value={Release_Quantity}
+                                onChange={(e) => {
+                                    setRelease_Quantity(e.target.value);
+                                }}
+                            />
+                        </div>
+
+                        <div className="d-flex">
+                            <button
+                                type="submit"
+                                className="edit--btn"
+                                onClick={() => {
+                                    setRequest_Status("Confirmed");
+                                }}
+                            >
+                                <i className='fa-solid fa-circle-check' />
+                                อนุมัติ
+                            </button>
+                            <button
+                                type="button"
+                                className="delete--btn btn-danger mx-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#rejectModal"
+                                onClick={() => {
+                                    setIsRejectButtonClicked(true); // Set the flag to indicate the Reject button is clicked
+                                }}
+                            >
+                                <i className='fa-solid fa-circle-xmark' />
+                                ปฏิเสธ
+                            </button>
+
+                            <div className="modal fade thai--font" id="rejectModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div className="modal-dialog">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title " id="exampleModalLabel">เหตุผลในการปฏิเสธ</h5>
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <label htmlFor="Request_Comment" className="form-label">หมายเหตุ*</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="Request_Comment"
+                                                placeholder="Enter Request Comment"
+                                                required={isRejectButtonClicked} // Make the input required only when Reject button is clicked
+                                                value={Request_Comment}
+                                                onChange={(e) => {
+                                                    setRequest_Comment(e.target.value);
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="modal-footer">
+                                        <button
+                                                type="submit"
+                                                className="btn edit--btn modal-btn"
+                                                onClick={() => {
+                                                    setRequest_Status("Rejected");
+                                                    setIsRejectButtonClicked(false); // Reset the flag when modal is closed
+                                                }}
+                                                data-bs-dismiss="modal"
+                                            >
+                                                <i className='fa-solid fa-circle-check' />ยืนยัน
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                className="btn btn-danger modal-btn"
+                                                data-bs-dismiss="modal"
+                                                onClick={() => {
+                                                    setRequest_Comment(""); // Clear the comment input field
+                                                    setIsRejectButtonClicked(false); // Reset the flag when modal is closed
+                                                }}
+                                            >
+                                                <i className='fa-solid fa-circle-xmark' /> ยกเลิก
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </form>
+                </main>
+
+                <footer className='footer'>
+                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
+                    <Link to="/chemicals-list" className='footer__item'> <i class="fa-solid fa-flask" /> </Link>
+                    <Link to="/equipment-list" className='footer__item'> <i class="fa-solid fa-toolbox" /></Link>
+                    <Link to="/chemicals-stock" className='footer__item'> <i class="fa-solid fa-flask-vial" /> </Link>
+                    <div className="dropup">
+                        <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user" />
+                        </button>
+                        <ul className="dropdown-menu">
+                            <Link to="/staff-profile" className='footer__item'> <i class="fa-regular fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        </ul>
                     </div>
-                </div>
-            </form>
+                </footer>
+            </div>
         </div>
     )
 }

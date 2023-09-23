@@ -103,8 +103,21 @@ table tbody tr {
 }
 
 .fa-circle-plus,
-.fa-eye {
+.fa-eye,
+.fa-pen-to-square,
+.fa-trash {
     margin-right: 10px;
+}
+
+.btn-outline-success {
+    color: #006C68;
+    border-color: #006C68;
+}
+
+.btn-outline-success:hover {
+    color: #fff;
+    background-color: #006C68;
+    border-color: #006C68;
 }
 
 table tbody tr:nth-of-type(even) td .table__button {
@@ -230,3 +243,32 @@ select {
     color: #fff !important;
     text-decoration: none;
 }
+
+/* ============================== table export ================================= */
+.table-export {
+    overflow: visible !important;
+}
+/* Style table headers */
+.table-header {
+    background-color: #f2f2f2 !important;
+    color: #006C68;
+    font-weight: bold;
+    border-bottom: 2px solid #cccccc80 !important;
+    padding: 8px; /* Adjust the padding as needed */
+    text-align: center; /* Center align the text in headers */
+  }
+  
+  /* Style table data cells */
+  .table-data {
+    border-bottom: 1px solid #ccc;
+    padding: 8px; /* Adjust the padding as needed */
+    text-align: center; /* Center align the text in cells */
+  }
+  
+  /* Style the table rows with alternating background colors */
+  .active-row {
+    background-color: #f2f2f2;
+  }
+  
+  /* Additional styles for specific elements can be added here */
+  

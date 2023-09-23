@@ -128,11 +128,11 @@ const BarcodeScanner = ({ onScannedTextChange }) => {
     <div>
       <button
         type="button"
-        className="btn btn-outline-primary me-2"
+        className="btn btn-outline-success me-2"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
-        Scan Barcode
+        <i class="fa-solid fa-expand"></i>
       </button>
 
       <div
@@ -166,20 +166,20 @@ const BarcodeScanner = ({ onScannedTextChange }) => {
             <div className="modal-footer">
               <button
                 type="button"
-                className="btn btn-secondary"
-                onClick={() => window.location.reload()}
+                className="btn edit--btn modal-btn"
+                onClick={handleModalSave}
                 data-bs-dismiss="modal"
               >
-                Close
+                <i className='fa-solid fa-circle-check' />ยืนยัน
               </button>
 
               <button
                 type="button"
-                className="btn btn-primary"
-                onClick={handleModalSave}
+                className="btn btn-danger modal-btn"
+                onClick={() => window.location.reload()}
                 data-bs-dismiss="modal"
               >
-                Save changes
+                <i className='fa-solid fa-circle-xmark' /> ยกเลิก
               </button>
             </div>
           </div>

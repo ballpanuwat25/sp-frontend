@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import { saveAs } from 'file-saver';
-import ExcelJS from 'exceljs'; // Import exceljs library
-import { Link } from 'react-router-dom';
-import { useReactToPrint } from "react-to-print"; // Import useReactToPrint hook
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+
+import '../../cssElement/Table.css'
+import '../../cssElement/Form.css'
+import '../../cssElement/Dashboard.css'
+
+import logo from '../../assets/logo.png';
 
 function ChemicalsStockList() {
   const [chemicals, setChemicals] = useState([]);
@@ -13,17 +14,6 @@ function ChemicalsStockList() {
 
   const [searchFilter, setSearchFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-
-  const [exportData, setExportData] = useState([]);
-
-  useEffect(() => {
-    // Filter the data and set it to the exportData state
-    const filteredData = processChemicalsData().filter(chemical => {
-      const remainingPercentage = (chemical.Remaining_Quantity / chemical.Package_Size) * 100;
-      return remainingPercentage < 25;
-    });
-    setExportData(filteredData);
-  }, []);
 
   useEffect(() => {
     getChemicals();
@@ -41,6 +31,7 @@ function ChemicalsStockList() {
   }
 
   // Function to process the chemicals data and return a new array with unique chemical IDs and summed up quantities
+  // Modify processChemicalsData function to include the filter
   const processChemicalsData = () => {
     const uniqueChemicals = {};
     chemicals.forEach((chemical) => {
@@ -109,119 +100,152 @@ function ChemicalsStockList() {
     setSearchTerm(event.target.value);
   };
 
-  const getRemainingQuantityColor = (remainingQuantity, packageSize) => {
-    if (remainingQuantity == 0) {
-      return "table-danger"; // Mark chemicals with no remaining quantity as red
-    } else if (remainingQuantity <= 0.25 * packageSize) {
-      return "table-warning"; // Mark chemicals with remaining quantity below 25% as yellow
-    } else if (remainingQuantity <= 0.5 * packageSize) {
-      return "table-info"; // Mark chemicals with remaining quantity below 50% as blue
-    } else if (remainingQuantity >= 0.75 * packageSize) {
-      return "table-success"; // Mark chemicals with remaining quantity below 75% as green
-    }
-    return ""; // Default styling
-  };
+  const [staffInfo, setStaffInfo] = useState({
+    staffId: "",
+    staffFirstName: "",
+    staffLastName: "",
+    staffUsername: "",
+    staffPassword: "",
+    staffTel: "",
+  })
 
-  const exportToExcel = () => {
-    const filteredData = processChemicalsData().filter(chemical => {
-      const remainingPercentage = (chemical.Remaining_Quantity / chemical.Package_Size) * 100;
-      return remainingPercentage < 25;
+  const navigate = useNavigate();
+
+  axios.defaults.withCredentials = true;
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/staff", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+      },
+    }).then((response) => {
+      if (response.data.Error) {
+        alert(response.data.Error);
+      } else {
+        setStaffInfo(response.data);
+      }
     });
+  }, []);
 
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('ChemicalsStock');
-
-    // Add headers to the worksheet
-    const headers = ['No', 'Chemicals Id', 'Chemicals Name', 'Remaining Quantity', 'Total Quantity', 'Counting Unit', 'Chemicals State'];
-    worksheet.addRow(headers);
-
-    // Add data rows to the worksheet
-    filteredData.forEach((chemical, index) => {
-      worksheet.addRow([
-        index + 1,
-        chemical.Chem_Id,
-        chemical.Chem_Name,
-        chemical.Remaining_Quantity,
-        chemical.Package_Size,
-        chemical.Counting_Unit,
-        chemical.Chem_State,
-      ]);
-    });
-
-    // Save the workbook to a Blob
-    workbook.xlsx.writeBuffer().then(buffer => {
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      saveAs(blob, 'chemicals_stock.xlsx');
+  const handleLogout = () => {
+    axios.get("http://localhost:3001/staff-logout").then((response) => {
+      if (response.data.Error) {
+        alert(response.data.Error);
+      } else {
+        localStorage.removeItem('staffToken');
+        navigate("/");
+      }
     });
   };
-
-  const conponentPDF = useRef();
-
-  const generatePDF = useReactToPrint({
-    content: () => conponentPDF.current,
-    documentTitle: "Chemicals Stock",
-  });
 
   return (
-    <div className="container-fluid">
-      <div className='d-flex justify-content-between align-items-center'>
-        <h2>Chemicals Stock</h2>
-        <div className="input-group w-25">
-          <select id="searchFilter" value={searchFilter} onChange={handleSearchFilterChange} className="btn btn-outline-primary" >
-            <option value="All">All</option>
-            <option value="Liquid">Liquid</option>
-            <option value="Solid">Solid</option>
-          </select>
-          <input
-            type="text"
-            id="searchTerm"
-            className="form-control"
-            value={searchTerm}
-            onChange={handleSearchInputChange}
-            placeholder="Enter Chem_Name..."
-          />
-        </div>
-      </div>
-      <div>
-        <button className="btn btn-success me-2" onClick={exportToExcel}>
-          Export to Excel
-        </button>
+    <div className='container-fluid vh-100'>
+      <div className='dashboard__container'>
+        <aside className='sidebar'>
+          <div className='sidebar__header'>
+            <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
+            <div className='sidebar__title admin__name'>Welcome, {staffInfo.staffFirstName}</div>
+          </div>
 
-        <button className="btn btn-danger" onClick={generatePDF}>
-          Export to PDF
-        </button>
-      </div>
-      <div ref={conponentPDF} style={{ width: '100%' }}>
-        <table className="table table-striped" id="stock-table">
-          <thead>
-            <tr>
-              <th scope="col">No</th>
-              <th scope="col">Chemicals Id</th>
-              <th scope="col">Chemicals Name</th>
-              <th scope="col">Remaining Quantity</th>
-              <th scope="col">Total Quantity</th>
-              <th scope="col">Counting Unit</th>
-              <th scope="col">Chemicals State</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {processChemicalsData().map((chemical, index) => (
-              <tr key={index} className={getRemainingQuantityColor(chemical.Remaining_Quantity, chemical.Package_Size)}>
-                <td> {index + 1} </td>
-                <td> {chemical.Chem_Id} </td>
-                <td> {chemical.Chem_Name} </td>
-                <td> {chemical.Remaining_Quantity} </td>
-                <td> {chemical.Package_Size} </td>
-                <td> {chemical.Counting_Unit} </td>
-                <td> {chemical.Chem_State} </td>
-                <td>
-                  <Link className="btn btn-primary btn-sm" to={`./${chemical.Chem_Id}`} >View</Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          <div className='sidebar__body'>
+            <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
+            <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask" /> Chemicals</Link>
+            <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-toolbox" />Equipment</Link>
+            <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask-vial" /> <div className='sidebar__item--active'> Stock</div></Link>
+            <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-user" /> Profile</Link>
+          </div>
+
+          <div className='sidebar__footer'>
+            <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+          </div>
+        </aside>
+
+        <main className='dashboard__content'>
+          <div className='component__header'>
+            <div className='component__headerGroup component__headerGroup--left'>
+              <i class='fa-solid fa-magnifying-glass' />
+              <input
+                type="text"
+                id="searchTerm"
+                className="component__search"
+                value={searchTerm}
+                onChange={handleSearchInputChange}
+                placeholder="Enter Chem_Name..."
+              />
+            </div>
+
+            <div className='component__headerGroup component__headerGroup--right'>
+              <i class="fa-solid fa-circle-user" />
+              <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+            </div>
+          </div>
+
+          <div>
+            <div className='table__tabs'>
+              <Link className='table__tab table__tab--chemicals table__tab--active'>คลังสารเคมีกลาง</Link>
+              <Link to="/chemicalsStock-filter" className='table__tab table__tab--equipment table__tab--unactive'>สารเคมีที่ใกล้หมด</Link>
+            </div>
+
+            <table className="table table-striped" id="stock-table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">รหัสสารเคมี</th>
+                  <th scope="col">ชื่อสารเคมี</th>
+                  <th scope="col">ปริมาณทั้งหมด</th>
+                  <th scope="col">ปริมาณคงเหลือ</th>
+                  <th scope="col">หน่วยนับ</th>
+                  <th scope="col">
+                    <select id="searchFilter" value={searchFilter} onChange={handleSearchFilterChange} className="buttonTab-btn thai--font" >
+                      <option disabled>เลือกสถานะของสาร</option>
+                      <option value="All">ทั้งหมด</option>
+                      <option value="Liquid">Liquid</option>
+                      <option value="Solid">Solid</option>
+                    </select>
+                  </th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {processChemicalsData().map((chemical, index) => (
+                  <tr key={index} className="active-row">
+                    <td> {index + 1} </td>
+                    <td> {chemical.Chem_Id} </td>
+                    <td> {chemical.Chem_Name} </td>
+                    <td> {chemical.Package_Size} </td>
+                    <td> {chemical.Remaining_Quantity} </td>
+                    <td> {chemical.Counting_Unit} </td>
+                    <td> {chemical.Chem_State} </td>
+                    <td>
+                      <Link className='disable--link thai--font' to={`./${chemical.Chem_Id}`} >
+                        <div className="table__button">
+                          <i class="fa-solid fa-eye"></i>
+                          ดูรายละเอียด
+                        </div>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </main>
+
+        <footer className='footer'>
+          <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
+          <Link to="/chemicals-list" className='footer__item'> <i class="fa-solid fa-flask" /> </Link>
+          <Link to="/equipment-list" className='footer__item'> <i class="fa-solid fa-toolbox" /></Link>
+          <Link to="/chemicals-stock" className='footer__item'> <i class="fa-solid fa-flask-vial" /> </Link>
+          <div className="dropup">
+            <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-user" />
+            </button>
+            <ul className="dropdown-menu">
+              <Link to="/staff-profile" className='footer__item'> <i class="fa-regular fa-user" /> Profile</Link>
+              <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+            </ul>
+          </div>
+        </footer>
       </div>
     </div>
   );

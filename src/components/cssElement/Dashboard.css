@@ -136,6 +136,9 @@
 .fa-cart-shopping,
 .fa-clock-rotate-left,
 .fa-user,
+.fa-flask,
+.fa-toolbox,
+.fa-flask-vial,
 .fa-arrow-right-from-bracket {
     margin-right: 15px;
 }
@@ -361,6 +364,44 @@
 
 .disable {
     display: none;
+}
+
+.btn-outline-secondary {
+    color: #006C68;
+    border: 2px solid #006C68;
+    font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #006C68;
+    color: #fff;
+    border: 2px solid #006C68;
+}
+
+.form-control-scan {
+    border: 2px solid #006C68;
+    border-radius: 10px;
+    box-shadow: none;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #006C68;
+    border-left: none;
+    border-right: none;
+}
+
+.form-control-scan:focus {
+    border: 2px solid #006C68;
+    border-left: 1px solid #006C68;
+    border-right: 1px solid #006C68;
+    box-shadow: none;
+}
+
+.form-control-scan2 {
+    border: 1px solid #006C68;
+    font-family: 'Noto Sans Thai', sans-serif;
 }
 
 @media screen and (min-width: 875px) {

@@ -1,6 +1,12 @@
 import axios from "axios";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react'
+
+import '../../cssElement/Table.css'
+import '../../cssElement/Form.css'
+import '../../cssElement/Dashboard.css'
+
+import logo from '../../assets/logo.png';
 
 function EquipmentList() {
     const [staffId, setStaffId] = useState("");
@@ -44,62 +50,165 @@ function EquipmentList() {
     };
 
     const deleteEquipment = async (id) => {
-            try {
-                const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Equipment", Equipment_Id: id, Staff_Id: staffId };
-                await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
-                await axios.delete(`http://localhost:3001/equipment-list/${id}`)
-                getEquipment();
-            } catch (error) {
-                console.log(error)
-            }
+        try {
+            const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Equipment", Equipment_Id: id, Staff_Id: staffId };
+            await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
+            await axios.delete(`http://localhost:3001/equipment-list/${id}`)
+            getEquipment();
+        } catch (error) {
+            console.log(error)
         }
-
-        return (
-            <div className="container-fluid">
-                <div className='d-flex justify-content-between align-items-center'>
-                    <h2>Equipment List</h2>
-                    <div className="btn-group">
-                        <Link to={`add-equipment`} className="btn btn-success"> Add Equipment</Link>
-                        <Link to="/equipmentCategory-list" className="btn btn-outline-success">Equipment Category</Link>
-                    </div>
-                </div>
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Equipment Id</th>
-                            <th scope="col">Equipment Category Id</th>
-                            <th scope="col">Equipment Name</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Location</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Fixed Cost</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {equipment.map((equipment, index) => (
-                            <tr key={index}>
-                                <td> {index + 1} </td>
-                                <td> {equipment.Equipment_Id} </td>
-                                <td> {equipment.Equipment_Category_Id} </td>
-                                <td> {equipment.Equipment_Name} </td>
-                                <td> {equipment.Quantity} </td>
-                                <td> {equipment.Location} </td>
-                                <td> {equipment.Price} </td>
-                                <td> {equipment.Fixed_Cost} </td>
-                                <td>
-                                    <div className="d-grid gap-2 d-sm-flex">
-                                        <Link to={`edit-equipment/${equipment.Equipment_Id}`} className="btn btn-success me-2">Edit</Link>
-                                        <button className="btn btn-danger" type="button" onClick={() => deleteEquipment(equipment.Equipment_Id)}>Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        )
     }
 
-    export default EquipmentList
+    const [staffInfo, setStaffInfo] = useState({
+        staffId: "",
+        staffFirstName: "",
+        staffLastName: "",
+        staffUsername: "",
+        staffPassword: "",
+        staffTel: "",
+    })
+
+    const navigate = useNavigate();
+
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        axios.get("http://localhost:3001/staff", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+            },
+        }).then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffInfo(response.data);
+            }
+        });
+    }, []);
+
+    const handleLogout = () => {
+        axios.get("http://localhost:3001/staff-logout").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                localStorage.removeItem('staffToken');
+                navigate("/");
+            }
+        });
+    };
+
+    return (
+        <div className='container-fluid vh-100'>
+            <div className='dashboard__container'>
+                <aside className='sidebar'>
+                    <div className='sidebar__header'>
+                        <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
+                        <div className='sidebar__title admin__name'>Welcome, {staffInfo.staffFirstName}</div>
+                    </div>
+
+                    <div className='sidebar__body'>
+                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
+                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-toolbox" /><div className='sidebar__item--active'> Equipment</div></Link>
+                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask-vial" /> Stock</Link>
+                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-user" /> Profile</Link>
+                    </div>
+
+                    <div className='sidebar__footer'>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                    </div>
+                </aside>
+
+                <main className='dashboard__content'>
+                    <div className='component__header'>
+                        <div className='component__headerGroup component__headerGroup--left'>
+                            <i class='fa-solid fa-magnifying-glass' />
+                            <input
+                                type="text"
+                                className="component__search"
+                                placeholder="ค้นหาด้วยรหัสครุภัณฑ์"
+                                value=""
+                                onChange=""
+                            />
+                        </div>
+
+                        <div className='component__headerGroup component__headerGroup--right'>
+                            <i class="fa-solid fa-circle-user" />
+                            <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='table__tabs'>
+                            <Link className='table__tab table__tab--chemicals table__tab--active'>ครุภัณฑ์</Link>
+                            <Link to="/equipmentCategory-list" className='table__tab table__tab--equipment table__tab--unactive'>หมวดหมู่ครุภัณฑ์</Link>
+                        </div>
+
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">รหัสครุภัณฑ์</th>
+                                    <th scope="col">รหัสหมวดหมู่ครุภัณฑ์</th>
+                                    <th scope="col">ชื่อครุภัณฑ์</th>
+                                    <th scope="col">จำนวน</th>
+                                    <th scope="col">สถานที่เก็บ</th>
+                                    <th scope="col">ราคา</th>
+                                    <th scope="col">ค่าซ่อม</th>
+                                    <th scope="col">
+                                        <Link to={`add-equipment`} className="buttonTab-btn thai--font disable--link"><i class="fa-solid fa-square-plus me-2" />เพิ่มครุภัณฑ์</Link>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {equipment.map((equipment, index) => (
+                                    <tr key={index} className="active-row">
+                                        <td> {index + 1} </td>
+                                        <td> {equipment.Equipment_Id} </td>
+                                        <td> {equipment.Equipment_Category_Id} </td>
+                                        <td> {equipment.Equipment_Name} </td>
+                                        <td> {equipment.Quantity} </td>
+                                        <td> {equipment.Location} </td>
+                                        <td> {equipment.Price} </td>
+                                        <td> {equipment.Fixed_Cost} </td>
+                                        <td>
+                                            <div className="d-grid gap-2 d-sm-flex">
+                                                <Link to={`edit-equipment/${equipment.Equipment_Id}`} className="edit--btn">
+                                                    <i class="fa-solid fa-pen-to-square" />
+                                                    แก้ไข
+                                                </Link>
+                                                <button className="delete--btn btn-danger" type="button" onClick={() => deleteEquipment(equipment.Equipment_Id)}>
+                                                    <i class="fa-solid fa-trash" />
+                                                    ลบ
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+            </div>
+
+            <footer className='footer'>
+                <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
+                <Link to="/chemicals-list" className='footer__item'> <i class="fa-solid fa-flask" /> </Link>
+                <Link to="/equipment-list" className='footer__item'> <i class="fa-solid fa-toolbox" /></Link>
+                <Link to="/chemicals-stock" className='footer__item'> <i class="fa-solid fa-flask-vial" /> </Link>
+                <div className="dropup">
+                    <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-user" />
+                    </button>
+                    <ul className="dropdown-menu">
+                        <Link to="/staff-profile" className='footer__item'> <i class="fa-regular fa-user" /> Profile</Link>
+                        <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                    </ul>
+                </div>
+            </footer>
+        </div>
+    )
+}
+
+export default EquipmentList
