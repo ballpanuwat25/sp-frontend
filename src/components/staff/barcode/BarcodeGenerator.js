@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
 import Barcode from "react-barcode";
 import html2canvas from "html2canvas";
 
