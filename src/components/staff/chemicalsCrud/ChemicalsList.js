@@ -1,8 +1,6 @@
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react'
-import html2canvas from "html2canvas";
-import Barcode from "react-barcode";
 
 import BarcodeScanner from "../barcode/BarcodeScanner";
 
@@ -87,24 +85,6 @@ function ChemicalsList({ logout }) {
         setScannedText(scannedText);
     };
 
-    const downloadBarcode = () => {
-        if (!barcodeRef.current) return;
-
-        html2canvas(barcodeRef.current).then((canvas) => {
-            const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-            const downloadLink = document.createElement("a");
-            downloadLink.href = pngUrl;
-            downloadLink.download = "mybarcode.png";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-        });
-    };
-
-    const handleChange = (event) => {
-        setBarcode(event.target.value);
-    };
-
     const getChemNameById = (chemId) => {
         const chemicalDetail = chemicalsDetail.find((chem) => chem.Chem_Id === chemId);
         return chemicalDetail ? chemicalDetail.Chem_Name : "N/A";
@@ -175,37 +155,7 @@ function ChemicalsList({ logout }) {
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
                             <BarcodeScanner onScannedTextChange={handleScannedTextChange} />
-                            <button className="btn btn-outline-success me-3" type="button" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#exampleModalToggle2"><i class="fa-solid fa-barcode"></i></button>
-                            <div className="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabIndex="-1">
-                                <div className="modal-dialog modal-dialog-centered">
-                                    <div className="modal-content">
-                                        <div className="modal-header">
-                                            <h5 className="modal-title" id="exampleModalToggleLabel2">Barcode Generator</h5>
-                                            <button className="btn btn-outline-secondary" type="button" data-bs-target="#exampleModal" data-bs-toggle="modal" data-bs-dismiss="modal">Barcode Scanner</button>
-                                        </div>
-                                        <div className="modal-body">
-                                            <input
-                                                type="text"
-                                                onChange={handleChange}
-                                                value={barcode}
-                                                placeholder="Barcode content"
-                                                className="form-control mb-3"
-                                            />
-                                            <div ref={barcodeRef} className="d-flex justify-content-center align-items-center" >
-                                                {barcode.trim() !== "" ? <Barcode value={barcode} background="#ffffff" /> : <p>No barcode preview</p>}
-                                            </div>
-                                        </div>
-                                        <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            {barcode && (
-                                                <button className="btn btn-success" onClick={downloadBarcode} data-bs-dismiss="modal">
-                                                    Download Barcode
-                                                </button>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <Link to="/barcode-generator" className="btn btn-outline-success me-3"><i class="fa-solid fa-barcode"></i></Link>
                             
                             <i class='fa-solid fa-magnifying-glass' />
                             <input
