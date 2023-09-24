@@ -8,7 +8,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function ChemicalsDetailList() {
+function ChemicalsDetailList({ logout }) {
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
     useEffect(() => {
@@ -67,10 +67,33 @@ function ChemicalsDetailList() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };
 
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredChemicalsDetail, setFilteredChemicalsDetail] = useState([]);
+
+    const handleSearch = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+    
+        const filteredChemicalsDetail = chemicalsDetail.filter((chemicalDetail) => {
+            const lowerCaseQuery = query.toLowerCase();
+            return (
+                chemicalDetail.Chem_Id.toLowerCase().includes(lowerCaseQuery) ||
+                chemicalDetail.Chem_Name.toLowerCase().includes(lowerCaseQuery)
+            );
+        });
+    
+        setFilteredChemicalsDetail(filteredChemicalsDetail);
+    }
+    
+    useEffect(() => {
+        setFilteredChemicalsDetail(chemicalsDetail);
+    }, [chemicalsDetail]);
+    
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
@@ -101,8 +124,8 @@ function ChemicalsDetailList() {
                                 type="text"
                                 className="component__search"
                                 placeholder="ค้นหาด้วยรหัสสารเคมี"
-                                value=""
-                                onChange=""
+                                value={searchQuery}
+                                onChange={handleSearch}
                             />
                         </div>
 
@@ -137,7 +160,7 @@ function ChemicalsDetailList() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {chemicalsDetail.map((chemicalsDetail, index) => (
+                                {filteredChemicalsDetail.map((chemicalsDetail, index) => (
                                     <tr key={index} className="active-row">
                                         <td> {index + 1} </td>
                                         <td> {chemicalsDetail.Chem_Id} </td>

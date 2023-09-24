@@ -117,9 +117,10 @@ function LogActivity() {
                                     <td> {formatDate(logActivity.createdAt)} </td>
                                     <td> {formatDate(logActivity.updatedAt)} </td>
                                     <td>
-                                        <div className="d-grid gap-2 d-sm-flex">
-                                            <button onClick={() => deleteLogActivity(logActivity.LogActivity_Id)} className="btn btn-danger">Delete</button>
-                                        </div>
+                                        <button onClick={() => deleteLogActivity(logActivity.LogActivity_Id)} className="delete--btn btn-danger">
+                                            <i class="fa-solid fa-trash" />
+                                            ลบ
+                                        </button>
                                     </td>
                                 </tr>
                             ))}

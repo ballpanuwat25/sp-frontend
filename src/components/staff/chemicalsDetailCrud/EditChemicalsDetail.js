@@ -8,7 +8,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function EditChemicalsDetail() {
+function EditChemicalsDetail({ logout }) {
     const [Chem_Id, setChem_Id] = useState("");
     const [Chem_Name, setChem_Name] = useState("");
     const [Chem_CAS, setChem_CAS] = useState("");
@@ -93,6 +93,7 @@ function EditChemicalsDetail() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };

@@ -10,7 +10,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function AddChemicals() {
+function AddChemicals({ logout }) {
     const [staffId, setStaffId] = useState("");
     const [logActivity, setLogActivity] = useState({
         LogActivity_Id: "",
@@ -112,6 +112,7 @@ function AddChemicals() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };

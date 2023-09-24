@@ -109,7 +109,7 @@ function ChemicalsBundleList({ logout }) {
                     <div className='sidebar__body'>
                         <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className="ms-1">Request</div></Link>
                         <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>
-                        <Link to="/teacher-dashboard/teacher-create-bundle" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
                         <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
@@ -136,7 +136,7 @@ function ChemicalsBundleList({ logout }) {
                         </div>
                     </div>
 
-                    <div >
+                    <div>
                         <div className='table__tabs'>
                             <Link className='table__tab table__tab--chemicals table__tab--active'>รายการสารเคมี</Link>
                             <Link to="/teacher-dashboard/equipment-bundle-list" className='table__tab table__tab--equipment table__tab--unactive'>รายการครุภัณฑ์</Link>
@@ -181,7 +181,7 @@ function ChemicalsBundleList({ logout }) {
                 <footer className='footer'>
                     <Link to="/teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
                     <Link to="/teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
-                    <Link to="/teacher-dashboard/teacher-create-bundle" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="/teacher-dashboard/bundle-list" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-user" />

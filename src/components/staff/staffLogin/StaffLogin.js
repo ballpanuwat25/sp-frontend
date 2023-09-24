@@ -9,12 +9,54 @@ function StaffLogin({ login }) {
         Staff_Username: "",
         Staff_Password: "",
     });
-
+    const [usernameError, setUsernameError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
+    const usernameExists = async (username) => {
+        try {
+            const response = await axios.get("http://localhost:3001/staff-list");
+            const staffList = response.data;
+            const staff = staffList.find((staff) => staff.Staff_Username === username);
+
+            if (staff) {
+                setUsernameError(""); // Username exists, clear error
+            } else {
+                setUsernameError("Username does not exist");
+            }
+        } catch (error) {
+            console.error("Axios Error:", error);
+        }
+    };
+
+    const passwordInCorrect = async (password) => {
+        try {
+            const response = await axios.get("http://localhost:3001/staff-list");
+            const staffList = response.data;
+            const staff = staffList.find((staff) => staff.Staff_Password === password);
+
+            if (staff) {
+                setPasswordError(""); // Password is correct, clear error
+            } else {
+                setPasswordError("Password is incorrect");
+            }
+        } catch (error) {
+            console.error("Axios Error:", error);
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (usernameError) {
+            alert(usernameError);
+            return;
+        } else if (passwordError) {
+            alert(passwordError);
+            return;
+        }
+
         axios.post("http://localhost:3001/staff-login", values)
             .then((response) => {
                 console.log(response);
@@ -41,6 +83,7 @@ function StaffLogin({ login }) {
                         <input
                             type="text"
                             required
+                            onBlur={(e) => usernameExists(e.target.value)} // Check on blur
                             onChange={(e) => setValues({ ...values, Staff_Username: e.target.value })}
                         />
                         <span>Username</span>
@@ -50,6 +93,7 @@ function StaffLogin({ login }) {
                         <input
                             type="password"
                             required
+                            onBlur={(e) => passwordInCorrect(e.target.value)} // Check on blur
                             onChange={(e) => setValues({ ...values, Staff_Password: e.target.value })}
                         />
                         <span>Password</span>

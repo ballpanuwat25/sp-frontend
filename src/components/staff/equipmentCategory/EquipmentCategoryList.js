@@ -8,8 +8,10 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function EquipmentListCategory() {
+function EquipmentListCategory({ logout }) {
     const [equipmentCategory, setEquipmentCategory] = useState([]);
+    const [searchQuery, setSearchQuery] = useState(""); // State for search query
+    const [filteredEquipmentCategory, setFilteredEquipmentCategory] = useState([]); // State for filtered equipment categories
 
     useEffect(() => {
         getEquipmentCategory();
@@ -18,6 +20,7 @@ function EquipmentListCategory() {
     const getEquipmentCategory = async () => {
         const response = await axios.get("http://localhost:3001/equipmentCategory-list");
         setEquipmentCategory(response.data);
+        setFilteredEquipmentCategory(response.data); // Initialize filtered equipment categories with all categories
     }
 
     const deleteEquipmentCategory = async (id) => {
@@ -63,9 +66,27 @@ function EquipmentListCategory() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };
+
+    // Function to handle search input changes and filter equipment categories
+    const handleSearch = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        // Use the query to filter equipment categories based on Equipment_Category_Id or any other property
+        const filteredCategories = equipmentCategory.filter((category) => {
+            return (
+                category.Equipment_Category_Id.toLowerCase().includes(query.toLowerCase()) ||
+                category.Equipment_Category_Name.toLowerCase().includes(query.toLowerCase())
+                // Add more conditions as needed for other properties
+            );
+        });
+
+        setFilteredEquipmentCategory(filteredCategories);
+    }
 
     return (
         <div className='container-fluid vh-100'>
@@ -96,9 +117,9 @@ function EquipmentListCategory() {
                             <input
                                 type="text"
                                 className="component__search"
-                                placeholder="ค้นหาด้วยรหัสหมวดหมู่ครุภัณฑ์"
-                                value=""
-                                onChange=""
+                                placeholder="ค้นหาด้วยรหัสหรือชื่อหมวดหมู่ครุภัณฑ์"
+                                value={searchQuery} // Bind input value to searchQuery state
+                                onChange={handleSearch} // Call handleSearch when input changes
                             />
                         </div>
 
@@ -126,7 +147,7 @@ function EquipmentListCategory() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {equipmentCategory.map((equipmentCategory, index) => (
+                                {filteredEquipmentCategory.map((equipmentCategory, index) => (
                                     <tr key={index} className="active-row">
                                         <td> {index + 1} </td>
                                         <td> {equipmentCategory.Equipment_Category_Id} </td>

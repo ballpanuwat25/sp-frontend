@@ -1,23 +1,66 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import '../../cssElement/Form.css'
+import '../../cssElement/Form.css';
 
 function TeacherLogin({ login }) {
     const [values, setValues] = useState({
         Teacher_Username: "",
         Teacher_Password: "",
     });
-
+    const [usernameError, setUsernameError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
+    const usernameExists = async (username) => {
+        try {
+            const response = await axios.get("http://localhost:3001/teacher-list");
+            const teacherList = response.data;
+            const teacher = teacherList.find((teacher) => teacher.Teacher_Username === username);
+            
+            if (teacher) {
+                setUsernameError(""); // Username exists, clear error
+            } else {
+                setUsernameError("Username does not exist");
+            }
+        } catch (error) {
+            console.error("Axios Error:", error);
+        }
+    };
+
+    const passwordInCorrect = async (password) => {
+        try {
+            const response = await axios.get("http://localhost:3001/teacher-list");
+            const teacherList = response.data;
+            const teacher = teacherList.find((teacher) => teacher.Teacher_Password === password);
+
+            if (teacher) {
+                setPasswordError(""); // Password is correct, clear error
+            } else {
+                setPasswordError("Password is incorrect");
+            }
+        } catch (error) {
+            console.error("Axios Error:", error);
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        
+        // Check if the username exists before proceeding with login
+        if (usernameError) {
+            alert(usernameError);
+            return;
+        } else if (passwordError) {
+            alert(passwordError);
+            return;
+        }
+
         axios.post("http://localhost:3001/teacher-login", values)
             .then((response) => {
-                console.log(response);
+                console.log(response.data.Error);
                 if (response.data.Error) {
                     alert(response.data.Error);
                 } else {
@@ -41,15 +84,17 @@ function TeacherLogin({ login }) {
                         <input
                             type="text"
                             required
+                            onBlur={(e) => usernameExists(e.target.value)} // Check on blur
                             onChange={(e) => setValues({ ...values, Teacher_Username: e.target.value })}
                         />
                         <span>Username</span>
                     </div>
-
+                    
                     <div className='form__inputBox form__inputBox--password'>
                         <input
                             type="password"
                             required
+                            onBlur={(e) => passwordInCorrect(e.target.value)} // Check on blur
                             onChange={(e) => setValues({ ...values, Teacher_Password: e.target.value })}
                         />
                         <span>Password</span>
@@ -62,7 +107,7 @@ function TeacherLogin({ login }) {
                 </form>
             </main>
         </div>
-    )
+    );
 }
 
-export default TeacherLogin
+export default TeacherLogin;

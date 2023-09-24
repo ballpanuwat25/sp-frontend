@@ -8,7 +8,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function EditEquipmentCategory() {
+function EditEquipmentCategory({ logout }) {
     const [Equipment_Category_Id, setEquipment_Category_Id] = useState("");
     const [Equipment_Category_Name, setEquipment_Category_Name] = useState("");
 
@@ -73,6 +73,7 @@ function EditEquipmentCategory() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };

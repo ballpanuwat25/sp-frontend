@@ -10,7 +10,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function StaffChemicalsRequest() {
+function StaffChemicalsRequest({ logout }) {
     const [Chem_Request_Id, setChem_Request_Id] = useState("");
     const [Chem_Id, setChem_Id] = useState("");
     const [Chem_Bottle_Id, setChem_Bottle_Id] = useState("");
@@ -206,6 +206,7 @@ function StaffChemicalsRequest() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };

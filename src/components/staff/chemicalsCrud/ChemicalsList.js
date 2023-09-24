@@ -12,7 +12,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function ChemicalsList() {
+function ChemicalsList({ logout }) {
     const [chemicals, setChemicals] = useState([]);
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
@@ -144,6 +144,7 @@ function ChemicalsList() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };

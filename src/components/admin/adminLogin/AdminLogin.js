@@ -9,12 +9,34 @@ function AdminLogin({ login }) {
         Admin_Username: "",
         Admin_Password: "",
     });
-
+    const [usernameError, setUsernameError] = useState("");
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
+    const usernameExists = async (username) => {
+        try {
+            const response = await axios.get("http://localhost:3001/admin-list");
+            const adminList = response.data;
+            const admin = adminList.find((admin) => admin.Admin_Username === username);
+
+            if (admin) {
+                setUsernameError(""); // Username exists, clear error
+            } else {
+                setUsernameError("Username does not exist");
+            }
+        } catch (error) {
+            console.error("Axios Error:", error);
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (usernameError) {
+            alert(usernameError);
+            return;
+        }
+
         axios.post("http://localhost:3001/admin-login", values)
             .then((response) => {
                 console.log(response);
@@ -41,6 +63,7 @@ function AdminLogin({ login }) {
                         <input
                             type="text"
                             required
+                            onBlur={(e) => usernameExists(e.target.value)} // Check on blur
                             onChange={(e) => setValues({ ...values, Admin_Username: e.target.value })}
                         />
                         <span>Username</span>

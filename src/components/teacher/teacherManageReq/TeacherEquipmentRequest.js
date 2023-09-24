@@ -187,7 +187,7 @@ function TeacherEquipmentRequest({ logout }) {
                     <div className='sidebar__body'>
                         <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'>Request</div></Link>
                         <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> List</Link>
-                        <Link to="/teacher-dashboard/teacher-create-bundle" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
                         <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
@@ -327,7 +327,7 @@ function TeacherEquipmentRequest({ logout }) {
                 <footer className='footer'>
                     <Link to="/teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
                     <Link to="/teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
-                    <Link to="/teacher-dashboard/teacher-create-bundle" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="/teacher-dashboard/bundle-list" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-user" />

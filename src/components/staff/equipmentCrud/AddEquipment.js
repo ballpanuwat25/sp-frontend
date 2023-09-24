@@ -8,7 +8,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function AddEquipment() {
+function AddEquipment({ logout }) {
     const [staffId, setStaffId] = useState("");
     const [logActivity, setLogActivity] = useState({
         LogActivity_Id: "",
@@ -99,6 +99,7 @@ function AddEquipment() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };

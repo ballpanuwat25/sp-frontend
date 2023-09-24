@@ -8,7 +8,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function EquipmentList() {
+function EquipmentList({ logout }) {
     const [staffId, setStaffId] = useState("");
     const [logActivity, setLogActivity] = useState({
         LogActivity_Id: "",
@@ -18,6 +18,8 @@ function EquipmentList() {
     });
 
     const [equipment, setEquipment] = useState([]);
+    const [searchQuery, setSearchQuery] = useState(""); // State for search query
+    const [filteredEquipment, setFilteredEquipment] = useState([]); // State for filtered equipment
 
     axios.defaults.withCredentials = true;
 
@@ -44,6 +46,7 @@ function EquipmentList() {
         try {
             const response = await axios.get("http://localhost:3001/equipment-list");
             setEquipment(response.data);
+            setFilteredEquipment(response.data); // Initialize filtered equipment with all equipment
         } catch (error) {
             console.log(error);
         }
@@ -94,9 +97,27 @@ function EquipmentList() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };
+
+    // Function to handle search input changes and filter equipment
+    const handleSearch = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        // Use the query to filter equipment based on Equipment_Id, Equipment_Name, or any other property
+        const filteredEquipmentList = equipment.filter((item) => {
+            return (
+                item.Equipment_Id.toLowerCase().includes(query.toLowerCase()) ||
+                item.Equipment_Name.toLowerCase().includes(query.toLowerCase())
+                // Add more conditions as needed for other properties
+            );
+        });
+
+        setFilteredEquipment(filteredEquipmentList);
+    }
 
     return (
         <div className='container-fluid vh-100'>
@@ -128,8 +149,8 @@ function EquipmentList() {
                                 type="text"
                                 className="component__search"
                                 placeholder="ค้นหาด้วยรหัสครุภัณฑ์"
-                                value=""
-                                onChange=""
+                                value={searchQuery} // Bind input value to searchQuery state
+                                onChange={handleSearch} // Call handleSearch when input changes
                             />
                         </div>
 
@@ -162,7 +183,7 @@ function EquipmentList() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {equipment.map((equipment, index) => (
+                                {filteredEquipment.map((equipment, index) => (
                                     <tr key={index} className="active-row">
                                         <td> {index + 1} </td>
                                         <td> {equipment.Equipment_Id} </td>

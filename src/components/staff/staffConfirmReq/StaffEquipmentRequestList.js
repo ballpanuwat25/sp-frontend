@@ -8,7 +8,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function StaffEquipmentRequestList() {
+function StaffEquipmentRequestList({ logout }) {
     const [equipmentReq, setEquipmentReq] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedIds, setSelectedIds] = useState([]);
@@ -107,6 +107,7 @@ function StaffEquipmentRequestList() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };

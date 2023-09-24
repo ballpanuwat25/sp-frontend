@@ -8,7 +8,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function AddChemicalsDetail() {
+function AddChemicalsDetail({ logout }) {
     const [chemicalsDetail, setChemicalsDetail] = useState({
         Chem_Id: "",
         Chem_Name: "",
@@ -76,6 +76,7 @@ function AddChemicalsDetail() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };

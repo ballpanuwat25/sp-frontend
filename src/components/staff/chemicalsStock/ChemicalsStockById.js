@@ -8,14 +8,17 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function ChemicalsStockById() {
+function ChemicalsStockById({ logout }) {
     const [chemicals, setChemicals] = useState([]);
     const { id } = useParams();
+    const [searchQuery, setSearchQuery] = useState(""); // State for search query
+    const [filteredChemicals, setFilteredChemicals] = useState([]); // State for filtered chemicals
 
     const getChemicalsByChemId = async (chemId) => {
         try {
             const response = await axios.get(`http://localhost:3001/chemicals-list/chemid/${chemId}`);
             setChemicals(response.data);
+            setFilteredChemicals(response.data); // Initialize filtered chemicals with all chemicals
         } catch (error) {
             console.log(error);
         }
@@ -59,9 +62,25 @@ function ChemicalsStockById() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };
+
+    const handleSearch = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        // Use the query to filter the chemicals based on Chem_Id or any other property
+        const filteredChemicals = chemicals.filter((chemical) => {
+            return (
+                chemical.Chem_Bottle_Id.toLowerCase().includes(query.toLowerCase())
+                // Add more conditions as needed for other properties
+            );
+        });
+
+        setFilteredChemicals(filteredChemicals);
+    }
 
     return (
         <div className='container-fluid vh-100'>
@@ -93,9 +112,9 @@ function ChemicalsStockById() {
                                 type="text"
                                 id="searchTerm"
                                 className="component__search"
-                                value=""
-                                onChange=""
-                                placeholder="Enter Chem_Name..."
+                                value={searchQuery}
+                                onChange={handleSearch}
+                                placeholder="ค้นหาจากรหัสขวดสารเคมี"
                             />
                         </div>
 
@@ -124,7 +143,7 @@ function ChemicalsStockById() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {chemicals.map((chemical, index) => (
+                                {filteredChemicals.map((chemical, index) => (
                                     <tr key={index} className="active-row">
                                         <td>{index + 1}</td>
                                         <td>{chemical.Chem_Bottle_Id}</td>

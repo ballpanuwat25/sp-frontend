@@ -77,7 +77,7 @@ const StaffList = ({ logout }) => {
         const query = e.target.value;
         setSearchQuery(query);
 
-        const filteredStaffs = staffs.filter((staff) => 
+        const filteredStaffs = staffs.filter((staff) =>
             staff.Staff_Id.toLowerCase().includes(query.toLowerCase()) ||
             staff.Staff_FName.toLowerCase().includes(query.toLowerCase()) ||
             staff.Staff_LName.toLowerCase().includes(query.toLowerCase()) ||

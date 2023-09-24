@@ -8,7 +8,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function EditChemicals() {
+function EditChemicals({ logout }) {
     const [staffId, setStaffId] = useState("");
     const [logActivity, setLogActivity] = useState({
         LogActivity_Id: "",
@@ -114,6 +114,7 @@ function EditChemicals() {
             } else {
                 localStorage.removeItem('staffToken');
                 navigate("/");
+                logout();
             }
         });
     };
@@ -236,9 +237,8 @@ function EditChemicals() {
                         <button type="submit" className="table__tab table__button thai--font">อัพเดต</button>
                     </form>
                 </main>
-            </div>
 
-            <footer className='footer'>
+                <footer className='footer'>
                 <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
                 <Link to="/chemicals-list" className='footer__item'> <i class="fa-solid fa-flask" /> </Link>
                 <Link to="/equipment-list" className='footer__item'> <i class="fa-solid fa-toolbox" /></Link>
@@ -253,6 +253,7 @@ function EditChemicals() {
                     </ul>
                 </div>
             </footer>
+            </div>
         </div>
     )
 }
