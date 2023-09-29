@@ -11,7 +11,6 @@ import logo from '../../assets/logo.png';
 function EditChemicals({ logout }) {
     const [staffId, setStaffId] = useState("");
     const [logActivity, setLogActivity] = useState({
-        LogActivity_Id: "",
         LogActivity_Name: "",
         Chem_Bottle_Id: "",
         Staff_Id: "",

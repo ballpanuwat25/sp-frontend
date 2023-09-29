@@ -60,7 +60,7 @@ function TeacherEquipmentRequest({ logout }) {
 
     const approveEquipmentRequest = async (id) => {
         try {
-            await updateEquipmentRequestStatus(id, "Approved");
+            await updateEquipmentRequestStatus(id, "Approve");
         } catch (err) {
             console.log(err);
         }
@@ -69,7 +69,7 @@ function TeacherEquipmentRequest({ logout }) {
     const declineEquipmentRequest = async () => {
         try {
             if (activeRequestId) {
-                await updateEquipmentRequestStatus(activeRequestId, "Declined", Request_Comment);
+                await updateEquipmentRequestStatus(activeRequestId, "Decline", Request_Comment);
                 setRequest_Comment("");
                 setActiveRequestId(null);
             }
@@ -171,6 +171,10 @@ function TeacherEquipmentRequest({ logout }) {
                 return 'fa-solid fa-circle-xmark';
             case 'Pending':
                 return 'fa-regular fa-clock';
+            case 'Confirmed':
+                return 'fa-solid fa-vial-circle-check';
+            case 'Rejected':
+                return 'fa-solid fa-filter-circle-xmark';
             default:
                 return ''
         }
@@ -272,7 +276,7 @@ function TeacherEquipmentRequest({ logout }) {
                                         <td> {equipmentReq.Student_Id} </td>
                                         <td> {findEquipmentName(equipmentReq.Equipment_Id)} </td>
                                         <td> {equipmentReq.Requested_Quantity} </td>
-                                        <td> {equipmentReq.Request_Status} </td>
+                                        <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> </td>
                                         <td> {equipmentReq.Request_Purpose} </td>
                                         <td> {equipmentReq.Request_Room} </td>
                                         <td>{formatDate(equipmentReq.createdAt)}</td>

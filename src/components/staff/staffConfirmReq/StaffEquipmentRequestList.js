@@ -49,7 +49,7 @@ function StaffEquipmentRequestList({ logout }) {
     const declineEquipmentRequest = async (id, comment) => {
         try {
             const data = {
-                Request_Status: "Declined",
+                Request_Status: "Decline",
                 Request_Comment: comment,
             };
             await axios.patch(`http://localhost:3001/equipment-request-list/${id}`, data);
@@ -120,6 +120,10 @@ function StaffEquipmentRequestList({ logout }) {
                 return 'fa-solid fa-circle-xmark';
             case 'Pending':
                 return 'fa-regular fa-clock';
+            case 'Confirmed':
+                return 'fa-solid fa-vial-circle-check';
+            case 'Rejected':
+                return 'fa-solid fa-filter-circle-xmark';
             default:
                 return ''
         }
@@ -225,7 +229,7 @@ function StaffEquipmentRequestList({ logout }) {
                                         <td> {equipmentReq.Release_Quantity} </td>
                                         <td> {equipmentReq.Staff_Id} </td>
                                         <td> {equipmentReq.Teacher_Id} </td>
-                                        <td> {equipmentReq.Request_Status} </td>
+                                        <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`}/> {equipmentReq.Request_Status} </td>
                                         <td> {equipmentReq.Request_Comment} </td>
                                         <td>{formatDate(equipmentReq.createdAt)}</td>
                                         <td>

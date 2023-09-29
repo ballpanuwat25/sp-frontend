@@ -27,23 +27,13 @@ table tbody tr:nth-of-type(odd) td {
     color: #006C68;
 }
 
-table tbody tr:nth-of-type(even) td div button .fa-circle-plus,
-table tbody tr:nth-of-type(even) td div button {
-    color: #fff;
-}
-
 table tbody tr:nth-of-type(odd) td div button .fa-circle-plus,
 table tbody tr:nth-of-type(odd) td div button {
     color: #006C68;
 }
 
 table tbody tr:nth-of-type(even) {
-    background-color: rgba(56, 164, 161, 0.926);
-}
-
-table tbody tr.active-row {
-    font-weight: bold;
-    color: #fff;
+    background-color: #f2f2f2 !important;
 }
 
 table thead tr th,
@@ -120,14 +110,6 @@ table tbody tr {
     border-color: #006C68;
 }
 
-table tbody tr:nth-of-type(even) td .table__button {
-    color: #fff !important;
-}
-
-table tbody tr:nth-of-type(even) td .table__button::before {
-    background-color: #fff;
-}
-
 .table__button {
     width: fit-content;
     line-height: 2;
@@ -161,11 +143,11 @@ table tbody tr:nth-of-type(even) td div .table__button::before {
 }
 
 table tbody tr:nth-of-type(even) td input {
-    color: #fff;
+    color: #006C68;
 }
 
 table tbody tr:nth-of-type(even) td .table__form--input {
-    border: 2px solid #fff;
+    border: 2px solid #006C68;
 }
 
 .table__form {
@@ -208,6 +190,8 @@ select {
 .fa-circle-check,
 .fa-circle-xmark,
 .fa-clock,
+.fa-vial-circle-check,
+.fa-filter-circle-xmark,
 .fa-square-minus {
     margin-right: 10px;
 }

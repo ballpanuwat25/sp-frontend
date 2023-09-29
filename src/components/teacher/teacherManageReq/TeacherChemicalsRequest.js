@@ -171,6 +171,10 @@ function TeacherChemicalsRequest({ logout }) {
                 return 'fa-solid fa-circle-xmark';
             case 'Pending':
                 return 'fa-regular fa-clock';
+            case 'Confirmed':
+                return 'fa-solid fa-vial-circle-check';
+            case 'Rejected':
+                return 'fa-solid fa-filter-circle-xmark';
             default:
                 return ''
         }

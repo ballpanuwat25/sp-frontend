@@ -65,12 +65,12 @@ function TeacherProfile({ logout }) {
     };
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/admin-logout").then((response) => {
+        axios.get("http://localhost:3001/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 logout();
-                localStorage.removeItem('adminToken');
+                localStorage.removeItem('teacherToken');
                 navigate("/");
             }
         });
@@ -113,6 +113,7 @@ function TeacherProfile({ logout }) {
                                 className='profile__input'
                                 placeholder='username'
                                 defaultValue={teacherInfo.teacherUsername}
+                                onChange={(e) => setValues({ ...values, Teacher_Username: e.target.value })}
                             />
                         </div>
 

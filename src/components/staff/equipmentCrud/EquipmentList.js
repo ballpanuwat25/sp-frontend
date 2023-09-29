@@ -11,7 +11,6 @@ import logo from '../../assets/logo.png';
 function EquipmentList({ logout }) {
     const [staffId, setStaffId] = useState("");
     const [logActivity, setLogActivity] = useState({
-        LogActivity_Id: "",
         LogActivity_Name: "",
         Equipment_Id: "",
         Staff_Id: "",
