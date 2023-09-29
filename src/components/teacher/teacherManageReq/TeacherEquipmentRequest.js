@@ -30,7 +30,7 @@ function TeacherEquipmentRequest({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/teacher", {
+        axios.get("https://special-problem.onrender.com/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -48,7 +48,7 @@ function TeacherEquipmentRequest({ logout }) {
     }, []);
 
     const getEquipmentRequest = async () => {
-        const response = await axios.get("http://localhost:3001/equipment-request-list");
+        const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
         setEquipmentReq(response.data);
     };
 
@@ -84,7 +84,7 @@ function TeacherEquipmentRequest({ logout }) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`http://localhost:3001/equipment-request-list/${id}`, data);
+            await axios.patch(`https://special-problem.onrender.com/equipment-request-list/${id}`, data);
             getEquipmentRequest();
         } catch (err) {
             console.log(err);
@@ -136,7 +136,7 @@ function TeacherEquipmentRequest({ logout }) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/teacher-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -154,7 +154,7 @@ function TeacherEquipmentRequest({ logout }) {
     }, []);
 
     const getEquipmentDetail = async () => {
-        const response = await axios.get("http://localhost:3001/equipment-list");
+        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
         setEquipmentDetail(response.data);
     };
 

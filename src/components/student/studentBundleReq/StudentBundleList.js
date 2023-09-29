@@ -22,7 +22,7 @@ function StudentBundleList() {
     }, [bundleList]);
 
     const getBundleList = async () => {
-        const response = await axios.get("http://localhost:3001/bundle-list");
+        const response = await axios.get("https://special-problem.onrender.com/bundle-list");
         setBundleList(response.data);
     }
 
@@ -97,7 +97,7 @@ function StudentBundleList() {
     const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/student", {
+        axios.get("https://special-problem.onrender.com/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -111,7 +111,7 @@ function StudentBundleList() {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/student-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -131,7 +131,7 @@ function StudentBundleList() {
     }, []);
 
     const getTeachers = async () => {
-        const response = await axios.get("http://localhost:3001/teacher-list");
+        const response = await axios.get("https://special-problem.onrender.com/teacher-list");
         setTeachers(response.data);
     };
 

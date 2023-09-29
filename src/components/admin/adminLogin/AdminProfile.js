@@ -24,7 +24,7 @@ function AdminProfile({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/admin", {
+        axios.get("https://special-problem.onrender.com/admin", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
             },
@@ -44,12 +44,12 @@ function AdminProfile({ logout }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/admin-forget-password", values).then((response) => {
+        axios.post("https://special-problem.onrender.com/admin-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("http://localhost:3001/admin-logout").then((response) => {
+                axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {
@@ -63,7 +63,7 @@ function AdminProfile({ logout }) {
     };
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/admin-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

@@ -34,7 +34,7 @@ function AddChemicals({ logout }) {
     const [scannedText, setScannedText] = useState("");
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff", {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -54,15 +54,15 @@ function AddChemicals({ logout }) {
             const { Chem_Bottle_Id } = chemicals;
 
             // Check if Chem_Id already exists
-            const chemBottleIdExists = await axios.get(`http://localhost:3001/chemicals-list/${Chem_Bottle_Id}`);
+            const chemBottleIdExists = await axios.get(`https://special-problem.onrender.com/chemicals-list/${Chem_Bottle_Id}`);
             if (chemBottleIdExists.data) {
                 alert("Chem_Id already exists. Please enter a different Chem_Bottle_Id.");
                 return;
             }
 
             const updatedLogActivity = { ...logActivity, LogActivity_Name: "Add Chemicals", Chem_Bottle_Id: Chem_Bottle_Id };
-            await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
-            await axios.post("http://localhost:3001/chemicals-list", chemicals);
+            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
+            await axios.post("https://special-problem.onrender.com/chemicals-list", chemicals);
 
             alert("Chemicals added successfully");
             navigate("/chemicals-list");
@@ -91,7 +91,7 @@ function AddChemicals({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff", {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -105,7 +105,7 @@ function AddChemicals({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/staff-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

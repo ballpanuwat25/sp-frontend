@@ -30,7 +30,7 @@ function ChemicalsBundleList({ logout }) {
     const [selectedChemicalsId, setSelectedChemicalsId] = useState(null);
 
     useEffect(() => {
-        axios.get("http://localhost:3001/teacher").then((response) => {
+        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -50,7 +50,7 @@ function ChemicalsBundleList({ logout }) {
     }, [chemicalsDetail]);
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
+        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
         setChemicalsDetail(response.data);
     }
 
@@ -87,7 +87,7 @@ function ChemicalsBundleList({ logout }) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/teacher-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

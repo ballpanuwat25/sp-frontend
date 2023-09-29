@@ -53,7 +53,7 @@ function TeacherBundleCart({ logout }) {
                     Request_Room: bundleRoom, // Use bundleRoom for all items
                     Teacher_Id: item.Teacher_Id,
                 };
-                await axios.post("http://localhost:3001/bundle-list", requestData);
+                await axios.post("https://special-problem.onrender.com/bundle-list", requestData);
             }
 
             localStorage.removeItem('bundleCart');
@@ -85,7 +85,7 @@ function TeacherBundleCart({ logout }) {
     });
 
     useEffect(() => {
-        axios.get("http://localhost:3001/teacher", {
+        axios.get("https://special-problem.onrender.com/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -101,7 +101,7 @@ function TeacherBundleCart({ logout }) {
     axios.defaults.withCredentials = true;
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/teacher-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

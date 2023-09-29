@@ -15,7 +15,7 @@ function AdminRegister() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:3001/admin-register", values).then((response) => {
+    axios.post("https://special-problem.onrender.com/admin-register", values).then((response) => {
       if (response.data.Error) {
         alert(response.data.Error);
       } else {

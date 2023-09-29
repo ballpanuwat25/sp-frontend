@@ -18,14 +18,14 @@ function EquipmentListCategory({ logout }) {
     }, []);
 
     const getEquipmentCategory = async () => {
-        const response = await axios.get("http://localhost:3001/equipmentCategory-list");
+        const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
         setEquipmentCategory(response.data);
         setFilteredEquipmentCategory(response.data); // Initialize filtered equipment categories with all categories
     }
 
     const deleteEquipmentCategory = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/equipmentCategory-list/${id}`)
+            await axios.delete(`https://special-problem.onrender.com/equipmentCategory-list/${id}`)
             getEquipmentCategory();
         } catch (error) {
             console.log(error)
@@ -46,7 +46,7 @@ function EquipmentListCategory({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff", {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -60,7 +60,7 @@ function EquipmentListCategory({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/staff-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

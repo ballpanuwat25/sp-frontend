@@ -19,7 +19,7 @@ function StaffEquipmentRequestList({ logout }) {
     }, [searchQuery]);
 
     const getEquipmentRequest = async () => {
-        const response = await axios.get("http://localhost:3001/equipment-request-list");
+        const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
         setEquipmentReq(response.data);
     };
 
@@ -52,7 +52,7 @@ function StaffEquipmentRequestList({ logout }) {
                 Request_Status: "Decline",
                 Request_Comment: comment,
             };
-            await axios.patch(`http://localhost:3001/equipment-request-list/${id}`, data);
+            await axios.patch(`https://special-problem.onrender.com/equipment-request-list/${id}`, data);
         } catch (error) {
             console.log(error);
         }
@@ -60,7 +60,7 @@ function StaffEquipmentRequestList({ logout }) {
 
     const deleteEquipmentRequest = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/equipment-request-list/${id}`)
+            await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`)
             getEquipmentRequest();
         } catch (error) {
             console.log(error)
@@ -87,7 +87,7 @@ function StaffEquipmentRequestList({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff", {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -101,7 +101,7 @@ function StaffEquipmentRequestList({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/staff-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

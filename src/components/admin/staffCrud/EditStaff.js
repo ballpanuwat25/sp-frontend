@@ -22,7 +22,7 @@ function EditStaff({ logout }) {
     }, [])
 
     const getStaffsById = async () => {
-        const response = await axios.get(`http://localhost:3001/staff-list/${id}`);
+        const response = await axios.get(`https://special-problem.onrender.com/staff-list/${id}`);
         const staff = response.data;
         setStaff_FName(staff.Staff_FName);
         setStaff_LName(staff.Staff_LName);
@@ -33,7 +33,7 @@ function EditStaff({ logout }) {
 
     const updateStaff = async (e) => {
         e.preventDefault();
-        const response = await axios.patch(`http://localhost:3001/staff-list/${id}`, {
+        const response = await axios.patch(`https://special-problem.onrender.com/staff-list/${id}`, {
             Staff_FName,
             Staff_LName,
             Staff_Username,
@@ -59,7 +59,7 @@ function EditStaff({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/admin", {
+        axios.get("https://special-problem.onrender.com/admin", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
             },
@@ -77,7 +77,7 @@ function EditStaff({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/admin-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

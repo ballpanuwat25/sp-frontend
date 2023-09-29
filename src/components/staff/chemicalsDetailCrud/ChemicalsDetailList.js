@@ -17,7 +17,7 @@ function ChemicalsDetailList({ logout }) {
 
     const getChemicalsDetail = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
+            const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
             setChemicalsDetail(response.data); // Make sure response.data is an array
         } catch (error) {
             console.log(error);
@@ -26,7 +26,7 @@ function ChemicalsDetailList({ logout }) {
 
     const deleteChemicalsDetail = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/chemicalsDetail-list/${id}`)
+            await axios.delete(`https://special-problem.onrender.com/chemicalsDetail-list/${id}`)
             getChemicalsDetail();
         } catch (error) {
             console.log(error)
@@ -47,7 +47,7 @@ function ChemicalsDetailList({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff", {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -61,7 +61,7 @@ function ChemicalsDetailList({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/staff-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

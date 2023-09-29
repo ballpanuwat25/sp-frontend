@@ -30,7 +30,7 @@ function TeacherDashboard({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/teacher", {
+        axios.get("https://special-problem.onrender.com/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -48,7 +48,7 @@ function TeacherDashboard({ logout }) {
     }, []);
 
     const getChemicalsRequest = async () => {
-        const response = await axios.get("http://localhost:3001/chemicals-request-list");
+        const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
         setChemicalsReq(response.data);
     };
 
@@ -84,7 +84,7 @@ function TeacherDashboard({ logout }) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`http://localhost:3001/chemicals-request-list/${id}`, data);
+            await axios.patch(`https://special-problem.onrender.com/chemicals-request-list/${id}`, data);
             getChemicalsRequest(); // Refresh the chemicals request list after updating status
         } catch (error) {
             console.log(error);
@@ -136,7 +136,7 @@ function TeacherDashboard({ logout }) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/teacher-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -154,7 +154,7 @@ function TeacherDashboard({ logout }) {
     }, []);
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
+        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
         setChemicalsDetail(response.data);
     };
 

@@ -16,7 +16,7 @@ const StudentViewTeacher = () => {
     }, []);
 
     const getTeachers = async () => {
-        const response = await axios.get("http://localhost:3001/teacher-list");
+        const response = await axios.get("https://special-problem.onrender.com/teacher-list");
         setTeachers(response.data);
     };
 
@@ -34,7 +34,7 @@ const StudentViewTeacher = () => {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/student", {
+        axios.get("https://special-problem.onrender.com/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -51,7 +51,7 @@ const StudentViewTeacher = () => {
     const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/student-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

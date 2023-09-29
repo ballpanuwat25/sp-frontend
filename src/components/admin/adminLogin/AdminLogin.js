@@ -15,7 +15,7 @@ function AdminLogin({ login }) {
 
     const usernameExists = async (username) => {
         try {
-            const response = await axios.get("http://localhost:3001/admin-list");
+            const response = await axios.get("https://special-problem.onrender.com/admin-list");
             const adminList = response.data;
             const admin = adminList.find((admin) => admin.Admin_Username === username);
 
@@ -37,7 +37,7 @@ function AdminLogin({ login }) {
             return;
         }
 
-        axios.post("http://localhost:3001/admin-login", values)
+        axios.post("https://special-problem.onrender.com/admin-login", values)
             .then((response) => {
                 console.log(response);
                 if (response.data.Error) {

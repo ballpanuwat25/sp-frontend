@@ -16,7 +16,7 @@ function StaffLogin({ login }) {
 
     const usernameExists = async (username) => {
         try {
-            const response = await axios.get("http://localhost:3001/staff-list");
+            const response = await axios.get("https://special-problem.onrender.com/staff-list");
             const staffList = response.data;
             const staff = staffList.find((staff) => staff.Staff_Username === username);
 
@@ -32,7 +32,7 @@ function StaffLogin({ login }) {
 
     const passwordInCorrect = async (password) => {
         try {
-            const response = await axios.get("http://localhost:3001/staff-list");
+            const response = await axios.get("https://special-problem.onrender.com/staff-list");
             const staffList = response.data;
             const staff = staffList.find((staff) => staff.Staff_Password === password);
 
@@ -57,7 +57,7 @@ function StaffLogin({ login }) {
             return;
         }
 
-        axios.post("http://localhost:3001/staff-login", values)
+        axios.post("https://special-problem.onrender.com/staff-login", values)
             .then((response) => {
                 console.log(response);
                 if (response.data.Error) {

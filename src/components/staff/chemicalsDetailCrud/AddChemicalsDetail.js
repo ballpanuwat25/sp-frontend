@@ -29,13 +29,13 @@ function AddChemicalsDetail({ logout }) {
             const { Chem_Id } = chemicalsDetail;
 
             // Check if Chem_Id already exists
-            const chemIdExists = await axios.get(`http://localhost:3001/chemicalsDetail-list/${Chem_Id}`);
+            const chemIdExists = await axios.get(`https://special-problem.onrender.com/chemicalsDetail-list/${Chem_Id}`);
             if (chemIdExists.data) {
                 alert("Chem_Id already exists. Please enter a different Chem_Id.");
                 return;
             }
 
-            await axios.post("http://localhost:3001/chemicalsDetail-list", chemicalsDetail);
+            await axios.post("https://special-problem.onrender.com/chemicalsDetail-list", chemicalsDetail);
 
             alert("Chemicals added successfully");
             navigate("/chemicalsDetail-list");
@@ -56,7 +56,7 @@ function AddChemicalsDetail({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff", {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -70,7 +70,7 @@ function AddChemicalsDetail({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/staff-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

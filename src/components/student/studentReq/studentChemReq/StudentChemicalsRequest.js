@@ -42,7 +42,7 @@ function StudentChemicalsRequest() {
     }, [chemicalsReq]);
 
     useEffect(() => {
-        axios.get("http://localhost:3001/student", {
+        axios.get("https://special-problem.onrender.com/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -57,7 +57,7 @@ function StudentChemicalsRequest() {
     }, []);
 
     const getChemicalsRequest = async () => {
-        const response = await axios.get("http://localhost:3001/chemicals-request-list");
+        const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
         setChemicalsReq(response.data);
     };
 
@@ -65,7 +65,7 @@ function StudentChemicalsRequest() {
     const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/student-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

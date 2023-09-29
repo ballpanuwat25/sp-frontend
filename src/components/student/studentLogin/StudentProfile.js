@@ -26,7 +26,7 @@ function StudentProfile() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/student", {
+        axios.get("https://special-problem.onrender.com/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -46,12 +46,12 @@ function StudentProfile() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:3001/student-forget-password", values).then((response) => {
+        axios.post("https://special-problem.onrender.com/student-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
                 alert("Password changed successfully");
-                axios.get("http://localhost:3001/student-logout").then((response) => {
+                axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {
@@ -67,7 +67,7 @@ function StudentProfile() {
     const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/student-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

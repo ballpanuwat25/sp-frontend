@@ -31,7 +31,7 @@ function EditEquipment({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff", {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -51,7 +51,7 @@ function EditEquipment({ logout }) {
     }, [])
 
     const getEquipmentById = async () => {
-        const response = await axios.get(`http://localhost:3001/equipment-list/${id}`);
+        const response = await axios.get(`https://special-problem.onrender.com/equipment-list/${id}`);
         const equipment = response.data;
         setEquipment_Id(equipment.Equipment_Id);
         setEquipment_Category_Id(equipment.Equipment_Category_Id);
@@ -68,7 +68,7 @@ function EditEquipment({ logout }) {
         e.preventDefault();
         const updatedFixedCost = initialFixedCost + parseFloat(Fixed_Cost);
 
-        const response = await axios.patch(`http://localhost:3001/equipment-list/${id}`, {
+        const response = await axios.patch(`https://special-problem.onrender.com/equipment-list/${id}`, {
             Equipment_Id,
             Equipment_Category_Id,
             Equipment_Name,
@@ -79,7 +79,7 @@ function EditEquipment({ logout }) {
         });
 
         const updatedLogActivity = { ...logActivity, LogActivity_Name: "Update Equipment", Equipment_Id: Equipment_Id };
-        await axios.post("http://localhost:3001/log-activity", updatedLogActivity);
+        await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
 
         if (response.data.Error) {
             alert(response.data.Error);
@@ -100,7 +100,7 @@ function EditEquipment({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff", {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -114,7 +114,7 @@ function EditEquipment({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/staff-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

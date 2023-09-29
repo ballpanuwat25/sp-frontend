@@ -23,7 +23,7 @@ function EditTeacher({ logout }) {
     }, [])
 
     const getTeachersById = async () => {
-        const response = await axios.get(`http://localhost:3001/teacher-list/${id}`);
+        const response = await axios.get(`https://special-problem.onrender.com/teacher-list/${id}`);
         const teacher = response.data;
         setTeacher_FName(teacher.Teacher_FName);
         setTeacher_LName(teacher.Teacher_LName);
@@ -34,7 +34,7 @@ function EditTeacher({ logout }) {
 
     const updateTeacher = async (e) => {
         e.preventDefault();
-        const response = await axios.patch(`http://localhost:3001/teacher-list/${id}`, {
+        const response = await axios.patch(`https://special-problem.onrender.com/teacher-list/${id}`, {
             Teacher_FName,
             Teacher_LName,
             Teacher_Username,
@@ -60,7 +60,7 @@ function EditTeacher({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/admin", {
+        axios.get("https://special-problem.onrender.com/admin", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
             },
@@ -78,7 +78,7 @@ function EditTeacher({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/admin-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

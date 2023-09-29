@@ -39,7 +39,7 @@ function StaffEquipmentRequest({ logout }) {
 
     const getStaffId = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/staff", {
+            const response = await axios.get("https://special-problem.onrender.com/staff", {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
                 },
@@ -56,14 +56,14 @@ function StaffEquipmentRequest({ logout }) {
     };
 
     const getEquipmentById = async () => {
-        const response = await axios.get(`http://localhost:3001/equipment-list/${Equipment_Id}`);
+        const response = await axios.get(`https://special-problem.onrender.com/equipment-list/${Equipment_Id}`);
         const equipment = response.data;
         setEquipment_Id(equipment.Equipment_Id);
         setQuantity(equipment.Quantity);
     }
 
     const getEquipmentRequestById = async () => {
-        const result = await axios.get(`http://localhost:3001/equipment-request-list/${id}`);
+        const result = await axios.get(`https://special-problem.onrender.com/equipment-request-list/${id}`);
         setEquipment_Request_Id(result.data.Equipment_Request_Id);
         setEquipment_Id(result.data.Equipment_Id);
         setRequested_Quantity(result.data.Requested_Quantity);
@@ -91,7 +91,7 @@ function StaffEquipmentRequest({ logout }) {
         const newQuantity = Quantity - Release_Quantity;
 
         try {
-            const equipmentListResponse = await axios.patch(`http://localhost:3001/equipment-list/${Equipment_Id}`, {
+            const equipmentListResponse = await axios.patch(`https://special-problem.onrender.com/equipment-list/${Equipment_Id}`, {
                 Quantity: newQuantity
             });
 
@@ -107,7 +107,7 @@ function StaffEquipmentRequest({ logout }) {
                     Request_Status,
                     Request_Comment
                 };
-                const equipmentRequestResponse = await axios.patch(`http://localhost:3001/equipment-request-list/${id}`, requestData);
+                const equipmentRequestResponse = await axios.patch(`https://special-problem.onrender.com/equipment-request-list/${id}`, requestData);
 
                 if (equipmentRequestResponse.data.Error) {
                     alert(equipmentRequestResponse.data.Error);
@@ -137,7 +137,7 @@ function StaffEquipmentRequest({ logout }) {
     const handleQuery = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:3001/equipment-list/${Equipment_Id}`
+                `https://special-problem.onrender.com/equipment-list/${Equipment_Id}`
             );
             const equipment = response.data;
 
@@ -164,7 +164,7 @@ function StaffEquipmentRequest({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff", {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -178,7 +178,7 @@ function StaffEquipmentRequest({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/staff-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

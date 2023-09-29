@@ -21,12 +21,12 @@ function BarcodeList({ logout }) {
     }, []);
 
     const getChemicals = async () => {
-        const response = await axios.get("http://localhost:3001/chemicals-list");
+        const response = await axios.get("https://special-problem.onrender.com/chemicals-list");
         setChemicals(response.data);
     }
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("http://localhost:3001/chemicalsDetail-list");
+        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
         setChemicalsDetail(response.data);
     }
 
@@ -56,7 +56,7 @@ function BarcodeList({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/staff", {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -70,7 +70,7 @@ function BarcodeList({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/staff-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

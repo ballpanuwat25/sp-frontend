@@ -22,7 +22,7 @@ function AdminDashboard({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/admin", {
+        axios.get("https://special-problem.onrender.com/admin", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
             },
@@ -40,7 +40,7 @@ function AdminDashboard({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/admin-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

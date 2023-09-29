@@ -16,7 +16,7 @@ function TeacherLogin({ login }) {
 
     const usernameExists = async (username) => {
         try {
-            const response = await axios.get("http://localhost:3001/teacher-list");
+            const response = await axios.get("https://special-problem.onrender.com/teacher-list");
             const teacherList = response.data;
             const teacher = teacherList.find((teacher) => teacher.Teacher_Username === username);
             
@@ -32,7 +32,7 @@ function TeacherLogin({ login }) {
 
     const passwordInCorrect = async (password) => {
         try {
-            const response = await axios.get("http://localhost:3001/teacher-list");
+            const response = await axios.get("https://special-problem.onrender.com/teacher-list");
             const teacherList = response.data;
             const teacher = teacherList.find((teacher) => teacher.Teacher_Password === password);
 
@@ -58,7 +58,7 @@ function TeacherLogin({ login }) {
             return;
         }
 
-        axios.post("http://localhost:3001/teacher-login", values)
+        axios.post("https://special-problem.onrender.com/teacher-login", values)
             .then((response) => {
                 console.log(response.data.Error);
                 if (response.data.Error) {

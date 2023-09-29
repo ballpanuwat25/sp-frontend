@@ -21,7 +21,7 @@ function AddStaff({ logout }) {
     const saveStaff = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:3001/staff-list", (staff));
+            await axios.post("https://special-problem.onrender.com/staff-list", (staff));
             navigate("/staff-list");
         } catch (err) {
             console.log(err);
@@ -40,7 +40,7 @@ function AddStaff({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("http://localhost:3001/admin", {
+        axios.get("https://special-problem.onrender.com/admin", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
             },
@@ -58,7 +58,7 @@ function AddStaff({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/admin-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

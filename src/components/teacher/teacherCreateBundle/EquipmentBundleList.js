@@ -30,7 +30,7 @@ function EquipmentBundleList({ logout }) {
     const [selectedEquipmentId, setSelectedEquipmentId] = useState(null);
 
     useEffect(() => {
-        axios.get("http://localhost:3001/teacher", {
+        axios.get("https://special-problem.onrender.com/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -54,7 +54,7 @@ function EquipmentBundleList({ logout }) {
     }, [equipment]);
 
     const getEquipment = async () => {
-        const response = await axios.get("http://localhost:3001/equipment-list");
+        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
         setEquipment(response.data);
     }
 
@@ -91,7 +91,7 @@ function EquipmentBundleList({ logout }) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        axios.get("http://localhost:3001/teacher-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

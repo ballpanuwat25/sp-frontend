@@ -16,7 +16,7 @@ function StaffRegister() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:3001/staff-register", values).then((response) => {
+    axios.post("https://special-problem.onrender.com/staff-register", values).then((response) => {
       if (response.data.Error) {
         alert(response.data.Error);
       } else {
