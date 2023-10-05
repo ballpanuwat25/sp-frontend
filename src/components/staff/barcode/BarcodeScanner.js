@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Quagga from "quagga";
 import "./styles.css";
+import '../../cssElement/Table.css'
 
 const BarcodeScanner = ({ onScannedTextChange }) => {
   const scannerRef = useRef(null);
@@ -158,7 +159,7 @@ const BarcodeScanner = ({ onScannedTextChange }) => {
             </div>
             <div className="modal-body">
               <div className="scanner" ref={scannerRef}></div>
-              <button onClick={handleScanButtonClick}>
+              <button className="btn edit--btn" onClick={handleScanButtonClick}>
                 {scanning ? "Stop Scan" : "Start Scan"}
               </button>
               <p>Scanned Text: {scannedText}</p>
