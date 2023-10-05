@@ -132,7 +132,7 @@ const BarcodeScanner = ({ onScannedTextChange }) => {
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
-        <i class="fa-solid fa-expand"></i>
+        <i className="fa-solid fa-expand"></i>
       </button>
 
       <div

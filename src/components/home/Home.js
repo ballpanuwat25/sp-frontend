@@ -16,7 +16,7 @@ function Home() {
                     <div className='home__container home__container--left'>
                         <div className='home__text'>
                             <p className='home__highlight'>Kasetsart University</p>
-                            <h1 className='home__title'>Elevate Projects with  <br /> <i class="fa-solid fa-globe" /> Essential Materials</h1>
+                            <h1 className='home__title'>Elevate Projects with  <br /> <i className="fa-solid fa-globe" /> Essential Materials</h1>
                             <p className='home__subtitle'>  Empowering Tomorrow's Innovators Seamlessly bridge the gap between student ingenuity and academic resources through our Chemical Disbursement System. Your graduation project, your convenience, our commitment.</p>
                             <button className='home__cta'>Get Started</button>
                             <button className='home__cta home__cta--faq'><span className='faq__highlight'>Frequently asked questions</span></button>

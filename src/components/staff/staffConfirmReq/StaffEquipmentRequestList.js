@@ -139,22 +139,22 @@ function StaffEquipmentRequestList({ logout }) {
                     </div>
 
                     <div className='sidebar__body'>
-                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
-                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask" /> Chemicals</Link>
-                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-toolbox" />Equipment</Link>
-                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask-vial" /> Stock</Link>
-                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-user" /> Profile</Link>
+                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
+                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
+                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
+                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
                     <div className='sidebar__footer'>
-                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </div>
                 </aside>
 
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
-                            <i class='fa-solid fa-magnifying-glass' />
+                            <i className='fa-solid fa-magnifying-glass' />
                             <input
                                 type="text"
                                 className="component__search"
@@ -165,7 +165,7 @@ function StaffEquipmentRequestList({ logout }) {
                         </div>
 
                         <div className='component__headerGroup component__headerGroup--right'>
-                            <i class="fa-solid fa-circle-user" />
+                            <i className="fa-solid fa-circle-user" />
                             <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
                         </div>
                     </div>
@@ -236,7 +236,7 @@ function StaffEquipmentRequestList({ logout }) {
                                             <div className="d-grid gap-2 d-sm-flex">
                                                 <Link to={`/staff-dashboard/staff-equipment-request/${equipmentReq.Equipment_Request_Id}`} className='disable--link thai--font'>
                                                     <div className="table__button">
-                                                        <i class="fa-solid fa-eye"></i>
+                                                        <i className="fa-solid fa-eye"></i>
                                                         ดูรายละเอียด
                                                     </div>
                                                 </Link>
@@ -250,17 +250,17 @@ function StaffEquipmentRequestList({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
-                    <Link to="/chemicals-list" className='footer__item'> <i class="fa-solid fa-flask" /> </Link>
-                    <Link to="/equipment-list" className='footer__item'> <i class="fa-solid fa-toolbox" /></Link>
-                    <Link to="/chemicals-stock" className='footer__item'> <i class="fa-solid fa-flask-vial" /> </Link>
+                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
+                    <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
+                    <Link to="/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-user" />
+                            <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='footer__item'> <i class="fa-regular fa-user" /> Profile</Link>
-                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>
                 </footer>

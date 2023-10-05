@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
 import { saveAs } from 'file-saver';
 import ExcelJS from 'exceljs'; // Import exceljs library
 import { Link, useNavigate } from 'react-router-dom';
@@ -210,22 +208,22 @@ function ChemicalsStockList({ logout }) {
                     </div>
 
                     <div className='sidebar__body'>
-                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask" /> Chemicals</Link>
-                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-toolbox" />Equipment</Link>
-                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask-vial" /> <div className='sidebar__item--active'> Stock</div></Link>
-                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-user" /> Profile</Link>
+                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
+                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
+                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> <div className='sidebar__item--active'> Stock</div></Link>
+                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
                     <div className='sidebar__footer'>
-                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </div>
                 </aside>
 
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
-                            <i class='fa-solid fa-magnifying-glass' />
+                            <i className='fa-solid fa-magnifying-glass' />
                             <input
                                 type="text"
                                 id="searchTerm"
@@ -237,7 +235,7 @@ function ChemicalsStockList({ logout }) {
                         </div>
 
                         <div className='component__headerGroup component__headerGroup--right'>
-                            <i class="fa-solid fa-circle-user" />
+                            <i className="fa-solid fa-circle-user" />
                             <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
                         </div>
                     </div>
@@ -245,12 +243,12 @@ function ChemicalsStockList({ logout }) {
                     <div className="mb-3 d-flex justify-content-between align-items-center">
                         <div>
                             <button className="edit--btn me-2" onClick={exportToExcel}>
-                                <i class="fa-solid fa-file-excel me-2"></i>
+                                <i className="fa-solid fa-file-excel me-2"></i>
                                 Export to Excel
                             </button>
 
                             <button className="delete--btn btn-danger" onClick={generatePDF}>
-                                <i class="fa-solid fa-file-pdf me-2"></i>
+                                <i className="fa-solid fa-file-pdf me-2"></i>
                                 Export to PDF
                             </button>
                         </div>
@@ -301,17 +299,17 @@ function ChemicalsStockList({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
-                    <Link to="/chemicals-list" className='footer__item'> <i class="fa-solid fa-flask" /> </Link>
-                    <Link to="/equipment-list" className='footer__item'> <i class="fa-solid fa-toolbox" /></Link>
-                    <Link to="/chemicals-stock" className='footer__item'> <i class="fa-solid fa-flask-vial" /> </Link>
+                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
+                    <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
+                    <Link to="/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-user" />
+                            <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='footer__item'> <i class="fa-regular fa-user" /> Profile</Link>
-                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>
                 </footer>

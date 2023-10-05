@@ -91,15 +91,15 @@ function BarcodeList({ logout }) {
                     </div>
 
                     <div className='sidebar__body'>
-                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask" /> <div className='sidebar__item--active'> Chemicals</div></Link>
-                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-toolbox" />Equipment</Link>
-                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask-vial" /> Stock</Link>
-                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-user" /> Profile</Link>
+                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
+                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Chemicals</div></Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
+                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
+                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
                     <div className='sidebar__footer'>
-                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </div>
                 </aside>
 
@@ -107,13 +107,13 @@ function BarcodeList({ logout }) {
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
                             <button className="delete--btn btn-danger" onClick={generatePDF}>
-                                <i class="fa-solid fa-file-pdf me-2"></i>
+                                <i className="fa-solid fa-file-pdf me-2"></i>
                                 Export to PDF
                             </button>
                         </div>
 
                         <div className='component__headerGroup component__headerGroup--right'>
-                            <i class="fa-solid fa-circle-user" />
+                            <i className="fa-solid fa-circle-user" />
                             <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
                         </div>
                     </div>

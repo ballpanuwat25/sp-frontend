@@ -1,8 +1,11 @@
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react'
+import { useReactToPrint } from "react-to-print";
 
-import BarcodeScanner from "../barcode/BarcodeScanner";
+import { saveAs } from 'file-saver';
+import ExcelJS from 'exceljs'; // Import exceljs library
+
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
@@ -10,16 +13,13 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function ChemicalsList({ logout }) {
+function ReportChemicals({ logout }) {
     const [chemicals, setChemicals] = useState([]);
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredChemicals, setFilteredChemicals] = useState([]);
     const [scannedText, setScannedText] = useState("");
-
-    const [barcode, setBarcode] = useState("Barcode Content");
-    const barcodeRef = useRef(null);
 
     const [staffId, setStaffId] = useState("");
     const [logActivity, setLogActivity] = useState({
@@ -60,17 +60,6 @@ function ChemicalsList({ logout }) {
         setChemicalsDetail(response.data);
     }
 
-    const deleteChemicals = async (id) => {
-        try {
-            const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Chemicals", Chem_Bottle_Id: id, Staff_Id: staffId };
-            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
-            await axios.delete(`https://special-problem.onrender.com/chemicals-list/${id}`)
-            getChemicals();
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     const handleSearchInputChange = (e) => {
         const query = e.target.value;
         setSearchQuery(query);
@@ -78,10 +67,6 @@ function ChemicalsList({ logout }) {
             chemical.Chem_Bottle_Id.toLowerCase().includes(query.toLowerCase())
         );
         setFilteredChemicals(filteredChemicals);
-    };
-
-    const handleScannedTextChange = (scannedText) => {
-        setScannedText(scannedText);
     };
 
     const getChemNameById = (chemId) => {
@@ -128,6 +113,42 @@ function ChemicalsList({ logout }) {
         });
     };
 
+    const exportToExcel = () => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('ChemicalsStock');
+
+        // Add headers to the worksheet
+        const headers = ['ลำดับ', 'รหัสขวด', 'ชื่อสาร', 'ขนาดบรรจุ', 'ปริมาณคงเหลือ', 'หน่วยนับ', 'สถานที่เก็บ', 'ราคา'];
+        worksheet.addRow(headers);
+
+        // Add data rows to the worksheet
+        chemicals.forEach((chemical, index) => {
+            worksheet.addRow([
+                index + 1,
+                chemical.Chem_Bottle_Id,
+                getChemNameById(chemical.Chem_Id),
+                chemical.Package_Size,
+                chemical.Remaining_Quantity,
+                chemical.Counting_Unit,
+                chemical.Location,
+                chemical.Price,
+            ]);
+        });
+
+        // Save the workbook to a Blob
+        workbook.xlsx.writeBuffer().then(buffer => {
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(blob, 'chemicals_stock.xlsx');
+        });
+    };
+
+    const conponentPDF = useRef();
+
+    const generatePDF = useReactToPrint({
+        content: () => conponentPDF.current,
+        documentTitle: "Chemicals Stock",
+    });
+
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
@@ -153,9 +174,6 @@ function ChemicalsList({ logout }) {
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
-                            <BarcodeScanner onScannedTextChange={handleScannedTextChange} />
-                            <Link to="/barcode-generator" className="btn btn-outline-success me-3"><i className="fa-solid fa-barcode"></i></Link>
-                            
                             <i className='fa-solid fa-magnifying-glass' />
                             <input
                                 type="text"
@@ -173,51 +191,42 @@ function ChemicalsList({ logout }) {
                     </div>
 
                     <div>
-                        <div className='table__tabs'>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>ขวดสารเคมี</Link>
-                            <Link to="/chemicalsDetail-list" className='table__tab table__tab--equipment table__tab--unactive'>สารเคมี</Link>
-                            <Link to="/report-chemicals" className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
-                        </div>
+                        <button className="edit--btn me-2" onClick={exportToExcel}>
+                            <i className="fa-solid fa-file-excel me-2"></i>
+                            Export to Excel
+                        </button>
 
-                        <table className="table table-striped">
+                        <button className="delete--btn btn-danger" onClick={generatePDF}>
+                            <i className="fa-solid fa-file-pdf me-2"></i>
+                            Export to PDF
+                        </button>
+                    </div>
+
+                    <div className="mt-3" ref={conponentPDF} style={{ width: '100%' }}>
+                        <table className="table table-export table-striped" id="stock-table">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">รหัสขวด</th>
-                                    <th scope="col">ชื่อสารเคมี</th>
-                                    <th scope="col">ขนาดบรรจุ</th>
-                                    <th scope="col">ปริมาณคงเหลือ</th>
-                                    <th scope="col">หน่วยนับ</th>
-                                    <th scope="col">สถานที่เก็บ</th>
-                                    <th scope="col">ราคา</th>
-                                    <th scope="col">
-                                        <Link to={`add-chemicals`} className="buttonTab-btn thai--font disable--link"><i className="fa-solid fa-square-plus me-2" /> เพิ่มขวดสารเคมี</Link>
-                                    </th>
+                                    <th className="table-header" scope="col">#</th>
+                                    <th className="table-header" scope="col">รหัสขวด</th>
+                                    <th className="table-header" scope="col">ชื่อสารเคมี</th>
+                                    <th className="table-header" scope="col">ขนาดบรรจุ</th>
+                                    <th className="table-header" scope="col">ปริมาณคงเหลือ</th>
+                                    <th className="table-header" scope="col">หน่วยนับ</th>
+                                    <th className="table-header" scope="col">สถานที่เก็บ</th>
+                                    <th className="table-header" scope="col">ราคา</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {(searchQuery ? filteredChemicals : chemicals).map((chemicals, index) => (
                                     <tr key={index} className="active-row">
-                                        <td> {index + 1} </td>
-                                        <td> {chemicals.Chem_Bottle_Id} </td>
-                                        <td> {getChemNameById(chemicals.Chem_Id)} </td>
-                                        <td> {chemicals.Package_Size} </td>
-                                        <td> {chemicals.Remaining_Quantity} </td>
-                                        <td> {chemicals.Counting_Unit} </td>
-                                        <td> {chemicals.Location} </td>
-                                        <td> {chemicals.Price} </td>
-                                        <td>
-                                            <div className="d-grid gap-2 d-sm-flex">
-                                                <Link to={`edit-chemicals/${chemicals.Chem_Bottle_Id}`} className="edit--btn">
-                                                    <i className="fa-solid fa-pen-to-square" />
-                                                    แก้ไข
-                                                </Link>
-                                                <button onClick={() => deleteChemicals(chemicals.Chem_Bottle_Id)} className="delete--btn btn-danger">
-                                                    <i className="fa-solid fa-trash" />
-                                                    ลบ
-                                                </button>
-                                            </div>
-                                        </td>
+                                        <td className="table-data"> {index + 1} </td>
+                                        <td className="table-data"> {chemicals.Chem_Bottle_Id} </td>
+                                        <td className="table-data"> {getChemNameById(chemicals.Chem_Id)} </td>
+                                        <td className="table-data"> {chemicals.Package_Size} </td>
+                                        <td className="table-data"> {chemicals.Remaining_Quantity} </td>
+                                        <td className="table-data"> {chemicals.Counting_Unit} </td>
+                                        <td className="table-data"> {chemicals.Location} </td>
+                                        <td className="table-data"> {chemicals.Price} </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -245,4 +254,4 @@ function ChemicalsList({ logout }) {
     )
 }
 
-export default ChemicalsList;
+export default ReportChemicals;

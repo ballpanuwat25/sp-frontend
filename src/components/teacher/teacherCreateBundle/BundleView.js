@@ -46,13 +46,17 @@ function BundleView({ logout }) {
     });
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setTeacherInfo(response.data);
-            }
-        });
+        axios.get("https://special-problem.onrender.com/teacher", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
+            },
+        }).then((response) => {
+                if (response.data.Error) {
+                    alert(response.data.Error);
+                } else {
+                    setTeacherInfo(response.data);
+                }
+            });
     }, []);
 
     axios.defaults.withCredentials = true;
@@ -79,13 +83,13 @@ function BundleView({ logout }) {
                         <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className="ms-1">Request</div></Link>
-                        <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> List</Link>
-                        <Link to="/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> <div className='sidebar__item--active'>Bundle</div></Link>
-                        <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className="ms-1">Request</div></Link>
+                        <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
+                        <Link to="/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> <div className='sidebar__item--active'>Bundle</div></Link>
+                        <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
-                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </div>
                 </aside>
                 <main className='dashboard__content'>
@@ -100,7 +104,7 @@ function BundleView({ logout }) {
                                 </div>
 
                                 <div className='component__headerGroup component__headerGroup--right'>
-                                    <i class="fa-solid fa-circle-user" />
+                                    <i className="fa-solid fa-circle-user" />
                                     <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
                                 </div>
                             </div>

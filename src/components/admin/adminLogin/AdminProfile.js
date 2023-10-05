@@ -83,12 +83,12 @@ function AdminProfile({ logout }) {
                         <div className='sidebar__title admin__name'>Welcome, {adminInfo.adminUsername}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> Log Activity</Link>
-                        <Link to="/staff-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-users" /> Users</Link>
-                        <Link to="/admin-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> <div className='sidebar__item--active'>Profile</div></Link>
+                        <Link to="/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
+                        <Link to="/staff-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
+                        <Link to="/admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> <div className='sidebar__item--active'>Profile</div></Link>
                     </div>
                     <div className='sidebar__footer'>
-                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </div>
                 </aside>
 
@@ -97,7 +97,7 @@ function AdminProfile({ logout }) {
                         <div className='component__headerGroup component__headerGroup--left' />
 
                         <div className='component__headerGroup component__headerGroup--right'>
-                            <i class="fa-solid fa-circle-user" />
+                            <i className="fa-solid fa-circle-user" />
                             <div className='username--text thai--font'>{adminInfo.adminUsername}</div>
                         </div>
                     </div>
@@ -129,15 +129,15 @@ function AdminProfile({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/admin-dashboard" className='footer__item'> <i class="fa-solid fa-list" /></Link>
-                    <Link to="/staff-list" className='footer__item'> <i class="fa-solid fa-users" /></Link>
+                    <Link to="/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to="/staff-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-user" />
+                            <i className="fa-solid fa-user" />
                         </button>
                         <ul class="dropdown-menu">
-                            <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
-                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                            <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>
                 </footer>

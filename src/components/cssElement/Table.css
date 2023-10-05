@@ -232,29 +232,47 @@ select {
 .table-export {
     overflow: visible !important;
 }
+
 /* Style table headers */
 .table-header {
     background-color: #f2f2f2 !important;
     color: #006C68;
     font-weight: bold;
     border-bottom: 2px solid #cccccc80 !important;
-    padding: 8px; /* Adjust the padding as needed */
-    text-align: center; /* Center align the text in headers */
-  }
-  
-  /* Style table data cells */
-  .table-data {
+    padding: 8px;
+    /* Adjust the padding as needed */
+    text-align: center;
+    /* Center align the text in headers */
+}
+
+/* Style table data cells */
+.table-data {
     border-bottom: 1px solid #ccc;
-    padding: 8px; /* Adjust the padding as needed */
-    text-align: center; /* Center align the text in cells */
-  }
-  
-  /* Style the table rows with alternating background colors */
-  .active-row {
+    padding: 8px;
+    /* Adjust the padding as needed */
+    text-align: center;
+    /* Center align the text in cells */
+}
+
+/* Style the table rows with alternating background colors */
+.active-row {
     background-color: #f2f2f2 !important;
     color: #006C68 !important;
     font-weight: 500 !important;
-  }
-  
-  /* Additional styles for specific elements can be added here */
-  
+}
+
+.floating-button {
+    position: fixed;
+    bottom: 40px;
+    right: 50px;
+}
+
+.text-success {
+    color: #006C68 !important;
+}
+
+@media screen and (max-width: 875px) {
+    .floating-button {
+        bottom: 120px;
+    }
+}

@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
@@ -8,18 +8,38 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function EditTeacher({ logout }) {
-    const [Teacher_FName, setTeacher_FName] = useState("");
-    const [Teacher_LName, setTeacher_LName] = useState("");
-    const [Teacher_Username, setTeacher_Username] = useState("");
-    const [Teacher_Password, setTeacher_Password] = useState("");
-    const [Teacher_Tel, setTeacher_Tel] = useState("");
+function TeacherEditProfile({ logout }) {
+    const [teacherInfo, setTeacherInfo] = useState({
+        teacherId: "",
+        teacherFirstName: "",
+        teacherLastName: "",
+        teacherUsername: "",
+        teacherPassword: "",
+    });
 
-    const { id } = useParams();
+    const navigate = useNavigate();
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        axios.get("https://special-problem.onrender.com/teacher", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Teacher Request Error:", response.data.Error);
+                } else {
+                    setTeacherInfo(response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Teacher Request Failed:", error);
+            });
+    }, []);
 
     useEffect(() => {
         getTeachersById()
-        // eslint-disable-next-line
     }, [])
 
     const getTeachersById = async () => {
@@ -32,7 +52,27 @@ function EditTeacher({ logout }) {
         setTeacher_Tel(teacher.Teacher_Tel);
     };
 
-    const updateTeacher = async (e) => {
+    const handleLogout = () => {
+        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                logout();
+                localStorage.removeItem('teacherToken');
+                navigate("/");
+            }
+        });
+    };
+
+    const [Teacher_FName, setTeacher_FName] = useState("");
+    const [Teacher_LName, setTeacher_LName] = useState("");
+    const [Teacher_Username, setTeacher_Username] = useState("");
+    const [Teacher_Password, setTeacher_Password] = useState("");
+    const [Teacher_Tel, setTeacher_Tel] = useState("");
+
+    const { id } = useParams();
+
+    const updateTeacherInfo = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.patch(`https://special-problem.onrender.com/teacher-list/${id}`, {
@@ -44,76 +84,32 @@ function EditTeacher({ logout }) {
             });
 
             if (response.status === 200) {
-                // Teacher Updated successfully, navigate to teacher list
-                navigate("/teacher-list");
+                handleLogout();
             } else {
-                // Handle other possible responses
                 console.log("Unexpected response:", response);
             }
         } catch (err) {
             if (err.response && err.response.status === 400) {
-                // Username already exists, display an error message
                 alert("Username already exists");
             } else {
-                // Handle other possible errors
                 console.log("Error:", err);
             }
         }
     };
 
-    const [adminInfo, setAdminInfo] = useState({
-        adminName: "",
-        adminUsername: "",
-        adminPassword: "",
-        adminTel: "",
-    });
-
-    const navigate = useNavigate();
-
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
-        axios.get("https://special-problem.onrender.com/admin", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-            },
-        })
-            .then((response) => {
-                if (response.data.Error) {
-                    console.error("Admin Request Error:", response.data.Error);
-                } else {
-                    setAdminInfo(response.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Admin Request Failed:", error);
-            });
-    }, []);
-
-    const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                logout();
-                localStorage.removeItem('adminToken');
-                navigate("/");
-            }
-        });
-    };
-
-    return (
-        <div className='container-fluid vh-100'>
+  return (
+    <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
-                <aside className='sidebar'>
+            <aside className='sidebar'>
                     <div className='sidebar__header'>
                         <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
-                        <div className='sidebar__title admin__name'>Welcome, {adminInfo.adminUsername}</div>
+                        <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
-                        <Link to="/staff-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
-                        <Link to="/admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className="ms-1">Request</div></Link>
+                        <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
+                        <Link to="/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> <div className='sidebar__item--active'>Profile</div></Link>
                     </div>
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
@@ -126,15 +122,15 @@ function EditTeacher({ logout }) {
 
                         <div className='component__headerGroup component__headerGroup--right'>
                             <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{adminInfo.adminUsername}</div>
+                            <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
                         </div>
                     </div>
 
-                    <form onSubmit={updateTeacher}>
+                    <form onSubmit={updateTeacherInfo}>
                         <div className='profile__form'>
                             <div className="mb-3">
                                 <label htmlFor="Teacher_FName" className='profile__label'>ชื่อจริง</label>
-                                <input type="text" className='profile__input' id="Teacher_FName" placeholder="Enter Teacher First Name" required
+                                <input type="text" className='profile__input' id="Teacher_FName" placeholder="Enter Teacher First Name"
                                     value={Teacher_FName}
                                     onChange={(e) => {
                                         setTeacher_FName(e.target.value);
@@ -144,7 +140,7 @@ function EditTeacher({ logout }) {
 
                             <div className="mb-3">
                                 <label htmlFor="Teacher_LName" className='profile__label'>นามสกุล</label>
-                                <input type="text" className='profile__input' id="Teacher_LName" placeholder="Enter Teacher Last Name" required
+                                <input type="text" className='profile__input' id="Teacher_LName" placeholder="Enter Teacher Last Name"
                                     value={Teacher_LName}
                                     onChange={(e) => {
                                         setTeacher_LName(e.target.value);
@@ -154,7 +150,7 @@ function EditTeacher({ logout }) {
 
                             <div className="mb-3">
                                 <label htmlFor="Teacher_Username" className='profile__label'>Username</label>
-                                <input type="text" className='profile__input' id="Teacher_Username" placeholder="Enter Teacher Username" required
+                                <input type="text" className='profile__input' id="Teacher_Username" placeholder="Enter Teacher Username"
                                     value={Teacher_Username}
                                     onChange={(e) => {
                                         setTeacher_Username(e.target.value);
@@ -174,7 +170,7 @@ function EditTeacher({ logout }) {
 
                             <div className="mb-3">
                                 <label htmlFor="Teacher_Tel" className='profile__label'>Tel</label>
-                                <input type="text" className='profile__input' id="Teacher_Tel" placeholder="Enter Teacher Tel" required
+                                <input type="text" className='profile__input' id="Teacher_Tel" placeholder="Enter Teacher Tel"
                                     value={Teacher_Tel}
                                     onChange={(e) => {
                                         setTeacher_Tel(e.target.value);
@@ -189,7 +185,7 @@ function EditTeacher({ logout }) {
 
                 <footer className='footer'>
                     <Link to="/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                    <Link to="/staff-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
+                    <Link to="/teacher-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
@@ -202,7 +198,7 @@ function EditTeacher({ logout }) {
                 </footer>
             </div>
         </div>
-    )
+  )
 }
 
-export default EditTeacher
+export default TeacherEditProfile

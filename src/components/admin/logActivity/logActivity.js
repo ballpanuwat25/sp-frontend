@@ -65,7 +65,7 @@ function LogActivity() {
             <main>
                 <div className='component__header'>
                     <div className='component__headerGroup component__headerGroup--left'>
-                        <i class='fa-solid fa-magnifying-glass'></i>
+                        <i className='fa-solid fa-magnifying-glass'></i>
                         <input
                             type="search"
                             className='component__search'
@@ -118,7 +118,7 @@ function LogActivity() {
                                     <td> {formatDate(logActivity.updatedAt)} </td>
                                     <td>
                                         <button onClick={() => deleteLogActivity(logActivity.LogActivity_Id)} className="delete--btn btn-danger">
-                                            <i class="fa-solid fa-trash" />
+                                            <i className="fa-solid fa-trash" />
                                             ลบ
                                         </button>
                                     </td>

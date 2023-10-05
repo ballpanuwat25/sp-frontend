@@ -2,12 +2,16 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Alert from '../../Alert';
 
 import '../../cssElement/Form.css'
 
 function StudentGoogleLogin() {
     const navigate = useNavigate();
     const [user, setUser] = useState({});
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
 
     async function handleCallbackResponse(response) {
         var userObject = jwt_decode(response.credential);
@@ -19,32 +23,37 @@ function StudentGoogleLogin() {
             const apiUrl = 'https://special-problem.onrender.com/student-list';
             const response = await axios.get(apiUrl);
             const students = response.data;
-    
+
             const emailExists = students.some(student => student.Student_Email === userObject.email);
-    
+
             if (emailExists) {
                 // Find the student object that matches the email
                 const matchingStudent = students.find(student => student.Student_Email === userObject.email);
                 console.log('Matching student:', matchingStudent);
-    
+
                 // Make the POST request with email and password
                 const postResponse = await axios.post("https://special-problem.onrender.com/student-login", {
                     Student_Email: matchingStudent.Student_Email,
                     Student_Password: matchingStudent.Student_Password
                 });
-    
+
                 if (postResponse.data.Error) {
                     console.log('Error:', postResponse.data.Error);
                 } else {
+                    const token = postResponse.data.token;
+                    localStorage.setItem("studentToken", token);
                     console.log('Login success');
                     navigate("/student-dashboard");
                 }
             } else {
-                console.log('Email does not exist');
+                setAlertMessage('Email does not exist');
+                setShowAlert(true);
                 navigate('/student-google-register');
             }
         } catch (error) {
             console.error('Error checking email:', error);
+            setAlertMessage('Error checking email');
+            setShowAlert(true);
         }
     }
 
@@ -70,7 +79,16 @@ function StudentGoogleLogin() {
     }, []);
 
     return (
-        <div id="signInDiv"></div>
+        <div>
+            <div id="signInDiv"></div>
+
+            {showAlert && (
+                <Alert
+                    message={alertMessage}
+                    onClose={() => setShowAlert(false)}
+                />
+            )}
+        </div>
     );
 }
 

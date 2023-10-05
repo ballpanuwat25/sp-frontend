@@ -21,12 +21,25 @@ function AddTeacher({ logout }) {
     const saveTeacher = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("https://special-problem.onrender.com/teacher-list", (teacher));
-            navigate("/teacher-list");
+            const response = await axios.post("https://special-problem.onrender.com/teacher-list", teacher);
+    
+            if (response.status === 201) {
+                // Teacher Created successfully, navigate to teacher list
+                navigate("/teacher-list");
+            } else {
+                // Handle other possible responses
+                console.log("Unexpected response:", response);
+            }
         } catch (err) {
-            console.log(err);
+            if (err.response && err.response.status === 400) {
+                // Username already exists, display an error message
+                alert("Username already exists");
+            } else {
+                // Handle other possible errors
+                console.log("Error:", err);
+            }
         }
-    };
+    };    
 
     const [adminInfo, setAdminInfo] = useState({
         adminName: "",
@@ -78,12 +91,12 @@ function AddTeacher({ logout }) {
                         <div className='sidebar__title admin__name'>Welcome, {adminInfo.adminUsername}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> Log Activity</Link>
-                        <Link to="/staff-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
-                        <Link to="/admin-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                        <Link to="/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
+                        <Link to="/staff-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
+                        <Link to="/admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
-                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </div>
                 </aside>
 
@@ -92,7 +105,7 @@ function AddTeacher({ logout }) {
                         <div className='component__headerGroup component__headerGroup--left' />
 
                         <div className='component__headerGroup component__headerGroup--right'>
-                            <i class="fa-solid fa-circle-user" />
+                            <i className="fa-solid fa-circle-user" />
                             <div className='username--text thai--font'>{adminInfo.adminUsername}</div>
                         </div>
                     </div>
@@ -159,15 +172,15 @@ function AddTeacher({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/admin-dashboard" className='footer__item'> <i class="fa-solid fa-list" /></Link>
-                    <Link to="/staff-list" className='footer__item'> <i class="fa-solid fa-users" /></Link>
+                    <Link to="/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to="/staff-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-user" />
+                            <i className="fa-solid fa-user" />
                         </button>
                         <ul class="dropdown-menu">
-                            <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
-                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                            <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>
                 </footer>

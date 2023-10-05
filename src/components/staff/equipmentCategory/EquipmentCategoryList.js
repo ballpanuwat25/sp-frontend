@@ -98,22 +98,22 @@ function EquipmentListCategory({ logout }) {
                     </div>
 
                     <div className='sidebar__body'>
-                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask" /> Chemicals</Link>
-                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-toolbox" /><div className='sidebar__item--active'> Equipment</div></Link>
-                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-flask-vial" /> Stock</Link>
-                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-user" /> Profile</Link>
+                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
+                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" /><div className='sidebar__item--active'> Equipment</div></Link>
+                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
+                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
                     <div className='sidebar__footer'>
-                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </div>
                 </aside>
 
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
-                            <i class='fa-solid fa-magnifying-glass' />
+                            <i className='fa-solid fa-magnifying-glass' />
                             <input
                                 type="text"
                                 className="component__search"
@@ -124,7 +124,7 @@ function EquipmentListCategory({ logout }) {
                         </div>
 
                         <div className='component__headerGroup component__headerGroup--right'>
-                            <i class="fa-solid fa-circle-user" />
+                            <i className="fa-solid fa-circle-user" />
                             <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
                         </div>
                     </div>
@@ -133,6 +133,7 @@ function EquipmentListCategory({ logout }) {
                         <div className='table__tabs'>
                             <Link to="/equipment-list" className='table__tab table__tab--chemicals table__tab--unactive'>ครุภัณฑ์</Link>
                             <Link className='table__tab table__tab--equipment table__tab--active'>หมวดหมู่ครุภัณฑ์</Link>
+                            <Link to="/report-equipment"className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
                         </div>
 
                         <table className="table table-striped">
@@ -142,7 +143,7 @@ function EquipmentListCategory({ logout }) {
                                     <th scope="col">รหัสหมวดหมู่ครุภัณฑ์</th>
                                     <th scope="col">หมวดหมู่ครุภัณฑ์</th>
                                     <th scope="col">
-                                        <Link to={`add-equipmentCategory`} className="buttonTab-btn thai--font disable--link"><i class="fa-solid fa-square-plus me-2" /> เพิ่มหมวดหมู่ครุภัณฑ์</Link>
+                                        <Link to={`add-equipmentCategory`} className="buttonTab-btn thai--font disable--link"><i className="fa-solid fa-square-plus me-2" /> เพิ่มหมวดหมู่ครุภัณฑ์</Link>
                                     </th>
                                 </tr>
                             </thead>
@@ -155,11 +156,11 @@ function EquipmentListCategory({ logout }) {
                                         <td>
                                             <div className="d-grid gap-2 d-sm-flex">
                                                 <Link to={`edit-equipmentCategory/${equipmentCategory.Equipment_Category_Id}`} className="edit--btn">
-                                                    <i class="fa-solid fa-pen-to-square" />
+                                                    <i className="fa-solid fa-pen-to-square" />
                                                     แก้ไข
                                                 </Link>
                                                 <button className="delete--btn btn-danger" type="button" onClick={() => deleteEquipmentCategory(equipmentCategory.Equipment_Category_Id)}>
-                                                    <i class="fa-solid fa-trash" />
+                                                    <i className="fa-solid fa-trash" />
                                                     ลบ
                                                 </button>
                                             </div>
@@ -172,17 +173,17 @@ function EquipmentListCategory({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
-                    <Link to="/chemicals-list" className='footer__item'> <i class="fa-solid fa-flask" /> </Link>
-                    <Link to="/equipment-list" className='footer__item'> <i class="fa-solid fa-toolbox" /></Link>
-                    <Link to="/chemicals-stock" className='footer__item'> <i class="fa-solid fa-flask-vial" /> </Link>
+                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
+                    <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
+                    <Link to="/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-user" />
+                            <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='footer__item'> <i class="fa-regular fa-user" /> Profile</Link>
-                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>
                 </footer>

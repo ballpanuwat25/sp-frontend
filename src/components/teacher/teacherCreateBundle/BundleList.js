@@ -9,7 +9,14 @@ import '../../cssElement/Dashboard.css'
 import logo from '../../assets/logo.png';
 
 function BundleList({ logout }) {
-    const [teacherId, setTeacherId] = useState("");
+    const [teacherInfo, setTeacherInfo] = useState({
+        teacherId: "",
+        teacherFirstName: "",
+        teacherLastName: "",
+        teacherUsername: "",
+        teacherPassword: "",
+        teacherTel: "",
+    });
     const [teacherIdSearch, setTeacherIdSearch] = useState("");
 
     const [bundleList, setBundleList] = useState([]);
@@ -36,7 +43,7 @@ function BundleList({ logout }) {
                 if (response.data.Error) {
                     console.error("Teacher Request Error:", response.data.Error);
                 } else {
-                    setTeacherId(response.data.teacherId);
+                    setTeacherInfo(response.data);
                 }
             })
             .catch((error) => {
@@ -129,32 +136,13 @@ function BundleList({ logout }) {
     useEffect(() => {
         const filteredBundleList = bundleList.filter((bundle) => {
             return (
-                bundle.Teacher_Id.toLowerCase().includes(teacherId.toLowerCase()) ||
-                teacherId === ""
+                bundle.Teacher_Id.toLowerCase().includes(teacherInfo.teacherId.toLowerCase()) ||
+                teacherInfo.teacherId === ""
             );
         });
 
         setFilteredBundleList(filteredBundleList);
-    }, [teacherId, bundleList]);
-
-    const [teacherInfo, setTeacherInfo] = useState({
-        teacherId: "",
-        teacherFirstName: "",
-        teacherLastName: "",
-        teacherUsername: "",
-        teacherPassword: "",
-        teacherTel: "",
-    });
-
-    useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setTeacherInfo(response.data);
-            }
-        });
-    }, []);
+    }, [teacherInfo.teacherId, bundleList]);
 
     axios.defaults.withCredentials = true;
     const navigate = useNavigate();
@@ -180,20 +168,20 @@ function BundleList({ logout }) {
                         <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className="ms-1">Request</div></Link>
-                        <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> List</Link>
-                        <Link to="/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> <div className='sidebar__item--active'>Bundle</div></Link>
-                        <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
+                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className="ms-1">Request</div></Link>
+                        <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
+                        <Link to="/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> <div className='sidebar__item--active'>Bundle</div></Link>
+                        <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
-                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </div>
                 </aside>
 
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
-                            <i class='fa-solid fa-magnifying-glass'></i>
+                            <i className='fa-solid fa-magnifying-glass'></i>
                             <input
                                 type="search"
                                 className='component__search'
@@ -206,13 +194,13 @@ function BundleList({ logout }) {
                                 type='text'
                                 className='form-control disable'
                                 placeholder='Search by Teacher Id'
-                                value={teacherId}
+                                value={teacherInfo.teacherId}
                                 readOnly
                             />
                         </div>
 
                         <div className='component__headerGroup component__headerGroup--right'>
-                            <i class="fa-solid fa-circle-user" />
+                            <i className="fa-solid fa-circle-user" />
                             <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
                         </div>
                     </div>
@@ -246,12 +234,12 @@ function BundleList({ logout }) {
                                             <div className='d-grid gap-2 d-sm-flex'>
                                                 <Link to={`${bundle.Bundle_Name}`} className='disable--link thai--font me-3'>
                                                     <div className="table__button">
-                                                        <i class="fa-solid fa-eye"></i>
+                                                        <i className="fa-solid fa-eye"></i>
                                                         ดูรายละเอียด
                                                     </div>
                                                 </Link>
                                                 <button className="delete--btn btn-danger" onClick={() => handleDelete(bundle.Bundle_Name)}>
-                                                    <i class="fa-solid fa-trash" />
+                                                    <i className="fa-solid fa-trash" />
                                                     ลบ Bundle
                                                 </button>
                                             </div>
@@ -264,16 +252,16 @@ function BundleList({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i class="fa-regular fa-clock" /></Link>
-                    <Link to="/teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i class="fa-solid fa-list" /></Link>
-                    <Link to="/teacher-dashboard/bundle-list" className='footer__item'> <i class="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="/teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to="/teacher-dashboard/bundle-list" className='footer__item'> <i className="fa-solid fa-boxes-stacked" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-user" />
+                            <i className="fa-solid fa-user" />
                         </button>
                         <ul class="dropdown-menu">
-                            <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
-                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                            <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>
                 </footer>

@@ -1,6 +1,11 @@
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef  } from 'react'
+
+import { useReactToPrint } from "react-to-print";
+
+import { saveAs } from 'file-saver';
+import ExcelJS from 'exceljs'; // Import exceljs library
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
@@ -8,7 +13,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function EquipmentList({ logout }) {
+function ReportEquipment({ logout }) {
     const [staffId, setStaffId] = useState("");
     const [logActivity, setLogActivity] = useState({
         LogActivity_Name: "",
@@ -17,6 +22,7 @@ function EquipmentList({ logout }) {
     });
 
     const [equipment, setEquipment] = useState([]);
+    const [equipmentCategory, setEquipmentCategory] = useState([]);
     const [searchQuery, setSearchQuery] = useState(""); // State for search query
     const [filteredEquipment, setFilteredEquipment] = useState([]); // State for filtered equipment
 
@@ -39,6 +45,7 @@ function EquipmentList({ logout }) {
 
     useEffect(() => {
         getEquipment();
+        getEquipmentCategory();
     }, []);
 
     const getEquipment = async () => {
@@ -51,16 +58,14 @@ function EquipmentList({ logout }) {
         }
     };
 
-    const deleteEquipment = async (id) => {
+    const getEquipmentCategory = async () => {
         try {
-            const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Equipment", Equipment_Id: id, Staff_Id: staffId };
-            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
-            await axios.delete(`https://special-problem.onrender.com/equipment-list/${id}`)
-            getEquipment();
+            const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
+            setEquipmentCategory(response.data);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     const [staffInfo, setStaffInfo] = useState({
         staffId: "",
@@ -101,6 +106,11 @@ function EquipmentList({ logout }) {
         });
     };
 
+    const getEquipmentCategoryName = (eqId) => {
+        const eqCategory = equipmentCategory.find((eq) => eq.Equipment_Category_Id === eqId);
+        return eqCategory ? eqCategory.Equipment_Category_Name : "N/A";
+    };    
+
     // Function to handle search input changes and filter equipment
     const handleSearch = (e) => {
         const query = e.target.value;
@@ -117,6 +127,41 @@ function EquipmentList({ logout }) {
 
         setFilteredEquipment(filteredEquipmentList);
     }
+
+    const exportToExcel = () => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('EquipmentStock');
+
+        // Add headers to the worksheet
+        const headers = ['ลำดับ', 'รหัสครุภัณฑ์', 'หมวดหมู่', 'ชื่อครุภัณฑ์', 'จำนวน', 'สถานที่เก็บ', 'ราคา', 'ค่าซ่อม'];
+        worksheet.addRow(headers);
+
+        equipment.forEach((equipment, index) => {
+            worksheet.addRow([
+                index + 1,
+                equipment.Equipment_Id,
+                getEquipmentCategoryName(equipment.Equipment_Category_Id),
+                equipment.Equipment_Name,
+                equipment.Quantity,
+                equipment.Location,
+                equipment.Price,
+                equipment.Fixed_Cost
+            ]);
+        });
+
+        // Save the workbook to a Blob
+        workbook.xlsx.writeBuffer().then(buffer => {
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(blob, 'equipment_stock.xlsx');
+        });
+    };
+
+    const conponentPDF = useRef();
+
+    const generatePDF = useReactToPrint({
+        content: () => conponentPDF.current,
+        documentTitle: "Chemicals Stock",
+    });
 
     return (
         <div className='container-fluid vh-100'>
@@ -160,51 +205,42 @@ function EquipmentList({ logout }) {
                     </div>
 
                     <div>
-                        <div className='table__tabs'>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>ครุภัณฑ์</Link>
-                            <Link to="/equipmentCategory-list" className='table__tab table__tab--equipment table__tab--unactive'>หมวดหมู่ครุภัณฑ์</Link>
-                            <Link to="/report-equipment"className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
-                        </div>
+                        <button className="edit--btn me-2" onClick={exportToExcel}>
+                            <i className="fa-solid fa-file-excel me-2"></i>
+                            Export to Excel
+                        </button>
 
-                        <table className="table table-striped">
+                        <button className="delete--btn btn-danger" onClick={generatePDF}>
+                            <i className="fa-solid fa-file-pdf me-2"></i>
+                            Export to PDF
+                        </button>
+                    </div>
+
+                    <div className="mt-3" ref={conponentPDF} style={{ width: '100%' }}>
+                        <table className="table table-export table-striped">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">รหัสครุภัณฑ์</th>
-                                    <th scope="col">รหัสหมวดหมู่ครุภัณฑ์</th>
-                                    <th scope="col">ชื่อครุภัณฑ์</th>
-                                    <th scope="col">จำนวน</th>
-                                    <th scope="col">สถานที่เก็บ</th>
-                                    <th scope="col">ราคา</th>
-                                    <th scope="col">ค่าซ่อม</th>
-                                    <th scope="col">
-                                        <Link to={`add-equipment`} className="buttonTab-btn thai--font disable--link"><i className="fa-solid fa-square-plus me-2" />เพิ่มครุภัณฑ์</Link>
-                                    </th>
+                                    <th className="table-header" scope="col">#</th>
+                                    <th className="table-header" scope="col">รหัสครุภัณฑ์</th>
+                                    <th className="table-header" scope="col">หมวดหมู่</th>
+                                    <th className="table-header" scope="col">ชื่อครุภัณฑ์</th>
+                                    <th className="table-header" scope="col">จำนวน</th>
+                                    <th className="table-header" scope="col">สถานที่เก็บ</th>
+                                    <th className="table-header" scope="col">ราคา</th>
+                                    <th className="table-header" scope="col">ค่าซ่อม</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredEquipment.map((equipment, index) => (
                                     <tr key={index} className="active-row">
-                                        <td> {index + 1} </td>
-                                        <td> {equipment.Equipment_Id} </td>
-                                        <td> {equipment.Equipment_Category_Id} </td>
-                                        <td> {equipment.Equipment_Name} </td>
-                                        <td> {equipment.Quantity} </td>
-                                        <td> {equipment.Location} </td>
-                                        <td> {equipment.Price} </td>
-                                        <td> {equipment.Fixed_Cost} </td>
-                                        <td>
-                                            <div className="d-grid gap-2 d-sm-flex">
-                                                <Link to={`edit-equipment/${equipment.Equipment_Id}`} className="edit--btn">
-                                                    <i className="fa-solid fa-pen-to-square" />
-                                                    แก้ไข
-                                                </Link>
-                                                <button className="delete--btn btn-danger" type="button" onClick={() => deleteEquipment(equipment.Equipment_Id)}>
-                                                    <i className="fa-solid fa-trash" />
-                                                    ลบ
-                                                </button>
-                                            </div>
-                                        </td>
+                                        <td className="table-data"> {index + 1} </td>
+                                        <td className="table-data"> {equipment.Equipment_Id} </td>
+                                        <td className="table-data"> {getEquipmentCategoryName(equipment.Equipment_Category_Id)} </td>
+                                        <td className="table-data"> {equipment.Equipment_Name} </td>
+                                        <td className="table-data"> {equipment.Quantity} </td>
+                                        <td className="table-data"> {equipment.Location} </td>
+                                        <td className="table-data"> {equipment.Price} </td>
+                                        <td className="table-data"> {equipment.Fixed_Cost} </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -232,4 +268,4 @@ function EquipmentList({ logout }) {
     )
 }
 
-export default EquipmentList
+export default ReportEquipment

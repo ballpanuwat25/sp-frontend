@@ -17,11 +17,6 @@ function TeacherProfile({ logout }) {
         teacherPassword: "",
     });
 
-    const [values, setValues] = useState({
-        Teacher_Username: "",
-        Teacher_Password: "",
-    });
-
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
@@ -36,33 +31,12 @@ function TeacherProfile({ logout }) {
                     console.error("Teacher Request Error:", response.data.Error);
                 } else {
                     setTeacherInfo(response.data);
-                    setValues({ ...values, Teacher_Username: response.data.teacherUsername });
                 }
             })
             .catch((error) => {
                 console.error("Teacher Request Failed:", error);
             });
     }, []);
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        axios.post("https://special-problem.onrender.com/teacher-forget-password", values).then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                alert("Password changed successfully");
-                axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
-                    if (response.data.Error) {
-                        alert(response.data.Error);
-                    } else {
-                        logout();
-                        localStorage.removeItem('teacherToken');
-                        navigate("/teacher-login");
-                    }
-                });
-            }
-        });
-    };
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
@@ -85,13 +59,13 @@ function TeacherProfile({ logout }) {
                         <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i class="fa-regular fa-clock" /> <div className="ms-1">Request</div></Link>
-                        <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-list" /> List</Link>
-                        <Link to="/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-boxes-stacked" /> Bundle</Link>
-                        <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i class="fa-solid fa-user" /> <div className='sidebar__item--active'>Profile</div></Link>
+                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className="ms-1">Request</div></Link>
+                        <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
+                        <Link to="/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> <div className='sidebar__item--active'>Profile</div></Link>
                     </div>
                     <div className='sidebar__footer'>
-                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </div>
                 </aside>
 
@@ -100,48 +74,31 @@ function TeacherProfile({ logout }) {
                         <div className='component__headerGroup component__headerGroup--left' />
 
                         <div className='component__headerGroup component__headerGroup--right'>
-                            <i class="fa-solid fa-circle-user" />
+                            <i className="fa-solid fa-circle-user" />
                             <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label htmlFor="username" className='profile__label'>Username</label>
-                            <input
-                                type="text"
-                                className='profile__input'
-                                placeholder='username'
-                                defaultValue={teacherInfo.teacherUsername}
-                                onChange={(e) => setValues({ ...values, Teacher_Username: e.target.value })}
-                            />
-                        </div>
-
-                        <div className="mb-3">
-                            <label htmlFor="password" className='profile__label'>New Password</label>
-                            <input
-                                type="password"
-                                className='profile__input'
-                                placeholder='password'
-                                values={values.Teacher_Password}
-                                onChange={(e) => setValues({ ...values, Teacher_Password: e.target.value })}
-                            />
-                        </div>
-
-                        <button type="submit" className="profile__button thai--font">ยืนยันการเปลี่ยนรหัส</button>
-                    </form>
+                    <div className="d-flex flex-column">
+                        <p className="profile__label">รหัสเจ้าหน้าที่: {teacherInfo.teacherId}</p>
+                        <p className="profile__label">ชื่อ: {teacherInfo.teacherFirstName}</p>
+                        <p className="profile__label">นามสกุล: {teacherInfo.teacherLastName}</p>
+                        <p className="profile__label">ชื่อผู้ใช้: {teacherInfo.teacherUsername}</p>
+                        <p className="profile__label">รหัสผ่าน: {teacherInfo.teacherPassword}</p>
+                        <Link to={`/teacher-profile/${teacherInfo.teacherId}`} className='btn edit--btn thai--font'>แก้ไขข้อมูล</Link>
+                    </div>
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/admin-dashboard" className='footer__item'> <i class="fa-solid fa-list" /></Link>
-                    <Link to="/staff-list" className='footer__item'> <i class="fa-solid fa-users" /></Link>
+                    <Link to="/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to="/teacher-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-user" />
+                            <i className="fa-solid fa-user" />
                         </button>
                         <ul class="dropdown-menu">
-                            <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i class="fa-solid fa-user" /> Profile</Link>
-                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i class="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                            <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>
                 </footer>

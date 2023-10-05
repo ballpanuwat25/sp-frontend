@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import Alert from '../../Alert';
 
 import '../../cssElement/Form.css'
 
@@ -11,55 +12,57 @@ function StaffLogin({ login }) {
     });
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [loginInProgress, setLoginInProgress] = useState(false);
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
-    const usernameExists = async (username) => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Check if the username exists
         try {
             const response = await axios.get("https://special-problem.onrender.com/staff-list");
             const staffList = response.data;
-            const staff = staffList.find((staff) => staff.Staff_Username === username);
+            const staff = staffList.find((staff) => staff.Staff_Username === values.Staff_Username);
 
             if (staff) {
                 setUsernameError(""); // Username exists, clear error
             } else {
                 setUsernameError("Username does not exist");
+                setAlertMessage("Username does not exist"); // Set the message for the custom alert
+                setShowAlert(true); // Show the custom alert
+                return; // Exit the function early
             }
         } catch (error) {
             console.error("Axios Error:", error);
         }
-    };
 
-    const passwordInCorrect = async (password) => {
+        // Check if the password is correct
         try {
             const response = await axios.get("https://special-problem.onrender.com/staff-list");
             const staffList = response.data;
-            const staff = staffList.find((staff) => staff.Staff_Password === password);
+            const staff = staffList.find((staff) => staff.Staff_Password === values.Staff_Password);
 
             if (staff) {
                 setPasswordError(""); // Password is correct, clear error
             } else {
                 setPasswordError("Password is incorrect");
+                setAlertMessage("Password is incorrect"); // Set the message for the custom alert
+                setShowAlert(true); // Show the custom alert
+                return
             }
         } catch (error) {
             console.error("Axios Error:", error);
         }
-    };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+        setLoginInProgress(true);
 
-        if (usernameError) {
-            alert(usernameError);
-            return;
-        } else if (passwordError) {
-            alert(passwordError);
-            return;
-        }
-
+        // If both username and password are valid, proceed with login
         axios.post("https://special-problem.onrender.com/staff-login", values)
             .then((response) => {
-                console.log(response);
+                console.log(response.data.Error);
                 if (response.data.Error) {
                     alert(response.data.Error);
                 } else {
@@ -71,6 +74,9 @@ function StaffLogin({ login }) {
             })
             .catch((error) => {
                 console.error("Axios Error:", error);
+            }).finally(() => {
+                // Reset login in progress
+                setLoginInProgress(false);
             });
     };
 
@@ -83,7 +89,6 @@ function StaffLogin({ login }) {
                         <input
                             type="text"
                             required
-                            onBlur={(e) => usernameExists(e.target.value)} // Check on blur
                             onChange={(e) => setValues({ ...values, Staff_Username: e.target.value })}
                         />
                         <span>Username</span>
@@ -93,7 +98,6 @@ function StaffLogin({ login }) {
                         <input
                             type="password"
                             required
-                            onBlur={(e) => passwordInCorrect(e.target.value)} // Check on blur
                             onChange={(e) => setValues({ ...values, Staff_Password: e.target.value })}
                         />
                         <span>Password</span>
@@ -103,7 +107,18 @@ function StaffLogin({ login }) {
                         <Link to="/staff-forget-password" className='forgetPassword__text'>Forgot password</Link>
                     </div>
 
-                    <button type="submit" className='form__btn'>Login</button>
+                    {loginInProgress ? (
+                        <div className="loader">Loading...</div>
+                    ) : (
+                        <button type="submit" className='form__btn'>Login</button>
+                    )}
+
+                    {showAlert && (
+                        <Alert
+                            message={alertMessage}
+                            onClose={() => setShowAlert(false)}
+                        />
+                    )}
                 </form>
             </main>
         </div>

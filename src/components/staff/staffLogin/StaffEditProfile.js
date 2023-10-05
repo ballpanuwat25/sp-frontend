@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
@@ -8,14 +8,35 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function EditStaff({ logout }) {
-    const [Staff_FName, setStaff_FName] = useState("");
-    const [Staff_LName, setStaff_LName] = useState("");
-    const [Staff_Username, setStaff_Username] = useState("");
-    const [Staff_Password, setStaff_Password] = useState("");
-    const [Staff_Tel, setStaff_Tel] = useState("");
+function StaffEditProfile({ logout }) {
+    const [staffInfo, setStaffInfo] = useState({
+        staffId: "",
+        staffFirstName: "",
+        staffLastName: "",
+        staffUsername: "",
+        staffPassword: "",
+    });
 
-    const { id } = useParams();
+    const navigate = useNavigate();
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        axios.get("https://special-problem.onrender.com/staff", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Staff Request Error:", response.data.Error);
+                } else {
+                    setStaffInfo(response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Staff Request Failed:", error);
+            });
+    }, []);
 
     useEffect(() => {
         getStaffsById()
@@ -31,7 +52,27 @@ function EditStaff({ logout }) {
         setStaff_Tel(staff.Staff_Tel);
     };
 
-    const updateStaff = async (e) => {
+    const handleLogout = () => {
+        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                localStorage.removeItem('staffToken');
+                navigate("/");
+                logout();
+            }
+        });
+    };
+
+    const [Staff_FName, setStaff_FName] = useState("");
+    const [Staff_LName, setStaff_LName] = useState("");
+    const [Staff_Username, setStaff_Username] = useState("");
+    const [Staff_Password, setStaff_Password] = useState("");
+    const [Staff_Tel, setStaff_Tel] = useState("");
+
+    const { id } = useParams();
+
+    const updateStaffInfo = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.patch(`https://special-problem.onrender.com/staff-list/${id}`, {
@@ -43,8 +84,7 @@ function EditStaff({ logout }) {
             });
 
             if (response.status === 200) {
-                // Staff Updated successfully, navigate to staff list
-                navigate("/staff-list");
+                handleLogout();
             } else {
                 // Handle other possible responses
                 console.log("Unexpected response:", response);
@@ -60,60 +100,23 @@ function EditStaff({ logout }) {
         }
     };
 
-    const [adminInfo, setAdminInfo] = useState({
-        adminName: "",
-        adminUsername: "",
-        adminPassword: "",
-        adminTel: "",
-    });
-
-    const navigate = useNavigate();
-
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
-        axios.get("https://special-problem.onrender.com/admin", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-            },
-        })
-            .then((response) => {
-                if (response.data.Error) {
-                    console.error("Admin Request Error:", response.data.Error);
-                } else {
-                    setAdminInfo(response.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Admin Request Failed:", error);
-            });
-    }, []);
-
-    const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                logout();
-                localStorage.removeItem('adminToken');
-                navigate("/");
-            }
-        });
-    };
-
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
-                <aside className='sidebar'>
+            <aside className='sidebar'>
                     <div className='sidebar__header'>
                         <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
-                        <div className='sidebar__title admin__name'>Welcome, {adminInfo.adminUsername}</div>
+                        <div className='sidebar__title admin__name'>Welcome, {staffInfo.staffFirstName}</div>
                     </div>
+
                     <div className='sidebar__body'>
-                        <Link to="/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
-                        <Link to="/staff-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
-                        <Link to="/admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
+                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" /> Equipment</Link>
+                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
+                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> <div className='sidebar__item--active'> Profile</div></Link>
                     </div>
+
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </div>
@@ -125,15 +128,15 @@ function EditStaff({ logout }) {
 
                         <div className='component__headerGroup component__headerGroup--right'>
                             <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{adminInfo.adminUsername}</div>
+                            <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
                         </div>
                     </div>
 
-                    <form onSubmit={updateStaff}>
+                    <form onSubmit={updateStaffInfo}>
                         <div className='profile__form'>
                             <div className="mb-3">
                                 <label htmlFor="Staff_FName" className='profile__label'>ชื่อจริง</label>
-                                <input type="text" className='profile__input' id="Staff_FName" placeholder="Enter Staff First Name" required
+                                <input type="text" className='profile__input' id="Staff_FName" placeholder="Enter Staff First Name"
                                     value={Staff_FName}
                                     onChange={(e) => {
                                         setStaff_FName(e.target.value);
@@ -143,7 +146,7 @@ function EditStaff({ logout }) {
 
                             <div className="mb-3">
                                 <label htmlFor="Staff_LName" className='profile__label'>นามสกุล</label>
-                                <input type="text" className='profile__input' id="Staff_LName" placeholder="Enter Staff Last Name" required
+                                <input type="text" className='profile__input' id="Staff_LName" placeholder="Enter Staff Last Name"
                                     value={Staff_LName}
                                     onChange={(e) => {
                                         setStaff_LName(e.target.value);
@@ -153,7 +156,7 @@ function EditStaff({ logout }) {
 
                             <div className="mb-3">
                                 <label htmlFor="Staff_Username" className='profile__label'>Username</label>
-                                <input type="text" className='profile__input' id="Staff_Username" placeholder="Enter Staff Username" required
+                                <input type="text" className='profile__input' id="Staff_Username" placeholder="Enter Staff Username"
                                     value={Staff_Username}
                                     onChange={(e) => {
                                         setStaff_Username(e.target.value);
@@ -187,14 +190,16 @@ function EditStaff({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                    <Link to="/staff-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
+                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
+                    <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
+                    <Link to="/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
-                            <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                        <ul className="dropdown-menu">
+                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>
@@ -204,4 +209,4 @@ function EditStaff({ logout }) {
     )
 }
 
-export default EditStaff
+export default StaffEditProfile
