@@ -2,7 +2,8 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import BarcodeScanner from "../barcode/BarcodeScanner";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
@@ -29,7 +30,6 @@ function StaffEquipmentRequest({ logout }) {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const [scannedText, setScannedText] = useState("");
 
     useEffect(() => {
         getStaffId();
@@ -77,7 +77,7 @@ function StaffEquipmentRequest({ logout }) {
         e.preventDefault();
 
         if (Release_Quantity > Quantity) {
-            alert("Release quantity cannot be more than the quantity!");
+            notifyWarn();
             return;
         }
 
@@ -120,37 +120,13 @@ function StaffEquipmentRequest({ logout }) {
         }
     };
 
+    const notifyWarn = () => toast.warn("Release quantity cannot be more than the quantity!");
+
     useEffect(() => {
         if (!staffIdInputValue && staffId) {
             setStaffIdInputValue(staffId);
         }
     }, [staffId, staffIdInputValue]);
-
-    const handleScannedTextChange = (scannedText) => {
-        setScannedText(scannedText);
-    };
-
-    const handleApplyButtonClick = () => {
-        setEquipment_Id(scannedText);
-    };
-
-    const handleQuery = async () => {
-        try {
-            const response = await axios.get(
-                `https://special-problem.onrender.com/equipment-list/${Equipment_Id}`
-            );
-            const equipment = response.data;
-
-            if (response.data.Error || equipment.Quantity === undefined) {
-                alert("Equipment not found!");
-            } else {
-                setQuantity(equipment.Quantity);
-            }
-        } catch (error) {
-            console.error("Error fetching equipment data:", error);
-            alert("Equipment not found!");
-        }
-    };
 
     const [staffInfo, setStaffInfo] = useState({
         staffId: "",
@@ -191,6 +167,7 @@ function StaffEquipmentRequest({ logout }) {
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>
@@ -224,7 +201,7 @@ function StaffEquipmentRequest({ logout }) {
                     </div>
 
                     <form onSubmit={updateEquipmentRequest}>
-                        <div className="mb-3">
+                        <div className="mb-3 disable">
                             <label htmlFor="Staff_Id" className="profile__label">รหัสเจ้าหน้าที่</label>
                             <input
                                 type="text"
@@ -242,10 +219,9 @@ function StaffEquipmentRequest({ logout }) {
                         <div className="mb-3">
                             <label htmlFor="Equipment_Id" className="profile__label">รหัสครุภัณฑ์</label>
                             <div className="input-group">
-                                <BarcodeScanner onScannedTextChange={handleScannedTextChange} />
                                 <input
                                     type="text"
-                                    className="form-control form-control-scan"
+                                    className="profile__input"
                                     id="Equipment_Id"
                                     placeholder="Enter Equipment Id"
                                     required={isRejectButtonClicked}
@@ -254,13 +230,6 @@ function StaffEquipmentRequest({ logout }) {
                                         setEquipment_Id(e.target.value);
                                     }}
                                 />
-                                <button
-                                    className="btn btn-outline-secondary"
-                                    type="button"
-                                    onClick={handleQuery}
-                                >
-                                    Query
-                                </button>
                             </div>
                         </div>
 

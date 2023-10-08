@@ -2,7 +2,9 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-import Alert from '../Alert';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import LogActivity from './logActivity/logActivity';
 
 import '../cssElement/Table.css'
@@ -12,9 +14,6 @@ import '../cssElement/Dashboard.css'
 import logo from '../assets/logo.png';
 
 function AdminDashboard({ logout }) {
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
-
     const [adminInfo, setAdminInfo] = useState({
         adminName: "",
         adminUsername: "",
@@ -26,9 +25,10 @@ function AdminDashboard({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        setAlertMessage("หลังใช้งานเสร็จควรออกจากระบบทุกครั้ง เพื่อไม่ให้เกิดปัญหาในการเข้าสู่ระบบครั้งถัดไป")
-        setShowAlert(true);
+        notify();
     }, []);
+
+    const notify = () => toast.info("หลังใช้งานเสร็จควรออกจากระบบทุกครั้ง เพื่อไม่ให้เกิดปัญหาในการเข้าสู่ระบบครั้งถัดไป");;
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/admin", {
@@ -62,12 +62,7 @@ function AdminDashboard({ logout }) {
 
     return (
         <div className='container-fluid vh-100'>
-            {showAlert && (
-                <Alert
-                    message={alertMessage}
-                    onClose={() => setShowAlert(false)}
-                />
-            )}
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>

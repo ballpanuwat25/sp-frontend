@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import Alert from '../../Alert'; // Import your custom alert component
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../../cssElement/Form.css';
 
@@ -11,8 +13,6 @@ function AdminLogin({ login }) {
         Admin_Password: '',
     });
     const [usernameError, setUsernameError] = useState('');
-    const [showAlert, setShowAlert] = useState(false); // State to control the visibility of the custom alert
-    const [alertMessage, setAlertMessage] = useState(''); // Message for the custom alert
     const [loginInProgress, setLoginInProgress] = useState(false);
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
@@ -30,8 +30,7 @@ function AdminLogin({ login }) {
                 setUsernameError(''); // Username exists, clear error
             } else {
                 setUsernameError('Username does not exist');
-                setAlertMessage('Username does not exist'); // Set the message for the custom alert
-                setShowAlert(true); // Show the custom alert
+                notifyUsername()
                 return; // Exit the function early
             }
         } catch (error) {
@@ -56,8 +55,7 @@ function AdminLogin({ login }) {
             })
             .catch((error) => {
                 console.error('Axios Error:', error);
-                setAlertMessage('Incorrect password'); // Set the message for the custom alert
-                setShowAlert(true); // Show the custom alert
+                notifyPassword();
             })
             .finally(() => {
                 // Reset login in progress
@@ -65,8 +63,12 @@ function AdminLogin({ login }) {
             });
     };
 
+    const notifyPassword = () => toast.error("Incorrect password");
+    const notifyUsername = () => toast.error("Username does not exist");
+
     return (
         <div className="container-fluid vh-100">
+            <ToastContainer />
             <main className="form__container">
                 <form className="form__card form__card--adminlogin" onSubmit={handleSubmit}>
                     <h3 className="form__header">Admin Login</h3>
@@ -100,13 +102,6 @@ function AdminLogin({ login }) {
                         <button type="submit" className="form__btn">
                             Login
                         </button>
-                    )}
-
-                    {showAlert && (
-                        <Alert
-                            message={alertMessage}
-                            onClose={() => setShowAlert(false)} // Function to hide the custom alert
-                        />
                     )}
                 </form>
             </main>

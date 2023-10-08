@@ -1,6 +1,9 @@
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import { useReactToPrint } from "react-to-print";
+
+import Barcode from "react-barcode";
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
@@ -8,23 +11,24 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function AddEquipmentCategory({ logout }) {
-    const [equipmentCategory, setEquipmentCategory] = useState({
-        Equipment_Category_Id: "",
-        Equipment_Category_Name: "",
+function BarcodeEquipment({ logout }) {
+    const [equipment, setEquipment] = useState([]);
+
+    useEffect(() => {
+        getEquipment();
+    }, []);
+
+    const getEquipment = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+        setEquipment(response.data);
+    }
+    
+    const conponentPDF = useRef();
+
+    const generatePDF = useReactToPrint({
+        content: () => conponentPDF.current,
+        documentTitle: "Equipment Barcode List",
     });
-
-    const navigate = useNavigate();
-
-    const saveEquipmentCategory = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.post("https://special-problem.onrender.com/equipmentCategory-list", (equipmentCategory));
-            navigate("/equipmentCategory-list");
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
     const [staffInfo, setStaffInfo] = useState({
         staffId: "",
@@ -33,7 +37,9 @@ function AddEquipmentCategory({ logout }) {
         staffUsername: "",
         staffPassword: "",
         staffTel: "",
-    });
+    })
+
+    const navigate = useNavigate();
 
     axios.defaults.withCredentials = true;
 
@@ -73,10 +79,10 @@ function AddEquipmentCategory({ logout }) {
                     </div>
 
                     <div className='sidebar__body'>
-                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
-                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" /><div className='sidebar__item--active'> Equipment</div></Link>
-                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
+                        <Link to="/staff-dashboard/staff-equipment-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Equipment</div></Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
+                        <Link to="/equipment-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
@@ -88,7 +94,10 @@ function AddEquipmentCategory({ logout }) {
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
-
+                            <button className="delete--btn btn-danger" onClick={generatePDF}>
+                                <i className="fa-solid fa-file-pdf me-2"></i>
+                                Export to PDF
+                            </button>
                         </div>
 
                         <div className='component__headerGroup component__headerGroup--right'>
@@ -97,34 +106,33 @@ function AddEquipmentCategory({ logout }) {
                         </div>
                     </div>
 
-                    <form onSubmit={saveEquipmentCategory}>
-                        <div className="mb-3">
-                            <label htmlFor="Equipment_Category_Id" className="profile__label">Equipment Category Id</label>
-                            <input type="text" className="profile__input" id="Equipment_Category_Id" placeholder="Enter Equipment Category Id" required
-                                onChange={(e) => {
-                                    setEquipmentCategory({ ...equipmentCategory, Equipment_Category_Id: e.target.value });
-                                }}
-                            />
-                        </div>
-
-                        <div className="mb-3">
-                            <label htmlFor="Equipment_Category_Name" className="profile__label">Equipment Category Name</label>
-                            <input type="text" className="profile__input" id="Equipment_Category_Name" placeholder="Enter Equipment Category Name" required
-                                onChange={(e) => {
-                                    setEquipmentCategory({ ...equipmentCategory, Equipment_Category_Name: e.target.value });
-                                }}
-                            />
-                        </div>
-
-                        <button type="submit" className="table__tab table__button thai--font">ยืนยัน</button>
-                    </form>
+                    <div ref={conponentPDF} style={{ width: '100%' }}>
+                        <table className="table table-export table-striped" id="stock-table">
+                            <thead>
+                                <tr>
+                                    <th className="table-header">#</th>
+                                    <th className="table-header">Barcode</th>
+                                    <th className="table-header">ชื่อครุภัณฑ์</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {equipment.map((equipment, index) => (
+                                    <tr key={equipment.Equipment_Id} className="active-row">
+                                        <td className="table-data">{index + 1}</td>
+                                        <td className="table-data"><Barcode value={equipment.Equipment_Id} background="#f2f2f2" /></td>
+                                        <td className="table-data">{equipment.Equipment_Name}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
-                    <Link to="/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
+                    <Link to="/staff-dashboard/staff-equipment-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
                     <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
-                    <Link to="/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
+                    <Link to="/equipment-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
@@ -140,4 +148,4 @@ function AddEquipmentCategory({ logout }) {
     )
 }
 
-export default AddEquipmentCategory
+export default BarcodeEquipment

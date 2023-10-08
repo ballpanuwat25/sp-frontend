@@ -2,6 +2,9 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
 import '../../cssElement/Dashboard.css'
@@ -64,7 +67,7 @@ function ChemicalsBundleList({ logout }) {
         const existingChemical = cartData.find(item => item.Teacher_Id === teacherInfo.teacherId && item.Chem_Id === Chem_Id);
 
         if (existingChemical) {
-            alert('This chemical is already in your cart');
+            notify();
         } else {
             cartData.push({
                 Teacher_Id: teacherInfo.teacherId,
@@ -74,6 +77,8 @@ function ChemicalsBundleList({ logout }) {
 
         localStorage.setItem('bundleCart', JSON.stringify(cartData));
     };
+
+    const notify = () => toast.warn("This chemical is already in your cart");
 
     const handleSearch = (e) => {
         const query = e.target.value;
@@ -104,6 +109,7 @@ function ChemicalsBundleList({ logout }) {
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>

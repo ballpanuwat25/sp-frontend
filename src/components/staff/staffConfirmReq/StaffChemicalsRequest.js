@@ -2,7 +2,10 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-import BarcodeScanner from "../barcode/BarcodeScanner";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import BarcodeScanner2 from "../barcode/BarcodeScanner2";
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
@@ -31,13 +34,23 @@ function StaffChemicalsRequest({ logout }) {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const [scannedText, setScannedText] = useState("");
+
+    const [scannedCode, setScannedCode] = useState("");
+    const [inputValue, setInputValue] = useState("");
 
     useEffect(() => {
         getStaffId();
         getChemicalsById();
         getChemicalsRequestById();
     }, []);
+
+    useEffect(() => {
+        if (scannedCode) {
+            setInputValue(scannedCode);
+        } else {
+            setInputValue(Chem_Bottle_Id);
+        }
+    }, [scannedCode, Chem_Bottle_Id]);
 
     const getStaffId = async () => {
         try {
@@ -87,12 +100,15 @@ function StaffChemicalsRequest({ logout }) {
         setRequest_Comment(result.data.Request_Comment);
     };
 
+    const notifyError = () => toast.error("Chemicals are not enough.");
+    const notifyWarn = () => toast.warn("Chemicals bottle id is not found, try again.");
+
     const updateChemicalsRequest = async (e) => {
         e.preventDefault();
 
         // Check if Release_Quantity is greater than Remaining_Quantity
         if (Release_Quantity > Remaining_Quantity) {
-            alert("Chemicals are not enough.");
+            notifyError();
             return;
         }
 
@@ -148,14 +164,6 @@ function StaffChemicalsRequest({ logout }) {
         }
     }, [staffId, staffIdInputValue]);
 
-    const handleScannedTextChange = (scannedText) => {
-        setScannedText(scannedText);
-    };
-
-    const handleApplyButtonClick = () => {
-        setChem_Bottle_Id(scannedText);
-    };
-
     const handleQuery = async () => {
         try {
             const response = await axios.get(
@@ -164,7 +172,7 @@ function StaffChemicalsRequest({ logout }) {
             const chemicals = response.data;
 
             if (response.data.Error || chemicals.Remaining_Quantity === undefined) {
-                alert("Chemicals bottle id is not found, try again.");
+                notifyWarn();
             } else {
                 setRemaining_Quantity(chemicals.Remaining_Quantity);
             }
@@ -211,8 +219,21 @@ function StaffChemicalsRequest({ logout }) {
         });
     };
 
+    const handleChemBotleIdChange = (e) => {
+        setChem_Bottle_Id(e.target.value);
+    };
+
+    const handleSave = (scannedText) => {
+        setScannedCode(scannedText);
+
+        // Update inputValue and chemicals.Chem_Bottle_Id
+        setInputValue(scannedText);
+        setChem_Bottle_Id(scannedText);
+    };
+
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>
@@ -246,7 +267,7 @@ function StaffChemicalsRequest({ logout }) {
                     </div>
 
                     <form onSubmit={updateChemicalsRequest}>
-                        <div className="mb-3">
+                        <div className="mb-3 disable">
                             <label htmlFor="Staff_Id" className='profile__label'>รหัสเจ้าหน้าที่</label>
                             <input
                                 type="text"
@@ -273,16 +294,15 @@ function StaffChemicalsRequest({ logout }) {
                         <div className="mb-3">
                             <label htmlFor="Chem_Bottle_Id" className='profile__label'>ใส่รหัสขวดสารเคมี</label>
                             <div className="input-group">
-                                <BarcodeScanner onScannedTextChange={handleScannedTextChange} />
+                                <BarcodeScanner2 onSave={handleSave} />
                                 <input
                                     type="text"
-                                    className="form-control form-control-scan"
+                                    className="form-control form-control-scan2"
                                     id="Chem_Bottle_Id"
+                                    placeholder="Enter Chemicals Bottle Id"
                                     required={isRejectButtonClicked}
-                                    value={Chem_Bottle_Id}
-                                    onChange={(e) => {
-                                        setChem_Bottle_Id(e.target.value);
-                                    }}
+                                    value={inputValue} // Use 'value' instead of 'defaultValue'
+                                    onChange={handleChemBotleIdChange}
                                 />
                                 <button
                                     className="btn btn-outline-secondary"

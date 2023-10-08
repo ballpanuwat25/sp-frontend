@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react'
-import Alert from '../Alert';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../cssElement/Table.css'
 import '../cssElement/Form.css'
@@ -10,9 +12,7 @@ import '../cssElement/Dashboard.css'
 import logo from '../assets/logo.png';
 
 function StaffDashboard({logout}) {
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
-    
+
     const [chemicalsReq, setChemicalsReq] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -21,9 +21,10 @@ function StaffDashboard({logout}) {
     const [Request_Comment, setRequest_Comment] = useState("");
 
     useEffect(() => {
-        setAlertMessage("หลังใช้งานเสร็จควรออกจากระบบทุกครั้ง เพื่อไม่ให้เกิดปัญหาในการเข้าสู่ระบบครั้งถัดไป")
-        setShowAlert(true);
+        notify();
     }, []);
+
+    const notify = () => toast.info("หลังใช้งานเสร็จควรออกจากระบบทุกครั้ง เพื่อไม่ให้เกิดปัญหาในการเข้าสู่ระบบครั้งถัดไป");
 
     useEffect(() => {
         getChemicalsRequest();
@@ -149,12 +150,7 @@ function StaffDashboard({logout}) {
 
     return (
         <div className='container-fluid vh-100'>
-            {showAlert && (
-                <Alert
-                    message={alertMessage}
-                    onClose={() => setShowAlert(false)}
-                />
-            )}
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>

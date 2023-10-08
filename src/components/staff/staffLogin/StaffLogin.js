@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import Alert from '../../Alert';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../../cssElement/Form.css'
 
@@ -12,8 +14,6 @@ function StaffLogin({ login }) {
     });
     const [usernameError, setUsernameError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
     const [loginInProgress, setLoginInProgress] = useState(false);
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
@@ -31,8 +31,7 @@ function StaffLogin({ login }) {
                 setUsernameError(""); // Username exists, clear error
             } else {
                 setUsernameError("Username does not exist");
-                setAlertMessage("Username does not exist"); // Set the message for the custom alert
-                setShowAlert(true); // Show the custom alert
+                notifyUsername()
                 return; // Exit the function early
             }
         } catch (error) {
@@ -49,8 +48,7 @@ function StaffLogin({ login }) {
                 setPasswordError(""); // Password is correct, clear error
             } else {
                 setPasswordError("Password is incorrect");
-                setAlertMessage("Password is incorrect"); // Set the message for the custom alert
-                setShowAlert(true); // Show the custom alert
+                notifyPassword();
                 return
             }
         } catch (error) {
@@ -80,8 +78,12 @@ function StaffLogin({ login }) {
             });
     };
 
+    const notifyPassword = () => toast.error("Incorrect password");
+    const notifyUsername = () => toast.error("Username does not exist");
+
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <main className='form__container'>
                 <form className='form__card form__card--adminlogin' onSubmit={handleSubmit}>
                     <h3 className='form__header'>Staff Login</h3>
@@ -111,13 +113,6 @@ function StaffLogin({ login }) {
                         <div className="loader">Loading...</div>
                     ) : (
                         <button type="submit" className='form__btn'>Login</button>
-                    )}
-
-                    {showAlert && (
-                        <Alert
-                            message={alertMessage}
-                            onClose={() => setShowAlert(false)}
-                        />
                     )}
                 </form>
             </main>

@@ -2,16 +2,15 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Alert from '../../Alert';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../../cssElement/Form.css'
 
 function StudentGoogleLogin() {
     const navigate = useNavigate();
     const [user, setUser] = useState({});
-
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
 
     async function handleCallbackResponse(response) {
         var userObject = jwt_decode(response.credential);
@@ -46,16 +45,17 @@ function StudentGoogleLogin() {
                     navigate("/student-dashboard");
                 }
             } else {
-                setAlertMessage('Email does not exist');
-                setShowAlert(true);
+                notifyEmail2();
                 navigate('/student-google-register');
             }
         } catch (error) {
             console.error('Error checking email:', error);
-            setAlertMessage('Error checking email');
-            setShowAlert(true);
+            notifyEmail1();
         }
     }
+
+    const notifyEmail1 = () => toast.error("Error checking email");
+    const notifyEmail2 = () => toast.error("Email does not exist");
 
     useEffect(() => {
         /* global google */
@@ -80,14 +80,8 @@ function StudentGoogleLogin() {
 
     return (
         <div>
+            <ToastContainer />
             <div id="signInDiv"></div>
-
-            {showAlert && (
-                <Alert
-                    message={alertMessage}
-                    onClose={() => setShowAlert(false)}
-                />
-            )}
         </div>
     );
 }

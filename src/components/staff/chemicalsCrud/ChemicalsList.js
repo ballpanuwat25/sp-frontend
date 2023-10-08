@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
-import BarcodeScanner from "../barcode/BarcodeScanner";
+import BarcodeScanner2 from "../barcode/BarcodeScanner2";
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
@@ -16,10 +16,9 @@ function ChemicalsList({ logout }) {
 
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredChemicals, setFilteredChemicals] = useState([]);
-    const [scannedText, setScannedText] = useState("");
 
-    const [barcode, setBarcode] = useState("Barcode Content");
-    const barcodeRef = useRef(null);
+    const [scannedCode, setScannedCode] = useState("");
+    const [inputValue, setInputValue] = useState("");
 
     const [staffId, setStaffId] = useState("");
     const [logActivity, setLogActivity] = useState({
@@ -29,6 +28,16 @@ function ChemicalsList({ logout }) {
     });
 
     axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        if (scannedCode) {
+            // If scannedCode is available, set it as the input value
+            setInputValue(scannedCode);
+        } else {
+            // Otherwise, use the searchQuery as the input value
+            setInputValue(searchQuery);
+        }
+    }, [scannedCode, searchQuery]);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/staff", {
@@ -74,14 +83,11 @@ function ChemicalsList({ logout }) {
     const handleSearchInputChange = (e) => {
         const query = e.target.value;
         setSearchQuery(query);
+        
         const filteredChemicals = chemicals.filter((chemical) =>
             chemical.Chem_Bottle_Id.toLowerCase().includes(query.toLowerCase())
         );
         setFilteredChemicals(filteredChemicals);
-    };
-
-    const handleScannedTextChange = (scannedText) => {
-        setScannedText(scannedText);
     };
 
     const getChemNameById = (chemId) => {
@@ -128,6 +134,12 @@ function ChemicalsList({ logout }) {
         });
     };
 
+    const handleSave = (scannedText) => {
+        setScannedCode(scannedText);
+        setInputValue(scannedText);
+        handleSearchInputChange({ target: { value: scannedText } }); // Pass a mock event object
+    };
+
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
@@ -153,15 +165,15 @@ function ChemicalsList({ logout }) {
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
-                            <BarcodeScanner onScannedTextChange={handleScannedTextChange} />
-                            <Link to="/barcode-generator" className="btn btn-outline-success me-3"><i className="fa-solid fa-barcode"></i></Link>
-                            
+                            <BarcodeScanner2 onSave={handleSave} />
+                            <Link to="/barcode-chemicals" className="btn btn-outline-success me-3"><i className="fa-solid fa-barcode"></i></Link>
+
                             <i className='fa-solid fa-magnifying-glass' />
                             <input
                                 type="text"
                                 className="component__search"
                                 placeholder="ค้นหาด้วยรหัสขวดสารเคมี"
-                                value={searchQuery}
+                                defaultValue={inputValue}
                                 onChange={handleSearchInputChange}
                             />
                         </div>

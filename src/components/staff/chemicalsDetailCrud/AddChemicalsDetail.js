@@ -2,6 +2,9 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
 import '../../cssElement/Dashboard.css'
@@ -31,18 +34,21 @@ function AddChemicalsDetail({ logout }) {
             // Check if Chem_Id already exists
             const chemIdExists = await axios.get(`https://special-problem.onrender.com/chemicalsDetail-list/${Chem_Id}`);
             if (chemIdExists.data) {
-                alert("Chem_Id already exists. Please enter a different Chem_Id.");
+                notifyWarn();
                 return;
             }
 
             await axios.post("https://special-problem.onrender.com/chemicalsDetail-list", chemicalsDetail);
 
-            alert("Chemicals added successfully");
+            notifySuccess();
             navigate("/chemicalsDetail-list");
         } catch (err) {
             console.log(err);
         }
     };
+
+    const notifyWarn = () => toast.warn("Chem_Id already exists. Please enter a different Chem_Bottle_Id.");
+    const notifySuccess = () => toast.success("Chemicals added successfully");
 
     const [staffInfo, setStaffInfo] = useState({
         staffId: "",
@@ -83,6 +89,7 @@ function AddChemicalsDetail({ logout }) {
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer/>
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>

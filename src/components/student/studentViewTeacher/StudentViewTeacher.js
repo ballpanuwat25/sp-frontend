@@ -10,6 +10,7 @@ import logo from '../../assets/logo.png';
 
 const StudentViewTeacher = () => {
     const [teachers, setTeachers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         getTeachers();
@@ -18,6 +19,7 @@ const StudentViewTeacher = () => {
     const getTeachers = async () => {
         const response = await axios.get("https://special-problem.onrender.com/teacher-list");
         setTeachers(response.data);
+        setIsLoading(false);
     };
 
     const [studentInfo, setStudentInfo] = useState({
@@ -71,7 +73,7 @@ const StudentViewTeacher = () => {
         const query = e.target.value;
         setSearchQuery(query);
 
-        const filteredTeachers = teachers.filter((teacher) => 
+        const filteredTeachers = teachers.filter((teacher) =>
             teacher.Teacher_Id.toLowerCase().includes(query.toLowerCase()) ||
             teacher.Teacher_FName.toLowerCase().includes(query.toLowerCase()) ||
             teacher.Teacher_LName.toLowerCase().includes(query.toLowerCase())
@@ -106,50 +108,56 @@ const StudentViewTeacher = () => {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div>
-                        <div className='component__header'>
-                            <div className='component__headerGroup component__headerGroup--left'>
-                                <i className='fa-solid fa-magnifying-glass'></i>
-                                <input
-                                    type="search"
-                                    className='component__search'
-                                    placeholder="ค้นหาด้วยชื่อหรือรหัสอาจารย์"
-                                    value={searchQuery}
-                                    onChange={handleSearch}
-                                />
-                            </div>
-
-                            <div className='component__headerGroup component__headerGroup--right'>
-                                <div>{user_picture}</div>
-                                <div>{user_email}</div>
-                            </div>
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass'></i>
+                                    <input
+                                        type="search"
+                                        className='component__search'
+                                        placeholder="ค้นหาด้วยชื่อหรือรหัสอาจารย์"
+                                        value={searchQuery}
+                                        onChange={handleSearch}
+                                    />
+                                </div>
 
-                        <div >
-                            <div className='table__tabs'>
-                                <Link className='table__tab table__tab--chemicals table__tab--active'>รายชื่ออาจารย์</Link>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <div>{user_picture}</div>
+                                    <div>{user_email}</div>
+                                </div>
                             </div>
 
-                            <table className="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">รหัสอาจารย์</th>
-                                        <th scope="col">ชื่อ-นามสกุล</th>
-                                        <th scope="col">เบอร์โทรศัพท์</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {filteredTeachers.map((teacher) => (
-                                        <tr key={teacher.Teacher_Id} className="active-row">
-                                            <td> {teacher.Teacher_Id} </td>
-                                            <td> {teacher.Teacher_FName} {teacher.Teacher_LName}</td>
-                                            <td> {teacher.Teacher_Tel} </td>
+                            <div >
+                                <div className='table__tabs'>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>รายชื่ออาจารย์</Link>
+                                </div>
+
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">รหัสอาจารย์</th>
+                                            <th scope="col">ชื่อ-นามสกุล</th>
+                                            <th scope="col">เบอร์โทรศัพท์</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {filteredTeachers.map((teacher) => (
+                                            <tr key={teacher.Teacher_Id} className="active-row">
+                                                <td> {teacher.Teacher_Id} </td>
+                                                <td> {teacher.Teacher_FName} {teacher.Teacher_LName}</td>
+                                                <td> {teacher.Teacher_Tel} </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

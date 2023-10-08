@@ -2,6 +2,8 @@ import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react'
 
+import BarcodeScanner2 from "../barcode/BarcodeScanner2";
+
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
 import '../../cssElement/Dashboard.css'
@@ -17,10 +19,23 @@ function EquipmentList({ logout }) {
     });
 
     const [equipment, setEquipment] = useState([]);
-    const [searchQuery, setSearchQuery] = useState(""); // State for search query
-    const [filteredEquipment, setFilteredEquipment] = useState([]); // State for filtered equipment
+    const [equipmentCategory, setEquipmentCategory] = useState([]);
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredEquipment, setFilteredEquipment] = useState([]);
+
+    const [scannedCode, setScannedCode] = useState("");
+    const [inputValue, setInputValue] = useState("");
 
     axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        if (scannedCode) {
+            setInputValue(scannedCode);
+        } else {
+            setInputValue(searchQuery);
+        }
+    }, [scannedCode, searchQuery]);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/staff", {
@@ -39,6 +54,7 @@ function EquipmentList({ logout }) {
 
     useEffect(() => {
         getEquipment();
+        getEquipmentCategory();
     }, []);
 
     const getEquipment = async () => {
@@ -51,16 +67,14 @@ function EquipmentList({ logout }) {
         }
     };
 
-    const deleteEquipment = async (id) => {
+    const getEquipmentCategory = async () => {
         try {
-            const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Equipment", Equipment_Id: id, Staff_Id: staffId };
-            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
-            await axios.delete(`https://special-problem.onrender.com/equipment-list/${id}`)
-            getEquipment();
+            const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
+            setEquipmentCategory(response.data);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     const [staffInfo, setStaffInfo] = useState({
         staffId: "",
@@ -101,22 +115,41 @@ function EquipmentList({ logout }) {
         });
     };
 
-    // Function to handle search input changes and filter equipment
-    const handleSearch = (e) => {
+    const deleteEquipment = async (id) => {
+        try {
+            const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Equipment", Equipment_Id: id, Staff_Id: staffId };
+            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
+            await axios.delete(`https://special-problem.onrender.com/equipment-list/${id}`)
+            getEquipment();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleSearchInputChange = (e) => {
         const query = e.target.value;
         setSearchQuery(query);
 
-        // Use the query to filter equipment based on Equipment_Id, Equipment_Name, or any other property
         const filteredEquipmentList = equipment.filter((item) => {
             return (
                 item.Equipment_Id.toLowerCase().includes(query.toLowerCase()) ||
                 item.Equipment_Name.toLowerCase().includes(query.toLowerCase())
-                // Add more conditions as needed for other properties
             );
         });
 
         setFilteredEquipment(filteredEquipmentList);
+    };
+
+    const getEquipmentCategoryName = (eqId) => {
+        const eqCategory = equipmentCategory.find((eq) => eq.Equipment_Category_Id === eqId);
+        return eqCategory ? eqCategory.Equipment_Category_Name : "N/A";
     }
+
+    const handleSave = (scannedText) => {
+        setScannedCode(scannedText);
+        setInputValue(scannedText);
+        handleSearchInputChange({ target: { value: scannedText } }); // Pass a mock event object
+    };
 
     return (
         <div className='container-fluid vh-100'>
@@ -143,13 +176,16 @@ function EquipmentList({ logout }) {
                 <main className='dashboard__content'>
                     <div className='component__header'>
                         <div className='component__headerGroup component__headerGroup--left'>
+                            <BarcodeScanner2 onSave={handleSave} />
+                            <Link to="/barcode-equipment" className="btn btn-outline-success me-3"><i className="fa-solid fa-barcode"></i></Link>
+
                             <i className='fa-solid fa-magnifying-glass' />
                             <input
                                 type="text"
                                 className="component__search"
                                 placeholder="ค้นหาด้วยรหัสครุภัณฑ์"
                                 value={searchQuery} // Bind input value to searchQuery state
-                                onChange={handleSearch} // Call handleSearch when input changes
+                                onChange={handleSearchInputChange} // Call handleSearch when input changes
                             />
                         </div>
 
@@ -163,7 +199,7 @@ function EquipmentList({ logout }) {
                         <div className='table__tabs'>
                             <Link className='table__tab table__tab--chemicals table__tab--active'>ครุภัณฑ์</Link>
                             <Link to="/equipmentCategory-list" className='table__tab table__tab--equipment table__tab--unactive'>หมวดหมู่ครุภัณฑ์</Link>
-                            <Link to="/report-equipment"className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
+                            <Link to="/report-equipment" className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
                         </div>
 
                         <table className="table table-striped">
@@ -171,7 +207,7 @@ function EquipmentList({ logout }) {
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">รหัสครุภัณฑ์</th>
-                                    <th scope="col">รหัสหมวดหมู่ครุภัณฑ์</th>
+                                    <th scope="col">หมวดหมู่ครุภัณฑ์</th>
                                     <th scope="col">ชื่อครุภัณฑ์</th>
                                     <th scope="col">จำนวน</th>
                                     <th scope="col">สถานที่เก็บ</th>
@@ -187,7 +223,7 @@ function EquipmentList({ logout }) {
                                     <tr key={index} className="active-row">
                                         <td> {index + 1} </td>
                                         <td> {equipment.Equipment_Id} </td>
-                                        <td> {equipment.Equipment_Category_Id} </td>
+                                        <td> {getEquipmentCategoryName(equipment.Equipment_Category_Id)} </td>
                                         <td> {equipment.Equipment_Name} </td>
                                         <td> {equipment.Quantity} </td>
                                         <td> {equipment.Location} </td>
@@ -211,23 +247,23 @@ function EquipmentList({ logout }) {
                         </table>
                     </div>
                 </main>
-            </div>
 
-            <footer className='footer'>
-                <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
-                <Link to="/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
-                <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
-                <Link to="/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
-                <div className="dropup">
-                    <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
-                        <i className="fa-solid fa-user" />
-                    </button>
-                    <ul className="dropdown-menu">
-                        <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
-                        <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
-                    </ul>
-                </div>
-            </footer>
+                <footer className='footer'>
+                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
+                    <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
+                    <Link to="/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
+                    <div className="dropup">
+                        <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
+                            <i className="fa-solid fa-user" />
+                        </button>
+                        <ul className="dropdown-menu">
+                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        </ul>
+                    </div>
+                </footer>
+            </div>
         </div>
     )
 }

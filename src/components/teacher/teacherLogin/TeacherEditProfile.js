@@ -2,6 +2,9 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
 import '../../cssElement/Dashboard.css'
@@ -90,17 +93,20 @@ function TeacherEditProfile({ logout }) {
             }
         } catch (err) {
             if (err.response && err.response.status === 400) {
-                alert("Username already exists");
+                notify();
             } else {
                 console.log("Error:", err);
             }
         }
     };
 
-  return (
-    <div className='container-fluid vh-100'>
+    const notify = () => toast.warn("Username already exists");
+
+    return (
+        <div className='container-fluid vh-100'>
+            <ToastContainer />
             <div className='dashboard__container'>
-            <aside className='sidebar'>
+                <aside className='sidebar'>
                     <div className='sidebar__header'>
                         <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
                         <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
@@ -198,7 +204,7 @@ function TeacherEditProfile({ logout }) {
                 </footer>
             </div>
         </div>
-  )
+    )
 }
 
 export default TeacherEditProfile

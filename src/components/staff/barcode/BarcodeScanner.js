@@ -7,7 +7,7 @@ const BarcodeScanner = ({ onScannedTextChange }) => {
   const scannerRef = useRef(null);
   const [scanning, setScanning] = useState(false);
   const [scannedText, setScannedText] = useState("");
-  const [isMounted, setIsMounted] = useState(true); // New state to track component mount status
+  const [isMounted, setIsMounted] = useState(true);
 
   useEffect(() => {
     let scannerIsRunning = false;

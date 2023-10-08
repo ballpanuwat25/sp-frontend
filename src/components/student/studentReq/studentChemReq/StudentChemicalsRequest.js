@@ -27,6 +27,8 @@ function StudentChemicalsRequest() {
 
     axios.defaults.withCredentials = true;
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const formatDate = (dateString) => {
         const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
         const date = new Date(dateString);
@@ -39,6 +41,8 @@ function StudentChemicalsRequest() {
             (request) => request.Student_Id.includes(inputValue)
         );
         setFilteredChemicalsReq(filteredRequests);
+        getChemicalsRequest();
+        setIsLoading(false);
     }, [chemicalsReq]);
 
     useEffect(() => {
@@ -53,7 +57,6 @@ function StudentChemicalsRequest() {
                 setStudentInfo(response.data);
             }
         });
-        getChemicalsRequest();
     }, []);
 
     const getChemicalsRequest = async () => {

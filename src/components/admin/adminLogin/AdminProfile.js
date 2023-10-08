@@ -2,6 +2,9 @@ import axios from "axios";
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
 import '../../cssElement/Dashboard.css'
@@ -48,7 +51,7 @@ function AdminProfile({ logout }) {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                alert("Password changed successfully");
+                notify();
                 axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
                     if (response.data.Error) {
                         alert(response.data.Error);
@@ -74,8 +77,11 @@ function AdminProfile({ logout }) {
         });
     };
 
+    const notify = () => toast.success("Password changed successfully");
+
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>

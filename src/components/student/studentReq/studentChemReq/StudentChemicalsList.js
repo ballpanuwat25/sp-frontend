@@ -1,7 +1,9 @@
 import axios from "axios";
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import Alert from '../../../Alert'
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../../../cssElement/Table.css'
 import '../../../cssElement/Form.css'
@@ -34,26 +36,33 @@ function StudentChemicalsList() {
     const [chemicalsReq, setChemicalsReq] = useState([]);
     const [mostRequestedChemIds, setMostRequestedChemIds] = useState([]);
 
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
-
     const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState(true);
 
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        setAlertMessage("หลังใช้งานเสร็จควรออกจากระบบทุกครั้ง เพื่อไม่ให้เกิดปัญหาในการเข้าสู่ระบบครั้งถัดไป")
-        setShowAlert(true);
-        getChemicalsRequest();
+        fetchData();
+        notify();
     }, []);
 
-    const getChemicalsRequest = async () => {
+    const notify = () => toast.info("หลังใช้งานเสร็จควรออกจากระบบทุกครั้ง เพื่อไม่ให้เกิดปัญหาในการเข้าสู่ระบบครั้งถัดไป");
+    const notifyWarn = () => toast.warn("This chemical is already in your cart");
+
+    const fetchData = async () => {
         try {
-            const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
-            setChemicalsReq(response.data);
-            findMostRequestedChemIds(response.data, 10);
+            const chemicalsResponse = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
+            setChemicalsReq(chemicalsResponse.data);
+            findMostRequestedChemIds(chemicalsResponse.data, 10);
+
+            const chemicalsDetailResponse = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+            setChemicalsDetail(chemicalsDetailResponse.data);
+
+            setIsLoading(false);
         } catch (error) {
             console.error("Error fetching chemicals request:", error);
+            setIsLoading(false);
         }
     };
 
@@ -80,7 +89,7 @@ function StudentChemicalsList() {
         const existingChemical = cartData.find(item => item.Student_Id === studentInfo.studentId && item.Chem_Id === chemId);
 
         if (existingChemical) {
-            alert('This chemical is already in your cart');
+            notifyWarn();
             return;
         }
 
@@ -109,17 +118,11 @@ function StudentChemicalsList() {
                 });
             }
         });
-        getChemicalsDetail();
     }, []);
 
     useEffect(() => {
         setFilteredChemicals(chemicalsDetail);
     }, [chemicalsDetail]);
-
-    const getChemicalsDetail = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
-        setChemicalsDetail(response.data);
-    }
 
     const addToCart = (Chem_Id) => {
         // Get the existing cart data from localStorage (if any)
@@ -129,7 +132,7 @@ function StudentChemicalsList() {
         const existingChemical = cartData.find(item => item.Student_Id === studentInfo.studentId && item.Chem_Id === Chem_Id);
 
         if (existingChemical) {
-            alert('This chemical is already in your cart');
+            notifyWarn();
         } else {
             cartData.push({
                 Student_Id: studentInfo.studentId,
@@ -177,12 +180,7 @@ function StudentChemicalsList() {
 
     return (
         <div className='container-fluid vh-100'>
-            {showAlert && (
-                <Alert
-                    message={alertMessage}
-                    onClose={() => setShowAlert(false)}
-                />
-            )}
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>
@@ -203,117 +201,125 @@ function StudentChemicalsList() {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass'></i>
-                            <input
-                                type="search"
-                                className='component__search'
-                                placeholder="ค้นหาด้วยชื่อ"
-                                value={searchQuery}
-                                onChange={handleSearch}
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass'></i>
+                                    <input
+                                        type="search"
+                                        className='component__search'
+                                        placeholder="ค้นหาด้วยชื่อ"
+                                        value={searchQuery}
+                                        onChange={handleSearch}
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <div>{user_picture}</div>
-                            <div>{user_email}</div>
-                        </div>
-                    </div>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <div>{user_picture}</div>
+                                    <div>{user_email}</div>
+                                </div>
+                            </div>
 
-                    <div >
-                        <div className='table__tabs'>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>รายการสารเคมี</Link>
-                            <Link to="/student-dashboard/student-equipment-list" className='table__tab table__tab--equipment table__tab--unactive'>รายการครุภัณฑ์</Link>
-                        </div>
+                            <div >
+                                <div className='table__tabs'>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>รายการสารเคมี</Link>
+                                    <Link to="/student-dashboard/student-equipment-list" className='table__tab table__tab--equipment table__tab--unactive'>รายการครุภัณฑ์</Link>
+                                </div>
 
-                        <table className='table table-striped'>
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Chemicals Name</th>
-                                    <th scope="col">Chemicals CAS</th>
-                                    <th scope="col">Chemicals UN</th>
-                                    <th scope="col">Chemicals Type</th>
-                                    <th scope="col">Chemicals Grade</th>
-                                    <th scope="col">Chemicals State</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredChemicals.map((chemicalsDetail, index) => {
-                                    // Filter the chemicalsReq list to find unique Chem_Id types
-                                    const uniqueChemIdTypes = [...new Set(chemicalsReq.map(request => request.Chem_Id))];
-
-                                    const isOffCanvasEnabled = uniqueChemIdTypes.length >= 3;
-
-                                    return (
-                                        <tr key={index} className="active-row">
-                                            <td> {index + 1} </td>
-                                            <td> {chemicalsDetail.Chem_Name} </td>
-                                            <td> {chemicalsDetail.Chem_CAS} </td>
-                                            <td> {chemicalsDetail.Chem_UN} </td>
-                                            <td> {chemicalsDetail.Chem_Type} </td>
-                                            <td> {chemicalsDetail.Chem_Grade} </td>
-                                            <td> {chemicalsDetail.Chem_State} </td>
-                                            <td>
-                                                <div>
-                                                    <button
-                                                        onClick={() => addToCart(chemicalsDetail.Chem_Id)}
-                                                        data-bs-toggle={isOffCanvasEnabled ? "offcanvas" : ""}
-                                                        data-bs-target={isOffCanvasEnabled ? "#offcanvasWithBackdrop1" : ""}
-                                                        aria-controls="offcanvasWithBackdrop"
-                                                        className="table__button thai--font"
-                                                    >
-                                                        <i className="fa-solid fa-circle-plus" />
-                                                        เพิ่มลงตระกร้า
-                                                    </button>
-
-                                                    {isOffCanvasEnabled && (
-                                                        <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasWithBackdrop1" aria-labelledby="offcanvasWithBackdropLabel">
-                                                            <div className="offcanvas-header">
-                                                                <button type="button" className="btn-close text-reset offcanvas-close--button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                                                                <div className="offcanvas--title">
-                                                                    {findChemicalNameById(selectedChemicalsId.Chem_Id)} <p className="offcanvas__title--highlight">ถูกเพิ่มลงตระกร้าสารเคมีแล้ว</p>
-                                                                </div>
-                                                                <Link to="/student-dashboard/student-chemicals-cart" className="offcanvas--link">ไปที่ตระกร้าสารเคมี</Link>
-                                                            </div>
-                                                            <div className="offcanvas-body">
-                                                                {selectedChemicalsId && (
-                                                                    <div>
-                                                                        <h5 className="thai--font"> สารเคมีแนะนำ </h5>
-                                                                        <ul className="offcanvas__lists">
-                                                                            {mostRequestedChemIds.map((chemId, index) => (
-                                                                                selectedChemicalsId.Chem_Id !== chemId && (
-                                                                                    <li className="offcanvas__item" key={index}>
-                                                                                        {findChemicalNameById(chemId)}
-                                                                                        <button
-                                                                                            className="offcanvas__button"
-                                                                                            onClick={() => addChemToCartFromOffcanvas(chemId)}
-                                                                                        >
-                                                                                            <i className="fa-solid fa-circle-plus" />
-                                                                                            <div className="offcanvas__button-text offcanvas__button-text--hover">
-                                                                                                add to cart
-                                                                                            </div>
-                                                                                        </button>
-                                                                                    </li>
-                                                                                )
-                                                                            ))}
-                                                                        </ul>
-
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </td>
+                                <table className='table table-striped'>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Chemicals Name</th>
+                                            <th scope="col">Chemicals CAS</th>
+                                            <th scope="col">Chemicals UN</th>
+                                            <th scope="col">Chemicals Type</th>
+                                            <th scope="col">Chemicals Grade</th>
+                                            <th scope="col">Chemicals State</th>
+                                            <th scope="col"></th>
                                         </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+                                    </thead>
+                                    <tbody>
+                                        {filteredChemicals.map((chemicalsDetail, index) => {
+                                            // Filter the chemicalsReq list to find unique Chem_Id types
+                                            const uniqueChemIdTypes = [...new Set(chemicalsReq.map(request => request.Chem_Id))];
+
+                                            const isOffCanvasEnabled = uniqueChemIdTypes.length >= 3;
+
+                                            return (
+                                                <tr key={index} className="active-row">
+                                                    <td> {index + 1} </td>
+                                                    <td> {chemicalsDetail.Chem_Name} </td>
+                                                    <td> {chemicalsDetail.Chem_CAS} </td>
+                                                    <td> {chemicalsDetail.Chem_UN} </td>
+                                                    <td> {chemicalsDetail.Chem_Type} </td>
+                                                    <td> {chemicalsDetail.Chem_Grade} </td>
+                                                    <td> {chemicalsDetail.Chem_State} </td>
+                                                    <td>
+                                                        <div>
+                                                            <button
+                                                                onClick={() => addToCart(chemicalsDetail.Chem_Id)}
+                                                                data-bs-toggle={isOffCanvasEnabled ? "offcanvas" : ""}
+                                                                data-bs-target={isOffCanvasEnabled ? "#offcanvasWithBackdrop1" : ""}
+                                                                aria-controls="offcanvasWithBackdrop"
+                                                                className="table__button thai--font"
+                                                            >
+                                                                <i className="fa-solid fa-circle-plus" />
+                                                                เพิ่มลงตระกร้า
+                                                            </button>
+
+                                                            {isOffCanvasEnabled && (
+                                                                <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasWithBackdrop1" aria-labelledby="offcanvasWithBackdropLabel">
+                                                                    <div className="offcanvas-header">
+                                                                        <button type="button" className="btn-close text-reset offcanvas-close--button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                                        <div className="offcanvas--title">
+                                                                            {findChemicalNameById(selectedChemicalsId.Chem_Id)} <p className="offcanvas__title--highlight">ถูกเพิ่มลงตระกร้าสารเคมีแล้ว</p>
+                                                                        </div>
+                                                                        <Link to="/student-dashboard/student-chemicals-cart" className="offcanvas--link">ไปที่ตระกร้าสารเคมี</Link>
+                                                                    </div>
+                                                                    <div className="offcanvas-body">
+                                                                        {selectedChemicalsId && (
+                                                                            <div>
+                                                                                <h5 className="thai--font"> สารเคมีแนะนำ </h5>
+                                                                                <ul className="offcanvas__lists">
+                                                                                    {mostRequestedChemIds.map((chemId, index) => (
+                                                                                        selectedChemicalsId.Chem_Id !== chemId && (
+                                                                                            <li className="offcanvas__item" key={index}>
+                                                                                                {findChemicalNameById(chemId)}
+                                                                                                <button
+                                                                                                    className="offcanvas__button"
+                                                                                                    onClick={() => addChemToCartFromOffcanvas(chemId)}
+                                                                                                >
+                                                                                                    <i className="fa-solid fa-circle-plus" />
+                                                                                                    <div className="offcanvas__button-text offcanvas__button-text--hover">
+                                                                                                        add to cart
+                                                                                                    </div>
+                                                                                                </button>
+                                                                                            </li>
+                                                                                        )
+                                                                                    ))}
+                                                                                </ul>
+
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

@@ -2,7 +2,10 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import BarcodeScanner from '../barcode/BarcodeScanner';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import BarcodeScanner2 from "../barcode/BarcodeScanner2";
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
@@ -31,7 +34,16 @@ function AddChemicals({ logout }) {
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
-    const [scannedText, setScannedText] = useState("");
+    const [scannedCode, setScannedCode] = useState("");
+    const [inputValue, setInputValue] = useState("");
+
+    useEffect(() => {
+        if (scannedCode) {
+            setInputValue(scannedCode);
+        } else {
+            setInputValue(chemicals.Chem_Bottle_Id);
+        }
+    }, [scannedCode, chemicals.Chem_Bottle_Id]);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/staff", {
@@ -56,7 +68,7 @@ function AddChemicals({ logout }) {
             // Check if Chem_Id already exists
             const chemBottleIdExists = await axios.get(`https://special-problem.onrender.com/chemicals-list/${Chem_Bottle_Id}`);
             if (chemBottleIdExists.data) {
-                alert("Chem_Id already exists. Please enter a different Chem_Bottle_Id.");
+                notifyWarn();
                 return;
             }
 
@@ -64,18 +76,25 @@ function AddChemicals({ logout }) {
             await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
             await axios.post("https://special-problem.onrender.com/chemicals-list", chemicals);
 
-            alert("Chemicals added successfully");
+            notifySuccess();
             navigate("/chemicals-list");
         } catch (err) {
             console.log(err);
         }
     };
 
-    const handleScannedTextChange = (scannedText) => {
-        setScannedText(scannedText);
+    const notifyWarn = () => toast.warn("Chem_Id already exists. Please enter a different Chem_Bottle_Id.");
+    const notifySuccess = () => toast.success("Chemicals added successfully");
+
+    const handleChemBotleIdChange = (e) => {
+        setChemicals({ ...chemicals, Chem_Bottle_Id: e.target.value });
     };
 
-    const handleApplyButtonClick = () => {
+    const handleSave = (scannedText) => {
+        setScannedCode(scannedText);
+
+        // Update inputValue and chemicals.Chem_Bottle_Id
+        setInputValue(scannedText);
         setChemicals({ ...chemicals, Chem_Bottle_Id: scannedText });
     };
 
@@ -118,6 +137,7 @@ function AddChemicals({ logout }) {
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer/>
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>
@@ -163,11 +183,15 @@ function AddChemicals({ logout }) {
                         <div className="mb-3">
                             <label htmlFor="Chem_Bottle_Id" className="profile__label">รหัสขวดสารเคมี*</label>
                             <div className="input-group">
-                                <BarcodeScanner onScannedTextChange={handleScannedTextChange} />
-                                <input type="text" className="form-control form-control-scan2" id="Chem_Bottle_Id" placeholder="Enter Chemicals Bottle Id" required value={chemicals.Chem_Bottle_Id}
-                                    onChange={(e) => {
-                                        setChemicals({ ...chemicals, Chem_Bottle_Id: e.target.value });
-                                    }}
+                                <BarcodeScanner2 onSave={handleSave} />
+                                <input
+                                    type="text"
+                                    className="form-control form-control-scan2"
+                                    id="Chem_Bottle_Id"
+                                    placeholder="Enter Chemicals Bottle Id"
+                                    required
+                                    value={inputValue} // Use 'value' instead of 'defaultValue'
+                                    onChange={handleChemBotleIdChange}
                                 />
                             </div>
                         </div>

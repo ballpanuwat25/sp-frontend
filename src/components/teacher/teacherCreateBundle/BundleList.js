@@ -2,6 +2,9 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
 import '../../cssElement/Dashboard.css'
@@ -126,12 +129,14 @@ function BundleList({ logout }) {
     const handleDelete = async (id) => {
         try {
             await axios.delete(`https://special-problem.onrender.com/bundle-list/${id}`);
-            alert("Bundle deleted successfully");
+            notify();
             getBundleList();
         } catch (err) {
             alert(err.response.data.Error);
         }
     }
+
+    const notify = () => toast.success("Bundle deleted successfully");
 
     useEffect(() => {
         const filteredBundleList = bundleList.filter((bundle) => {
@@ -161,6 +166,7 @@ function BundleList({ logout }) {
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>

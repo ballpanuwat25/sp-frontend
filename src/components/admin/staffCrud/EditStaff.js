@@ -6,6 +6,9 @@ import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
 import '../../cssElement/Dashboard.css'
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import logo from '../../assets/logo.png';
 
 function EditStaff({ logout }) {
@@ -52,13 +55,15 @@ function EditStaff({ logout }) {
         } catch (err) {
             if (err.response && err.response.status === 400) {
                 // Username already exists, display an error message
-                alert("Username already exists");
+                notify();
             } else {
                 // Handle other possible errors
                 console.log("Error:", err);
             }
         }
     };
+
+    const notify = () => toast.warn("Username already exists");
 
     const [adminInfo, setAdminInfo] = useState({
         adminName: "",
@@ -103,6 +108,7 @@ function EditStaff({ logout }) {
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>

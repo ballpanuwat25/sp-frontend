@@ -2,6 +2,9 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
 import '../../cssElement/Dashboard.css'
@@ -33,13 +36,15 @@ function AddStaff({ logout }) {
         } catch (err) {
             if (err.response && err.response.status === 400) {
                 // Username already exists, display an error message
-                alert("Username already exists");
+                notify();
             } else {
                 // Handle other possible errors
                 console.log("Error:", err);
             }
         }
-    };    
+    };
+
+    const notify = () => toast.warn("Username already exists");
 
     const [adminInfo, setAdminInfo] = useState({
         adminName: "",
@@ -84,6 +89,7 @@ function AddStaff({ logout }) {
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>

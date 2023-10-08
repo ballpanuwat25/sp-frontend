@@ -9,23 +9,33 @@ import '../../cssElement/Dashboard.css'
 import logo from '../../assets/logo.png';
 
 function StudentBundleList() {
+    const [teachers, setTeachers] = useState([]);
     const [bundleList, setBundleList] = useState([]);
     const [filteredBundleList, setFilteredBundleList] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+    
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        getBundleList();
+        fetchData();
     }, []);
 
     useEffect(() => {
         setFilteredBundleList(bundleList);
     }, [bundleList]);
 
-    const getBundleList = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/bundle-list");
-        setBundleList(response.data);
-    }
+    const fetchData = async () => {
+        try {
+            const bundleResponse = await axios.get("https://special-problem.onrender.com/bundle-list");
+            const teacherResponse = await axios.get("https://special-problem.onrender.com/teacher-list");
+            setTeachers(teacherResponse.data);
+            setBundleList(bundleResponse.data);
+            setIsLoading(false);
+        } catch (err) {
+            console.error('Error fetching data:', err);
+            setIsLoading(false);
+        }
+    };
 
     const handleSearch = (e) => {
         const query = e.target.value;
@@ -125,17 +135,6 @@ function StudentBundleList() {
         });
     };
 
-    const [teachers, setTeachers] = useState([]);
-
-    useEffect(() => {
-        getTeachers();
-    }, []);
-
-    const getTeachers = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/teacher-list");
-        setTeachers(response.data);
-    };
-
     const findTeacherFNameById = (teacherId) => {
         const teacher = teachers.find((teacher) => teacher.Teacher_Id === teacherId);
         return teacher ? teacher.Teacher_FName : "";
@@ -168,60 +167,68 @@ function StudentBundleList() {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass'></i>
-                            <input
-                                type="search"
-                                className='component__search'
-                                placeholder="ค้นหาด้วยชื่อ"
-                                value={searchQuery}
-                                onChange={handleSearch}
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass'></i>
+                                    <input
+                                        type="search"
+                                        className='component__search'
+                                        placeholder="ค้นหาด้วยชื่อ"
+                                        value={searchQuery}
+                                        onChange={handleSearch}
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <div>{user_picture}</div>
-                            <div>{user_email}</div>
-                        </div>
-                    </div>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <div>{user_picture}</div>
+                                    <div>{user_email}</div>
+                                </div>
+                            </div>
 
-                    <div >
-                        <div className='table__tabs'>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>กลุ่มสารเคมีและครุภัณฑ์</Link>
+                            <div >
+                                <div className='table__tabs'>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>กลุ่มสารเคมีและครุภัณฑ์</Link>
+                                </div>
+                                <table className='table table-striped'>
+                                    <thead>
+                                        <tr>
+                                            <th scope='col'>#</th>
+                                            <th scope='col'>ชื่อ</th>
+                                            <th scope='col'>รายละเอียด</th>
+                                            <th scope='col'>สร้างโดย</th>
+                                            <th scope='col'>สร้างเมื่อ</th>
+                                            <th scope='col'></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {processedBundleList.map((bundle, index) => (
+                                            <tr key={index} className="active-row">
+                                                <th>{index + 1}</th>
+                                                <td>{bundle.Bundle_Name}</td>
+                                                <td>{bundle.Bundle_Description}</td>
+                                                <td>{findTeacherFNameById(bundle.Teacher_Id)} {findTeacherLNameById(bundle.Teacher_Id)}</td>
+                                                <td>{formatDate(bundle.createdAt)}</td>
+                                                <td>
+                                                    <Link to={`${bundle.Bundle_Name}`} className='disable--link thai--font'>
+                                                        <div className="table__button">
+                                                            <i className="fa-solid fa-eye"></i>
+                                                            ดูรายละเอียด
+                                                        </div>
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <table className='table table-striped'>
-                            <thead>
-                                <tr>
-                                    <th scope='col'>#</th>
-                                    <th scope='col'>ชื่อ</th>
-                                    <th scope='col'>รายละเอียด</th>
-                                    <th scope='col'>สร้างโดย</th>
-                                    <th scope='col'>สร้างเมื่อ</th>
-                                    <th scope='col'></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {processedBundleList.map((bundle, index) => (
-                                    <tr key={index} className="active-row">
-                                        <th>{index + 1}</th>
-                                        <td>{bundle.Bundle_Name}</td>
-                                        <td>{bundle.Bundle_Description}</td>
-                                        <td>{findTeacherFNameById(bundle.Teacher_Id)} {findTeacherLNameById(bundle.Teacher_Id)}</td>
-                                        <td>{formatDate(bundle.createdAt)}</td>
-                                        <td>
-                                            <Link to={`${bundle.Bundle_Name}`} className='disable--link thai--font'>
-                                                <div className="table__button">
-                                                    <i className="fa-solid fa-eye"></i>
-                                                    ดูรายละเอียด
-                                                </div>
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

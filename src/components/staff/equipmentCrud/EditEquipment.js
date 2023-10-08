@@ -247,23 +247,23 @@ function EditEquipment({ logout }) {
                         <button type="submit" className="table__tab table__button thai--font">อัพเดต</button>
                     </form>
                 </main>
-            </div>
 
-            <footer className='footer'>
-                <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
-                <Link to="/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
-                <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
-                <Link to="/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
-                <div className="dropup">
-                    <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
-                        <i className="fa-solid fa-user" />
-                    </button>
-                    <ul className="dropdown-menu">
-                        <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
-                        <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
-                    </ul>
-                </div>
-            </footer>
+                <footer className='footer'>
+                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
+                    <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
+                    <Link to="/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
+                    <div className="dropup">
+                        <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
+                            <i className="fa-solid fa-user" />
+                        </button>
+                        <ul className="dropdown-menu">
+                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        </ul>
+                    </div>
+                </footer>
+            </div>
         </div>
     )
 }

@@ -51,12 +51,12 @@ function BundleView({ logout }) {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
         }).then((response) => {
-                if (response.data.Error) {
-                    alert(response.data.Error);
-                } else {
-                    setTeacherInfo(response.data);
-                }
-            });
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setTeacherInfo(response.data);
+            }
+        });
     }, []);
 
     axios.defaults.withCredentials = true;
@@ -147,6 +147,20 @@ function BundleView({ logout }) {
                     )}
                 </main>
 
+                <footer className='footer'>
+                    <Link to="/teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to="/teacher-dashboard/bundle-list" className='footer__item'> <i className="fa-solid fa-boxes-stacked" /></Link>
+                    <div className="dropup">
+                        <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
+                            <i className="fa-solid fa-user" />
+                        </button>
+                        <ul class="dropdown-menu">
+                            <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        </ul>
+                    </div>
+                </footer>
             </div>
         </div>
     );

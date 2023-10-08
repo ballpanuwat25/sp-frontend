@@ -2,6 +2,12 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+import BarcodeScanner2 from '../barcode/BarcodeScanner2';
+
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
 import '../../cssElement/Dashboard.css'
@@ -29,6 +35,17 @@ function AddEquipment({ logout }) {
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
+    const [scannedCode, setScannedCode] = useState("");
+    const [inputValue, setInputValue] = useState("");
+
+    useEffect(() => {
+        if (scannedCode) {
+            setInputValue(scannedCode);
+        } else {
+            setInputValue(equipment.Equipment_Id);
+        }
+    }, [scannedCode, equipment.Equipment_Id]);
+
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/staff", {
             headers: {
@@ -51,7 +68,7 @@ function AddEquipment({ logout }) {
 
             const equipmentIdExists = await axios.get(`https://special-problem.onrender.com/equipment-list/${Equipment_Id}`);
             if (equipmentIdExists.data) {
-                alert("Equipment Id already exists. Please enter a different Equipment Id.");
+                notifyWarn();
                 return;
             }
 
@@ -59,11 +76,26 @@ function AddEquipment({ logout }) {
             await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
             await axios.post("https://special-problem.onrender.com/equipment-list", (equipment));
 
-            alert("Equipment added successfully");
+            notifySuccess();
             navigate("/equipment-list");
         } catch (err) {
             console.log(err);
         }
+    };
+
+    const notifyWarn = () => toast.warn("Equipment Id already exists. Please enter a different Chem_Bottle_Id.");
+    const notifySuccess = () => toast.success("Equipment added successfully");
+
+    const handleEquipmentIdChange = (e) => {
+        setEquipment({ ...equipment, Equipment_Id: e.target.value });
+    };
+
+    const handleSave = (scannedText) => {
+        setScannedCode(scannedText);
+
+        // Update inputValue and chemicals.Chem_Bottle_Id
+        setInputValue(scannedText);
+        setEquipment({ ...equipment, Equipment_Id: scannedText });
     };
 
     const [staffInfo, setStaffInfo] = useState({
@@ -105,6 +137,7 @@ function AddEquipment({ logout }) {
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>
@@ -150,11 +183,18 @@ function AddEquipment({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Equipment_Id" className="profile__label">รหัสครุภัณฑ์*</label>
-                            <input type="text" className="profile__input" id="Equipment_Id" placeholder="รหัสครุภัณฑ์" required
-                                onChange={(e) => {
-                                    setEquipment({ ...equipment, Equipment_Id: e.target.value });
-                                }}
-                            />
+                            <div className="input-group">
+                                <BarcodeScanner2 onSave={handleSave} />
+                                <input
+                                    type="text"
+                                    className="form-control form-control-scan2"
+                                    id="Equipment_Id"
+                                    placeholder="รหัสครุภัณฑ์"
+                                    required
+                                    value={inputValue}
+                                    onChange={handleEquipmentIdChange}
+                                />
+                            </div>
                         </div>
 
                         <div className="mb-3">

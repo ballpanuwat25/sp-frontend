@@ -53,7 +53,8 @@ import StaffChemicalsRequestList from './components/staff/staffConfirmReq/StaffC
 import StaffEquipmentRequest from './components/staff/staffConfirmReq/StaffEquipmentRequest.js';
 import StaffEquipmentRequestList from './components/staff/staffConfirmReq/StaffEquipmentRequestList.js';
 
-import BarcodeList from './components/staff/chemicalsCrud/BarcodeList.js';
+import BarcodeChemicals from './components/staff/chemicalsCrud/BarcodeChemicals.js';
+import BarcodeEquipment from './components/staff/equipmentCrud/BarcodeEquipment.js';
 
 import ReportChemicals from './components/staff/chemicalsCrud/ReportChemicals.js';
 import ReportEquipment from './components/staff/equipmentCrud/ReportEquipment.js';
@@ -187,7 +188,8 @@ function App() {
         <Route path="/chemicalsDetail-list/add-chemicalsDetail" element={staffLoggedIn ? <AddChemicalsDetail logout={handleStaffLogOut} /> : <Navigate to="/" />} />
         <Route path="/chemicalsDetail-list/edit-chemicalsDetail/:id" element={staffLoggedIn ? <EditChemicalsDetail logout={handleStaffLogOut} /> : <Navigate to="/" />} />
 
-        <Route path="/barcode-generator" element={staffLoggedIn ? <BarcodeList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/barcode-chemicals" element={staffLoggedIn ? <BarcodeChemicals logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/barcode-equipment" element={staffLoggedIn ? <BarcodeEquipment logout={handleStaffLogOut} /> : <Navigate to="/" />} />
 
         <Route path="/equipment-list" element={staffLoggedIn ? <EquipmentList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
         <Route path="/equipment-list/add-equipment" element={staffLoggedIn ? <AddEquipment logout={handleStaffLogOut} /> : <Navigate to="/" />} />

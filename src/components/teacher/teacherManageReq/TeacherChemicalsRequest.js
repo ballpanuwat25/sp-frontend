@@ -45,6 +45,7 @@ function TeacherChemicalsRequest({ logout }) {
 
     useEffect(() => {
         getChemicalsRequest();
+        getChemicalsDetail();
     }, []);
 
     const getChemicalsRequest = async () => {
@@ -148,10 +149,6 @@ function TeacherChemicalsRequest({ logout }) {
     };
 
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
-
-    useEffect(() => {
-        getChemicalsDetail();
-    }, []);
 
     const getChemicalsDetail = async () => {
         const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
