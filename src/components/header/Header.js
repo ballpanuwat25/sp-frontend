@@ -11,7 +11,7 @@ function Header() {
 
             <div className='header__buttonsCenter'>
                 <Link to="/" className='header__button header__button--hover'>Home</Link>
-                <Link to="/" className='header__button header__button--hover mx-5'>About</Link>
+                <Link to="https://forms.gle/7L4BApMbd9mfqaaq7" className='header__button header__button--hover mx-5'>About</Link>
                 <Link to="/" className='header__button header__button--hover'>Contact</Link>
             </div>
 
