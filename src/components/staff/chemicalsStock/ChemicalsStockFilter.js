@@ -145,6 +145,12 @@ function ChemicalsStockList({ logout }) {
             ]);
         });
 
+        worksheet.addRow([]);
+
+        // Add a row for the report generation timestamp
+        const reportTimestampRow = ['วันเวลาที่ออกรายงาน', new Date().toLocaleString()];
+        worksheet.addRow(reportTimestampRow);
+
         // Save the workbook to a Blob
         workbook.xlsx.writeBuffer().then(buffer => {
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

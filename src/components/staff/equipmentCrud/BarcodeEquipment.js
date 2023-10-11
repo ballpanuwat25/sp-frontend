@@ -80,8 +80,8 @@ function BarcodeEquipment({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-equipment-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Equipment</div></Link>
-                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" />  Chemicals</Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" /><div className='sidebar__item--active'>Equipment</div></Link>
                         <Link to="/equipment-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
@@ -119,8 +119,8 @@ function BarcodeEquipment({ logout }) {
                                 {equipment.map((equipment, index) => (
                                     <tr key={equipment.Equipment_Id} className="active-row">
                                         <td className="table-data">{index + 1}</td>
-                                        <td className="table-data"><Barcode value={equipment.Equipment_Id} background="#f2f2f2" /></td>
                                         <td className="table-data">{equipment.Equipment_Name}</td>
+                                        <td className="table-data"><Barcode value={equipment.Equipment_Id} background="#f2f2f2" height="30" width="1.5" fontSize="10" /></td>
                                     </tr>
                                 ))}
                             </tbody>

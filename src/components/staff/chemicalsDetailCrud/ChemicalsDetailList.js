@@ -171,7 +171,7 @@ function ChemicalsDetailList({ logout }) {
                                         <td> {chemicalsDetail.Chem_Type} </td>
                                         <td> {chemicalsDetail.Chem_Grade} </td>
                                         <td> {chemicalsDetail.Chem_State} </td>
-                                        <td> {chemicalsDetail.Chem_MSDS} </td>
+                                        <td> <Link to={chemicalsDetail.Chem_MSDS}>{chemicalsDetail.Chem_MSDS}</Link> </td>
                                         <td> {chemicalsDetail.Chem_GHS} </td>
                                         <td>
                                             <div className="d-grid gap-2 d-sm-flex">

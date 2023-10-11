@@ -15,8 +15,19 @@ function Header() {
                 <Link to="/" className='header__button header__button--hover'>Contact</Link>
             </div>
 
-            <div className='header__buttonsEnd'>
-                <Link to="/student-login" className='header__button header__button--hover me-4'>Log in</Link>
+            <div className='header__buttonsEnd d-flex'>
+                <div className='dropdown'>
+                    <button className='header__button header__button--hover me-4 dropdown-toggle' type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Log in
+                    </button>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><Link class="dropdown-item" to="/student-login">Student</Link></li>
+                        <li><Link class="dropdown-item" to="/teacher-login">Teacher</Link></li>
+                        <li><Link class="dropdown-item" to="/staff-login">Staff</Link></li>
+                        <li><Link class="dropdown-item" to="/admin-login">Admin</Link></li>
+                    </ul>
+                </div>
                 <Link to="/student-register" className='header__button header__button--signup '>Sign up</Link>
 
                 <i className="fa-solid fa-bars" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"></i>
@@ -40,7 +51,18 @@ function Header() {
                             </div>
 
                             <div className='header__links'>
-                                <Link to="/student-login" className='header__link header__button--hover'>Log in</Link>
+                                <div className='dropdown'>
+                                    <button className='header__button--hover dropdown-toggle' type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Log in
+                                    </button>
+
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                        <li><Link class="dropdown-item" to="/student-login">Student</Link></li>
+                                        <li><Link class="dropdown-item" to="/teacher-login">Teacher</Link></li>
+                                        <li><Link class="dropdown-item" to="/staff-login">Staff</Link></li>
+                                        <li><Link class="dropdown-item" to="/admin-login">Admin</Link></li>
+                                    </ul>
+                                </div>
                             </div>
 
                             <div className='header__links'>
