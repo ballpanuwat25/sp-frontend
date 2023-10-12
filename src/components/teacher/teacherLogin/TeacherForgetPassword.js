@@ -1,28 +1,34 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import '../../cssElement/Form.css'
 
 function TeacherForgetPassword() {
+    const [inProgress, setInProgress] = useState(false);
     const [values, setValues] = useState({
         Teacher_Username: "",
         Teacher_Email: "",
     });
 
-    const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post("https://special-problem.onrender.com/teacher-forget-password", values).then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                navigate("/teacher-login");
-            }
-        });
+        axios.post("https://special-problem.onrender.com/teacher-forget-password", values)
+            .then((response) => {
+                console.log(response);
+                if (response.data.Error) {
+                    alert(response.data.Error);
+                } else {
+                    const token = response.data.token;
+                    localStorage.setItem('teacherToken', token);
+
+                    setInProgress(true);
+                }
+            });
+
+        setInProgress(false);
     };
 
     return (
@@ -48,7 +54,11 @@ function TeacherForgetPassword() {
                         <span>Email</span>
                     </div>
 
-                    <button type="submit" className='form__btn form__btn--forgetpassword'>Submit</button>
+                    {inProgress ? (
+                        <p>Please check your email for the reset link, you can close this tab now</p>
+                    ) : (
+                        <button type="submit" className='form__btn form__btn--forgetpassword'>Submit</button>
+                    )}
                 </form>
             </main>
         </div>
