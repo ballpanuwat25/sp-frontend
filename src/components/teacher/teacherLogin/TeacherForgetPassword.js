@@ -7,7 +7,7 @@ import '../../cssElement/Form.css'
 function TeacherForgetPassword() {
     const [values, setValues] = useState({
         Teacher_Username: "",
-        Teacher_Password: "",
+        Teacher_Email: "",
     });
 
     const navigate = useNavigate();
@@ -39,13 +39,13 @@ function TeacherForgetPassword() {
                         <span>Username</span>
                     </div>
 
-                    <div className='form__inputBox form__inputBox--password'>
+                    <div className='form__inputBox form__inputBox--email'>
                         <input
-                            type="password"
+                            type="email"
                             required
-                            onChange={(e) => setValues({ ...values, Teacher_Password: e.target.value })}
+                            onChange={(e) => setValues({ ...values, Teacher_Email: e.target.value })}
                         />
-                        <span>Password</span>
+                        <span>Email</span>
                     </div>
 
                     <button type="submit" className='form__btn form__btn--forgetpassword'>Submit</button>

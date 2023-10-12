@@ -138,6 +138,7 @@ const TeacherList = ({ logout }) => {
                                 <tr>
                                     <th scope="col">Teacher Id</th>
                                     <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
                                     <th scope="col">Username</th>
                                     <th scope="col">Password</th>
                                     <th scope="col">Tel</th>
@@ -149,6 +150,7 @@ const TeacherList = ({ logout }) => {
                                     <tr key={teacher.Teacher_Id} className="active-row">
                                         <td> {teacher.Teacher_Id} </td>
                                         <td> {teacher.Teacher_FName} {teacher.Teacher_LName}</td>
+                                        <td> {teacher.Teacher_Email} </td>
                                         <td> {teacher.Teacher_Username} </td>
                                         <td> {teacher.Teacher_Password} </td>
                                         <td> {teacher.Teacher_Tel} </td>

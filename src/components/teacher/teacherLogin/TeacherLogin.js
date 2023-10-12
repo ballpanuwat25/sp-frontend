@@ -60,7 +60,7 @@ function TeacherLogin({ login }) {
         // If both username and password are valid, proceed with login
         axios.post("https://special-problem.onrender.com/teacher-login", values)
             .then((response) => {
-                console.log(response.data.Error);
+                console.log(response);
                 if (response.data.Error) {
                     alert(response.data.Error);
                 } else {

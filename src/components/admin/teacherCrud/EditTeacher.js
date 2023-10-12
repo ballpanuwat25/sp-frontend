@@ -14,6 +14,7 @@ import logo from '../../assets/logo.png';
 function EditTeacher({ logout }) {
     const [Teacher_FName, setTeacher_FName] = useState("");
     const [Teacher_LName, setTeacher_LName] = useState("");
+    const [Teacher_Email, setTeacher_Email] = useState("");
     const [Teacher_Username, setTeacher_Username] = useState("");
     const [Teacher_Password, setTeacher_Password] = useState("");
     const [Teacher_Tel, setTeacher_Tel] = useState("");
@@ -30,6 +31,7 @@ function EditTeacher({ logout }) {
         const teacher = response.data;
         setTeacher_FName(teacher.Teacher_FName);
         setTeacher_LName(teacher.Teacher_LName);
+        setTeacher_Email(teacher.Teacher_Email);
         setTeacher_Username(teacher.Teacher_Username);
         setTeacher_Password(teacher.Teacher_Password);
         setTeacher_Tel(teacher.Teacher_Tel);
@@ -41,6 +43,7 @@ function EditTeacher({ logout }) {
             const response = await axios.patch(`https://special-problem.onrender.com/teacher-list/${id}`, {
                 Teacher_FName,
                 Teacher_LName,
+                Teacher_Email,
                 Teacher_Username,
                 Teacher_Password,
                 Teacher_Tel
@@ -140,7 +143,7 @@ function EditTeacher({ logout }) {
                         <div className='profile__form'>
                             <div className="mb-3">
                                 <label htmlFor="Teacher_FName" className='profile__label'>ชื่อจริง</label>
-                                <input type="text" className='profile__input' id="Teacher_FName" placeholder="Enter Teacher First Name" required
+                                <input type="text" className='profile__input' id="Teacher_FName" placeholder="Enter Teacher First Name"
                                     value={Teacher_FName}
                                     onChange={(e) => {
                                         setTeacher_FName(e.target.value);
@@ -150,7 +153,7 @@ function EditTeacher({ logout }) {
 
                             <div className="mb-3">
                                 <label htmlFor="Teacher_LName" className='profile__label'>นามสกุล</label>
-                                <input type="text" className='profile__input' id="Teacher_LName" placeholder="Enter Teacher Last Name" required
+                                <input type="text" className='profile__input' id="Teacher_LName" placeholder="Enter Teacher Last Name"
                                     value={Teacher_LName}
                                     onChange={(e) => {
                                         setTeacher_LName(e.target.value);
@@ -159,8 +162,18 @@ function EditTeacher({ logout }) {
                             </div>
 
                             <div className="mb-3">
+                                <label htmlFor="Teacher_Email" className='profile__label'>Email</label>
+                                <input type="text" className='profile__input' id="Teacher_Email" placeholder="Enter Teacher Email"
+                                    value={Teacher_Email}
+                                    onChange={(e) => {
+                                        setTeacher_Email(e.target.value);
+                                    }}
+                                />
+                            </div>
+
+                            <div className="mb-3">
                                 <label htmlFor="Teacher_Username" className='profile__label'>Username</label>
-                                <input type="text" className='profile__input' id="Teacher_Username" placeholder="Enter Teacher Username" required
+                                <input type="text" className='profile__input' id="Teacher_Username" placeholder="Enter Teacher Username"
                                     value={Teacher_Username}
                                     onChange={(e) => {
                                         setTeacher_Username(e.target.value);
@@ -170,7 +183,7 @@ function EditTeacher({ logout }) {
 
                             <div className="mb-3">
                                 <label htmlFor="Teacher_Password" className='profile__label'>Password</label>
-                                <input type="password" className='profile__input' id="Teacher_Password" placeholder="Enter Teacher Password" required
+                                <input type="password" className='profile__input' id="Teacher_Password" placeholder="Enter Teacher Password"
                                     value={Teacher_Password}
                                     onChange={(e) => {
                                         setTeacher_Password(e.target.value);
@@ -180,7 +193,7 @@ function EditTeacher({ logout }) {
 
                             <div className="mb-3">
                                 <label htmlFor="Teacher_Tel" className='profile__label'>Tel</label>
-                                <input type="text" className='profile__input' id="Teacher_Tel" placeholder="Enter Teacher Tel" required
+                                <input type="text" className='profile__input' id="Teacher_Tel" placeholder="Enter Teacher Tel"
                                     value={Teacher_Tel}
                                     onChange={(e) => {
                                         setTeacher_Tel(e.target.value);

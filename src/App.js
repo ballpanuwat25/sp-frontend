@@ -67,6 +67,8 @@ import TeacherDashboard from './components/teacher/TeacherDashboard.js';
 import TeacherProfile from './components/teacher/teacherLogin/TeacherProfile';
 import TeacherEditProfile from './components/teacher/teacherLogin/TeacherEditProfile.js';
 
+import TeacherNewPassword from './components/teacher/teacherLogin/TeacherNewPassword.js';
+
 import TeacherChemicalsRequest from './components/teacher/teacherManageReq/TeacherChemicalsRequest.js';
 import TeacherEquipmentRequest from './components/teacher/teacherManageReq/TeacherEquipmentRequest.js';
 
@@ -209,6 +211,8 @@ function App() {
         <Route path="/teacher-dashboard" element={teacherLoggedIn ? <TeacherDashboard logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
         <Route path="/teacher-profile" element={teacherLoggedIn ? <TeacherProfile logout={handleTeacherLogOut} /> : <Navigate to="/teacher-login" />} />
         <Route path="/teacher-profile/:id" element={teacherLoggedIn ? <TeacherEditProfile logout={handleTeacherLogOut} /> : <Navigate to="/teacher-login" />} />
+
+        <Route path="/reset-password/:resetToken" element={<TeacherNewPassword />} />
 
         <Route path="/teacher-dashboard/teacher-chemicals-request" element={teacherLoggedIn ? <TeacherChemicalsRequest logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
         <Route path="/teacher-dashboard/teacher-equipment-request" element={teacherLoggedIn ? <TeacherEquipmentRequest logout={handleTeacherLogOut} /> : <Navigate to="/" />} />

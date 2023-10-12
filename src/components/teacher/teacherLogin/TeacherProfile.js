@@ -13,6 +13,7 @@ function TeacherProfile({ logout }) {
         teacherId: "",
         teacherFirstName: "",
         teacherLastName: "",
+        teacherEmail: "",
         teacherUsername: "",
         teacherPassword: "",
     });
@@ -80,11 +81,11 @@ function TeacherProfile({ logout }) {
                     </div>
 
                     <div className="d-flex flex-column">
-                        <p className="profile__label">รหัสเจ้าหน้าที่: {teacherInfo.teacherId}</p>
+                        <p className="profile__label">รหัสอาจารย์: {teacherInfo.teacherId}</p>
                         <p className="profile__label">ชื่อ: {teacherInfo.teacherFirstName}</p>
                         <p className="profile__label">นามสกุล: {teacherInfo.teacherLastName}</p>
+                        <p className="profile__label">อีเมล: {teacherInfo.teacherEmail}</p>
                         <p className="profile__label">ชื่อผู้ใช้: {teacherInfo.teacherUsername}</p>
-                        <p className="profile__label">รหัสผ่าน: {teacherInfo.teacherPassword}</p>
                         <Link to={`/teacher-profile/${teacherInfo.teacherId}`} className='btn edit--btn thai--font'>แก้ไขข้อมูล</Link>
                     </div>
                 </main>

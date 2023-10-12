@@ -16,9 +16,17 @@ function TeacherEditProfile({ logout }) {
         teacherId: "",
         teacherFirstName: "",
         teacherLastName: "",
+        teacherEmail: "",
         teacherUsername: "",
         teacherPassword: "",
     });
+
+    const [Teacher_FName, setTeacher_FName] = useState("");
+    const [Teacher_LName, setTeacher_LName] = useState("");
+    const [Teacher_Email, setTeacher_Email] = useState("");
+    const [Teacher_Username, setTeacher_Username] = useState("");
+    const [Teacher_Password, setTeacher_Password] = useState("");
+    const [Teacher_Tel, setTeacher_Tel] = useState("");
 
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
@@ -50,6 +58,7 @@ function TeacherEditProfile({ logout }) {
         const teacher = response.data;
         setTeacher_FName(teacher.Teacher_FName);
         setTeacher_LName(teacher.Teacher_LName);
+        setTeacher_Email(teacher.Teacher_Email);
         setTeacher_Username(teacher.Teacher_Username);
         setTeacher_Password(teacher.Teacher_Password);
         setTeacher_Tel(teacher.Teacher_Tel);
@@ -67,12 +76,6 @@ function TeacherEditProfile({ logout }) {
         });
     };
 
-    const [Teacher_FName, setTeacher_FName] = useState("");
-    const [Teacher_LName, setTeacher_LName] = useState("");
-    const [Teacher_Username, setTeacher_Username] = useState("");
-    const [Teacher_Password, setTeacher_Password] = useState("");
-    const [Teacher_Tel, setTeacher_Tel] = useState("");
-
     const { id } = useParams();
 
     const updateTeacherInfo = async (e) => {
@@ -81,6 +84,7 @@ function TeacherEditProfile({ logout }) {
             const response = await axios.patch(`https://special-problem.onrender.com/teacher-list/${id}`, {
                 Teacher_FName,
                 Teacher_LName,
+                Teacher_Email,
                 Teacher_Username,
                 Teacher_Password,
                 Teacher_Tel
@@ -150,6 +154,16 @@ function TeacherEditProfile({ logout }) {
                                     value={Teacher_LName}
                                     onChange={(e) => {
                                         setTeacher_LName(e.target.value);
+                                    }}
+                                />
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="Teacher_Email" className='profile__label'>Email</label>
+                                <input type="text" className='profile__input' id="Teacher_Email" placeholder="Enter Teacher Email"
+                                    value={Teacher_Email}
+                                    onChange={(e) => {
+                                        setTeacher_Email(e.target.value);
                                     }}
                                 />
                             </div>

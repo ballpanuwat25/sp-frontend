@@ -16,6 +16,7 @@ function AddTeacher({ logout }) {
         Teacher_Id: "",
         Teacher_FName: "",
         Teacher_LName: "",
+        Teacher_Email: "",
         Teacher_Username: "",
         Teacher_Password: "",
         Teacher_Tel: ""
@@ -141,6 +142,15 @@ function AddTeacher({ logout }) {
                                 <input type="text" className='profile__input' id="Teacher_LName" placeholder="Enter Teacher Last Name"
                                     onChange={(e) => {
                                         setTeacher({ ...teacher, Teacher_LName: e.target.value });
+                                    }}
+                                />
+                            </div>
+
+                            <div className='mb-3'>
+                                <label htmlFor="Teacher_Email" className='profile__label'>Email</label>
+                                <input type="text" className='profile__input' id="Teacher_Email" placeholder="Enter Teacher Email" required
+                                    onChange={(e) => {
+                                        setTeacher({ ...teacher, Teacher_Email: e.target.value });
                                     }}
                                 />
                             </div>
