@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './components/home/Home.js';
+import Notfound from './components/Notfound.js';
 
 //------------------------------------------------------------ Admin ------------------------------------------------------------//
 import AdminLogin from './components/admin/adminLogin/AdminLogin.js';
@@ -147,7 +148,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-
+        <Route path="*" element={<Notfound />} />
         {/* -------------------------------------------------------- Admin -------------------------------------------------------- */}
         <Route path="/admin-login" element={adminLoggedIn ? <Navigate to="admin-dashboard" /> : <AdminLogin login={handleAdminLogIn} />} />
         <Route path="/admin-register" element={<AdminRegister />} />

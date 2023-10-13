@@ -9,6 +9,8 @@ function TeacherNewPassword() {
         teacherId: "",
     });
 
+    const [confirmPassword, setConfirmPassword] = useState("");
+
     const [Teacher_FName, setTeacher_FName] = useState("");
     const [Teacher_LName, setTeacher_LName] = useState("");
     const [Teacher_Email, setTeacher_Email] = useState("");
@@ -57,26 +59,31 @@ function TeacherNewPassword() {
     const updateTeacherInfo = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await axios.patch(`https://special-problem.onrender.com/teacher-list/${id}`, {
-                Teacher_FName,
-                Teacher_LName,
-                Teacher_Email,
-                Teacher_Username,
-                Teacher_Password,
-                Teacher_Tel
-            });
+        if (Teacher_Password !== confirmPassword) {
+            alert("Password and Confirm Password do not match");
+            return;
+        } else {
+            try {
+                const response = await axios.patch(`https://special-problem.onrender.com/teacher-list/${id}`, {
+                    Teacher_FName,
+                    Teacher_LName,
+                    Teacher_Email,
+                    Teacher_Username,
+                    Teacher_Password,
+                    Teacher_Tel
+                });
 
-            if (response.status === 200) {
-                handleLogout();
-            } else {
-                console.log("Unexpected response:", response);
-            }
-        } catch (err) {
-            if (err.response && err.response.status === 400) {
-                alert("Username already exists")
-            } else {
-                console.log("Error:", err);
+                if (response.status === 200) {
+                    handleLogout();
+                } else {
+                    console.log("Unexpected response:", response);
+                }
+            } catch (err) {
+                if (err.response && err.response.status === 400) {
+                    alert("Username already exists")
+                } else {
+                    console.log("Error:", err);
+                }
             }
         }
     };
@@ -95,8 +102,18 @@ function TeacherNewPassword() {
     return (
         <div className='container-fluid vh-100'>
             <main className='form__container'>
-                <form onSubmit={updateTeacherInfo} className="form__card form__card--adminlogin">
+                <form onSubmit={updateTeacherInfo} className="form__card form__card--login">
                     <h3 className='form__header'>New Password</h3>
+
+                    <div className="mb-3 form__inputBox ">
+                        <label htmlFor="Username" className='profile__label'>Username</label>
+                        <input type="text" className='profile__input' id="Teacher_Username" placeholder="Enter Teacher Username" required
+                            value={Teacher_Username}
+                            onChange={(e) => {
+                                setTeacher_Username(e.target.value);
+                            }}
+                        />
+                    </div>
 
                     <div className="mb-3 form__inputBox">
                         <label htmlFor="Password" className='profile__label'>New Password</label>
@@ -111,12 +128,9 @@ function TeacherNewPassword() {
                     <div className='mb-4 form__inputBox'>
                         <label htmlFor="Confirm Password" className='profile__label'>Confirm Password</label>
                         <input type="password" className='profile__input' id="Confirm_Password" placeholder="Enter Confirm Password" required
+                            value={confirmPassword}
                             onChange={(e) => {
-                                if (e.target.value === Teacher_Password) {
-                                    setTeacher_Password(e.target.value);
-                                } else {
-                                    alert("Password does not match");
-                                }
+                                setConfirmPassword(e.target.value);
                             }}
                         />
                     </div>
