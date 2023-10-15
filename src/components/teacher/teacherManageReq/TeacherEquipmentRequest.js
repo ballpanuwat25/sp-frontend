@@ -27,7 +27,22 @@ function TeacherEquipmentRequest({ logout }) {
     const [studentIdSearch, setStudentIdSearch] = useState("");
     const [teacherIdSearch, setTeacherIdSearch] = useState("");
 
+    const [equipmentDetail, setEquipmentDetail] = useState([]);
+
+    const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState(true);
+
     axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        getEquipmentRequest();
+        getEquipmentDetail();
+    }, []);
+
+    useEffect(() => {
+        setTeacherIdSearch(teacherInfo.teacherId);
+    }, [teacherInfo.teacherId]);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/teacher", {
@@ -43,13 +58,10 @@ function TeacherEquipmentRequest({ logout }) {
         });
     }, []);
 
-    useEffect(() => {
-        getEquipmentRequest();
-    }, []);
-
     const getEquipmentRequest = async () => {
         const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
         setEquipmentReq(response.data);
+        setIsLoading(false);
     };
 
     const formatDate = (dateString) => {
@@ -107,6 +119,27 @@ function TeacherEquipmentRequest({ logout }) {
         setSelectedIds([]);
     }
 
+    const handleDeleteChecked = async () => {
+        try {
+            for (const id of selectedIds) {
+                await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`);
+            }
+            getEquipmentRequest();
+            setSelectedIds([]);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`);
+            getEquipmentRequest();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     const handleCheckboxChange = (id) => {
         if (selectedIds.includes(id)) {
             setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
@@ -129,12 +162,6 @@ function TeacherEquipmentRequest({ logout }) {
 
     const filteredEquipmentReq = filterEquipmentReq(equipmentReq);
 
-    useEffect(() => {
-        setTeacherIdSearch(teacherInfo.teacherId);
-    }, [teacherInfo.teacherId]);
-
-    const navigate = useNavigate();
-
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
             if (response.data.Error) {
@@ -147,15 +174,10 @@ function TeacherEquipmentRequest({ logout }) {
         });
     };
 
-    const [equipmentDetail, setEquipmentDetail] = useState([]);
-
-    useEffect(() => {
-        getEquipmentDetail();
-    }, []);
-
     const getEquipmentDetail = async () => {
         const response = await axios.get("https://special-problem.onrender.com/equipment-list");
         setEquipmentDetail(response.data);
+        setIsLoading(false);
     };
 
     const findEquipmentName = (equipId) => {
@@ -200,132 +222,173 @@ function TeacherEquipmentRequest({ logout }) {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass'></i>
-                            <input
-                                type="search"
-                                className='component__search'
-                                placeholder="ค้นหาด้วยรหัสนิสิต"
-                                value={studentIdSearch}
-                                id="studentIdSearch"
-                                onChange={(e) => setStudentIdSearch(e.target.value)}
-                            />
-                            <input
-                                type="search"
-                                className='disable'
-                                id="teacherIdSearch"
-                                value={teacherIdSearch}
-                                onChange={(e) => setTeacherIdSearch(e.target.value)}
-                                readOnly
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass'></i>
+                                    <input
+                                        type="search"
+                                        className='component__search'
+                                        placeholder="ค้นหาด้วยรหัสนิสิต"
+                                        value={studentIdSearch}
+                                        id="studentIdSearch"
+                                        onChange={(e) => setStudentIdSearch(e.target.value)}
+                                    />
+                                    <input
+                                        type="search"
+                                        className='disable'
+                                        id="teacherIdSearch"
+                                        value={teacherIdSearch}
+                                        onChange={(e) => setTeacherIdSearch(e.target.value)}
+                                        readOnly
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
-                        </div>
-                    </div>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <i className="fa-solid fa-circle-user" />
+                                    <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
+                                </div>
+                            </div>
 
-                    <div>
-                        <div className='table__tabs'>
-                            <Link to="/teacher-dashboard/teacher-chemicals-request" className='table__tab table__tab--chemicals table__tab--unactive'>คำขอเบิกสารเคมี</Link>
-                            <Link className='table__tab table__tab--equipment table__tab--active'>คำขอเบิกครุภัณฑ์</Link>
-                        </div>
+                            <div>
+                                <div className='table__tabs'>
+                                    <Link to="/teacher-dashboard/teacher-chemicals-request" className='table__tab table__tab--chemicals table__tab--unactive'>คำขอเบิกสารเคมี</Link>
+                                    <Link className='table__tab table__tab--equipment table__tab--active'>คำขอเบิกครุภัณฑ์</Link>
+                                </div>
 
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        <input
-                                            type="checkbox"
-                                            className="form-check-input"
-                                            checked={selectedIds.length === equipmentReq.length}
-                                            onChange={handleCheckAll}
-                                        />
-                                    </th>
-                                    <th scope="col">รหัสนิสิต</th>
-                                    <th scope="col">ครุภัณฑ์</th>
-                                    <th scope="col">จำนวนที่ขอ</th>
-                                    <th scope="col">สถานะคำขอ</th>
-                                    <th scope="col">วัตถุประสงค์</th>
-                                    <th scope="col">นำไปใช้ห้อง</th>
-                                    <th scope="col">วันที่ส่งคำขอ</th>
-                                    <th scope="col">
-                                        <button className="buttonTab-btn thai--font" onClick={handleApproveChecked}>
-                                            อนุมัติจากที่เลือก
-                                        </button>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredEquipmentReq.map((equipmentReq) => (
-                                    <tr key={equipmentReq.Equipment_Request_Id} className="active-row">
-                                        <td>
-                                            <div className="form-check">
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">
                                                 <input
-                                                    className="form-check-input"
                                                     type="checkbox"
-                                                    value={equipmentReq.Equipment_Request_Id}
-                                                    id={`flexCheckDefault-${equipmentReq.Equipment_Request_Id}`}
-                                                    checked={selectedIds.includes(equipmentReq.Equipment_Request_Id)}
-                                                    onChange={() => handleCheckboxChange(equipmentReq.Equipment_Request_Id)}
+                                                    className="form-check-input"
+                                                    checked={selectedIds.length === equipmentReq.length}
+                                                    onChange={handleCheckAll}
                                                 />
-                                            </div>
-                                        </td>
-                                        <td> {equipmentReq.Student_Id} </td>
-                                        <td> {findEquipmentName(equipmentReq.Equipment_Id)} </td>
-                                        <td> {equipmentReq.Requested_Quantity} </td>
-                                        <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> </td>
-                                        <td> {equipmentReq.Request_Purpose} </td>
-                                        <td> {equipmentReq.Request_Room} </td>
-                                        <td>{formatDate(equipmentReq.createdAt)}</td>
-                                        <td>
-                                            <div className="d-grid gap-2 d-sm-flex">
-                                                <button onClick={() => approveEquipmentRequest(equipmentReq.Equipment_Request_Id)} className="edit--btn">
-                                                    <i className='fa-solid fa-circle-check' />
-                                                    อนุมัติ
+                                            </th>
+                                            <th scope="col">รหัสนิสิต</th>
+                                            <th scope="col">ครุภัณฑ์</th>
+                                            <th scope="col">จำนวนที่ขอ</th>
+                                            <th scope="col">สถานะคำขอ</th>
+                                            <th scope="col">วัตถุประสงค์</th>
+                                            <th scope="col">นำไปใช้ห้อง</th>
+                                            <th scope="col">วันที่ส่งคำขอ</th>
+                                            <th scope="col">
+                                                <button className="buttonTab-btn thai--font" onClick={handleApproveChecked}>
+                                                    อนุมัติจากที่เลือก
                                                 </button>
-                                                <button
-                                                    className="delete--btn btn-danger"
-                                                    data-bs-toggle="modal" data-bs-target={`#exampleModal-${equipmentReq.Equipment_Request_Id}`}
-                                                    onClick={() => setActiveRequestId(equipmentReq.Equipment_Request_Id)}
-                                                >
-                                                    <i className='fa-solid fa-circle-xmark' />
-                                                    ปฏิเสธ
+                                            </th>
+                                            <th scope="col">
+                                                <button className="buttonTab-reject-btn thai--font" onClick={handleDeleteChecked}>
+                                                    ลบจากที่เลือก
                                                 </button>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredEquipmentReq.map((equipmentReq) => (
+                                            <tr key={equipmentReq.Equipment_Request_Id} className="active-row">
+                                                <td>
+                                                    <div className="form-check">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="checkbox"
+                                                            value={equipmentReq.Equipment_Request_Id}
+                                                            id={`flexCheckDefault-${equipmentReq.Equipment_Request_Id}`}
+                                                            checked={selectedIds.includes(equipmentReq.Equipment_Request_Id)}
+                                                            onChange={() => handleCheckboxChange(equipmentReq.Equipment_Request_Id)}
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td> {equipmentReq.Student_Id} </td>
+                                                <td> {findEquipmentName(equipmentReq.Equipment_Id)} </td>
+                                                <td> {equipmentReq.Requested_Quantity} </td>
+                                                <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> </td>
+                                                <td> {equipmentReq.Request_Purpose} </td>
+                                                <td> {equipmentReq.Request_Room} </td>
+                                                <td>{formatDate(equipmentReq.createdAt)}</td>
+                                                <td>
+                                                    <div className="d-grid gap-2 d-sm-flex">
+                                                        <button onClick={() => approveEquipmentRequest(equipmentReq.Equipment_Request_Id)} className="edit--btn w-100">
+                                                            <i className='fa-solid fa-circle-check' />
+                                                            อนุมัติ
+                                                        </button>
+                                                        <button
+                                                            className="delete--btn btn-danger w-100"
+                                                            data-bs-toggle="modal" data-bs-target={`#exampleModal-${equipmentReq.Equipment_Request_Id}`}
+                                                            onClick={() => setActiveRequestId(equipmentReq.Equipment_Request_Id)}
+                                                        >
+                                                            <i className='fa-solid fa-circle-xmark' />
+                                                            ปฏิเสธ
+                                                        </button>
 
-                                                <div className="modal fade" id={`exampleModal-${equipmentReq.Equipment_Request_Id}`} tabIndex="-1" aria-labelledby={`exampleModalLabel-${equipmentReq.Equipment_Request_Id}`} aria-hidden="true">
-                                                    <div className="modal-dialog">
-                                                        <div className="modal-content">
-                                                            <div className="modal-header">
-                                                                <h5 className="modal-title" id="exampleModalLabel">Decline Reason</h5>
-                                                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div className="modal-body">
-                                                                <div className="mb-3">
-                                                                    <label htmlFor="Request_Comment" className="form-label">Request Comment</label>
-                                                                    <input type="text" className="form-control" id="Request_Comment" placeholder="Enter Request Comment" value={Request_Comment} required
-                                                                        onChange={(e) => {
-                                                                            setRequest_Comment(e.target.value);
-                                                                        }}
-                                                                    />
+                                                        <div className="modal fade" id={`exampleModal-${equipmentReq.Equipment_Request_Id}`} tabIndex="-1" aria-labelledby={`exampleModalLabel-${equipmentReq.Equipment_Request_Id}`} aria-hidden="true">
+                                                            <div className="modal-dialog">
+                                                                <div className="modal-content">
+                                                                    <div className="modal-header">
+                                                                        <h5 className="modal-title" id="exampleModalLabel">เหตุผลในการปฏิเสธ</h5>
+                                                                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div className="modal-body">
+                                                                        <div className="mb-3">
+                                                                            <label htmlFor="Request_Comment" className="form-label">หมายเหตุ*</label>
+                                                                            <input type="text" className="form-control" id="Request_Comment" placeholder="Enter Request Comment" value={Request_Comment} required
+                                                                                onChange={(e) => {
+                                                                                    setRequest_Comment(e.target.value);
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="modal-footer">
+                                                                        <button onClick={declineEquipmentRequest} type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal"><i className='fa-solid fa-circle-check' />ยืนยัน</button>
+                                                                        <button type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal"><i className='fa-solid fa-circle-xmark' /> ยกเลิก</button>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="modal-footer">
-                                                            <button type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal">Close</button>
-                                                                <button onClick={declineEquipmentRequest} type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal">Save changes</button>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className="delete--btn btn-danger w-100"
+                                                        data-bs-toggle="modal" data-bs-target={`#deleteModal-${equipmentReq.Equipment_Request_Id}`}
+                                                        onClick={() => setActiveRequestId(equipmentReq.Equipment_Request_Id)}
+                                                    >
+                                                        <i className='fa-solid fa-trash' />
+                                                        ลบ
+                                                    </button>
+
+                                                    <div className="modal fade" id={`deleteModal-${equipmentReq.Equipment_Request_Id}`} tabIndex="-1" aria-labelledby={`deleteModalLabel-${equipmentReq.Equipment_Request_Id}`} aria-hidden="true">
+                                                        <div className="modal-dialog">
+                                                            <div className="modal-content">
+                                                                <div className="modal-header">
+                                                                    <h5 className="modal-title" id={`deleteModalLabel-${equipmentReq.Equipment_Request_Id}`}>ลบคำขอเบิกครุภัณฑ์</h5>
+                                                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div className="modal-body">
+                                                                    คุณต้องการลบคำขอเบิกครุภัณฑ์นี้ใช่หรือไม่?
+                                                                </div>
+                                                                <div className="modal-footer">
+                                                                    <button onClick={() => handleDelete(equipmentReq.Equipment_Request_Id)} type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal"> ยืนยัน</button>
+                                                                    <button type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal">ยกเลิก</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

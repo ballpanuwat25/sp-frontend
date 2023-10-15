@@ -2,6 +2,8 @@ import Header from '../header/Header'
 import React from 'react'
 import './Home.css'
 
+import { Link } from 'react-router-dom';
+
 import Spline from '@splinetool/react-spline';
 
 function Home() {
@@ -18,8 +20,7 @@ function Home() {
                             <p className='home__highlight'>Kasetsart University</p>
                             <h1 className='home__title'>Elevate Projects with  <br /> <i className="fa-solid fa-globe" /> Essential Materials</h1>
                             <p className='home__subtitle'>  Empowering Tomorrow's Innovators Seamlessly bridge the gap between student ingenuity and academic resources through our Chemical Disbursement System. Your graduation project, your convenience, our commitment.</p>
-                            <button className='home__cta'>Get Started</button>
-                            <button className='home__cta home__cta--faq'><span className='faq__highlight'>Frequently asked questions</span></button>
+                            <Link to="https://forms.gle/7L4BApMbd9mfqaaq7" className='home__cta thai--font'>ทำแบบสอบถาม</Link>
                         </div>
                     </div>
 

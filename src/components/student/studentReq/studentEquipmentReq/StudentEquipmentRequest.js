@@ -25,16 +25,16 @@ function StudentEquipmentRequest() {
 
     const navigate = useNavigate();
 
+    const [isLoading, setIsLoading] = useState(true);
+
+    const user_picture = localStorage.getItem('user_picture') ? <img src={localStorage.getItem('user_picture')} alt="user" className='user__avatar' /> : <i className="fa-solid fa-circle-user" />;
+    const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
+
     axios.defaults.withCredentials = true;
 
-    const formatDate = (dateString) => {
-        const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-GB', options);
-    };
-
     useEffect(() => {
-        const inputValue = searchInputRef.current.value;
+        fetchData();
+        const inputValue = searchInputRef.current?.value;
         const filteredRequests = equipmentReq.filter(
             (request) => request.Student_Id.includes(inputValue)
         );
@@ -53,16 +53,24 @@ function StudentEquipmentRequest() {
                 setStudentInfo(response.data);
             }
         });
-        getEquipmentRequest();
     }, []);
 
-    const getEquipmentRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
-        setEquipmentReq(response.data);
+    const fetchData = async () => {
+        try {
+            const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
+            setEquipmentReq(response.data);
+            setIsLoading(false);
+        } catch (error) {
+            console.error(error);
+            setIsLoading(false);
+        }
     };
 
-    const user_picture = localStorage.getItem('user_picture') ? <img src={localStorage.getItem('user_picture')} alt="user" className='user__avatar' /> : <i className="fa-solid fa-circle-user" />;
-    const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
+    const formatDate = (dateString) => {
+        const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', options);
+    };
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
@@ -101,7 +109,7 @@ function StudentEquipmentRequest() {
                 <aside className='sidebar'>
                     <div className='sidebar__header'>
                         <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
-                        <div className='sidebar__title std__name'>Welcome, {studentInfo.studentFirstName}</div>
+                        <div className='sidebar__title std__name thai--font'>Welcome, {studentInfo.studentFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
                         <Link to="/student-dashboard/student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
@@ -117,63 +125,71 @@ function StudentEquipmentRequest() {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-ban'></i>
-                            <input
-                                type="text"
-                                readOnly
-                                className='component__search'
-                                ref={searchInputRef}
-                                defaultValue={studentInfo.studentId}
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-ban'></i>
+                                    <input
+                                        type="text"
+                                        readOnly
+                                        className='component__search'
+                                        ref={searchInputRef}
+                                        defaultValue={studentInfo.studentId}
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <div>{user_picture}</div>
-                            <div>{user_email}</div>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <div>{user_picture}</div>
+                                    <div>{user_email}</div>
+                                </div>
+                            </div>
+
+                            <div >
+                                <div className='table__tabs'>
+                                    <Link to="/student-dashboard/student-chemicals-request" className='table__tab table__tab--chemicals table__tab--unactive'>ประวัติการเบิกสารเคมี</Link>
+                                    <Link className='table__tab table__tab--equipment table__tab--active'>ประวัติการเบิกครุภัณฑ์</Link>
+                                </div>
+
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Student Id</th>
+                                            <th scope="col">Equipment Id</th>
+                                            <th scope="col">Equipment Category Id</th>
+                                            <th scope="col">Requested Quantity</th>
+                                            <th scope="col">Release Quantity</th>
+                                            <th scope="col">Staff Id</th>
+                                            <th scope="col">Teacher Id</th>
+                                            <th scope="col">Request Status</th>
+                                            <th scope="col">Request Comment</th>
+                                            <th scope="col">Request Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredEquipmentReq.map((equipmentReq) => (
+                                            <tr key={equipmentReq.Chem_Request_Id} className="active-row">
+                                                <td> {equipmentReq.Student_Id} </td>
+                                                <td> {equipmentReq.Equipment_Id} </td>
+                                                <td> {equipmentReq.Equipment_Category_Id} </td>
+                                                <td> {equipmentReq.Requested_Quantity} </td>
+                                                <td> {equipmentReq.Release_Quantity} </td>
+                                                <td> {equipmentReq.Staff_Id} </td>
+                                                <td> {equipmentReq.Teacher_Id} </td>
+                                                <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> </td>
+                                                <td> {equipmentReq.Request_Comment} </td>
+                                                <td>{formatDate(equipmentReq.createdAt)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-
-                    <div >
-                        <div className='table__tabs'>
-                            <Link to="/student-dashboard/student-chemicals-request" className='table__tab table__tab--chemicals table__tab--unactive'>ประวัติการเบิกสารเคมี</Link>
-                            <Link className='table__tab table__tab--equipment table__tab--active'>ประวัติการเบิกครุภัณฑ์</Link>
-                        </div>
-
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Student Id</th>
-                                    <th scope="col">Equipment Id</th>
-                                    <th scope="col">Equipment Category Id</th>
-                                    <th scope="col">Requested Quantity</th>
-                                    <th scope="col">Release Quantity</th>
-                                    <th scope="col">Staff Id</th>
-                                    <th scope="col">Teacher Id</th>
-                                    <th scope="col">Request Status</th>
-                                    <th scope="col">Request Comment</th>
-                                    <th scope="col">Request Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredEquipmentReq.map((equipmentReq) => (
-                                    <tr key={equipmentReq.Chem_Request_Id} className="active-row">
-                                        <td> {equipmentReq.Student_Id} </td>
-                                        <td> {equipmentReq.Equipment_Id} </td>
-                                        <td> {equipmentReq.Equipment_Category_Id} </td>
-                                        <td> {equipmentReq.Requested_Quantity} </td>
-                                        <td> {equipmentReq.Release_Quantity} </td>
-                                        <td> {equipmentReq.Staff_Id} </td>
-                                        <td> {equipmentReq.Teacher_Id} </td>
-                                        <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> </td>
-                                        <td> {equipmentReq.Request_Comment} </td>
-                                        <td>{formatDate(equipmentReq.createdAt)}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

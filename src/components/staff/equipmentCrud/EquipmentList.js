@@ -12,6 +12,15 @@ import logo from '../../assets/logo.png';
 
 function EquipmentList({ logout }) {
     const [staffId, setStaffId] = useState("");
+    const [staffInfo, setStaffInfo] = useState({
+        staffId: "",
+        staffFirstName: "",
+        staffLastName: "",
+        staffUsername: "",
+        staffPassword: "",
+        staffTel: "",
+    })
+
     const [logActivity, setLogActivity] = useState({
         LogActivity_Name: "",
         Equipment_Id: "",
@@ -27,7 +36,16 @@ function EquipmentList({ logout }) {
     const [scannedCode, setScannedCode] = useState("");
     const [inputValue, setInputValue] = useState("");
 
+    const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState(true);
+
     axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        getEquipment();
+        getEquipmentCategory();
+    }, []);
 
     useEffect(() => {
         if (scannedCode) {
@@ -53,43 +71,6 @@ function EquipmentList({ logout }) {
     }, [logActivity]);
 
     useEffect(() => {
-        getEquipment();
-        getEquipmentCategory();
-    }, []);
-
-    const getEquipment = async () => {
-        try {
-            const response = await axios.get("https://special-problem.onrender.com/equipment-list");
-            setEquipment(response.data);
-            setFilteredEquipment(response.data); // Initialize filtered equipment with all equipment
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const getEquipmentCategory = async () => {
-        try {
-            const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
-            setEquipmentCategory(response.data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const [staffInfo, setStaffInfo] = useState({
-        staffId: "",
-        staffFirstName: "",
-        staffLastName: "",
-        staffUsername: "",
-        staffPassword: "",
-        staffTel: "",
-    })
-
-    const navigate = useNavigate();
-
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
         axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
@@ -102,6 +83,27 @@ function EquipmentList({ logout }) {
             }
         });
     }, []);
+
+    const getEquipment = async () => {
+        try {
+            const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+            setEquipment(response.data);
+            setFilteredEquipment(response.data); // Initialize filtered equipment with all equipment
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getEquipmentCategory = async () => {
+        try {
+            const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
+            setEquipmentCategory(response.data);
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
@@ -174,78 +176,86 @@ function EquipmentList({ logout }) {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <BarcodeScanner2 onSave={handleSave} />
-                            <Link to="/barcode-equipment" className="btn btn-outline-success me-3"><i className="fa-solid fa-barcode"></i></Link>
-
-                            <i className='fa-solid fa-magnifying-glass' />
-                            <input
-                                type="text"
-                                className="component__search"
-                                placeholder="ค้นหาด้วยรหัสครุภัณฑ์"
-                                value={searchQuery} // Bind input value to searchQuery state
-                                onChange={handleSearchInputChange} // Call handleSearch when input changes
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <BarcodeScanner2 onSave={handleSave} />
+                                    <Link to="/barcode-equipment" className="btn btn-outline-success me-3"><i className="fa-solid fa-barcode"></i></Link>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                                    <i className='fa-solid fa-magnifying-glass' />
+                                    <input
+                                        type="text"
+                                        className="component__search"
+                                        placeholder="ค้นหาด้วยรหัสครุภัณฑ์"
+                                        value={searchQuery} // Bind input value to searchQuery state
+                                        onChange={handleSearchInputChange} // Call handleSearch when input changes
+                                    />
+                                </div>
+
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <i className="fa-solid fa-circle-user" />
+                                    <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className='table__tabs'>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>ครุภัณฑ์</Link>
+                                    <Link to="/equipmentCategory-list" className='table__tab table__tab--equipment table__tab--unactive'>หมวดหมู่ครุภัณฑ์</Link>
+                                    <Link to="/report-equipment" className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
+                                </div>
+
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">รหัสครุภัณฑ์</th>
+                                            <th scope="col">หมวดหมู่ครุภัณฑ์</th>
+                                            <th scope="col">ชื่อครุภัณฑ์</th>
+                                            <th scope="col">จำนวน</th>
+                                            <th scope="col">สถานที่เก็บ</th>
+                                            <th scope="col">ราคา</th>
+                                            <th scope="col">ค่าซ่อม</th>
+                                            <th scope="col">
+                                                <Link to={`add-equipment`} className="buttonTab-btn thai--font disable--link"><i className="fa-solid fa-square-plus me-2" />เพิ่มครุภัณฑ์</Link>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredEquipment.map((equipment, index) => (
+                                            <tr key={index} className="active-row">
+                                                <td> {index + 1} </td>
+                                                <td> {equipment.Equipment_Id} </td>
+                                                <td> {getEquipmentCategoryName(equipment.Equipment_Category_Id)} </td>
+                                                <td> {equipment.Equipment_Name} </td>
+                                                <td> {equipment.Quantity} </td>
+                                                <td> {equipment.Location} </td>
+                                                <td> {equipment.Price} </td>
+                                                <td> {equipment.Fixed_Cost} </td>
+                                                <td>
+                                                    <div className="d-grid gap-2 d-sm-flex">
+                                                        <Link to={`edit-equipment/${equipment.Equipment_Id}`} className="edit--btn">
+                                                            <i className="fa-solid fa-pen-to-square" />
+                                                            แก้ไข
+                                                        </Link>
+                                                        <button className="delete--btn btn-danger" type="button" onClick={() => deleteEquipment(equipment.Equipment_Id)}>
+                                                            <i className="fa-solid fa-trash" />
+                                                            ลบ
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-
-                    <div>
-                        <div className='table__tabs'>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>ครุภัณฑ์</Link>
-                            <Link to="/equipmentCategory-list" className='table__tab table__tab--equipment table__tab--unactive'>หมวดหมู่ครุภัณฑ์</Link>
-                            <Link to="/report-equipment" className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
-                        </div>
-
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">รหัสครุภัณฑ์</th>
-                                    <th scope="col">หมวดหมู่ครุภัณฑ์</th>
-                                    <th scope="col">ชื่อครุภัณฑ์</th>
-                                    <th scope="col">จำนวน</th>
-                                    <th scope="col">สถานที่เก็บ</th>
-                                    <th scope="col">ราคา</th>
-                                    <th scope="col">ค่าซ่อม</th>
-                                    <th scope="col">
-                                        <Link to={`add-equipment`} className="buttonTab-btn thai--font disable--link"><i className="fa-solid fa-square-plus me-2" />เพิ่มครุภัณฑ์</Link>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredEquipment.map((equipment, index) => (
-                                    <tr key={index} className="active-row">
-                                        <td> {index + 1} </td>
-                                        <td> {equipment.Equipment_Id} </td>
-                                        <td> {getEquipmentCategoryName(equipment.Equipment_Category_Id)} </td>
-                                        <td> {equipment.Equipment_Name} </td>
-                                        <td> {equipment.Quantity} </td>
-                                        <td> {equipment.Location} </td>
-                                        <td> {equipment.Price} </td>
-                                        <td> {equipment.Fixed_Cost} </td>
-                                        <td>
-                                            <div className="d-grid gap-2 d-sm-flex">
-                                                <Link to={`edit-equipment/${equipment.Equipment_Id}`} className="edit--btn">
-                                                    <i className="fa-solid fa-pen-to-square" />
-                                                    แก้ไข
-                                                </Link>
-                                                <button className="delete--btn btn-danger" type="button" onClick={() => deleteEquipment(equipment.Equipment_Id)}>
-                                                    <i className="fa-solid fa-trash" />
-                                                    ลบ
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

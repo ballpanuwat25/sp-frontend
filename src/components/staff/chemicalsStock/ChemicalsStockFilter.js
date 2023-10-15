@@ -20,6 +20,40 @@ function ChemicalsStockList({ logout }) {
 
     const [exportData, setExportData] = useState([]);
 
+    const [staffInfo, setStaffInfo] = useState({
+        staffId: "",
+        staffFirstName: "",
+        staffLastName: "",
+        staffUsername: "",
+        staffPassword: "",
+        staffTel: "",
+    })
+
+    const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        getChemicals();
+        getChemicalsDetail();
+    }, []);
+
+    useEffect(() => {
+        axios.get("https://special-problem.onrender.com/staff", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+            },
+        }).then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffInfo(response.data);
+            }
+        });
+    }, []);
+
     useEffect(() => {
         // Filter the data and set it to the exportData state
         const filteredData = processChemicalsData().filter(chemical => {
@@ -29,19 +63,16 @@ function ChemicalsStockList({ logout }) {
         setExportData(filteredData);
     }, []);
 
-    useEffect(() => {
-        getChemicals();
-        getChemicalsDetail();
-    }, []);
-
     const getChemicals = async () => {
         const response = await axios.get("https://special-problem.onrender.com/chemicals-list");
         setChemicals(response.data);
+        setIsLoading(false);
     }
 
     const getChemicalsDetail = async () => {
         const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
         setChemicalsDetail(response.data);
+        setIsLoading(false);
     }
 
     // Function to process the chemicals data and return a new array with unique chemical IDs and summed up quantities
@@ -165,33 +196,6 @@ function ChemicalsStockList({ logout }) {
         documentTitle: "Chemicals Stock",
     });
 
-    const [staffInfo, setStaffInfo] = useState({
-        staffId: "",
-        staffFirstName: "",
-        staffLastName: "",
-        staffUsername: "",
-        staffPassword: "",
-        staffTel: "",
-    })
-
-    const navigate = useNavigate();
-
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
-            },
-        }).then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setStaffInfo(response.data);
-            }
-        });
-    }, []);
-
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
@@ -227,81 +231,89 @@ function ChemicalsStockList({ logout }) {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass' />
-                            <input
-                                type="text"
-                                id="searchTerm"
-                                className="component__search"
-                                value={searchTerm}
-                                onChange={handleSearchInputChange}
-                                placeholder="Enter Chem_Name..."
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
-
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
-                        </div>
-                    </div>
-
-                    <div className="mb-3 d-flex justify-content-between align-items-center">
+                    ) : (
                         <div>
-                            <button className="edit--btn me-2" onClick={exportToExcel}>
-                                <i className="fa-solid fa-file-excel me-2"></i>
-                                Export to Excel
-                            </button>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass' />
+                                    <input
+                                        type="text"
+                                        id="searchTerm"
+                                        className="component__search"
+                                        value={searchTerm}
+                                        onChange={handleSearchInputChange}
+                                        placeholder="Enter Chem_Name..."
+                                    />
+                                </div>
 
-                            <button className="delete--btn btn-danger" onClick={generatePDF}>
-                                <i className="fa-solid fa-file-pdf me-2"></i>
-                                Export to PDF
-                            </button>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <i className="fa-solid fa-circle-user" />
+                                    <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                                </div>
+                            </div>
+
+                            <div className="mb-3 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <button className="edit--btn me-2" onClick={exportToExcel}>
+                                        <i className="fa-solid fa-file-excel me-2"></i>
+                                        Export to Excel
+                                    </button>
+
+                                    <button className="delete--btn btn-danger" onClick={generatePDF}>
+                                        <i className="fa-solid fa-file-pdf me-2"></i>
+                                        Export to PDF
+                                    </button>
+                                </div>
+
+                                <div className="w-50 d-flex justify-content-between align-items-center">
+                                    <label className="form-label thai--font">เลือกสถานะของสาร:</label>
+                                    <select
+                                        id="searchFilter"
+                                        value={searchFilter}
+                                        onChange={handleSearchFilterChange}
+                                        className="form-control w-75 thai--font"
+                                    >
+                                        <option value="All">ทั้งหมด</option>
+                                        <option value="Liquid">Liquid</option>
+                                        <option value="Solid">Solid</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div ref={conponentPDF} style={{ width: '100%' }}>
+                                <table className="table table-export table-striped" id="stock-table">
+                                    <thead>
+                                        <tr>
+                                            <th className="table-header">#</th>
+                                            <th className="table-header">รหัสสารเคมี</th>
+                                            <th className="table-header">ชื่อสารเคมี</th>
+                                            <th className="table-header">ปริมาณทั้งหมด</th>
+                                            <th className="table-header">ปริมาณคงเหลือ</th>
+                                            <th className="table-header">หน่วยนับ</th>
+                                            <th className="table-header">สถานะของสาร</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {processChemicalsData().map((chemical, index) => (
+                                            <tr key={index}>
+                                                <td className="table-data"> {index + 1} </td>
+                                                <td className="table-data"> {chemical.Chem_Id} </td>
+                                                <td className="table-data"> {chemical.Chem_Name} </td>
+                                                <td className="table-data"> {chemical.Package_Size} </td>
+                                                <td className="table-data"> {chemical.Remaining_Quantity} </td>
+                                                <td className="table-data"> {chemical.Counting_Unit} </td>
+                                                <td className="table-data"> {chemical.Chem_State} </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-
-                        <div className="w-50 d-flex justify-content-between align-items-center">
-                            <label className="form-label thai--font">เลือกสถานะของสาร:</label>
-                            <select
-                                id="searchFilter"
-                                value={searchFilter}
-                                onChange={handleSearchFilterChange}
-                                className="form-control w-75 thai--font"
-                            >
-                                <option value="All">ทั้งหมด</option>
-                                <option value="Liquid">Liquid</option>
-                                <option value="Solid">Solid</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div ref={conponentPDF} style={{ width: '100%' }}>
-                        <table className="table table-export table-striped" id="stock-table">
-                            <thead>
-                                <tr>
-                                    <th className="table-header">#</th>
-                                    <th className="table-header">รหัสสารเคมี</th>
-                                    <th className="table-header">ชื่อสารเคมี</th>
-                                    <th className="table-header">ปริมาณทั้งหมด</th>
-                                    <th className="table-header">ปริมาณคงเหลือ</th>
-                                    <th className="table-header">หน่วยนับ</th>
-                                    <th className="table-header">สถานะของสาร</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {processChemicalsData().map((chemical, index) => (
-                                    <tr key={index}>
-                                        <td className="table-data"> {index + 1} </td>
-                                        <td className="table-data"> {chemical.Chem_Id} </td>
-                                        <td className="table-data"> {chemical.Chem_Name} </td>
-                                        <td className="table-data"> {chemical.Package_Size} </td>
-                                        <td className="table-data"> {chemical.Remaining_Quantity} </td>
-                                        <td className="table-data"> {chemical.Counting_Unit} </td>
-                                        <td className="table-data"> {chemical.Chem_State} </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

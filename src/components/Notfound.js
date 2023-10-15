@@ -8,7 +8,7 @@ import './cssElement/Table.css'
 function Notfound() {
 
     const navigate = useNavigate();
-
+    
     const backToHome = () => {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('teacherToken');

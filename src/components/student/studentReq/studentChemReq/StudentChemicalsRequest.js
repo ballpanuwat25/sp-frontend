@@ -25,24 +25,20 @@ function StudentChemicalsRequest() {
 
     const navigate = useNavigate();
 
-    axios.defaults.withCredentials = true;
-
     const [isLoading, setIsLoading] = useState(true);
 
-    const formatDate = (dateString) => {
-        const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-GB', options);
-    };
+    const user_picture = localStorage.getItem('user_picture') ? <img src={localStorage.getItem('user_picture')} alt="user" className='user__avatar' /> : <i className="fa-solid fa-circle-user" />;
+    const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
+
+    axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        const inputValue = searchInputRef.current.value;
+        fetchData();
+        const inputValue = searchInputRef.current?.value;
         const filteredRequests = chemicalsReq.filter(
             (request) => request.Student_Id.includes(inputValue)
         );
         setFilteredChemicalsReq(filteredRequests);
-        getChemicalsRequest();
-        setIsLoading(false);
     }, [chemicalsReq]);
 
     useEffect(() => {
@@ -59,13 +55,22 @@ function StudentChemicalsRequest() {
         });
     }, []);
 
-    const getChemicalsRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
-        setChemicalsReq(response.data);
+    const fetchData = async () => {
+        try {
+            const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
+            setChemicalsReq(response.data);
+            setIsLoading(false);
+        } catch (error) {
+            console.error(error);
+            setIsLoading(false);
+        }
     };
 
-    const user_picture = localStorage.getItem('user_picture') ? <img src={localStorage.getItem('user_picture')} alt="user" className='user__avatar' /> : <i className="fa-solid fa-circle-user" />;
-    const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
+    const formatDate = (dateString) => {
+        const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', options);
+    };
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
@@ -104,7 +109,7 @@ function StudentChemicalsRequest() {
                 <aside className='sidebar'>
                     <div className='sidebar__header'>
                         <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
-                        <div className='sidebar__title std__name'>Welcome, {studentInfo.studentFirstName}</div>
+                        <div className='sidebar__title std__name thai--font'>Welcome, {studentInfo.studentFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
                         <Link to="/student-dashboard/student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
@@ -120,65 +125,73 @@ function StudentChemicalsRequest() {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className="fa-solid fa-ban"/>
-                            <input
-                                type="text"
-                                readOnly
-                                className='component__search'
-                                ref={searchInputRef}
-                                defaultValue={studentInfo.studentId}
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className="fa-solid fa-ban" />
+                                    <input
+                                        type="text"
+                                        readOnly
+                                        className='component__search'
+                                        ref={searchInputRef}
+                                        defaultValue={studentInfo.studentId}
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <div>{user_picture}</div>
-                            <div>{user_email}</div>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <div>{user_picture}</div>
+                                    <div>{user_email}</div>
+                                </div>
+                            </div>
+
+                            <div >
+                                <div className='table__tabs'>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>ประวัติการเบิกสารเคมี</Link>
+                                    <Link to="/student-dashboard/student-equipment-request" className='table__tab table__tab--equipment table__tab--unactive'>ประวัติการเบิกครุภัณฑ์</Link>
+                                </div>
+
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Student Id</th>
+                                            <th scope="col">Chem Id</th>
+                                            <th scope="col">Chem Bottle Id</th>
+                                            <th scope="col">Requested Quantity</th>
+                                            <th scope="col">Release Quantity</th>
+                                            <th scope="col">Counting Unit</th>
+                                            <th scope="col">Staff Id</th>
+                                            <th scope="col">Teacher Id</th>
+                                            <th scope="col">Request Status</th>
+                                            <th scope="col">Request Comment</th>
+                                            <th scope="col">Request Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredChemicalsReq.map((chemicalsReq) => (
+                                            <tr key={chemicalsReq.Chem_Request_Id} className="active-row">
+                                                <td> {chemicalsReq.Student_Id} </td>
+                                                <td> {chemicalsReq.Chem_Id} </td>
+                                                <td> {chemicalsReq.Chem_Bottle_Id} </td>
+                                                <td> {chemicalsReq.Requested_Quantity} </td>
+                                                <td> {chemicalsReq.Release_Quantity} </td>
+                                                <td> {chemicalsReq.Counting_Unit} </td>
+                                                <td> {chemicalsReq.Staff_Id} </td>
+                                                <td> {chemicalsReq.Teacher_Id} </td>
+                                                <td> <i className={`${getStatusIcon(chemicalsReq.Request_Status)}`} /> {chemicalsReq.Request_Status}</td>
+                                                <td> {chemicalsReq.Request_Comment} </td>
+                                                <td>{formatDate(chemicalsReq.createdAt)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-
-                    <div >
-                        <div className='table__tabs'>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>ประวัติการเบิกสารเคมี</Link>
-                            <Link to="/student-dashboard/student-equipment-request" className='table__tab table__tab--equipment table__tab--unactive'>ประวัติการเบิกครุภัณฑ์</Link>
-                        </div>
-
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Student Id</th>
-                                    <th scope="col">Chem Id</th>
-                                    <th scope="col">Chem Bottle Id</th>
-                                    <th scope="col">Requested Quantity</th>
-                                    <th scope="col">Release Quantity</th>
-                                    <th scope="col">Counting Unit</th>
-                                    <th scope="col">Staff Id</th>
-                                    <th scope="col">Teacher Id</th>
-                                    <th scope="col">Request Status</th>
-                                    <th scope="col">Request Comment</th>
-                                    <th scope="col">Request Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredChemicalsReq.map((chemicalsReq) => (
-                                    <tr key={chemicalsReq.Chem_Request_Id} className="active-row">
-                                        <td> {chemicalsReq.Student_Id} </td>
-                                        <td> {chemicalsReq.Chem_Id} </td>
-                                        <td> {chemicalsReq.Chem_Bottle_Id} </td>
-                                        <td> {chemicalsReq.Requested_Quantity} </td>
-                                        <td> {chemicalsReq.Release_Quantity} </td>
-                                        <td> {chemicalsReq.Counting_Unit} </td>
-                                        <td> {chemicalsReq.Staff_Id} </td>
-                                        <td> {chemicalsReq.Teacher_Id} </td>
-                                        <td> <i className={`${getStatusIcon(chemicalsReq.Request_Status)}`} /> {chemicalsReq.Request_Status}</td>
-                                        <td> {chemicalsReq.Request_Comment} </td>
-                                        <td>{formatDate(chemicalsReq.createdAt)}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

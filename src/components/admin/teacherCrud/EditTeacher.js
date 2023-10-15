@@ -23,7 +23,6 @@ function EditTeacher({ logout }) {
 
     useEffect(() => {
         getTeachersById()
-        // eslint-disable-next-line
     }, [])
 
     const getTeachersById = async () => {

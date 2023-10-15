@@ -11,6 +11,7 @@ function LogActivity() {
     const [filteredLogActivity, setFilteredLogActivity] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedDate, setSelectedDate] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         getLogActivity();
@@ -23,6 +24,7 @@ function LogActivity() {
     const getLogActivity = async () => {
         const response = await axios.get("https://special-problem.onrender.com/log-activity");
         setLogActivity(response.data);
+        setIsLoading(false);
     }
 
     const deleteLogActivity = async (id) => {
@@ -62,71 +64,79 @@ function LogActivity() {
 
     return (
         <div className="container-fluid">
-            <main>
-                <div className='component__header'>
-                    <div className='component__headerGroup component__headerGroup--left'>
-                        <i className='fa-solid fa-magnifying-glass'></i>
-                        <input
-                            type="search"
-                            className='component__search'
-                            placeholder="ค้นหาด้วยรหัสเจ้าหน้าที่หรือวันเดือนปี"
-                            value={searchQuery}
-                            onChange={handleSearch}
-                        />
+            <main className='dashboard__content'>
+                {isLoading ? (
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
+                ) : (
+                    <div>
+                        <div className='component__header'>
+                            <div className='component__headerGroup component__headerGroup--left'>
+                                <i className='fa-solid fa-magnifying-glass'></i>
+                                <input
+                                    type="search"
+                                    className='component__search'
+                                    placeholder="ค้นหาด้วยรหัสเจ้าหน้าที่หรือวันเดือนปี"
+                                    value={searchQuery}
+                                    onChange={handleSearch}
+                                />
+                            </div>
 
-                    <div className='component__headerGroup component__headerGroup--right'>
-                        <input
-                            type="date"
-                            className="date__input"
-                            value={selectedDate}
-                            onChange={(e) => {
-                                setSelectedDate(e.target.value);
-                            }}
-                        />
-                        <button className="search__button" type="button" onClick={handleSearch}>
-                            ค้นหา
-                        </button>
+                            <div className='component__headerGroup component__headerGroup--right'>
+                                <input
+                                    type="date"
+                                    className="date__input"
+                                    value={selectedDate}
+                                    onChange={(e) => {
+                                        setSelectedDate(e.target.value);
+                                    }}
+                                />
+                                <button className="search__button" type="button" onClick={handleSearch}>
+                                    ค้นหา
+                                </button>
+                            </div>
+                        </div>
+
+                        <div >
+                            <div className='table__tabs'>
+                                <Link className='table__tab table__tab--chemicals table__tab--active'>Log Activity</Link>
+                            </div>
+
+                            <table className="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Staff Id</th>
+                                        <th scope="col">Activity</th>
+                                        <th scope="col">Products</th>
+                                        <th scope="col">Create At</th>
+                                        <th scope="col">Update At</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredLogActivity.map((logActivity) => (
+                                        <tr key={logActivity.LogActivity_Id} className="active-row">
+                                            <td> {logActivity.LogActivity_Id} </td>
+                                            <td> {logActivity.Staff_Id} </td>
+                                            <td> {logActivity.LogActivity_Name} </td>
+                                            <td> {logActivity.Chem_Bottle_Id || logActivity.Equipment_Id} </td>
+                                            <td> {formatDate(logActivity.createdAt)} </td>
+                                            <td> {formatDate(logActivity.updatedAt)} </td>
+                                            <td>
+                                                <button onClick={() => deleteLogActivity(logActivity.LogActivity_Id)} className="delete--btn btn-danger">
+                                                    <i className="fa-solid fa-trash" />
+                                                    ลบ
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-
-                <div >
-                    <div className='table__tabs'>
-                        <Link className='table__tab table__tab--chemicals table__tab--active'>Log Activity</Link>
-                    </div>
-
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Staff Id</th>
-                                <th scope="col">Activity</th>
-                                <th scope="col">Products</th>
-                                <th scope="col">Create At</th>
-                                <th scope="col">Update At</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredLogActivity.map((logActivity) => (
-                                <tr key={logActivity.LogActivity_Id} className="active-row">
-                                    <td> {logActivity.LogActivity_Id} </td>
-                                    <td> {logActivity.Staff_Id} </td>
-                                    <td> {logActivity.LogActivity_Name} </td>
-                                    <td> {logActivity.Chem_Bottle_Id || logActivity.Equipment_Id} </td>
-                                    <td> {formatDate(logActivity.createdAt)} </td>
-                                    <td> {formatDate(logActivity.updatedAt)} </td>
-                                    <td>
-                                        <button onClick={() => deleteLogActivity(logActivity.LogActivity_Id)} className="delete--btn btn-danger">
-                                            <i className="fa-solid fa-trash" />
-                                            ลบ
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                )}
             </main>
         </div>
     )

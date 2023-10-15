@@ -15,6 +15,15 @@ import logo from '../../assets/logo.png';
 
 function ReportEquipment({ logout }) {
     const [staffId, setStaffId] = useState("");
+    const [staffInfo, setStaffInfo] = useState({
+        staffId: "",
+        staffFirstName: "",
+        staffLastName: "",
+        staffUsername: "",
+        staffPassword: "",
+        staffTel: "",
+    })
+
     const [logActivity, setLogActivity] = useState({
         LogActivity_Name: "",
         Equipment_Id: "",
@@ -26,7 +35,30 @@ function ReportEquipment({ logout }) {
     const [searchQuery, setSearchQuery] = useState(""); // State for search query
     const [filteredEquipment, setFilteredEquipment] = useState([]); // State for filtered equipment
 
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    const formattedDateTime = currentDateTime.toLocaleString();
+
+    const navigate = useNavigate();
+
     axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        getEquipment();
+        getEquipmentCategory();
+    }, []);
+
+    useEffect(() => {
+        // Update the current date and time every second
+        const intervalId = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000);
+
+        // Clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, []);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/staff", {
@@ -44,43 +76,6 @@ function ReportEquipment({ logout }) {
     }, [logActivity]);
 
     useEffect(() => {
-        getEquipment();
-        getEquipmentCategory();
-    }, []);
-
-    const getEquipment = async () => {
-        try {
-            const response = await axios.get("https://special-problem.onrender.com/equipment-list");
-            setEquipment(response.data);
-            setFilteredEquipment(response.data); // Initialize filtered equipment with all equipment
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const getEquipmentCategory = async () => {
-        try {
-            const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
-            setEquipmentCategory(response.data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const [staffInfo, setStaffInfo] = useState({
-        staffId: "",
-        staffFirstName: "",
-        staffLastName: "",
-        staffUsername: "",
-        staffPassword: "",
-        staffTel: "",
-    })
-
-    const navigate = useNavigate();
-
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
         axios.get("https://special-problem.onrender.com/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
@@ -93,6 +88,27 @@ function ReportEquipment({ logout }) {
             }
         });
     }, []);
+
+    const getEquipment = async () => {
+        try {
+            const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+            setEquipment(response.data);
+            setFilteredEquipment(response.data); // Initialize filtered equipment with all equipment
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getEquipmentCategory = async () => {
+        try {
+            const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
+            setEquipmentCategory(response.data);
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
@@ -192,66 +208,78 @@ function ReportEquipment({ logout }) {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass' />
-                            <input
-                                type="text"
-                                className="component__search"
-                                placeholder="ค้นหาด้วยรหัสครุภัณฑ์"
-                                value={searchQuery} // Bind input value to searchQuery state
-                                onChange={handleSearch} // Call handleSearch when input changes
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass' />
+                                    <input
+                                        type="text"
+                                        className="component__search"
+                                        placeholder="ค้นหาด้วยรหัสครุภัณฑ์"
+                                        value={searchQuery} // Bind input value to searchQuery state
+                                        onChange={handleSearch} // Call handleSearch when input changes
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <i className="fa-solid fa-circle-user" />
+                                    <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <button className="edit--btn me-2" onClick={exportToExcel}>
+                                    <i className="fa-solid fa-file-excel me-2"></i>
+                                    Export to Excel
+                                </button>
+
+                                <button className="delete--btn btn-danger" onClick={generatePDF}>
+                                    <i className="fa-solid fa-file-pdf me-2"></i>
+                                    Export to PDF
+                                </button>
+                            </div>
+
+                            <div ref={conponentPDF} style={{ width: '100%' }}>
+                                <div className="d-flex justify-content-between">
+                                    <div className="report-header__title thai--font">รายงานครุภัณฑ์</div>
+                                    <div className="report-header__date thai--font">วันที่ออกรายงาน {formattedDateTime}</div>
+                                </div>
+                                <table className="table table-export table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th className="table-header" scope="col">#</th>
+                                            <th className="table-header" scope="col">รหัสครุภัณฑ์</th>
+                                            <th className="table-header" scope="col">หมวดหมู่</th>
+                                            <th className="table-header" scope="col">ชื่อครุภัณฑ์</th>
+                                            <th className="table-header" scope="col">จำนวน</th>
+                                            <th className="table-header" scope="col">สถานที่เก็บ</th>
+                                            <th className="table-header" scope="col">ราคา</th>
+                                            <th className="table-header" scope="col">ค่าซ่อม</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredEquipment.map((equipment, index) => (
+                                            <tr key={index} className="active-row">
+                                                <td className="table-data"> {index + 1} </td>
+                                                <td className="table-data"> {equipment.Equipment_Id} </td>
+                                                <td className="table-data"> {getEquipmentCategoryName(equipment.Equipment_Category_Id)} </td>
+                                                <td className="table-data"> {equipment.Equipment_Name} </td>
+                                                <td className="table-data"> {equipment.Quantity} </td>
+                                                <td className="table-data"> {equipment.Location} </td>
+                                                <td className="table-data"> {equipment.Price} </td>
+                                                <td className="table-data"> {equipment.Fixed_Cost} </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-
-                    <div>
-                        <button className="edit--btn me-2" onClick={exportToExcel}>
-                            <i className="fa-solid fa-file-excel me-2"></i>
-                            Export to Excel
-                        </button>
-
-                        <button className="delete--btn btn-danger" onClick={generatePDF}>
-                            <i className="fa-solid fa-file-pdf me-2"></i>
-                            Export to PDF
-                        </button>
-                    </div>
-
-                    <div className="mt-3" ref={conponentPDF} style={{ width: '100%' }}>
-                        <table className="table table-export table-striped">
-                            <thead>
-                                <tr>
-                                    <th className="table-header" scope="col">#</th>
-                                    <th className="table-header" scope="col">รหัสครุภัณฑ์</th>
-                                    <th className="table-header" scope="col">หมวดหมู่</th>
-                                    <th className="table-header" scope="col">ชื่อครุภัณฑ์</th>
-                                    <th className="table-header" scope="col">จำนวน</th>
-                                    <th className="table-header" scope="col">สถานที่เก็บ</th>
-                                    <th className="table-header" scope="col">ราคา</th>
-                                    <th className="table-header" scope="col">ค่าซ่อม</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredEquipment.map((equipment, index) => (
-                                    <tr key={index} className="active-row">
-                                        <td className="table-data"> {index + 1} </td>
-                                        <td className="table-data"> {equipment.Equipment_Id} </td>
-                                        <td className="table-data"> {getEquipmentCategoryName(equipment.Equipment_Category_Id)} </td>
-                                        <td className="table-data"> {equipment.Equipment_Name} </td>
-                                        <td className="table-data"> {equipment.Quantity} </td>
-                                        <td className="table-data"> {equipment.Location} </td>
-                                        <td className="table-data"> {equipment.Price} </td>
-                                        <td className="table-data"> {equipment.Fixed_Cost} </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

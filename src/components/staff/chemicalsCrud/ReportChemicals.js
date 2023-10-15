@@ -19,7 +19,6 @@ function ReportChemicals({ logout }) {
 
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredChemicals, setFilteredChemicals] = useState([]);
-    const [scannedText, setScannedText] = useState("");
 
     const [staffId, setStaffId] = useState("");
     const [logActivity, setLogActivity] = useState({
@@ -28,7 +27,39 @@ function ReportChemicals({ logout }) {
         Staff_Id: "",
     });
 
+    const [staffInfo, setStaffInfo] = useState({
+        staffId: "",
+        staffFirstName: "",
+        staffLastName: "",
+        staffUsername: "",
+        staffPassword: "",
+        staffTel: "",
+    })
+
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+    const formattedDateTime = currentDateTime.toLocaleString();
+
+    const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState(true);
+
     axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        getChemicals();
+        getChemicalsDetail();
+    }, []);
+
+    useEffect(() => {
+        // Update the current date and time every second
+        const intervalId = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000);
+
+        // Clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, []);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/staff", {
@@ -46,18 +77,29 @@ function ReportChemicals({ logout }) {
     }, [logActivity]);
 
     useEffect(() => {
-        getChemicals();
-        getChemicalsDetail();
+        axios.get("https://special-problem.onrender.com/staff", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+            },
+        }).then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffInfo(response.data);
+            }
+        });
     }, []);
 
     const getChemicals = async () => {
         const response = await axios.get("https://special-problem.onrender.com/chemicals-list");
         setChemicals(response.data);
+        setIsLoading(false);
     }
 
     const getChemicalsDetail = async () => {
         const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
         setChemicalsDetail(response.data);
+        setIsLoading(false);
     }
 
     const handleSearchInputChange = (e) => {
@@ -73,33 +115,6 @@ function ReportChemicals({ logout }) {
         const chemicalDetail = chemicalsDetail.find((chem) => chem.Chem_Id === chemId);
         return chemicalDetail ? chemicalDetail.Chem_Name : "N/A";
     };
-
-    const [staffInfo, setStaffInfo] = useState({
-        staffId: "",
-        staffFirstName: "",
-        staffLastName: "",
-        staffUsername: "",
-        staffPassword: "",
-        staffTel: "",
-    })
-
-    const navigate = useNavigate();
-
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
-            },
-        }).then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setStaffInfo(response.data);
-            }
-        });
-    }, []);
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
@@ -178,66 +193,78 @@ function ReportChemicals({ logout }) {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass' />
-                            <input
-                                type="text"
-                                className="component__search"
-                                placeholder="ค้นหาด้วยรหัสขวดสารเคมี"
-                                value={searchQuery}
-                                onChange={handleSearchInputChange}
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass' />
+                                    <input
+                                        type="text"
+                                        className="component__search"
+                                        placeholder="ค้นหาด้วยรหัสขวดสารเคมี"
+                                        value={searchQuery}
+                                        onChange={handleSearchInputChange}
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <i className="fa-solid fa-circle-user" />
+                                    <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <button className="edit--btn me-2" onClick={exportToExcel}>
+                                    <i className="fa-solid fa-file-excel me-2"></i>
+                                    Export to Excel
+                                </button>
+
+                                <button className="delete--btn btn-danger" onClick={generatePDF}>
+                                    <i className="fa-solid fa-file-pdf me-2"></i>
+                                    Export to PDF
+                                </button>
+                            </div>
+
+                            <div ref={conponentPDF} style={{ width: '100%' }}>
+                                <div className="d-flex justify-content-between">
+                                    <div className="report-header__title thai--font">รายงานสารเคมี</div>
+                                    <div className="report-header__date thai--font">วันที่ออกรายงาน {formattedDateTime}</div>
+                                </div>
+                                <table className="table table-export table-striped" id="stock-table">
+                                    <thead>
+                                        <tr>
+                                            <th className="table-header" scope="col">#</th>
+                                            <th className="table-header" scope="col">รหัสขวด</th>
+                                            <th className="table-header" scope="col">ชื่อสารเคมี</th>
+                                            <th className="table-header" scope="col">ขนาดบรรจุ</th>
+                                            <th className="table-header" scope="col">ปริมาณคงเหลือ</th>
+                                            <th className="table-header" scope="col">หน่วยนับ</th>
+                                            <th className="table-header" scope="col">สถานที่เก็บ</th>
+                                            <th className="table-header" scope="col">ราคา</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {(searchQuery ? filteredChemicals : chemicals).map((chemicals, index) => (
+                                            <tr key={index} className="active-row">
+                                                <td className="table-data"> {index + 1} </td>
+                                                <td className="table-data"> {chemicals.Chem_Bottle_Id} </td>
+                                                <td className="table-data"> {getChemNameById(chemicals.Chem_Id)} </td>
+                                                <td className="table-data"> {chemicals.Package_Size} </td>
+                                                <td className="table-data"> {chemicals.Remaining_Quantity} </td>
+                                                <td className="table-data"> {chemicals.Counting_Unit} </td>
+                                                <td className="table-data"> {chemicals.Location} </td>
+                                                <td className="table-data"> {chemicals.Price} </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-
-                    <div>
-                        <button className="edit--btn me-2" onClick={exportToExcel}>
-                            <i className="fa-solid fa-file-excel me-2"></i>
-                            Export to Excel
-                        </button>
-
-                        <button className="delete--btn btn-danger" onClick={generatePDF}>
-                            <i className="fa-solid fa-file-pdf me-2"></i>
-                            Export to PDF
-                        </button>
-                    </div>
-
-                    <div className="mt-3" ref={conponentPDF} style={{ width: '100%' }}>
-                        <table className="table table-export table-striped" id="stock-table">
-                            <thead>
-                                <tr>
-                                    <th className="table-header" scope="col">#</th>
-                                    <th className="table-header" scope="col">รหัสขวด</th>
-                                    <th className="table-header" scope="col">ชื่อสารเคมี</th>
-                                    <th className="table-header" scope="col">ขนาดบรรจุ</th>
-                                    <th className="table-header" scope="col">ปริมาณคงเหลือ</th>
-                                    <th className="table-header" scope="col">หน่วยนับ</th>
-                                    <th className="table-header" scope="col">สถานที่เก็บ</th>
-                                    <th className="table-header" scope="col">ราคา</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {(searchQuery ? filteredChemicals : chemicals).map((chemicals, index) => (
-                                    <tr key={index} className="active-row">
-                                        <td className="table-data"> {index + 1} </td>
-                                        <td className="table-data"> {chemicals.Chem_Bottle_Id} </td>
-                                        <td className="table-data"> {getChemNameById(chemicals.Chem_Id)} </td>
-                                        <td className="table-data"> {chemicals.Package_Size} </td>
-                                        <td className="table-data"> {chemicals.Remaining_Quantity} </td>
-                                        <td className="table-data"> {chemicals.Counting_Unit} </td>
-                                        <td className="table-data"> {chemicals.Location} </td>
-                                        <td className="table-data"> {chemicals.Price} </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

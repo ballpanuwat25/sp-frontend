@@ -120,7 +120,7 @@ function BarcodeEquipment({ logout }) {
                                     <tr key={equipment.Equipment_Id} className="active-row">
                                         <td className="table-data">{index + 1}</td>
                                         <td className="table-data">{equipment.Equipment_Name}</td>
-                                        <td className="table-data"><Barcode value={equipment.Equipment_Id} background="#f2f2f2" height="30" width="1.5" fontSize="10" /></td>
+                                        <td className="table-data"><Barcode value={equipment.Equipment_Id} background="#fff"  height="20" width="1.5" fontSize="8" /></td>
                                     </tr>
                                 ))}
                             </tbody>

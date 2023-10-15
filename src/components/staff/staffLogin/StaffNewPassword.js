@@ -4,75 +4,75 @@ import { useNavigate } from 'react-router-dom';
 
 import '../../cssElement/Form.css';
 
-function TeacherNewPassword() {
-    const [teacherInfo, setTeacherInfo] = useState({
-        teacherId: "",
-        teacherUsername: "",
+function StaffNewPassword() {
+    const [staffInfo, setStaffInfo] = useState({
+        staffId: "",
+        staffUsername: "",
     });
 
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const [Teacher_FName, setTeacher_FName] = useState("");
-    const [Teacher_LName, setTeacher_LName] = useState("");
-    const [Teacher_Email, setTeacher_Email] = useState("");
-    const [Teacher_Username, setTeacher_Username] = useState("");
-    const [Teacher_Password, setTeacher_Password] = useState("");
-    const [Teacher_Tel, setTeacher_Tel] = useState("");
+    const [Staff_FName, setStaff_FName] = useState("");
+    const [Staff_LName, setStaff_LName] = useState("");
+    const [Staff_Email, setStaff_Email] = useState("");
+    const [Staff_Username, setStaff_Username] = useState("");
+    const [Staff_Password, setStaff_Password] = useState("");
+    const [Staff_Tel, setStaff_Tel] = useState("");
+
+    const id = staffInfo.staffId;
 
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher", {
+        getStaffsById()
+    }, [])
+
+    useEffect(() => {
+        axios.get("https://special-problem.onrender.com/staff", {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
+                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
         })
             .then((response) => {
                 if (response.data.Error) {
-                    console.error("Teacher Request Error:", response.data.Error);
+                    console.error("Staff Request Error:", response.data.Error);
                 } else {
-                    setTeacherInfo(response.data);
-                    setTeacher_Username(response.data.teacherUsername);
+                    setStaffInfo(response.data);
+                    setStaff_Username(response.data.staffUsername);
                 }
             })
             .catch((error) => {
-                console.error("Teacher Request Failed:", error);
+                console.error("Staff Request Failed:", error);
             });
     }, []);
 
-    useEffect(() => {
-        getTeachersById()
-    }, [])
-
-    const id = teacherInfo.teacherId
-
-    const getTeachersById = async () => {
-        const response = await axios.get(`https://special-problem.onrender.com/teacher-list/${id}`);
-        const teacher = response.data;
-        setTeacher_FName(teacher.Teacher_FName);
-        setTeacher_LName(teacher.Teacher_LName);
-        setTeacher_Email(teacher.Teacher_Email);
-        setTeacher_Username(teacher.Teacher_Username);
-        setTeacher_Password(teacher.Teacher_Password);
-        setTeacher_Tel(teacher.Teacher_Tel);
+    const getStaffsById = async () => {
+        const response = await axios.get(`https://special-problem.onrender.com/staff-list/${id}`);
+        const staff = response.data;
+        setStaff_FName(staff.Staff_FName);
+        setStaff_LName(staff.Staff_LName);
+        setStaff_Email(staff.Staff_Email);
+        setStaff_Username(staff.Staff_Username);
+        setStaff_Password(staff.Staff_Password);
+        setStaff_Tel(staff.Staff_Tel);
     };
 
-    const updateTeacherInfo = async (e) => {
+    const updateStaffInfo = async (e) => {
         e.preventDefault();
 
-        if (Teacher_Password !== confirmPassword) {
+        if (Staff_Password !== confirmPassword) {
             alert("Password and Confirm Password do not match");
             return;
         } else {
             try {
-                const response = await axios.patch(`https://special-problem.onrender.com/teacher-list/${id}`, {
-                    Teacher_FName,
-                    Teacher_LName,
-                    Teacher_Email,
-                    Teacher_Username: teacherInfo.teacherUsername,
-                    Teacher_Password,
-                    Teacher_Tel
+                const response = await axios.patch(`https://special-problem.onrender.com/staff-list/${id}`, {
+                    Staff_FName,
+                    Staff_LName,
+                    Staff_Email,
+                    Staff_Username: staffInfo.staffUsername,
+                    Staff_Password,
+                    Staff_Tel
                 });
 
                 if (response.status === 200) {
@@ -91,12 +91,12 @@ function TeacherNewPassword() {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
+        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                localStorage.removeItem('teacherToken');
-                navigate("/teacher-login");
+                localStorage.removeItem('staffToken');
+                navigate("/staff-login");
             }
         });
     };
@@ -104,22 +104,22 @@ function TeacherNewPassword() {
     return (
         <div className='container-fluid vh-100'>
             <main className='form__container'>
-                <form onSubmit={updateTeacherInfo} className="form__card form__card--login">
+                <form onSubmit={updateStaffInfo} className="form__card form__card--login">
                     <h3 className='form__header'>New Password</h3>
 
                     <div className="mb-3 form__inputBox ">
                         <label htmlFor="Username" className='profile__label'>Username</label>
-                        <input type="text" className='profile__input' id="Teacher_Username" placeholder="Enter Teacher Username" required readOnly
-                            defaultValue={teacherInfo.teacherUsername}
+                        <input type="text" className='profile__input' id="Staff_Username" placeholder="Enter Your Username" required readOnly
+                            defaultValue={staffInfo.staffUsername}
                         />
                     </div>
 
                     <div className="mb-3 form__inputBox">
                         <label htmlFor="Password" className='profile__label'>New Password</label>
-                        <input type="password" className='profile__input' id="Teacher_Password" placeholder="Enter Teacher Password" required
-                            value={Teacher_Password}
+                        <input type="password" className='profile__input' id="Staff_Password" placeholder="Enter Staff Password" required
+                            value={Staff_Password}
                             onChange={(e) => {
-                                setTeacher_Password(e.target.value);
+                                setStaff_Password(e.target.value);
                             }}
                         />
                     </div>
@@ -141,4 +141,4 @@ function TeacherNewPassword() {
     )
 }
 
-export default TeacherNewPassword
+export default StaffNewPassword

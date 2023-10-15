@@ -2,12 +2,6 @@ table {
     border-collapse: collapse;
     font-size: 0.9em;
     color: #006C68;
-
-    border-start-end-radius: 15px;
-    border-end-start-radius: 15px;
-    border-end-end-radius: 15px;
-
-    overflow: hidden;
 }
 
 table thead tr {
@@ -33,7 +27,7 @@ table tbody tr:nth-of-type(odd) td div button {
 }
 
 table tbody tr:nth-of-type(even) {
-    background-color: #f2f2f2 !important;
+    background-color: #fff !important;
 }
 
 table thead tr th,
@@ -256,7 +250,7 @@ select {
 
 /* Style the table rows with alternating background colors */
 .active-row {
-    background-color: #f2f2f2 !important;
+    background-color: #fff !important;
     color: #006C68 !important;
     font-weight: 500 !important;
 }
@@ -269,6 +263,14 @@ select {
 
 .text-success {
     color: #006C68 !important;
+}
+
+.table>:not(caption)>*>* {
+    box-shadow: none !important;
+}
+
+table tbody tr td.table-data {
+    padding: 0px !important;
 }
 
 @media screen and (max-width: 875px) {

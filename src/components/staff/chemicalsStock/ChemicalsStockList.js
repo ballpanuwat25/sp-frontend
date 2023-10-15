@@ -15,19 +15,50 @@ function ChemicalsStockList({ logout }) {
   const [searchFilter, setSearchFilter] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [staffInfo, setStaffInfo] = useState({
+    staffId: "",
+    staffFirstName: "",
+    staffLastName: "",
+    staffUsername: "",
+    staffPassword: "",
+    staffTel: "",
+  })
+
+  const navigate = useNavigate();
+
+  axios.defaults.withCredentials = true;
+
   useEffect(() => {
     getChemicals();
     getChemicalsDetail();
   }, []);
 
+  useEffect(() => {
+    axios.get("https://special-problem.onrender.com/staff", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+      },
+    }).then((response) => {
+      if (response.data.Error) {
+        alert(response.data.Error);
+      } else {
+        setStaffInfo(response.data);
+      }
+    });
+  }, []);
+
   const getChemicals = async () => {
     const response = await axios.get("https://special-problem.onrender.com/chemicals-list");
     setChemicals(response.data);
+    setIsLoading(false);
   }
 
   const getChemicalsDetail = async () => {
     const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
     setChemicalsDetail(response.data);
+    setIsLoading(false);
   }
 
   // Function to process the chemicals data and return a new array with unique chemical IDs and summed up quantities
@@ -100,33 +131,6 @@ function ChemicalsStockList({ logout }) {
     setSearchTerm(event.target.value);
   };
 
-  const [staffInfo, setStaffInfo] = useState({
-    staffId: "",
-    staffFirstName: "",
-    staffLastName: "",
-    staffUsername: "",
-    staffPassword: "",
-    staffTel: "",
-  })
-
-  const navigate = useNavigate();
-
-  axios.defaults.withCredentials = true;
-
-  useEffect(() => {
-    axios.get("https://special-problem.onrender.com/staff", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
-      },
-    }).then((response) => {
-      if (response.data.Error) {
-        alert(response.data.Error);
-      } else {
-        setStaffInfo(response.data);
-      }
-    });
-  }, []);
-
   const handleLogout = () => {
     axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
       if (response.data.Error) {
@@ -162,74 +166,82 @@ function ChemicalsStockList({ logout }) {
         </aside>
 
         <main className='dashboard__content'>
-          <div className='component__header'>
-            <div className='component__headerGroup component__headerGroup--left'>
-              <i className='fa-solid fa-magnifying-glass' />
-              <input
-                type="text"
-                id="searchTerm"
-                className="component__search"
-                value={searchTerm}
-                onChange={handleSearchInputChange}
-                placeholder="Enter Chem_Name..."
-              />
+          {isLoading ? (
+            <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Loading...</span>
             </div>
+          ) : (
+            <div>
+              <div className='component__header'>
+                <div className='component__headerGroup component__headerGroup--left'>
+                  <i className='fa-solid fa-magnifying-glass' />
+                  <input
+                    type="text"
+                    id="searchTerm"
+                    className="component__search"
+                    value={searchTerm}
+                    onChange={handleSearchInputChange}
+                    placeholder="Enter Chem_Name..."
+                  />
+                </div>
 
-            <div className='component__headerGroup component__headerGroup--right'>
-              <i className="fa-solid fa-circle-user" />
-              <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                <div className='component__headerGroup component__headerGroup--right'>
+                  <i className="fa-solid fa-circle-user" />
+                  <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                </div>
+              </div>
+
+              <div>
+                <div className='table__tabs'>
+                  <Link className='table__tab table__tab--chemicals table__tab--active'>คลังสารเคมีกลาง</Link>
+                  <Link to="/chemicalsStock-filter" className='table__tab table__tab--equipment table__tab--unactive'>สารเคมีที่ใกล้หมด</Link>
+                </div>
+
+                <table className="table table-striped" id="stock-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">รหัสสารเคมี</th>
+                      <th scope="col">ชื่อสารเคมี</th>
+                      <th scope="col">ปริมาณทั้งหมด</th>
+                      <th scope="col">ปริมาณคงเหลือ</th>
+                      <th scope="col">หน่วยนับ</th>
+                      <th scope="col">
+                        <select id="searchFilter" value={searchFilter} onChange={handleSearchFilterChange} className="buttonTab-btn thai--font" >
+                          <option disabled>เลือกสถานะของสาร</option>
+                          <option value="All">ทั้งหมด</option>
+                          <option value="Liquid">Liquid</option>
+                          <option value="Solid">Solid</option>
+                        </select>
+                      </th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {processChemicalsData().map((chemical, index) => (
+                      <tr key={index} className="active-row">
+                        <td> {index + 1} </td>
+                        <td> {chemical.Chem_Id} </td>
+                        <td> {chemical.Chem_Name} </td>
+                        <td> {chemical.Package_Size} </td>
+                        <td> {chemical.Remaining_Quantity} </td>
+                        <td> {chemical.Counting_Unit} </td>
+                        <td> {chemical.Chem_State} </td>
+                        <td>
+                          <Link className='disable--link thai--font' to={`./${chemical.Chem_Id}`} >
+                            <div className="table__button">
+                              <i className="fa-solid fa-eye"></i>
+                              ดูรายละเอียด
+                            </div>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-
-          <div>
-            <div className='table__tabs'>
-              <Link className='table__tab table__tab--chemicals table__tab--active'>คลังสารเคมีกลาง</Link>
-              <Link to="/chemicalsStock-filter" className='table__tab table__tab--equipment table__tab--unactive'>สารเคมีที่ใกล้หมด</Link>
-            </div>
-
-            <table className="table table-striped" id="stock-table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">รหัสสารเคมี</th>
-                  <th scope="col">ชื่อสารเคมี</th>
-                  <th scope="col">ปริมาณทั้งหมด</th>
-                  <th scope="col">ปริมาณคงเหลือ</th>
-                  <th scope="col">หน่วยนับ</th>
-                  <th scope="col">
-                    <select id="searchFilter" value={searchFilter} onChange={handleSearchFilterChange} className="buttonTab-btn thai--font" >
-                      <option disabled>เลือกสถานะของสาร</option>
-                      <option value="All">ทั้งหมด</option>
-                      <option value="Liquid">Liquid</option>
-                      <option value="Solid">Solid</option>
-                    </select>
-                  </th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {processChemicalsData().map((chemical, index) => (
-                  <tr key={index} className="active-row">
-                    <td> {index + 1} </td>
-                    <td> {chemical.Chem_Id} </td>
-                    <td> {chemical.Chem_Name} </td>
-                    <td> {chemical.Package_Size} </td>
-                    <td> {chemical.Remaining_Quantity} </td>
-                    <td> {chemical.Counting_Unit} </td>
-                    <td> {chemical.Chem_State} </td>
-                    <td>
-                      <Link className='disable--link thai--font' to={`./${chemical.Chem_Id}`} >
-                        <div className="table__button">
-                          <i className="fa-solid fa-eye"></i>
-                          ดูรายละเอียด
-                        </div>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          )}
         </main>
 
         <footer className='footer'>

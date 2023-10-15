@@ -1,16 +1,19 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../../cssElement/Form.css'
 
 function TeacherForgetPassword() {
-    const [inProgress, setInProgress] = useState(false);
     const [values, setValues] = useState({
         Teacher_Username: "",
         Teacher_Email: "",
     });
 
     axios.defaults.withCredentials = true;
+
+    const notify = () => toast.info("Please check your email for the reset link, you can close this tab now");
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -23,16 +26,14 @@ function TeacherForgetPassword() {
                 } else {
                     const token = response.data.token;
                     localStorage.setItem('teacherToken', token);
-
-                    setInProgress(true);
+                    notify();
                 }
             });
-
-        setInProgress(false);
     };
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <main className='form__container'>
                 <form className='form__card form__card--forgetpassword' onSubmit={handleSubmit}>
                     <h3 className='form__header'>Forget Password</h3>
@@ -54,11 +55,8 @@ function TeacherForgetPassword() {
                         <span>Email</span>
                     </div>
 
-                    {inProgress ? (
-                        <p>Please check your email for the reset link, you can close this tab now</p>
-                    ) : (
-                        <button type="submit" className='form__btn form__btn--forgetpassword'>Submit</button>
-                    )}
+                    <button type="submit" className='form__btn form__btn--forgetpassword'>Submit</button>
+
                 </form>
             </main>
         </div>

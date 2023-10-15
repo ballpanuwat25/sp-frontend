@@ -191,7 +191,7 @@ function StudentEquipmentList() {
                     <aside className='sidebar'>
                         <div className='sidebar__header'>
                             <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
-                            <div className='sidebar__title std__name'>Welcome, {studentInfo.studentFirstName}</div>
+                            <div className='sidebar__title std__name thai--font'>Welcome, {studentInfo.studentFirstName}</div>
                         </div>
                         <div className='sidebar__body'>
                             <Link to="/student-dashboard/student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>

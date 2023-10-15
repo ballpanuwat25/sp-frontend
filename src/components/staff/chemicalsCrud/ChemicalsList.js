@@ -27,6 +27,8 @@ function ChemicalsList({ logout }) {
         Staff_Id: "",
     });
 
+    const [isLoading, setIsLoading] = useState(true);
+
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
@@ -62,11 +64,13 @@ function ChemicalsList({ logout }) {
     const getChemicals = async () => {
         const response = await axios.get("https://special-problem.onrender.com/chemicals-list");
         setChemicals(response.data);
+        setIsLoading(false)
     }
 
     const getChemicalsDetail = async () => {
         const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
         setChemicalsDetail(response.data);
+        setIsLoading(false)
     }
 
     const deleteChemicals = async (id) => {
@@ -83,7 +87,7 @@ function ChemicalsList({ logout }) {
     const handleSearchInputChange = (e) => {
         const query = e.target.value;
         setSearchQuery(query);
-        
+
         const filteredChemicals = chemicals.filter((chemical) =>
             chemical.Chem_Bottle_Id.toLowerCase().includes(query.toLowerCase())
         );
@@ -163,78 +167,86 @@ function ChemicalsList({ logout }) {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <BarcodeScanner2 onSave={handleSave} />
-                            <Link to="/barcode-chemicals" className="btn btn-outline-success me-3"><i className="fa-solid fa-barcode"></i></Link>
-
-                            <i className='fa-solid fa-magnifying-glass' />
-                            <input
-                                type="text"
-                                className="component__search"
-                                placeholder="ค้นหาด้วยรหัสขวดสารเคมี"
-                                defaultValue={inputValue}
-                                onChange={handleSearchInputChange}
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <BarcodeScanner2 onSave={handleSave} />
+                                    <Link to="/barcode-chemicals" className="btn btn-outline-success me-3"><i className="fa-solid fa-barcode"></i></Link>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                                    <i className='fa-solid fa-magnifying-glass' />
+                                    <input
+                                        type="text"
+                                        className="component__search"
+                                        placeholder="ค้นหาด้วยรหัสขวดสารเคมี"
+                                        defaultValue={inputValue}
+                                        onChange={handleSearchInputChange}
+                                    />
+                                </div>
+
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <i className="fa-solid fa-circle-user" />
+                                    <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className='table__tabs'>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>ขวดสารเคมี</Link>
+                                    <Link to="/chemicalsDetail-list" className='table__tab table__tab--equipment table__tab--unactive'>สารเคมี</Link>
+                                    <Link to="/report-chemicals" className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
+                                </div>
+
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">รหัสขวด</th>
+                                            <th scope="col">ชื่อสารเคมี</th>
+                                            <th scope="col">ขนาดบรรจุ</th>
+                                            <th scope="col">ปริมาณคงเหลือ</th>
+                                            <th scope="col">หน่วยนับ</th>
+                                            <th scope="col">สถานที่เก็บ</th>
+                                            <th scope="col">ราคา</th>
+                                            <th scope="col">
+                                                <Link to={`add-chemicals`} className="buttonTab-btn thai--font disable--link"><i className="fa-solid fa-square-plus me-2" /> เพิ่มขวดสารเคมี</Link>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {(searchQuery ? filteredChemicals : chemicals).map((chemicals, index) => (
+                                            <tr key={index} className="active-row">
+                                                <td> {index + 1} </td>
+                                                <td> {chemicals.Chem_Bottle_Id} </td>
+                                                <td> {getChemNameById(chemicals.Chem_Id)} </td>
+                                                <td> {chemicals.Package_Size} </td>
+                                                <td> {chemicals.Remaining_Quantity} </td>
+                                                <td> {chemicals.Counting_Unit} </td>
+                                                <td> {chemicals.Location} </td>
+                                                <td> {chemicals.Price} </td>
+                                                <td>
+                                                    <div className="d-grid gap-2 d-sm-flex">
+                                                        <Link to={`edit-chemicals/${chemicals.Chem_Bottle_Id}`} className="edit--btn">
+                                                            <i className="fa-solid fa-pen-to-square" />
+                                                            แก้ไข
+                                                        </Link>
+                                                        <button onClick={() => deleteChemicals(chemicals.Chem_Bottle_Id)} className="delete--btn btn-danger">
+                                                            <i className="fa-solid fa-trash" />
+                                                            ลบ
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-
-                    <div>
-                        <div className='table__tabs'>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>ขวดสารเคมี</Link>
-                            <Link to="/chemicalsDetail-list" className='table__tab table__tab--equipment table__tab--unactive'>สารเคมี</Link>
-                            <Link to="/report-chemicals" className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
-                        </div>
-
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">รหัสขวด</th>
-                                    <th scope="col">ชื่อสารเคมี</th>
-                                    <th scope="col">ขนาดบรรจุ</th>
-                                    <th scope="col">ปริมาณคงเหลือ</th>
-                                    <th scope="col">หน่วยนับ</th>
-                                    <th scope="col">สถานที่เก็บ</th>
-                                    <th scope="col">ราคา</th>
-                                    <th scope="col">
-                                        <Link to={`add-chemicals`} className="buttonTab-btn thai--font disable--link"><i className="fa-solid fa-square-plus me-2" /> เพิ่มขวดสารเคมี</Link>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {(searchQuery ? filteredChemicals : chemicals).map((chemicals, index) => (
-                                    <tr key={index} className="active-row">
-                                        <td> {index + 1} </td>
-                                        <td> {chemicals.Chem_Bottle_Id} </td>
-                                        <td> {getChemNameById(chemicals.Chem_Id)} </td>
-                                        <td> {chemicals.Package_Size} </td>
-                                        <td> {chemicals.Remaining_Quantity} </td>
-                                        <td> {chemicals.Counting_Unit} </td>
-                                        <td> {chemicals.Location} </td>
-                                        <td> {chemicals.Price} </td>
-                                        <td>
-                                            <div className="d-grid gap-2 d-sm-flex">
-                                                <Link to={`edit-chemicals/${chemicals.Chem_Bottle_Id}`} className="edit--btn">
-                                                    <i className="fa-solid fa-pen-to-square" />
-                                                    แก้ไข
-                                                </Link>
-                                                <button onClick={() => deleteChemicals(chemicals.Chem_Bottle_Id)} className="delete--btn btn-danger">
-                                                    <i className="fa-solid fa-trash" />
-                                                    ลบ
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

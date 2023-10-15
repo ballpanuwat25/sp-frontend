@@ -10,24 +10,10 @@ import logo from '../../assets/logo.png';
 
 const TeacherList = ({ logout }) => {
     const [teachers, setTeachers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        getTeachers();
-    }, []);
-
-    const getTeachers = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/teacher-list");
-        setTeachers(response.data);
-    };
-
-    const deleteTeacher = async (id) => {
-        try {
-            await axios.delete(`https://special-problem.onrender.com/teacher-list/${id}`)
-            getTeachers();
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredTeachers, setFilteredTeachers] = useState([]);
 
     const [adminInfo, setAdminInfo] = useState({
         adminName: "",
@@ -39,6 +25,14 @@ const TeacherList = ({ logout }) => {
     const navigate = useNavigate();
 
     axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        getTeachers();
+    }, []);
+
+    useEffect(() => {
+        setFilteredTeachers(teachers);
+    }, [teachers]);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/admin", {
@@ -58,6 +52,21 @@ const TeacherList = ({ logout }) => {
             });
     }, []);
 
+    const getTeachers = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/teacher-list");
+        setTeachers(response.data);
+        setIsLoading(false);
+    };
+
+    const deleteTeacher = async (id) => {
+        try {
+            await axios.delete(`https://special-problem.onrender.com/teacher-list/${id}`)
+            getTeachers();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
             if (response.data.Error) {
@@ -69,9 +78,6 @@ const TeacherList = ({ logout }) => {
             }
         });
     };
-
-    const [searchQuery, setSearchQuery] = useState("");
-    const [filteredTeachers, setFilteredTeachers] = useState([]);
 
     const handleSearch = (e) => {
         const query = e.target.value;
@@ -86,10 +92,6 @@ const TeacherList = ({ logout }) => {
 
         setFilteredTeachers(filteredTeachers);
     };
-
-    useEffect(() => {
-        setFilteredTeachers(teachers);
-    }, [teachers]);
 
     return (
         <div className='container-fluid vh-100'>
@@ -110,61 +112,69 @@ const TeacherList = ({ logout }) => {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass'></i>
-                            <input
-                                type="search"
-                                className='component__search'
-                                placeholder="ค้นหาด้วยชื่อหรือรหัสอาจารย์"
-                                value={searchQuery}
-                                onChange={handleSearch}
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass'></i>
+                                    <input
+                                        type="search"
+                                        className='component__search'
+                                        placeholder="ค้นหาด้วยชื่อหรือรหัสอาจารย์"
+                                        value={searchQuery}
+                                        onChange={handleSearch}
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <Link to={`add-teacher`} className="search__button add--btn">เพิ่มอาจารย์</Link>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <Link to={`add-teacher`} className="search__button add--btn">เพิ่มอาจารย์</Link>
+                                </div>
+                            </div>
+
+                            <div >
+                                <div className='table__tabs'>
+                                    <Link to="/staff-list" className='table__tab table__tab--chemicals table__tab--unactive'>เจ้าหน้าที่</Link>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>อาจารย์</Link>
+                                </div>
+
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Teacher Id</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Password</th>
+                                            <th scope="col">Tel</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredTeachers.map((teacher) => (
+                                            <tr key={teacher.Teacher_Id} className="active-row">
+                                                <td> {teacher.Teacher_Id} </td>
+                                                <td> {teacher.Teacher_FName} {teacher.Teacher_LName}</td>
+                                                <td> {teacher.Teacher_Email} </td>
+                                                <td> {teacher.Teacher_Username} </td>
+                                                <td> {teacher.Teacher_Password} </td>
+                                                <td> {teacher.Teacher_Tel} </td>
+                                                <td>
+                                                    <div className="d-grid gap-2 d-sm-flex">
+                                                        <Link to={`edit-teacher/${teacher.Teacher_Id}`} className="edit--btn">แก้ไขผู้ใช้</Link>
+                                                        <button onClick={() => deleteTeacher(teacher.Teacher_Id)} className="delete--btn btn-danger">ลบผู้ใช้</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-
-                    <div >
-                        <div className='table__tabs'>
-                            <Link to="/staff-list" className='table__tab table__tab--chemicals table__tab--unactive'>เจ้าหน้าที่</Link>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>อาจารย์</Link>
-                        </div>
-
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Teacher Id</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Username</th>
-                                    <th scope="col">Password</th>
-                                    <th scope="col">Tel</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredTeachers.map((teacher) => (
-                                    <tr key={teacher.Teacher_Id} className="active-row">
-                                        <td> {teacher.Teacher_Id} </td>
-                                        <td> {teacher.Teacher_FName} {teacher.Teacher_LName}</td>
-                                        <td> {teacher.Teacher_Email} </td>
-                                        <td> {teacher.Teacher_Username} </td>
-                                        <td> {teacher.Teacher_Password} </td>
-                                        <td> {teacher.Teacher_Tel} </td>
-                                        <td>
-                                            <div className="d-grid gap-2 d-sm-flex">
-                                                <Link to={`edit-teacher/${teacher.Teacher_Id}`} className="edit--btn">แก้ไขผู้ใช้</Link>
-                                                <button onClick={() => deleteTeacher(teacher.Teacher_Id)} className="delete--btn btn-danger">ลบผู้ใช้</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

@@ -14,6 +14,7 @@ import logo from '../../assets/logo.png';
 function EditStaff({ logout }) {
     const [Staff_FName, setStaff_FName] = useState("");
     const [Staff_LName, setStaff_LName] = useState("");
+    const [Staff_Email, setStaff_Email] = useState(""); 
     const [Staff_Username, setStaff_Username] = useState("");
     const [Staff_Password, setStaff_Password] = useState("");
     const [Staff_Tel, setStaff_Tel] = useState("");
@@ -29,6 +30,7 @@ function EditStaff({ logout }) {
         const staff = response.data;
         setStaff_FName(staff.Staff_FName);
         setStaff_LName(staff.Staff_LName);
+        setStaff_Email(staff.Staff_Email);
         setStaff_Username(staff.Staff_Username);
         setStaff_Password(staff.Staff_Password);
         setStaff_Tel(staff.Staff_Tel);
@@ -41,6 +43,7 @@ function EditStaff({ logout }) {
                 Staff_FName,
                 Staff_LName,
                 Staff_Username,
+                Staff_Email,
                 Staff_Password,
                 Staff_Tel
             });
@@ -139,7 +142,7 @@ function EditStaff({ logout }) {
                         <div className='profile__form'>
                             <div className="mb-3">
                                 <label htmlFor="Staff_FName" className='profile__label'>ชื่อจริง</label>
-                                <input type="text" className='profile__input' id="Staff_FName" placeholder="Enter Staff First Name" required
+                                <input type="text" className='profile__input' id="Staff_FName" placeholder="Enter Staff First Name"
                                     value={Staff_FName}
                                     onChange={(e) => {
                                         setStaff_FName(e.target.value);
@@ -149,10 +152,20 @@ function EditStaff({ logout }) {
 
                             <div className="mb-3">
                                 <label htmlFor="Staff_LName" className='profile__label'>นามสกุล</label>
-                                <input type="text" className='profile__input' id="Staff_LName" placeholder="Enter Staff Last Name" required
+                                <input type="text" className='profile__input' id="Staff_LName" placeholder="Enter Staff Last Name"
                                     value={Staff_LName}
                                     onChange={(e) => {
                                         setStaff_LName(e.target.value);
+                                    }}
+                                />
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="Staff_Email" className='profile__label'>Email</label>
+                                <input type="text" className='profile__input' id="Staff_Email" placeholder="Enter Staff Email"
+                                    value={Staff_Email}
+                                    onChange={(e) => {
+                                        setStaff_Email(e.target.value);
                                     }}
                                 />
                             </div>

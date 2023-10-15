@@ -10,24 +10,7 @@ import logo from '../../assets/logo.png';
 
 const StaffList = ({ logout }) => {
     const [staffs, setStaffs] = useState([]);
-
-    useEffect(() => {
-        getStaffs();
-    }, []);
-
-    const getStaffs = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/staff-list");
-        setStaffs(response.data);
-    };
-
-    const deleteStaff = async (id) => {
-        try {
-            await axios.delete(`https://special-problem.onrender.com/staff-list/${id}`)
-            getStaffs();
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    const [isLoading, setIsLoading] = useState(true);
 
     const [adminInfo, setAdminInfo] = useState({
         adminName: "",
@@ -36,9 +19,20 @@ const StaffList = ({ logout }) => {
         adminTel: "",
     });
 
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredStaffs, setFilteredStaffs] = useState([]);
+
     const navigate = useNavigate();
 
     axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        getStaffs();
+    }, []);
+
+    useEffect(() => {
+        setFilteredStaffs(staffs);
+    }, [staffs]);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/admin", {
@@ -58,6 +52,21 @@ const StaffList = ({ logout }) => {
             });
     }, []);
 
+    const getStaffs = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/staff-list");
+        setStaffs(response.data);
+        setIsLoading(false);
+    };
+
+    const deleteStaff = async (id) => {
+        try {
+            await axios.delete(`https://special-problem.onrender.com/staff-list/${id}`)
+            getStaffs();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
             if (response.data.Error) {
@@ -69,9 +78,6 @@ const StaffList = ({ logout }) => {
             }
         });
     };
-
-    const [searchQuery, setSearchQuery] = useState("");
-    const [filteredStaffs, setFilteredStaffs] = useState([]);
 
     const handleSearch = (e) => {
         const query = e.target.value;
@@ -86,10 +92,6 @@ const StaffList = ({ logout }) => {
 
         setFilteredStaffs(filteredStaffs);
     };
-
-    useEffect(() => {
-        setFilteredStaffs(staffs);
-    }, [staffs]);
 
     return (
         <div className='container-fluid vh-100'>
@@ -110,59 +112,69 @@ const StaffList = ({ logout }) => {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass'></i>
-                            <input
-                                type="search"
-                                className='component__search'
-                                placeholder="ค้นหาด้วยชื่อหรือรหัสเจ้าหน้าที่"
-                                value={searchQuery}
-                                onChange={handleSearch}
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass'></i>
+                                    <input
+                                        type="search"
+                                        className='component__search'
+                                        placeholder="ค้นหาด้วยชื่อหรือรหัสเจ้าหน้าที่"
+                                        value={searchQuery}
+                                        onChange={handleSearch}
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <Link to={`add-staff`} className="search__button add--btn">เพิ่มเจ้าหน้าที่</Link>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <Link to={`add-staff`} className="search__button add--btn">เพิ่มเจ้าหน้าที่</Link>
+                                </div>
+                            </div>
+
+                            <div >
+                                <div className='table__tabs'>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>เจ้าหน้าที่</Link>
+                                    <Link to="/teacher-list" className='table__tab table__tab--chemicals table__tab--unactive'>อาจารย์</Link>
+                                </div>
+
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Staff Id</th>
+                                            <th scope="col">Name</th>
+                                            <th scope='col'>Email</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Password</th>
+                                            <th scope="col">Tel</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredStaffs.map((staff) => (
+                                            <tr key={staff.Staff_Id} className="active-row">
+                                                <td> {staff.Staff_Id} </td>
+                                                <td> {staff.Staff_FName} {staff.Staff_LName}</td>
+                                                <td> {staff.Staff_Email} </td>
+                                                <td> {staff.Staff_Username} </td>
+                                                <td> {staff.Staff_Password} </td>
+                                                <td> {staff.Staff_Tel} </td>
+                                                <td>
+                                                    <div className="d-grid gap-2 d-sm-flex">
+                                                        <Link to={`edit-staff/${staff.Staff_Id}`} className="edit--btn">Edit</Link>
+                                                        <button onClick={() => deleteStaff(staff.Staff_Id)} className="delete--btn btn-danger">Delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-
-                    <div >
-                        <div className='table__tabs'>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>เจ้าหน้าที่</Link>
-                            <Link to="/teacher-list" className='table__tab table__tab--chemicals table__tab--unactive'>อาจารย์</Link>
-                        </div>
-
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Staff Id</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Username</th>
-                                    <th scope="col">Password</th>
-                                    <th scope="col">Tel</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredStaffs.map((staff) => (
-                                    <tr key={staff.Staff_Id} className="active-row">
-                                        <td> {staff.Staff_Id} </td>
-                                        <td> {staff.Staff_FName} {staff.Staff_LName}</td>
-                                        <td> {staff.Staff_Username} </td>
-                                        <td> {staff.Staff_Password} </td>
-                                        <td> {staff.Staff_Tel} </td>
-                                        <td>
-                                            <div className="d-grid gap-2 d-sm-flex">
-                                                <Link to={`edit-staff/${staff.Staff_Id}`} className="edit--btn">Edit</Link>
-                                                <button onClick={() => deleteStaff(staff.Staff_Id)} className="delete--btn btn-danger">Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

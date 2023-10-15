@@ -13,6 +13,7 @@ function StaffProfile({ logout }) {
         staffId: "",
         staffFirstName: "",
         staffLastName: "",
+        staffEmail: "",
         staffUsername: "",
         staffPassword: "",
     });
@@ -88,8 +89,8 @@ function StaffProfile({ logout }) {
                         <p className="profile__label">รหัสเจ้าหน้าที่: {staffInfo.staffId}</p>
                         <p className="profile__label">ชื่อ: {staffInfo.staffFirstName}</p>
                         <p className="profile__label">นามสกุล: {staffInfo.staffLastName}</p>
+                        <p className="profile__label">อีเมล: {staffInfo.staffEmail}</p>
                         <p className="profile__label">ชื่อผู้ใช้: {staffInfo.staffUsername}</p>
-                        <p className="profile__label">รหัสผ่าน: {staffInfo.staffPassword}</p>
                         <Link to={`/staff-profile/${staffInfo.staffId}`} className='btn edit--btn thai--font'>แก้ไขข้อมูล</Link>
                     </div>
                 </main>

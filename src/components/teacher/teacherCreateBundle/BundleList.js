@@ -20,11 +20,16 @@ function BundleList({ logout }) {
         teacherPassword: "",
         teacherTel: "",
     });
+
     const [teacherIdSearch, setTeacherIdSearch] = useState("");
 
     const [bundleList, setBundleList] = useState([]);
     const [filteredBundleList, setFilteredBundleList] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     axios.defaults.withCredentials = true;
 
@@ -35,6 +40,17 @@ function BundleList({ logout }) {
     useEffect(() => {
         setFilteredBundleList(bundleList);
     }, [bundleList]);
+
+    useEffect(() => {
+        const filteredBundleList = bundleList.filter((bundle) => {
+            return (
+                bundle.Teacher_Id.toLowerCase().includes(teacherInfo.teacherId.toLowerCase()) ||
+                teacherInfo.teacherId === ""
+            );
+        });
+
+        setFilteredBundleList(filteredBundleList);
+    }, [teacherInfo.teacherId, bundleList]);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/teacher", {
@@ -57,6 +73,7 @@ function BundleList({ logout }) {
     const getBundleList = async () => {
         const response = await axios.get("https://special-problem.onrender.com/bundle-list");
         setBundleList(response.data);
+        setIsLoading(false);
     }
 
     const handleSearch = (e) => {
@@ -138,20 +155,6 @@ function BundleList({ logout }) {
 
     const notify = () => toast.success("Bundle deleted successfully");
 
-    useEffect(() => {
-        const filteredBundleList = bundleList.filter((bundle) => {
-            return (
-                bundle.Teacher_Id.toLowerCase().includes(teacherInfo.teacherId.toLowerCase()) ||
-                teacherInfo.teacherId === ""
-            );
-        });
-
-        setFilteredBundleList(filteredBundleList);
-    }, [teacherInfo.teacherId, bundleList]);
-
-    axios.defaults.withCredentials = true;
-    const navigate = useNavigate();
-
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
             if (response.data.Error) {
@@ -185,76 +188,84 @@ function BundleList({ logout }) {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass'></i>
-                            <input
-                                type="search"
-                                className='component__search'
-                                placeholder="ค้นหาด้วยชื่อ"
-                                value={searchQuery}
-                                onChange={handleSearch}
-                            />
-
-                            <input
-                                type='text'
-                                className='form-control disable'
-                                placeholder='Search by Teacher Id'
-                                value={teacherInfo.teacherId}
-                                readOnly
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass'></i>
+                                    <input
+                                        type="search"
+                                        className='component__search'
+                                        placeholder="ค้นหาด้วยชื่อ"
+                                        value={searchQuery}
+                                        onChange={handleSearch}
+                                    />
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
-                        </div>
-                    </div>
+                                    <input
+                                        type='text'
+                                        className='form-control disable'
+                                        placeholder='Search by Teacher Id'
+                                        value={teacherInfo.teacherId}
+                                        readOnly
+                                    />
+                                </div>
 
-                    <div>
-                        <div className='table__tabs'>
-                            <Link className='table__tab table__tab--chemicals table__tab--active'>กลุ่มสารเคมีและครุภัณฑ์</Link>
-                            <Link to="/teacher-dashboard/teacher-create-bundle" className='table__tab table__tab--equipment table__tab--unactive'>สร้าง Bundle</Link>
-                        </div>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <i className="fa-solid fa-circle-user" />
+                                    <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
+                                </div>
+                            </div>
 
-                        <table className='table table-striped'>
-                            <thead>
-                                <tr>
-                                    <th scope='col'>#</th>
-                                    <th scope='col'>ชื่อ Bundle</th>
-                                    <th scope='col'>รายละเอียดBundle</th>
-                                    <th scope='col'>สร้างโดย</th>
-                                    <th scope='col'>สร้างเมื่อ</th>
-                                    <th scope='col'></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {processedBundleList.map((bundle, index) => (
-                                    <tr key={index}>
-                                        <th scope='row'>{index + 1}</th>
-                                        <td>{bundle.Bundle_Name}</td>
-                                        <td>{bundle.Bundle_Description}</td>
-                                        <td>{bundle.Teacher_Id}</td>
-                                        <td>{formatDate(bundle.createdAt)}</td>
-                                        <td>
-                                            <div className='d-grid gap-2 d-sm-flex'>
-                                                <Link to={`${bundle.Bundle_Name}`} className='disable--link thai--font me-3'>
-                                                    <div className="table__button">
-                                                        <i className="fa-solid fa-eye"></i>
-                                                        ดูรายละเอียด
+                            <div>
+                                <div className='table__tabs'>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>กลุ่มสารเคมีและครุภัณฑ์</Link>
+                                    <Link to="/teacher-dashboard/teacher-create-bundle" className='table__tab table__tab--equipment table__tab--unactive'>สร้าง Bundle</Link>
+                                </div>
+
+                                <table className='table table-striped'>
+                                    <thead>
+                                        <tr>
+                                            <th scope='col'>#</th>
+                                            <th scope='col'>ชื่อ Bundle</th>
+                                            <th scope='col'>รายละเอียด</th>
+                                            <th scope='col'>สร้างโดย</th>
+                                            <th scope='col'>สร้างเมื่อ</th>
+                                            <th scope='col'></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {processedBundleList.map((bundle, index) => (
+                                            <tr key={index}>
+                                                <th scope='row'>{index + 1}</th>
+                                                <td>{bundle.Bundle_Name}</td>
+                                                <td>{bundle.Bundle_Description}</td>
+                                                <td>{bundle.Teacher_Id}</td>
+                                                <td>{formatDate(bundle.createdAt)}</td>
+                                                <td>
+                                                    <div className='d-grid gap-2 d-sm-flex'>
+                                                        <Link to={`${bundle.Bundle_Name}`} className='disable--link thai--font me-3'>
+                                                            <div className="table__button">
+                                                                <i className="fa-solid fa-eye"></i>
+                                                                ดูรายละเอียด
+                                                            </div>
+                                                        </Link>
+                                                        <button className="delete--btn btn-danger" onClick={() => handleDelete(bundle.Bundle_Name)}>
+                                                            <i className="fa-solid fa-trash" />
+                                                            ลบ Bundle
+                                                        </button>
                                                     </div>
-                                                </Link>
-                                                <button className="delete--btn btn-danger" onClick={() => handleDelete(bundle.Bundle_Name)}>
-                                                    <i className="fa-solid fa-trash" />
-                                                    ลบ Bundle
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

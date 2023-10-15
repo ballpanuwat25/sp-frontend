@@ -28,6 +28,8 @@ import StaffDashboard from './components/staff/StaffDashboard.js';
 import StaffProfile from './components/staff/staffLogin/StaffProfile';
 import StaffEditProfile from './components/staff/staffLogin/StaffEditProfile.js';
 
+import StaffNewPassword from './components/staff/staffLogin/StaffNewPassword.js';
+
 import AddChemicals from './components/staff/chemicalsCrud/AddChemicals.js';
 import EditChemicals from './components/staff/chemicalsCrud/EditChemicals.js';
 import ChemicalsList from './components/staff/chemicalsCrud/ChemicalsList.js';
@@ -170,9 +172,11 @@ function App() {
         <Route path="/staff-login" element={staffLoggedIn ? <Navigate to="/staff-dashboard" /> : <StaffLogin login={handleStaffLogIn} />} />
         <Route path="/staff-register" element={<StaffRegister />} />
         <Route path="/staff-forget-password" element={<StaffForgetPassword />} />
-        <Route path="/staff-dashboard" element={staffLoggedIn ? <StaffDashboard logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/staff-dashboard" element={staffLoggedIn ? <StaffChemicalsRequestList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
         <Route path="/staff-profile" element={staffLoggedIn ? <StaffProfile logout={handleStaffLogOut} /> : <Navigate to="/staff-login" />} />
         <Route path="/staff-profile/:id" element={staffLoggedIn ? <StaffEditProfile logout={handleStaffLogOut} /> : <Navigate to="/staff-login" />} />
+
+        <Route path="/staff-reset-password/:resetToken" element={<StaffNewPassword />} />
 
         <Route path="/staff-dashboard/staff-chemicals-request/:id" element={staffLoggedIn ? <StaffChemicalsRequest logout={handleStaffLogOut} /> : <Navigate to="/" />} />
         <Route path="/staff-dashboard/staff-chemicals-request-list" element={staffLoggedIn ? <StaffChemicalsRequestList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
@@ -209,11 +213,11 @@ function App() {
         <Route path="/teacher-login" element={teacherLoggedIn ? <Navigate to="teacher-dashboard" /> : <TeacherLogin login={handleTeacherLogIn} />} />
         <Route path="/teacher-register" element={<TeacherRegister />} />
         <Route path="/teacher-forget-password" element={<TeacherForgetPassword />} />
-        <Route path="/teacher-dashboard" element={teacherLoggedIn ? <TeacherDashboard logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
+        <Route path="/teacher-dashboard" element={teacherLoggedIn ? <TeacherChemicalsRequest logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
         <Route path="/teacher-profile" element={teacherLoggedIn ? <TeacherProfile logout={handleTeacherLogOut} /> : <Navigate to="/teacher-login" />} />
         <Route path="/teacher-profile/:id" element={teacherLoggedIn ? <TeacherEditProfile logout={handleTeacherLogOut} /> : <Navigate to="/teacher-login" />} />
 
-        <Route path="/reset-password/:resetToken" element={<TeacherNewPassword />} />
+        <Route path="/teacher-reset-password/:resetToken" element={<TeacherNewPassword />} />
 
         <Route path="/teacher-dashboard/teacher-chemicals-request" element={teacherLoggedIn ? <TeacherChemicalsRequest logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
         <Route path="/teacher-dashboard/teacher-equipment-request" element={teacherLoggedIn ? <TeacherEquipmentRequest logout={handleTeacherLogOut} /> : <Navigate to="/" />} />

@@ -28,7 +28,7 @@ function AdminDashboard({ logout }) {
         notify();
     }, []);
 
-    const notify = () => toast.info("หลังใช้งานเสร็จควรออกจากระบบทุกครั้ง เพื่อไม่ให้เกิดปัญหาในการเข้าสู่ระบบครั้งถัดไป");;
+    const notify = () => toast.info("หลังใช้งานเสร็จควรออกจากระบบทุกครั้ง เพื่อไม่ให้เกิดปัญหาในการเข้าสู่ระบบครั้งถัดไป");
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/admin", {

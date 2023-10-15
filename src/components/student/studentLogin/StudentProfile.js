@@ -25,7 +25,11 @@ function StudentProfile() {
         Student_Password: "",
     });
 
+    const user_picture = localStorage.getItem('user_picture') ? <img src={localStorage.getItem('user_picture')} alt="user" className='user__avatar' /> : <i className="fa-solid fa-circle-user" />;
+    const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
+
     const navigate = useNavigate();
+
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
@@ -68,9 +72,6 @@ function StudentProfile() {
 
     const notify = () => toast.success("Password changed successfully");
 
-    const user_picture = localStorage.getItem('user_picture') ? <img src={localStorage.getItem('user_picture')} alt="user" className='user__avatar' /> : <i className="fa-solid fa-circle-user" />;
-    const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
-
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
             if (response.data.Error) {
@@ -92,7 +93,7 @@ function StudentProfile() {
                 <aside className='sidebar'>
                     <div className='sidebar__header'>
                         <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
-                        <div className='sidebar__title std__name'>Welcome, {studentInfo.studentFirstName}</div>
+                        <div className='sidebar__title std__name thai--font'>Welcome, {studentInfo.studentFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
                         <Link to="/student-dashboard/student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
@@ -162,17 +163,6 @@ function StudentProfile() {
                         </div>
 
                         <div className='profile__form'>
-                            <label className='profile__label'>รหัสผ่าน:</label>
-                            <input
-                                type="text"
-                                readOnly
-                                className='profile__input'
-                                placeholder='password'
-                                defaultValue={studentInfo.studentPassword}
-                            />
-                        </div>
-
-                        <div className='profile__form'>
                             <label className='profile__label'>รหัสผ่านใหม่:</label>
                             <input
                                 type="password"
@@ -180,15 +170,6 @@ function StudentProfile() {
                                 placeholder='new password'
                                 values={values.Student_Password}
                                 onChange={(e) => setValues({ ...values, Student_Password: e.target.value })}
-                            />
-                        </div>
-
-                        <div className='profile__form'>
-                            <label className='profile__label'>ยืนยันรหัสผ่านใหม่:</label>
-                            <input
-                                type="text"
-                                className='profile__input'
-                                placeholder='confirm new password'
                             />
                         </div>
 

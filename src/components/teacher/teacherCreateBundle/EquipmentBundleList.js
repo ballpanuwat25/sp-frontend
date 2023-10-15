@@ -20,19 +20,31 @@ function EquipmentBundleList({ logout }) {
         teacherPassword: "",
         teacherTel: "",
     });
-    const [equipment, setEquipment] = useState([]);
-
-    const [searchQuery, setSearchQuery] = useState("");
-    const [filteredEquipment, setFilteredEquipment] = useState([]);
 
     const [bundle, setBundle] = useState({
         Teacher_Id: "",
         Equipment_Id: "",
     });
 
+    const [equipment, setEquipment] = useState([]);
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredEquipment, setFilteredEquipment] = useState([]);
+
     const [selectedEquipmentId, setSelectedEquipmentId] = useState(null);
 
+    const [isLoading, setIsLoading] = useState(true);
+
+    const navigate = useNavigate();
+    axios.defaults.withCredentials = true;
+
     useEffect(() => {
+        setFilteredEquipment(equipment);
+    }, [equipment]);
+
+    useEffect(() => {
+        getEquipment();
+
         axios.get("https://special-problem.onrender.com/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
@@ -49,16 +61,12 @@ function EquipmentBundleList({ logout }) {
                 });
             }
         });
-        getEquipment();
     }, []);
-
-    useEffect(() => {
-        setFilteredEquipment(equipment);
-    }, [equipment]);
 
     const getEquipment = async () => {
         const response = await axios.get("https://special-problem.onrender.com/equipment-list");
         setEquipment(response.data);
+        setIsLoading(false);
     }
 
     const addToCart = (Equipment_Id) => {
@@ -91,9 +99,6 @@ function EquipmentBundleList({ logout }) {
         });
         setFilteredEquipment(filteredEquipment);
     }
-
-    axios.defaults.withCredentials = true;
-    const navigate = useNavigate();
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
@@ -128,56 +133,64 @@ function EquipmentBundleList({ logout }) {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass'></i>
-                            <input
-                                type="search"
-                                className='component__search'
-                                placeholder="ค้นหาด้วยชื่อ"
-                                value={searchQuery}
-                                onChange={handleSearch}
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass'></i>
+                                    <input
+                                        type="search"
+                                        className='component__search'
+                                        placeholder="ค้นหาด้วยชื่อ"
+                                        value={searchQuery}
+                                        onChange={handleSearch}
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <i className="fa-solid fa-circle-user" />
+                                    <div className='username--text thai--font'>{teacherInfo.teacherUsername}</div>
+                                </div>
+                            </div>
+
+                            <div >
+                                <div className='table__tabs'>
+                                    <Link to="/teacher-dashboard/chemicals-bundle-list" className='table__tab table__tab--chemicals table__tab--unactive'>รายการสารเคมี</Link>
+                                    <Link className='table__tab table__tab--equipment table__tab--active'>รายการครุภัณฑ์</Link>
+                                </div>
+
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Equipment Name</th>
+                                            <th scope="col">Equipment Category Id</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredEquipment.map((equipment, index) => (
+                                            <tr key={index} className="active-row">
+                                                <td> {index + 1} </td>
+                                                <td> {equipment.Equipment_Name} </td>
+                                                <td> {equipment.Equipment_Category_Id} </td>
+                                                <td>
+                                                    <button className="table__button thai--font" onClick={() => addToCart(equipment.Equipment_Id)}>
+                                                        <i className="fa-solid fa-circle-plus" />
+                                                        เพิ่มครุภัณฑ์
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-
-                    <div >
-                        <div className='table__tabs'>
-                            <Link to="/teacher-dashboard/chemicals-bundle-list" className='table__tab table__tab--chemicals table__tab--unactive'>รายการสารเคมี</Link>
-                            <Link className='table__tab table__tab--equipment table__tab--active'>รายการครุภัณฑ์</Link>
-                        </div>
-
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Equipment Name</th>
-                                    <th scope="col">Equipment Category Id</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredEquipment.map((equipment, index) => (
-                                    <tr key={index} className="active-row">
-                                        <td> {index + 1} </td>
-                                        <td> {equipment.Equipment_Name} </td>
-                                        <td> {equipment.Equipment_Category_Id} </td>
-                                        <td>
-                                            <button className="table__button thai--font" onClick={() => addToCart(equipment.Equipment_Id)}>
-                                                <i className="fa-solid fa-circle-plus" />
-                                                เพิ่มครุภัณฑ์
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    )}
                 </main>
 
                 <footer className='footer'>

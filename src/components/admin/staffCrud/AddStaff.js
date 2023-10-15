@@ -17,6 +17,7 @@ function AddStaff({ logout }) {
         Staff_FName: "",
         Staff_LName: "",
         Staff_Username: "",
+        Staff_Username: "",
         Staff_Password: "",
         Staff_Tel: ""
     });
@@ -142,6 +143,15 @@ function AddStaff({ logout }) {
                                 <input type="text" className='profile__input' id="Staff_LName" placeholder="Enter Staff Last Name"
                                     onChange={(e) => {
                                         setStaff({ ...staff, Staff_LName: e.target.value });
+                                    }}
+                                />
+                            </div>
+
+                            <div className='mb-3'>
+                                <label htmlFor="Staff_Email" className='profile__label'>Email</label>
+                                <input type="text" className='profile__input' id="Staff_Email" placeholder="Enter Staff Email" required
+                                    onChange={(e) => {
+                                        setStaff({ ...staff, Staff_Email: e.target.value });
                                     }}
                                 />
                             </div>

@@ -132,7 +132,7 @@ function BarcodeChemicals({ logout }) {
                                     <tr key={chemical.Chem_Bottle_Id} className="active-row">
                                         <td className="table-data">{index + 1}</td>
                                         <td className="table-data">{getChemNameById(chemical.Chem_Id)}</td>
-                                        <td className="table-data"><Barcode value={chemical.Chem_Bottle_Id} background="#f2f2f2"  height="30" width="1.5" fontSize="10" /></td>
+                                        <td className="table-data"><Barcode value={chemical.Chem_Bottle_Id} background="#fff"  height="20" width="1.5" fontSize="8" /></td>
                                     </tr>
                                 ))}
                             </tbody>

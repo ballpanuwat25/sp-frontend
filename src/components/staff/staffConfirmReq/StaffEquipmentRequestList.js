@@ -9,18 +9,49 @@ import '../../cssElement/Dashboard.css'
 import logo from '../../assets/logo.png';
 
 function StaffEquipmentRequestList({ logout }) {
+    const [staffInfo, setStaffInfo] = useState({
+        staffId: "",
+        staffFirstName: "",
+        staffLastName: "",
+        staffUsername: "",
+        staffPassword: "",
+        staffTel: "",
+    })
+
     const [equipmentReq, setEquipmentReq] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedIds, setSelectedIds] = useState([]);
     const [Request_Comment, setRequest_Comment] = useState("");
 
+    const [isLoading, setIsLoading] = useState(true);
+    const [activeRequestId, setActiveRequestId] = useState(null);
+
+    const navigate = useNavigate();
+
+    axios.defaults.withCredentials = true;
+
     useEffect(() => {
         getEquipmentRequest();
     }, [searchQuery]);
 
+    useEffect(() => {
+        axios.get("https://special-problem.onrender.com/staff", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
+            },
+        }).then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                setStaffInfo(response.data);
+            }
+        });
+    }, []);
+
     const getEquipmentRequest = async () => {
         const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
         setEquipmentReq(response.data);
+        setIsLoading(false);
     };
 
     const handleCheckboxChange = (id) => {
@@ -43,6 +74,27 @@ function StaffEquipmentRequestList({ logout }) {
             getEquipmentRequest(); // Refresh the equipment request list after declining
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    const handleDeleteChecked = async () => {
+        try {
+            for (const id of selectedIds) {
+                await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`);
+            }
+            getEquipmentRequest();
+            setSelectedIds([]);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`);
+            getEquipmentRequest();
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -72,33 +124,6 @@ function StaffEquipmentRequestList({ logout }) {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-GB', options);
     };
-
-    const [staffInfo, setStaffInfo] = useState({
-        staffId: "",
-        staffFirstName: "",
-        staffLastName: "",
-        staffUsername: "",
-        staffPassword: "",
-        staffTel: "",
-    })
-
-    const navigate = useNavigate();
-
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
-            },
-        }).then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                setStaffInfo(response.data);
-            }
-        });
-    }, []);
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
@@ -152,101 +177,142 @@ function StaffEquipmentRequestList({ logout }) {
                 </aside>
 
                 <main className='dashboard__content'>
-                    <div className='component__header'>
-                        <div className='component__headerGroup component__headerGroup--left'>
-                            <i className='fa-solid fa-magnifying-glass' />
-                            <input
-                                type="text"
-                                className="component__search"
-                                placeholder="ค้นหาด้วยรหัสนิสิตหรือรหัสครุภัณฑ์"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
+                    {isLoading ? (
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
                         </div>
+                    ) : (
+                        <div>
+                            <div className='component__header'>
+                                <div className='component__headerGroup component__headerGroup--left'>
+                                    <i className='fa-solid fa-magnifying-glass' />
+                                    <input
+                                        type="text"
+                                        className="component__search"
+                                        placeholder="ค้นหาด้วยรหัสนิสิตหรือรหัสครุภัณฑ์"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                </div>
 
-                        <div className='component__headerGroup component__headerGroup--right'>
-                            <i className="fa-solid fa-circle-user" />
-                            <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
-                        </div>
-                    </div>
+                                <div className='component__headerGroup component__headerGroup--right'>
+                                    <i className="fa-solid fa-circle-user" />
+                                    <div className='username--text thai--font'>{staffInfo.staffUsername}</div>
+                                </div>
+                            </div>
 
-                    <div className="mb-4">
-                        <label htmlFor="Request_Comment" className="profile__label">สาเหตุในการปฏิเสธ</label>
-                        <textarea
-                            className="form-control thai--font"
-                            id="Request_Comment"
-                            rows="1"
-                            value={Request_Comment}
-                            onChange={(e) => setRequest_Comment(e.target.value)}
-                            placeholder="กรุณากรอกสาเหตุในการปฏิเสธก่อนใช้ปุ่มปฏิเสธจากที่เลือก"
-                        ></textarea>
-                    </div>
+                            <div className="mb-4">
+                                <label htmlFor="Request_Comment" className="profile__label">สาเหตุในการปฏิเสธ</label>
+                                <textarea
+                                    className="form-control thai--font"
+                                    id="Request_Comment"
+                                    rows="1"
+                                    value={Request_Comment}
+                                    onChange={(e) => setRequest_Comment(e.target.value)}
+                                    placeholder="กรุณากรอกสาเหตุในการปฏิเสธก่อนใช้ปุ่มปฏิเสธจากที่เลือก"
+                                ></textarea>
+                            </div>
 
-                    <div>
-                        <div className='table__tabs'>
-                            <Link to="/staff-dashboard/staff-chemicals-request-list" className='table__tab table__tab--chemicals table__tab--unactive'>คำขอเบิกสารเคมี</Link>
-                            <Link className='table__tab table__tab--equipment table__tab--active'>คำขอเบิกครุภัณฑ์</Link>
-                        </div>
+                            <div>
+                                <div className='table__tabs'>
+                                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='table__tab table__tab--chemicals table__tab--unactive'>คำขอเบิกสารเคมี</Link>
+                                    <Link className='table__tab table__tab--equipment table__tab--active'>คำขอเบิกครุภัณฑ์</Link>
+                                </div>
 
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col"></th>
-                                    <th scope="col">รหัสนิสิต</th>
-                                    <th scope="col">รหัสครุภัณฑ์</th>
-                                    <th scope="col">จำนวนที่ขอ</th>
-                                    <th scope="col">จำนวนที่จ่าย</th>
-                                    <th scope="col">รหัสเจ้าหน้าที่</th>
-                                    <th scope="col">รหัสอาจารย์</th>
-                                    <th scope="col">สถานะคำขอ</th>
-                                    <th scope="col">หมายเหตุ</th>
-                                    <th scope="col">วันที่ส่งคำขอ</th>
-                                    <th scope="col">
-                                        <button onClick={handleDeclineChecked} className="buttonTab-reject-btn thai--font">
-                                            ปฏิเสธจากที่เลือก
-                                        </button>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {equipmentReq.map((equipmentReq) => (
-                                    <tr key={equipmentReq.Equipment_Request_Id} className="active-row">
-                                        <td>
-                                            <div className="form-check">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    value={equipmentReq.Equipment_Request_Id}
-                                                    id={`flexCheckDefault-${equipmentReq.Equipment_Request_Id}`}
-                                                    checked={selectedIds.includes(equipmentReq.Equipment_Request_Id)}
-                                                    onChange={() => handleCheckboxChange(equipmentReq.Equipment_Request_Id)}
-                                                />
-                                            </div>
-                                        </td>
-                                        <td> {equipmentReq.Student_Id} </td>
-                                        <td> {equipmentReq.Equipment_Id} </td>
-                                        <td> {equipmentReq.Requested_Quantity} </td>
-                                        <td> {equipmentReq.Release_Quantity} </td>
-                                        <td> {equipmentReq.Staff_Id} </td>
-                                        <td> {equipmentReq.Teacher_Id} </td>
-                                        <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`}/> {equipmentReq.Request_Status} </td>
-                                        <td> {equipmentReq.Request_Comment} </td>
-                                        <td>{formatDate(equipmentReq.createdAt)}</td>
-                                        <td>
-                                            <div className="d-grid gap-2 d-sm-flex">
-                                                <Link to={`/staff-dashboard/staff-equipment-request/${equipmentReq.Equipment_Request_Id}`} className='disable--link thai--font'>
-                                                    <div className="table__button">
-                                                        <i className="fa-solid fa-eye"></i>
-                                                        ดูรายละเอียด
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col">รหัสนิสิต</th>
+                                            <th scope="col">รหัสครุภัณฑ์</th>
+                                            <th scope="col">จำนวนที่ขอ</th>
+                                            <th scope="col">จำนวนที่จ่าย</th>
+                                            <th scope="col">รหัสเจ้าหน้าที่</th>
+                                            <th scope="col">รหัสอาจารย์</th>
+                                            <th scope="col">สถานะคำขอ</th>
+                                            <th scope="col">หมายเหตุ</th>
+                                            <th scope="col">วันที่ส่งคำขอ</th>
+                                            <th scope="col">
+                                                <button onClick={handleDeclineChecked} className="buttonTab-reject-btn thai--font">
+                                                    ปฏิเสธจากที่เลือก
+                                                </button>
+                                            </th>
+                                            <th scope="col">
+                                                <button className="buttonTab-reject-btn thai--font" onClick={handleDeleteChecked}>
+                                                    ลบจากที่เลือก
+                                                </button>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {equipmentReq.map((equipmentReq) => (
+                                            <tr key={equipmentReq.Equipment_Request_Id} className="active-row">
+                                                <td>
+                                                    <div className="form-check">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="checkbox"
+                                                            value={equipmentReq.Equipment_Request_Id}
+                                                            id={`flexCheckDefault-${equipmentReq.Equipment_Request_Id}`}
+                                                            checked={selectedIds.includes(equipmentReq.Equipment_Request_Id)}
+                                                            onChange={() => handleCheckboxChange(equipmentReq.Equipment_Request_Id)}
+                                                        />
                                                     </div>
-                                                </Link>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                                </td>
+                                                <td> {equipmentReq.Student_Id} </td>
+                                                <td> {equipmentReq.Equipment_Id} </td>
+                                                <td> {equipmentReq.Requested_Quantity} </td>
+                                                <td> {equipmentReq.Release_Quantity} </td>
+                                                <td> {equipmentReq.Staff_Id} </td>
+                                                <td> {equipmentReq.Teacher_Id} </td>
+                                                <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> {equipmentReq.Request_Status} </td>
+                                                <td> {equipmentReq.Request_Comment} </td>
+                                                <td>{formatDate(equipmentReq.createdAt)}</td>
+                                                <td>
+                                                    <div className="d-grid gap-2 d-sm-flex">
+                                                        <Link to={`/staff-dashboard/staff-equipment-request/${equipmentReq.Equipment_Request_Id}`} className='disable--link thai--font'>
+                                                            <div className="table__button">
+                                                                <i className="fa-solid fa-eye"></i>
+                                                                ดูรายละเอียด
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className="delete--btn btn-danger w-100"
+                                                        data-bs-toggle="modal" data-bs-target={`#deleteModal-${equipmentReq.Equipment_Request_Id}`}
+                                                        onClick={() => setActiveRequestId(equipmentReq.Equipment_Request_Id)}
+                                                    >
+                                                        <i className='fa-solid fa-trash' />
+                                                        ลบ
+                                                    </button>
+
+                                                    <div className="modal fade" id={`deleteModal-${equipmentReq.Equipment_Request_Id}`} tabIndex="-1" aria-labelledby={`deleteModalLabel-${equipmentReq.Equipment_Request_Id}`} aria-hidden="true">
+                                                        <div className="modal-dialog">
+                                                            <div className="modal-content">
+                                                                <div className="modal-header">
+                                                                    <h5 className="modal-title" id={`deleteModalLabel-${equipmentReq.Equipment_Request_Id}`}>ลบคำขอเบิกครุภัณฑ์</h5>
+                                                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div className="modal-body">
+                                                                    คุณต้องการลบคำขอเบิกครุภัณฑ์นี้ใช่หรือไม่?
+                                                                </div>
+                                                                <div className="modal-footer">
+                                                                    <button onClick={() => handleDelete(equipmentReq.Equipment_Request_Id)} type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal"> ยืนยัน</button>
+                                                                    <button type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal">ยกเลิก</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
                 </main>
 
                 <footer className='footer'>
