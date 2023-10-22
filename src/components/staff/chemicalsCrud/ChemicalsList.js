@@ -89,7 +89,8 @@ function ChemicalsList({ logout }) {
         setSearchQuery(query);
 
         const filteredChemicals = chemicals.filter((chemical) =>
-            chemical.Chem_Bottle_Id.toLowerCase().includes(query.toLowerCase())
+            chemical.Chem_Bottle_Id.toLowerCase().includes(query.toLowerCase()) ||
+            getChemNameById(chemical.Chem_Id).toLowerCase().includes(query.toLowerCase())
         );
         setFilteredChemicals(filteredChemicals);
     };
@@ -155,6 +156,7 @@ function ChemicalsList({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
+                        <Link to="/staff-dashboard/staff-chemicals-receipt" className='sidebar__item sidebar__item--hover'> <i className="me-3 fa-solid fa-receipt"/> Receipt</Link>
                         <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Chemicals</div></Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
@@ -182,7 +184,7 @@ function ChemicalsList({ logout }) {
                                     <input
                                         type="text"
                                         className="component__search"
-                                        placeholder="ค้นหาด้วยรหัสขวดสารเคมี"
+                                        placeholder="ค้นหาด้วยชื่อหรือรหัสขวดสารเคมี"
                                         defaultValue={inputValue}
                                         onChange={handleSearchInputChange}
                                     />
@@ -259,7 +261,7 @@ function ChemicalsList({ logout }) {
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <Link to="/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

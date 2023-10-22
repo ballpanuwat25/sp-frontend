@@ -29,6 +29,8 @@ function TeacherChemicalsRequest({ logout }) {
 
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
+    const [student, setStudent] = useState([]);
+
     const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -42,6 +44,7 @@ function TeacherChemicalsRequest({ logout }) {
     useEffect(() => {
         getChemicalsRequest();
         getChemicalsDetail();
+        getStudent();
     }, []);
 
     useEffect(() => {
@@ -72,7 +75,7 @@ function TeacherChemicalsRequest({ logout }) {
 
     const approveChemicalsRequest = async (id) => {
         try {
-            await updateChemicalsRequestStatus(id, "Approve");
+            await updateChemicalsRequestStatus(id, "Approved");
         } catch (error) {
             console.log(error)
         }
@@ -81,7 +84,7 @@ function TeacherChemicalsRequest({ logout }) {
     const declineChemicalsRequest = async () => {
         try {
             if (activeRequestId) {
-                await updateChemicalsRequestStatus(activeRequestId, "Decline", Request_Comment);
+                await updateChemicalsRequestStatus(activeRequestId, "Disapproved", Request_Comment);
                 setRequest_Comment(""); // Clear the comment after successful decline
                 setActiveRequestId(null); // Reset activeRequestId after successful decline
             }
@@ -114,7 +117,7 @@ function TeacherChemicalsRequest({ logout }) {
         }
     };
 
-    const handleApproveChecked = () => {
+    const handleApprovedChecked = () => {
         selectedIds.forEach((id) => approveChemicalsRequest(id));
         setSelectedIds([]);
     }
@@ -148,19 +151,46 @@ function TeacherChemicalsRequest({ logout }) {
         }
     }
 
-    const filterChemicalsReq = (data) => {
-        const studentIdRegex = new RegExp(studentIdSearch, "i"); // "i" flag for case-insensitive search
-        const teacherIdRegex = new RegExp(teacherIdSearch, "i"); // "i" flag for case-insensitive search
+    const [filteredStatus, setFilteredStatus] = useState('All');
+    const [filteredChemicalsReq, setFilteredChemicalsReq] = useState([]);
 
-        return data.filter((req) => {
-            const studentIdMatch = studentIdSearch ? studentIdRegex.test(req.Student_Id) : true;
-            const teacherIdMatch = teacherIdSearch ? teacherIdRegex.test(req.Teacher_Id) : true;
-
-            return studentIdMatch && teacherIdMatch;
-        });
+    const matchFilters = (request) => {
+        const studentIdRegex = new RegExp(studentIdSearch, "i");
+        const teacherIdRegex = new RegExp(teacherIdSearch, "i");
+        const studentIdMatch = studentIdSearch ? studentIdRegex.test(request.Student_Id) : true;
+        const teacherIdMatch = teacherIdSearch ? teacherIdRegex.test(request.Teacher_Id) : true;
+        const statusMatch = filteredStatus === 'All' ? true : request.Request_Status === filteredStatus;
+        return studentIdMatch && teacherIdMatch && statusMatch;
     };
 
-    const filteredChemicalsReq = filterChemicalsReq(chemicalsReq);
+    useEffect(() => {
+        // Filter the chemicals requests based on studentIdSearch, teacherIdSearch, and status filter
+        const filteredRequests = chemicalsReq.filter((req) => matchFilters(req));
+
+        // Sort the filtered requests by createdAt in descending order
+        const sortedChemicalsReq = filteredRequests.slice().sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+
+        // Set the sorted and filtered requests in the state
+        setFilteredChemicalsReq(sortedChemicalsReq);
+    }, [chemicalsReq, studentIdSearch, teacherIdSearch, filteredStatus]);
+
+    const filterRequestsByStatus = (status) => {
+        if (status === 'All') {
+            // Show all requests
+            setFilteredChemicalsReq(chemicalsReq);
+        } else {
+            const filteredRequests = chemicalsReq.filter((req) => req.Request_Status === status);
+            setFilteredChemicalsReq(filteredRequests);
+        }
+    };
+
+    const handleStatusChange = (event) => {
+        const selectedStatus = event.target.value;
+        setFilteredStatus(selectedStatus);
+        filterRequestsByStatus(selectedStatus);
+    };
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
@@ -187,19 +217,29 @@ function TeacherChemicalsRequest({ logout }) {
 
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'Approve':
+            case 'Approved':
                 return 'fa-solid fa-circle-check';
-            case 'Decline':
+            case 'Disapproved':
                 return 'fa-solid fa-circle-xmark';
             case 'Pending':
                 return 'fa-regular fa-clock';
-            case 'Confirmed':
+            case 'Succeed':
                 return 'fa-solid fa-vial-circle-check';
-            case 'Rejected':
+            case 'Failed':
                 return 'fa-solid fa-filter-circle-xmark';
             default:
                 return ''
         }
+    };
+
+    const getStudent = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        setStudent(response.data);
+    }
+
+    const getStudentNameById = (studentId) => {
+        const studentDetail = student.find((student) => student.Student_Id === studentId);
+        return studentDetail ? studentDetail.Student_FName + " " + studentDetail.Student_LName : "N/A";
     };
 
     return (
@@ -273,21 +313,32 @@ function TeacherChemicalsRequest({ logout }) {
                                                 />
                                             </th>
                                             <th scope="col">รหัสนิสิต</th>
+                                            <th scope="col">ชื่อ-สกุล</th>
                                             <th scope="col">สารเคมี</th>
                                             <th scope="col">ปริมาณที่ขอ</th>
                                             <th scope="col">หน่วยนับ</th>
-                                            <th scope="col">สถานะคำขอ</th>
+                                            <th scope="col">
+                                                <select
+                                                    id="statusFilter"
+                                                    className="form-select"
+                                                    onChange={handleStatusChange}
+                                                    value={filteredStatus}
+                                                >
+                                                    <option value="All">ทั้งหมด</option>
+                                                    <option value="Pending">รอดำเนินการ</option>
+                                                    <option value="Approved">อนุมัติ</option>
+                                                    <option value="Disapproved">ไม่อนุมัติ</option>
+                                                    <option value="Succeed">สำเร็จ</option>
+                                                    <option value="Failed">ล้มเหลว</option>
+                                                </select>
+                                            </th>
                                             <th scope="col">วัตถุประสงค์</th>
                                             <th scope="col">นำไปใช้ห้อง</th>
+                                            <th scope="col">รหัสอาจารย์</th>
                                             <th scope="col">วันที่ส่งคำขอ</th>
                                             <th scope="col">
-                                                <button className="buttonTab-btn thai--font" onClick={handleApproveChecked}>
+                                                <button className="buttonTab-btn thai--font" onClick={handleApprovedChecked}>
                                                     อนุมัติจากที่เลือก
-                                                </button>
-                                            </th>
-                                            <th scope="col">
-                                                <button className="buttonTab-reject-btn thai--font" onClick={handleDeleteChecked}>
-                                                    ลบจากที่เลือก
                                                 </button>
                                             </th>
                                         </tr>
@@ -308,12 +359,14 @@ function TeacherChemicalsRequest({ logout }) {
                                                     </div>
                                                 </td>
                                                 <td> {chemicalsReq.Student_Id} </td>
+                                                <td> {getStudentNameById(chemicalsReq.Student_Id)} </td>
                                                 <td> {findChemNameById(chemicalsReq.Chem_Id)} </td>
                                                 <td> {chemicalsReq.Requested_Quantity} </td>
                                                 <td> {chemicalsReq.Counting_Unit} </td>
                                                 <td> <i className={`${getStatusIcon(chemicalsReq.Request_Status)}`} /> {chemicalsReq.Request_Status}</td>
                                                 <td> {chemicalsReq.Request_Purpose} </td>
                                                 <td> {chemicalsReq.Request_Room} </td>
+                                                <td> {chemicalsReq.Teacher_Id} </td>
                                                 <td>{formatDate(chemicalsReq.createdAt)}</td>
                                                 <td>
                                                     <div className="d-grid gap-2 d-sm-flex">
@@ -351,34 +404,6 @@ function TeacherChemicalsRequest({ logout }) {
                                                                         <button onClick={declineChemicalsRequest} type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal"> <i className='fa-solid fa-circle-check' />ยืนยัน</button>
                                                                         <button type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal"><i className='fa-solid fa-circle-xmark' /> ยกเลิก</button>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        className="delete--btn btn-danger w-100"
-                                                        data-bs-toggle="modal" data-bs-target={`#deleteModal-${chemicalsReq.Chem_Request_Id}`}
-                                                        onClick={() => setActiveRequestId(chemicalsReq.Chem_Request_Id)}
-                                                    >
-                                                        <i className='fa-solid fa-trash' />
-                                                        ลบ
-                                                    </button>
-
-                                                    <div className="modal fade" id={`deleteModal-${chemicalsReq.Chem_Request_Id}`} tabIndex="-1" aria-labelledby={`deleteModalLabel-${chemicalsReq.Chem_Request_Id}`} aria-hidden="true">
-                                                        <div className="modal-dialog">
-                                                            <div className="modal-content">
-                                                                <div className="modal-header">
-                                                                    <h5 className="modal-title" id={`deleteModalLabel-${chemicalsReq.Chem_Request_Id}`}>ลบคำขอเบิกสารเคมี</h5>
-                                                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div className="modal-body">
-                                                                    คุณต้องการลบคำขอเบิกสารเคมีนี้ใช่หรือไม่?
-                                                                </div>
-                                                                <div className="modal-footer">
-                                                                    <button onClick={() => handleDelete(chemicalsReq.Chem_Request_Id)} type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal"> ยืนยัน</button>
-                                                                    <button type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal">ยกเลิก</button>
                                                                 </div>
                                                             </div>
                                                         </div>

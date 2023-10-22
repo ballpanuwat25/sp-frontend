@@ -22,6 +22,11 @@ function StudentEquipmentCart() {
     });
 
     const [cartItems, setCartItems] = useState(cartData);
+    const [equipment, setEquipment] = useState([]);
+
+    useEffect(() => {
+        getEquipment();
+    }, []);
 
     const handleChange = (index, key, value) => {
         const updatedCartItems = [...cartItems];
@@ -111,6 +116,16 @@ function StudentEquipmentCart() {
         });
     };
 
+    const getEquipment = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+        setEquipment(response.data);
+    }
+
+    const getEquipmentNameById = (equipmentId) => {
+        const equipmentDetail = equipment.find((equipment) => equipment.Equipment_Id === equipmentId);
+        return equipmentDetail ? equipmentDetail.Equipment_Name : "N/A";
+    };
+
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
@@ -133,36 +148,36 @@ function StudentEquipmentCart() {
                 </aside>
 
                 <main className='dashboard__content'>
-                    {cartItems.length === 0 ? (
-                        <p>Nothing in cart.</p>
-                    ) : (
-                        <div>
-                            <div className='component__header'>
-                                <div className='component__headerGroup component__headerGroup--left' />
+                    <div>
+                        <div className='component__header'>
+                            <div className='component__headerGroup component__headerGroup--left' />
 
-                                <div className='component__headerGroup component__headerGroup--right'>
-                                    <div>{user_picture}</div>
-                                    <div>{user_email}</div>
-                                </div>
+                            <div className='component__headerGroup component__headerGroup--right'>
+                                <div>{user_picture}</div>
+                                <div>{user_email}</div>
                             </div>
-                            <div >
-                                <div className='table__tabs'>
-                                    <Link to="/student-dashboard/student-chemicals-cart" className='table__tab table__tab--chemicals table__tab--unactive'>ตระกร้าสารเคมี</Link>
-                                    <Link className='table__tab table__tab--equipment table__tab--active'>ตระกร้าครุภัณฑ์</Link>
-                                </div>
+                        </div>
+                        <div >
+                            <div className='table__tabs'>
+                                <Link to="/student-dashboard/student-chemicals-cart" className='table__tab table__tab--chemicals table__tab--unactive'>ตระกร้าสารเคมี</Link>
+                                <Link className='table__tab table__tab--equipment table__tab--active'>ตระกร้าครุภัณฑ์</Link>
+                            </div>
 
-                                <table className="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Student Id</th>
-                                            <th>Equipment Id</th>
-                                            <th>Requested Quantity</th>
-                                            <th>Request Purpose</th>
-                                            <th>Request Room</th>
-                                            <th>Teacher Id</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
+                            <table className="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>รหัสนิสิต</th>
+                                        <th>ครุภัณฑ์</th>
+                                        <th>ปริมาณที่ขอ</th>
+                                        <th>ปริมาณที่ได้รับ</th>
+                                        <th>ห้องที่ใช้</th>
+                                        <th>รหัสอาจารย์</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                {cartItems.length === 0 ? (
+                                    <p>Nothing in cart.</p>
+                                ) : (
                                     <tbody>
                                         {cartItems.map((item, index) => (
                                             <tr key={index}>
@@ -178,7 +193,7 @@ function StudentEquipmentCart() {
                                                     <input
                                                         type="text"
                                                         className='table__form'
-                                                        value={item.Equipment_Id}
+                                                        value={getEquipmentNameById(item.Equipment_Id)}
                                                         readOnly
                                                     />
                                                 </td>
@@ -237,13 +252,13 @@ function StudentEquipmentCart() {
                                             </tr>
                                         ))}
                                     </tbody>
-                                </table>
-                            </div>
-                            <button className="table__tab table__button thai--font floating-button" type="button" onClick={sendEquipmentRequest}>
-                                ยืนยันการขอเบิกครุภัณฑ์
-                            </button>
+                                )}
+                            </table>
                         </div>
-                    )}
+                        <button className="table__tab table__button thai--font floating-button" type="button" onClick={sendEquipmentRequest}>
+                            ยืนยันการขอเบิกครุภัณฑ์
+                        </button>
+                    </div>
                 </main>
 
                 <footer className='footer'>

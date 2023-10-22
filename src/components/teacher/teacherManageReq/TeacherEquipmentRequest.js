@@ -29,6 +29,8 @@ function TeacherEquipmentRequest({ logout }) {
 
     const [equipmentDetail, setEquipmentDetail] = useState([]);
 
+    const [student, setStudent] = useState([]);
+
     const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +40,7 @@ function TeacherEquipmentRequest({ logout }) {
     useEffect(() => {
         getEquipmentRequest();
         getEquipmentDetail();
+        getStudent();
     }, []);
 
     useEffect(() => {
@@ -72,7 +75,7 @@ function TeacherEquipmentRequest({ logout }) {
 
     const approveEquipmentRequest = async (id) => {
         try {
-            await updateEquipmentRequestStatus(id, "Approve");
+            await updateEquipmentRequestStatus(id, "Approved");
         } catch (err) {
             console.log(err);
         }
@@ -81,7 +84,7 @@ function TeacherEquipmentRequest({ logout }) {
     const declineEquipmentRequest = async () => {
         try {
             if (activeRequestId) {
-                await updateEquipmentRequestStatus(activeRequestId, "Decline", Request_Comment);
+                await updateEquipmentRequestStatus(activeRequestId, "Disapproved", Request_Comment);
                 setRequest_Comment("");
                 setActiveRequestId(null);
             }
@@ -114,7 +117,7 @@ function TeacherEquipmentRequest({ logout }) {
         }
     };
 
-    const handleApproveChecked = () => {
+    const handleApprovedChecked = () => {
         selectedIds.forEach((id) => approveEquipmentRequest(id));
         setSelectedIds([]);
     }
@@ -148,19 +151,26 @@ function TeacherEquipmentRequest({ logout }) {
         }
     }
 
-    const filterEquipmentReq = (data) => {
-        const studentIdRegex = new RegExp(studentIdSearch, "i"); // "i" flag for case-insensitive search
-        const teacherIdRegex = new RegExp(teacherIdSearch, "i"); // "i" flag for case-insensitive search
-
-        return data.filter((req) => {
+    useEffect(() => {
+        const filteredRequests = equipmentReq.filter((req) => {
+            const studentIdRegex = new RegExp(studentIdSearch, "i");
+            const teacherIdRegex = new RegExp(teacherIdSearch, "i");
             const studentIdMatch = studentIdSearch ? studentIdRegex.test(req.Student_Id) : true;
             const teacherIdMatch = teacherIdSearch ? teacherIdRegex.test(req.Teacher_Id) : true;
+            const statusMatch = filteredStatus === 'All' ? true : req.Request_Status === filteredStatus;
 
-            return studentIdMatch && teacherIdMatch;
+            // Apply both teacher ID and status filters together
+            return studentIdMatch && teacherIdMatch && statusMatch;
         });
-    };
 
-    const filteredEquipmentReq = filterEquipmentReq(equipmentReq);
+        const sortedEquipmentReq = filteredRequests.slice().sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+
+        setFilteredEquipmentReq(sortedEquipmentReq);
+    }, [studentIdSearch, teacherIdSearch, equipmentReq, filteredStatus]);
+
+    const [filteredEquipmentReq, setFilteredEquipmentReq] = useState([]);
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
@@ -187,19 +197,46 @@ function TeacherEquipmentRequest({ logout }) {
 
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'Approve':
+            case 'Approved':
                 return 'fa-solid fa-circle-check';
-            case 'Decline':
+            case 'Disapproved':
                 return 'fa-solid fa-circle-xmark';
             case 'Pending':
                 return 'fa-regular fa-clock';
-            case 'Confirmed':
+            case 'Succeed':
                 return 'fa-solid fa-vial-circle-check';
-            case 'Rejected':
+            case 'Failed':
                 return 'fa-solid fa-filter-circle-xmark';
             default:
                 return ''
         }
+    };
+
+    const getStudent = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        setStudent(response.data);
+    }
+
+    const getStudentNameById = (studentId) => {
+        const studentDetail = student.find((student) => student.Student_Id === studentId);
+        return studentDetail ? studentDetail.Student_FName + " " + studentDetail.Student_LName : "N/A";
+    };
+
+    const [filteredStatus, setFilteredStatus] = useState('All');
+
+    const filterRequestsByStatus = (status) => {
+        if (status === 'All') {
+            setFilteredEquipmentReq(equipmentReq);
+        } else {
+            const filteredRequests = equipmentReq.filter((req) => req.Request_Status === status);
+            setFilteredEquipmentReq(filteredRequests);
+        }
+    };
+
+    const handleStatusChange = (event) => {
+        const selectedStatus = event.target.value;
+        setFilteredStatus(selectedStatus);
+        filterRequestsByStatus(selectedStatus);
     };
 
     return (
@@ -273,20 +310,30 @@ function TeacherEquipmentRequest({ logout }) {
                                                 />
                                             </th>
                                             <th scope="col">รหัสนิสิต</th>
+                                            <th scope="col">ชื่อ-สกุล</th>
                                             <th scope="col">ครุภัณฑ์</th>
                                             <th scope="col">จำนวนที่ขอ</th>
-                                            <th scope="col">สถานะคำขอ</th>
+                                            <th scope="col">
+                                                <select
+                                                    id="statusFilter"
+                                                    className="form-select"
+                                                    onChange={handleStatusChange}
+                                                    value={filteredStatus}
+                                                >
+                                                    <option value="All">ทั้งหมด</option>
+                                                    <option value="Pending">รอดำเนินการ</option>
+                                                    <option value="Approved">อนุมัติ</option>
+                                                    <option value="Disapproved">ไม่อนุมัติ</option>
+                                                    <option value="Succeed">สำเร็จ</option>
+                                                    <option value="Failed">ล้มเหลว</option>
+                                                </select>
+                                            </th>
                                             <th scope="col">วัตถุประสงค์</th>
                                             <th scope="col">นำไปใช้ห้อง</th>
                                             <th scope="col">วันที่ส่งคำขอ</th>
                                             <th scope="col">
-                                                <button className="buttonTab-btn thai--font" onClick={handleApproveChecked}>
+                                                <button className="buttonTab-btn thai--font" onClick={handleApprovedChecked}>
                                                     อนุมัติจากที่เลือก
-                                                </button>
-                                            </th>
-                                            <th scope="col">
-                                                <button className="buttonTab-reject-btn thai--font" onClick={handleDeleteChecked}>
-                                                    ลบจากที่เลือก
                                                 </button>
                                             </th>
                                         </tr>
@@ -307,9 +354,10 @@ function TeacherEquipmentRequest({ logout }) {
                                                     </div>
                                                 </td>
                                                 <td> {equipmentReq.Student_Id} </td>
+                                                <td> {getStudentNameById(equipmentReq.Student_Id)} </td>
                                                 <td> {findEquipmentName(equipmentReq.Equipment_Id)} </td>
                                                 <td> {equipmentReq.Requested_Quantity} </td>
-                                                <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> </td>
+                                                <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> {equipmentReq.Request_Status} </td>
                                                 <td> {equipmentReq.Request_Purpose} </td>
                                                 <td> {equipmentReq.Request_Room} </td>
                                                 <td>{formatDate(equipmentReq.createdAt)}</td>
@@ -349,34 +397,6 @@ function TeacherEquipmentRequest({ logout }) {
                                                                         <button onClick={declineEquipmentRequest} type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal"><i className='fa-solid fa-circle-check' />ยืนยัน</button>
                                                                         <button type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal"><i className='fa-solid fa-circle-xmark' /> ยกเลิก</button>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        className="delete--btn btn-danger w-100"
-                                                        data-bs-toggle="modal" data-bs-target={`#deleteModal-${equipmentReq.Equipment_Request_Id}`}
-                                                        onClick={() => setActiveRequestId(equipmentReq.Equipment_Request_Id)}
-                                                    >
-                                                        <i className='fa-solid fa-trash' />
-                                                        ลบ
-                                                    </button>
-
-                                                    <div className="modal fade" id={`deleteModal-${equipmentReq.Equipment_Request_Id}`} tabIndex="-1" aria-labelledby={`deleteModalLabel-${equipmentReq.Equipment_Request_Id}`} aria-hidden="true">
-                                                        <div className="modal-dialog">
-                                                            <div className="modal-content">
-                                                                <div className="modal-header">
-                                                                    <h5 className="modal-title" id={`deleteModalLabel-${equipmentReq.Equipment_Request_Id}`}>ลบคำขอเบิกครุภัณฑ์</h5>
-                                                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div className="modal-body">
-                                                                    คุณต้องการลบคำขอเบิกครุภัณฑ์นี้ใช่หรือไม่?
-                                                                </div>
-                                                                <div className="modal-footer">
-                                                                    <button onClick={() => handleDelete(equipmentReq.Equipment_Request_Id)} type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal"> ยืนยัน</button>
-                                                                    <button type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal">ยกเลิก</button>
                                                                 </div>
                                                             </div>
                                                         </div>

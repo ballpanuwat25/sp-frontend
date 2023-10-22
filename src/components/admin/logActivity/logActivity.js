@@ -13,8 +13,12 @@ function LogActivity() {
     const [selectedDate, setSelectedDate] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    const [staff, setStaff] = useState([]);
+
     useEffect(() => {
         getLogActivity();
+        getStaff();
+        console.log(staff)
     }, []);
 
     useEffect(() => {
@@ -23,9 +27,20 @@ function LogActivity() {
 
     const getLogActivity = async () => {
         const response = await axios.get("https://special-problem.onrender.com/log-activity");
+        
         setLogActivity(response.data);
         setIsLoading(false);
     }
+
+    const getStaff = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/staff-list");
+        setStaff(response.data);
+    }
+
+    const getStaffNameById = (staffId) => {
+        const staffInfo = staff.find((staff) => staff.Staff_Id === staffId);
+        return staffInfo ? staffInfo.Staff_FName + " " + staffInfo.Staff_LName : "N/A";
+    };
 
     const deleteLogActivity = async (id) => {
         try {
@@ -62,9 +77,15 @@ function LogActivity() {
         setFilteredLogActivity(filteredLogActivity);
     };
 
+    const sortedLogActivity = [...filteredLogActivity].sort((a, b) => {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        return dateB - dateA; // Sort in descending order (newest first)
+    });
+
     return (
         <div className="container-fluid">
-            <main className='dashboard__content'>
+            <main>
                 {isLoading ? (
                     <div class="spinner-border text-success" role="status">
                         <span class="visually-hidden">Loading...</span>
@@ -107,19 +128,21 @@ function LogActivity() {
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Staff Id</th>
-                                        <th scope="col">Activity</th>
-                                        <th scope="col">Products</th>
+                                        <th scope="col">รหัสเจ้าหน้าที่</th>
+                                        <th scope="col">ชื่อ-สกุล</th>
+                                        <th scope="col">กิจกรรม</th>
+                                        <th scope="col">ผลิตภัณฑ์</th>
                                         <th scope="col">Create At</th>
                                         <th scope="col">Update At</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredLogActivity.map((logActivity) => (
+                                    {sortedLogActivity.map((logActivity) => (
                                         <tr key={logActivity.LogActivity_Id} className="active-row">
                                             <td> {logActivity.LogActivity_Id} </td>
                                             <td> {logActivity.Staff_Id} </td>
+                                            <td> {getStaffNameById(logActivity.Staff_Id)} </td>
                                             <td> {logActivity.LogActivity_Name} </td>
                                             <td> {logActivity.Chem_Bottle_Id || logActivity.Equipment_Id} </td>
                                             <td> {formatDate(logActivity.createdAt)} </td>

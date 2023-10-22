@@ -368,3 +368,8 @@
     padding: 5px 10px;
     width: 100%;
 }
+
+.form-select {
+    padding: 0 10px !important;
+    color: #006C68 !important;
+}

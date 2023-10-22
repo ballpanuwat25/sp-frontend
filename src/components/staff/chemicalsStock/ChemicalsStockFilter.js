@@ -78,16 +78,20 @@ function ChemicalsStockList({ logout }) {
     // Function to process the chemicals data and return a new array with unique chemical IDs and summed up quantities
     const processChemicalsData = () => {
         const uniqueChemicals = {};
+
         chemicals.forEach((chemical) => {
             const { Chem_Id, Remaining_Quantity, Package_Size } = chemical;
-            if (uniqueChemicals[Chem_Id]) {
-                uniqueChemicals[Chem_Id].Package_Size += Package_Size;
-                uniqueChemicals[Chem_Id].Remaining_Quantity += Remaining_Quantity;
-            } else {
-                uniqueChemicals[Chem_Id] = {
-                    Package_Size: Package_Size,
-                    Remaining_Quantity,
-                };
+
+            if (Remaining_Quantity / Package_Size >= 0.1) {
+                if (uniqueChemicals[Chem_Id]) {
+                    uniqueChemicals[Chem_Id].Package_Size += Package_Size;
+                    uniqueChemicals[Chem_Id].Remaining_Quantity += Remaining_Quantity;
+                } else {
+                    uniqueChemicals[Chem_Id] = {
+                        Package_Size: Package_Size,
+                        Remaining_Quantity,
+                    };
+                }
             }
         });
 
@@ -208,6 +212,11 @@ function ChemicalsStockList({ logout }) {
         });
     };
 
+    const getChemGradeById = (chemId) => {
+        const chemicalDetail = chemicalsDetail.find((chem) => chem.Chem_Id === chemId);
+        return chemicalDetail ? chemicalDetail.Chem_Grade : "N/A";
+    };
+
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
@@ -219,7 +228,8 @@ function ChemicalsStockList({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link to="/staff-dashboard/staff-chemicals-receipt" className='sidebar__item sidebar__item--hover'> <i className="me-3 fa-solid fa-receipt"/> Receipt</Link>
+<Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> <div className='sidebar__item--active'> Stock</div></Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
@@ -291,6 +301,7 @@ function ChemicalsStockList({ logout }) {
                                             <th className="table-header">#</th>
                                             <th className="table-header">รหัสสารเคมี</th>
                                             <th className="table-header">ชื่อสารเคมี</th>
+                                            <th className="table-header">เกรด</th>
                                             <th className="table-header">ปริมาณทั้งหมด</th>
                                             <th className="table-header">ปริมาณคงเหลือ</th>
                                             <th className="table-header">หน่วยนับ</th>
@@ -303,6 +314,7 @@ function ChemicalsStockList({ logout }) {
                                                 <td className="table-data"> {index + 1} </td>
                                                 <td className="table-data"> {chemical.Chem_Id} </td>
                                                 <td className="table-data"> {chemical.Chem_Name} </td>
+                                                <td className="table-data"> {getChemGradeById(chemical.Chem_Id)} </td>
                                                 <td className="table-data"> {chemical.Package_Size} </td>
                                                 <td className="table-data"> {chemical.Remaining_Quantity} </td>
                                                 <td className="table-data"> {chemical.Counting_Unit} </td>
@@ -326,7 +338,7 @@ function ChemicalsStockList({ logout }) {
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <Link to="/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

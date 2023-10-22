@@ -23,36 +23,6 @@ function Header() {
                     </ul>
                 </div>
                 <Link to="/student-register" className='header__button header__button--signup '>Sign up</Link>
-
-                <i className="fa-solid fa-bars" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"></i>
-
-                <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                    <div className="offcanvas-header d-flex justify-content-end">
-                        <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div className="offcanvas-body">
-                        <div className='d-flex flex-column align-items-center'>
-                            <div className='header__links'>
-                                <div className='dropdown'>
-                                    <button className='header__button--hover dropdown-toggle' type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Log in
-                                    </button>
-
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                        <li><Link class="dropdown-item" to="/student-login">Student</Link></li>
-                                        <li><Link class="dropdown-item" to="/teacher-login">Teacher</Link></li>
-                                        <li><Link class="dropdown-item" to="/staff-login">Staff</Link></li>
-                                        <li><Link class="dropdown-item" to="/admin-login">Admin</Link></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className='header__links'>
-                                <Link to="/student-register" className='header__link header__button--hover'>Sign up</Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     )

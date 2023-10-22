@@ -83,16 +83,6 @@
     opacity: 0;
 }
 
-@media screen and (max-width: 1250px) {
-    .header__button {
-        display: none;
-    }
-
-    .fa-bars {
-        display: block;
-    }
-}
-
 @media screen and (max-width: 768px) {
     .header {
         padding-right: 25px !important;

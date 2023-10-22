@@ -38,6 +38,8 @@ function StudentChemicalsRequest() {
         const filteredRequests = chemicalsReq.filter(
             (request) => request.Student_Id.includes(inputValue)
         );
+        // Sort by createdAt in descending order (newest at the top)
+        filteredRequests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setFilteredChemicalsReq(filteredRequests);
     }, [chemicalsReq]);
 
@@ -88,20 +90,36 @@ function StudentChemicalsRequest() {
 
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'Approve':
+            case 'Approved':
                 return 'fa-solid fa-circle-check';
-            case 'Decline':
+            case 'Disapproved':
                 return 'fa-solid fa-circle-xmark';
             case 'Pending':
                 return 'fa-regular fa-clock';
-            case 'Confirmed':
+            case 'Succeed':
                 return 'fa-solid fa-vial-circle-check';
-            case 'Rejected':
+            case 'Failed':
                 return 'fa-solid fa-filter-circle-xmark';
             default:
                 return ''
         }
     };
+
+    const [chemicalsDetail, setChemicalsDetail] = useState([]);
+
+    useEffect(() => {
+        getChemicalsDetail();
+    }, []);
+
+    const getChemNameById = (chemId) => {
+        const chemicalDetail = chemicalsDetail.find((chem) => chem.Chem_Id === chemId);
+        return chemicalDetail ? chemicalDetail.Chem_Name : "N/A";
+    };
+
+    const getChemicalsDetail = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+        setChemicalsDetail(response.data);
+    }
 
     return (
         <div className='container-fluid vh-100'>
@@ -158,30 +176,24 @@ function StudentChemicalsRequest() {
                                 <table className="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Student Id</th>
-                                            <th scope="col">Chem Id</th>
-                                            <th scope="col">Chem Bottle Id</th>
-                                            <th scope="col">Requested Quantity</th>
-                                            <th scope="col">Release Quantity</th>
-                                            <th scope="col">Counting Unit</th>
-                                            <th scope="col">Staff Id</th>
-                                            <th scope="col">Teacher Id</th>
-                                            <th scope="col">Request Status</th>
-                                            <th scope="col">Request Comment</th>
-                                            <th scope="col">Request Date</th>
+                                            <th scope="col">รหัสนิสิต</th>
+                                            <th scope="col">ชื่อสารเคมี</th>
+                                            <th scope="col">ปริมาณที่ขอ</th>
+                                            <th scope="col">ปริมาณที่ได้รับ</th>
+                                            <th scope="col">หน่วยนับ</th>
+                                            <th scope="col">สถานะคำร้อง</th>
+                                            <th scope="col">หมายเหตุ</th>
+                                            <th scope="col">วันที่ส่งคำร้อง</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {filteredChemicalsReq.map((chemicalsReq) => (
                                             <tr key={chemicalsReq.Chem_Request_Id} className="active-row">
                                                 <td> {chemicalsReq.Student_Id} </td>
-                                                <td> {chemicalsReq.Chem_Id} </td>
-                                                <td> {chemicalsReq.Chem_Bottle_Id} </td>
+                                                <td> {getChemNameById(chemicalsReq.Chem_Id)} </td>
                                                 <td> {chemicalsReq.Requested_Quantity} </td>
                                                 <td> {chemicalsReq.Release_Quantity} </td>
                                                 <td> {chemicalsReq.Counting_Unit} </td>
-                                                <td> {chemicalsReq.Staff_Id} </td>
-                                                <td> {chemicalsReq.Teacher_Id} </td>
                                                 <td> <i className={`${getStatusIcon(chemicalsReq.Request_Status)}`} /> {chemicalsReq.Request_Status}</td>
                                                 <td> {chemicalsReq.Request_Comment} </td>
                                                 <td>{formatDate(chemicalsReq.createdAt)}</td>

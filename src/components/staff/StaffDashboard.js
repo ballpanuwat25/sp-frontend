@@ -77,10 +77,10 @@ function StaffDashboard({logout}) {
         }
     }
 
-    const handleDeclineChecked = async () => {
+    const handleDisapprovedChecked = async () => {
         try {
             const promises = selectedIds.map((id) =>
-                updateChemicalsRequestStatus(id, "Rejected", Request_Comment) // Set status to "Rejected" for all selected items
+                updateChemicalsRequestStatus(id, "Failed", Request_Comment) // Set status to "Failed" for all selected items
             );
 
             await Promise.all(promises); // Wait for all requests to complete
@@ -133,15 +133,15 @@ function StaffDashboard({logout}) {
 
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'Approve':
+            case 'Approved':
                 return 'fa-solid fa-circle-check';
-            case 'Decline':
+            case 'Disapproved':
                 return 'fa-solid fa-circle-xmark';
             case 'Pending':
                 return 'fa-regular fa-clock';
-            case 'Confirmed':
+            case 'Succeed':
                 return 'fa-solid fa-vial-circle-check';
-            case 'Rejected':
+            case 'Failed':
                 return 'fa-solid fa-filter-circle-xmark';
             default:
                 return ''
@@ -160,7 +160,9 @@ function StaffDashboard({logout}) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
-                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
+<Link to="/staff-dashboard/staff-chemicals-receipt" className='sidebar__item sidebar__item--hover'> <i className="me-3 fa-solid fa-receipt"/> Receipt</Link>
+                        <Link to="/staff-dashboard/staff-chemicals-receipt" className='sidebar__item sidebar__item--hover'> <i className="me-3 fa-solid fa-receipt"/> Receipt</Link>
+<Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
@@ -224,7 +226,7 @@ function StaffDashboard({logout}) {
                                     <th scope="col">หมายเหตุ</th>
                                     <th scope="col">วันที่ส่งคำขอ</th>
                                     <th scope="col">
-                                        <button onClick={handleDeclineChecked} className="buttonTab-reject-btn thai--font">
+                                        <button onClick={handleDisapprovedChecked} className="buttonTab-reject-btn thai--font">
                                             ปฏิเสธจากที่เลือก
                                         </button>
                                     </th>

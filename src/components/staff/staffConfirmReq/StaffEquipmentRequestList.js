@@ -26,13 +26,27 @@ function StaffEquipmentRequestList({ logout }) {
     const [isLoading, setIsLoading] = useState(true);
     const [activeRequestId, setActiveRequestId] = useState(null);
 
+    const [student, setStudent] = useState([]);
+    const [equipment, setEquipment] = useState([]);
+
     const navigate = useNavigate();
+
+    const [filteredStatus, setFilteredStatus] = useState("All");
+
+    const handleStatusChange = (event) => {
+        setFilteredStatus(event.target.value);
+    }
 
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
+        getStudent();
+        getEquipment();
+    }, []);
+
+    useEffect(() => {
         getEquipmentRequest();
-    }, [searchQuery]);
+    }, [searchQuery, filteredStatus]);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/staff", {
@@ -50,7 +64,17 @@ function StaffEquipmentRequestList({ logout }) {
 
     const getEquipmentRequest = async () => {
         const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
-        setEquipmentReq(response.data);
+        const filteredEquipmentReq = response.data.filter((equipmentReq) => {
+            return (
+                (filteredStatus === "All" || equipmentReq.Request_Status === filteredStatus) &&
+                (equipmentReq.Student_Id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    getEquipmentNameById(equipmentReq.Equipment_Id).toLowerCase().includes(searchQuery.toLowerCase())) &&
+                equipmentReq.Request_Status !== "Pending"
+            )
+        });
+
+        filteredEquipmentReq.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setEquipmentReq(filteredEquipmentReq);
         setIsLoading(false);
     };
 
@@ -62,7 +86,7 @@ function StaffEquipmentRequestList({ logout }) {
         }
     }
 
-    const handleDeclineChecked = async () => {
+    const handleDisapprovedChecked = async () => {
         try {
             const promises = selectedIds.map((id) =>
                 declineEquipmentRequest(id, Request_Comment)
@@ -101,7 +125,7 @@ function StaffEquipmentRequestList({ logout }) {
     const declineEquipmentRequest = async (id, comment) => {
         try {
             const data = {
-                Request_Status: "Decline",
+                Request_Status: "Disapproved",
                 Request_Comment: comment,
             };
             await axios.patch(`https://special-problem.onrender.com/equipment-request-list/${id}`, data);
@@ -139,19 +163,39 @@ function StaffEquipmentRequestList({ logout }) {
 
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'Approve':
+            case 'Approved':
                 return 'fa-solid fa-circle-check';
-            case 'Decline':
+            case 'Disapproved':
                 return 'fa-solid fa-circle-xmark';
             case 'Pending':
                 return 'fa-regular fa-clock';
-            case 'Confirmed':
+            case 'Succeed':
                 return 'fa-solid fa-vial-circle-check';
-            case 'Rejected':
+            case 'Failed':
                 return 'fa-solid fa-filter-circle-xmark';
             default:
                 return ''
         }
+    };
+
+    const getStudent = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        setStudent(response.data);
+    }
+
+    const getEquipment = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+        setEquipment(response.data);
+    }
+
+    const getStudentNameById = (studentId) => {
+        const studentDetail = student.find((student) => student.Student_Id === studentId);
+        return studentDetail ? studentDetail.Student_FName + " " + studentDetail.Student_LName : "N/A";
+    };
+
+    const getEquipmentNameById = (equipmentId) => {
+        const equipmentDetail = equipment.find((equipment) => equipment.Equipment_Id === equipmentId);
+        return equipmentDetail ? equipmentDetail.Equipment_Name : "N/A";
     };
 
     return (
@@ -165,6 +209,7 @@ function StaffEquipmentRequestList({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
+                        <Link to="/staff-dashboard/staff-chemicals-receipt" className='sidebar__item sidebar__item--hover'> <i className="me-3 fa-solid fa-receipt" /> Receipt</Link>
                         <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
@@ -189,7 +234,7 @@ function StaffEquipmentRequestList({ logout }) {
                                     <input
                                         type="text"
                                         className="component__search"
-                                        placeholder="ค้นหาด้วยรหัสนิสิตหรือรหัสครุภัณฑ์"
+                                        placeholder="ค้นหาด้วยรหัสนิสิตหรือชื่อครุภัณฑ์"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                     />
@@ -202,14 +247,14 @@ function StaffEquipmentRequestList({ logout }) {
                             </div>
 
                             <div className="mb-4">
-                                <label htmlFor="Request_Comment" className="profile__label">สาเหตุในการปฏิเสธ</label>
+                                <label htmlFor="Request_Comment" className="profile__label">เหตุผลในการปฏิเสธ</label>
                                 <textarea
                                     className="form-control thai--font"
                                     id="Request_Comment"
                                     rows="1"
                                     value={Request_Comment}
                                     onChange={(e) => setRequest_Comment(e.target.value)}
-                                    placeholder="กรุณากรอกสาเหตุในการปฏิเสธก่อนใช้ปุ่มปฏิเสธจากที่เลือก"
+                                    placeholder="กรุณาระบุเหตุผลในการปฏิเสธก่อนใช้ปุ่มปฏิเสธจากที่เลือก"
                                 ></textarea>
                             </div>
 
@@ -224,22 +269,29 @@ function StaffEquipmentRequestList({ logout }) {
                                         <tr>
                                             <th scope="col"></th>
                                             <th scope="col">รหัสนิสิต</th>
-                                            <th scope="col">รหัสครุภัณฑ์</th>
+                                            <th scope="col">ชื่อ-สกุล</th>
+                                            <th scope="col">ครุภัณฑ์</th>
                                             <th scope="col">จำนวนที่ขอ</th>
-                                            <th scope="col">จำนวนที่จ่าย</th>
-                                            <th scope="col">รหัสเจ้าหน้าที่</th>
-                                            <th scope="col">รหัสอาจารย์</th>
-                                            <th scope="col">สถานะคำขอ</th>
+                                            <th scope="col">จำนวนที่ให้</th>
+                                            <th scope="col">
+                                                <select
+                                                    id="statusFilter"
+                                                    className="form-select"
+                                                    onChange={handleStatusChange}
+                                                    value={filteredStatus}
+                                                >
+                                                    {/* <option value="All">ทั้งหมด</option>*/}
+                                                    <option value="Approved">อนุมัติ</option>
+                                                    <option value="Disapproved">ไม่อนุมัติ</option>
+                                                    <option value="Succeed">สำเร็จ</option>
+                                                    <option value="Failed">ล้มเหลว</option>
+                                                </select>
+                                            </th>
                                             <th scope="col">หมายเหตุ</th>
                                             <th scope="col">วันที่ส่งคำขอ</th>
                                             <th scope="col">
-                                                <button onClick={handleDeclineChecked} className="buttonTab-reject-btn thai--font">
+                                                <button onClick={handleDisapprovedChecked} className="buttonTab-reject-btn thai--font">
                                                     ปฏิเสธจากที่เลือก
-                                                </button>
-                                            </th>
-                                            <th scope="col">
-                                                <button className="buttonTab-reject-btn thai--font" onClick={handleDeleteChecked}>
-                                                    ลบจากที่เลือก
                                                 </button>
                                             </th>
                                         </tr>
@@ -260,11 +312,10 @@ function StaffEquipmentRequestList({ logout }) {
                                                     </div>
                                                 </td>
                                                 <td> {equipmentReq.Student_Id} </td>
-                                                <td> {equipmentReq.Equipment_Id} </td>
+                                                <td> {getStudentNameById(equipmentReq.Student_Id)} </td>
+                                                <td> {getEquipmentNameById(equipmentReq.Equipment_Id)} </td>
                                                 <td> {equipmentReq.Requested_Quantity} </td>
                                                 <td> {equipmentReq.Release_Quantity} </td>
-                                                <td> {equipmentReq.Staff_Id} </td>
-                                                <td> {equipmentReq.Teacher_Id} </td>
                                                 <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> {equipmentReq.Request_Status} </td>
                                                 <td> {equipmentReq.Request_Comment} </td>
                                                 <td>{formatDate(equipmentReq.createdAt)}</td>
@@ -276,34 +327,6 @@ function StaffEquipmentRequestList({ logout }) {
                                                                 ดูรายละเอียด
                                                             </div>
                                                         </Link>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        className="delete--btn btn-danger w-100"
-                                                        data-bs-toggle="modal" data-bs-target={`#deleteModal-${equipmentReq.Equipment_Request_Id}`}
-                                                        onClick={() => setActiveRequestId(equipmentReq.Equipment_Request_Id)}
-                                                    >
-                                                        <i className='fa-solid fa-trash' />
-                                                        ลบ
-                                                    </button>
-
-                                                    <div className="modal fade" id={`deleteModal-${equipmentReq.Equipment_Request_Id}`} tabIndex="-1" aria-labelledby={`deleteModalLabel-${equipmentReq.Equipment_Request_Id}`} aria-hidden="true">
-                                                        <div className="modal-dialog">
-                                                            <div className="modal-content">
-                                                                <div className="modal-header">
-                                                                    <h5 className="modal-title" id={`deleteModalLabel-${equipmentReq.Equipment_Request_Id}`}>ลบคำขอเบิกครุภัณฑ์</h5>
-                                                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div className="modal-body">
-                                                                    คุณต้องการลบคำขอเบิกครุภัณฑ์นี้ใช่หรือไม่?
-                                                                </div>
-                                                                <div className="modal-footer">
-                                                                    <button onClick={() => handleDelete(equipmentReq.Equipment_Request_Id)} type="button" className="btn btn-danger modal-btn" data-bs-dismiss="modal"> ยืนยัน</button>
-                                                                    <button type="button" className="btn edit--btn modal-btn" data-bs-dismiss="modal">ยกเลิก</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -325,7 +348,7 @@ function StaffEquipmentRequestList({ logout }) {
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <Link to="/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

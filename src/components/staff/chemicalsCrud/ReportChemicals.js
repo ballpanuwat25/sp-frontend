@@ -116,6 +116,11 @@ function ReportChemicals({ logout }) {
         return chemicalDetail ? chemicalDetail.Chem_Name : "N/A";
     };
 
+    const getChemGradeById = (chemId) => {
+        const chemicalDetail = chemicalsDetail.find((chem) => chem.Chem_Id === chemId);
+        return chemicalDetail ? chemicalDetail.Chem_Grade : "N/A";
+    };
+
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
             if (response.data.Error) {
@@ -142,6 +147,7 @@ function ReportChemicals({ logout }) {
                 index + 1,
                 chemical.Chem_Bottle_Id,
                 getChemNameById(chemical.Chem_Id),
+                getChemGradeById(chemical.Chem_Id),
                 chemical.Package_Size,
                 chemical.Remaining_Quantity,
                 chemical.Counting_Unit,
@@ -181,6 +187,7 @@ function ReportChemicals({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
+                        <Link to="/staff-dashboard/staff-chemicals-receipt" className='sidebar__item sidebar__item--hover'> <i className="me-3 fa-solid fa-receipt"/> Receipt</Link>
                         <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Chemicals</div></Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
@@ -240,6 +247,7 @@ function ReportChemicals({ logout }) {
                                             <th className="table-header" scope="col">#</th>
                                             <th className="table-header" scope="col">รหัสขวด</th>
                                             <th className="table-header" scope="col">ชื่อสารเคมี</th>
+                                            <th className="table-header" scope="col">เกรด</th>
                                             <th className="table-header" scope="col">ขนาดบรรจุ</th>
                                             <th className="table-header" scope="col">ปริมาณคงเหลือ</th>
                                             <th className="table-header" scope="col">หน่วยนับ</th>
@@ -253,6 +261,7 @@ function ReportChemicals({ logout }) {
                                                 <td className="table-data"> {index + 1} </td>
                                                 <td className="table-data"> {chemicals.Chem_Bottle_Id} </td>
                                                 <td className="table-data"> {getChemNameById(chemicals.Chem_Id)} </td>
+                                                <td className="table-data"> {getChemGradeById(chemicals.Chem_Id)} </td>
                                                 <td className="table-data"> {chemicals.Package_Size} </td>
                                                 <td className="table-data"> {chemicals.Remaining_Quantity} </td>
                                                 <td className="table-data"> {chemicals.Counting_Unit} </td>
@@ -277,7 +286,7 @@ function ReportChemicals({ logout }) {
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <Link to="/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

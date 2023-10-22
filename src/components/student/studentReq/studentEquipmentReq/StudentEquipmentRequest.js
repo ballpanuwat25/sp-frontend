@@ -38,6 +38,7 @@ function StudentEquipmentRequest() {
         const filteredRequests = equipmentReq.filter(
             (request) => request.Student_Id.includes(inputValue)
         );
+        filteredRequests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setFilteredEquipmentReq(filteredRequests);
     }, [equipmentReq]);
 
@@ -88,15 +89,15 @@ function StudentEquipmentRequest() {
 
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'Approve':
+            case 'Approved':
                 return 'fa-solid fa-circle-check';
-            case 'Decline':
+            case 'Disapproved':
                 return 'fa-solid fa-circle-xmark';
             case 'Pending':
                 return 'fa-regular fa-clock';
-            case 'Confirmed':
+            case 'Succeed':
                 return 'fa-solid fa-vial-circle-check';
-            case 'Rejected':
+            case 'Failed':
                 return 'fa-solid fa-filter-circle-xmark';
             default:
                 return ''

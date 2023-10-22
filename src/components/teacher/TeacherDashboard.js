@@ -66,7 +66,7 @@ function TeacherDashboard({ logout }) {
 
     const approveChemicalsRequest = async (id) => {
         try {
-            await updateChemicalsRequestStatus(id, "Approve");
+            await updateChemicalsRequestStatus(id, "Approved");
         } catch (error) {
             console.log(error)
         }
@@ -75,7 +75,7 @@ function TeacherDashboard({ logout }) {
     const declineChemicalsRequest = async () => {
         try {
             if (activeRequestId) {
-                await updateChemicalsRequestStatus(activeRequestId, "Decline", Request_Comment);
+                await updateChemicalsRequestStatus(activeRequestId, "Disapproved", Request_Comment);
                 setRequest_Comment(""); // Clear the comment after successful decline
                 setActiveRequestId(null); // Reset activeRequestId after successful decline
             }
@@ -108,7 +108,7 @@ function TeacherDashboard({ logout }) {
         }
     };
 
-    const handleApproveChecked = () => {
+    const handleApprovedChecked = () => {
         selectedIds.forEach((id) => approveChemicalsRequest(id));
         setSelectedIds([]);
     }
@@ -171,15 +171,15 @@ function TeacherDashboard({ logout }) {
 
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'Approve':
+            case 'Approved':
                 return 'fa-solid fa-circle-check';
-            case 'Decline':
+            case 'Disapproved':
                 return 'fa-solid fa-circle-xmark';
             case 'Pending':
                 return 'fa-regular fa-clock';
-            case 'Confirmed':
+            case 'Succeed':
                 return 'fa-solid fa-vial-circle-check';
-            case 'Rejected':
+            case 'Failed':
                 return 'fa-solid fa-filter-circle-xmark';
             default:
                 return ''
@@ -260,7 +260,7 @@ function TeacherDashboard({ logout }) {
                                     <th scope="col">นำไปใช้ห้อง</th>
                                     <th scope="col">วันที่ส่งคำขอ</th>
                                     <th scope="col">
-                                        <button className="buttonTab-btn thai--font" onClick={handleApproveChecked}>
+                                        <button className="buttonTab-btn thai--font" onClick={handleApprovedChecked}>
                                             อนุมัติจากที่เลือก
                                         </button>
                                     </th>

@@ -28,6 +28,8 @@ function StaffEquipmentRequest({ logout }) {
 
     const [isRejectButtonClicked, setIsRejectButtonClicked] = useState(false);
 
+    const [equipment, setEquipment] = useState([]);
+
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -35,6 +37,7 @@ function StaffEquipmentRequest({ logout }) {
         getStaffId();
         getEquipmentById();
         getEquipmentRequestById();
+        getEquipment();
     }, []);
 
     const getStaffId = async () => {
@@ -82,8 +85,8 @@ function StaffEquipmentRequest({ logout }) {
         }
 
         if (Release_Quantity === Quantity) {
-            const userConfirmed = window.confirm("Are you sure you want to release all the equipment?");
-            if (!userConfirmed) {
+            const userSucceed = window.confirm("Are you sure you want to release all the equipment?");
+            if (!userSucceed) {
                 return;
             }
         }
@@ -165,6 +168,16 @@ function StaffEquipmentRequest({ logout }) {
         });
     };
 
+    const getEquipment = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+        setEquipment(response.data);
+    }
+
+    const getEquipmentNameById = (equipmentId) => {
+        const equipmentDetail = equipment.find((equipment) => equipment.Equipment_Id === equipmentId);
+        return equipmentDetail ? equipmentDetail.Equipment_Name : "N/A";
+    };
+
     return (
         <div className='container-fluid vh-100'>
             <ToastContainer />
@@ -177,6 +190,7 @@ function StaffEquipmentRequest({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
+                        <Link to="/staff-dashboard/staff-chemicals-receipt" className='sidebar__item sidebar__item--hover'> <i className="me-3 fa-solid fa-receipt"/> Receipt</Link>
                         <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
@@ -214,6 +228,10 @@ function StaffEquipmentRequest({ logout }) {
                                 }}
                                 readOnly
                             />
+                        </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="Equipment_Name" className="profile__label">ครุภัณฑ์: {getEquipmentNameById(Equipment_Id)}</label>
                         </div>
 
                         <div className="mb-3">
@@ -266,12 +284,21 @@ function StaffEquipmentRequest({ logout }) {
                             />
                         </div>
 
+                        <div className="mb-3">
+                            <label htmlFor="Request_Comment" className='profile__label'>หมายเหตุ (ไม่บังคับ)</label>
+                            <input type="text" className="profile__input" id="Request_Comment" placeholder="เช่น ให้มารับในวันที่..." value={Request_Comment}
+                                onChange={(e) => {
+                                    setRequest_Comment(e.target.value);
+                                }}
+                            />
+                        </div>
+
                         <div className="d-flex">
                             <button
                                 type="submit"
                                 className="edit--btn"
                                 onClick={() => {
-                                    setRequest_Status("Confirmed");
+                                    setRequest_Status("Succeed");
                                 }}
                             >
                                 <i className='fa-solid fa-circle-check' />
@@ -316,7 +343,7 @@ function StaffEquipmentRequest({ logout }) {
                                                 type="submit"
                                                 className="btn edit--btn modal-btn"
                                                 onClick={() => {
-                                                    setRequest_Status("Rejected");
+                                                    setRequest_Status("Failed");
                                                     setIsRejectButtonClicked(false); // Reset the flag when modal is closed
                                                 }}
                                                 data-bs-dismiss="modal"
@@ -353,7 +380,7 @@ function StaffEquipmentRequest({ logout }) {
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <Link to="/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

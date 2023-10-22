@@ -38,10 +38,13 @@ function StaffChemicalsRequest({ logout }) {
     const [scannedCode, setScannedCode] = useState("");
     const [inputValue, setInputValue] = useState("");
 
+    const [chemicalsDetail, setChemicalsDetail] = useState([]);
+
     useEffect(() => {
         getStaffId();
         getChemicalsById();
         getChemicalsRequestById();
+        getChemicalsDetail();
     }, []);
 
     useEffect(() => {
@@ -114,8 +117,8 @@ function StaffChemicalsRequest({ logout }) {
 
         // Check if Release_Quantity is equal to Remaining_Quantity
         if (Release_Quantity === Remaining_Quantity) {
-            const userConfirmed = window.confirm("Chemicals are empty now. Do you still want to proceed?");
-            if (!userConfirmed) {
+            const userSucceed = window.confirm("Chemicals are empty now. Do you still want to proceed?");
+            if (!userSucceed) {
                 return;
             }
         }
@@ -231,6 +234,16 @@ function StaffChemicalsRequest({ logout }) {
         setChem_Bottle_Id(scannedText);
     };
 
+    const getChemicalsDetail = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+        setChemicalsDetail(response.data);
+    }
+
+    const getChemNameById = (chemId) => {
+        const chemicalDetail = chemicalsDetail.find((chem) => chem.Chem_Id === chemId);
+        return chemicalDetail ? chemicalDetail.Chem_Name : "N/A";
+    };
+
     return (
         <div className='container-fluid vh-100'>
             <ToastContainer />
@@ -243,6 +256,7 @@ function StaffChemicalsRequest({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
+                        <Link to="/staff-dashboard/staff-chemicals-receipt" className='sidebar__item sidebar__item--hover'> <i className="me-3 fa-solid fa-receipt"/> Receipt</Link>
                         <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
@@ -282,17 +296,11 @@ function StaffChemicalsRequest({ logout }) {
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="Chem_Id" className='profile__label'>รหัสสารเคมี</label>
-                            <input type="text" className='profile__input profile__input--readonly' id="Chem_Id" placeholder="Enter Chemicals Id" required={isRejectButtonClicked} value={Chem_Id}
-                                onChange={(e) => {
-                                    setChem_Id(e.target.value);
-                                }}
-                                readOnly
-                            />
+                            <label htmlFor="Chem_Id" className='profile__label'>สารเคมี: {getChemNameById(Chem_Id)}</label>
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="Chem_Bottle_Id" className='profile__label'>ใส่รหัสขวดสารเคมี</label>
+                            <label htmlFor="Chem_Bottle_Id" className='profile__label'>ใส่รหัสขวดสารเคมี (เจ้าหน้าที่เลือกใช้ขวดไหนก็ได้)</label>
                             <div className="input-group">
                                 <BarcodeScanner2 onSave={handleSave} />
                                 <input
@@ -358,12 +366,21 @@ function StaffChemicalsRequest({ logout }) {
                             />
                         </div>
 
+                        <div className="mb-3">
+                            <label htmlFor="Request_Comment" className='profile__label'>หมายเหตุ (ไม่บังคับ)</label>
+                            <input type="text" className="profile__input" id="Request_Comment" placeholder="เช่น ให้มารับในวันที่..." value={Request_Comment}
+                                onChange={(e) => {
+                                    setRequest_Comment(e.target.value);
+                                }}
+                            />
+                        </div>
+
                         <div className="d-flex">
                             <button
                                 type="submit"
                                 className="edit--btn"
                                 onClick={() => {
-                                    setRequest_Status("Confirmed");
+                                    setRequest_Status("Succeed");
                                 }}
                             >
                                 <i className='fa-solid fa-circle-check' />
@@ -408,7 +425,7 @@ function StaffChemicalsRequest({ logout }) {
                                                 type="submit"
                                                 className="btn edit--btn modal-btn"
                                                 onClick={() => {
-                                                    setRequest_Status("Rejected");
+                                                    setRequest_Status("Failed");
                                                     setIsRejectButtonClicked(false); // Reset the flag when modal is closed
                                                 }}
                                                 data-bs-dismiss="modal"
@@ -445,7 +462,7 @@ function StaffChemicalsRequest({ logout }) {
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <Link to="/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

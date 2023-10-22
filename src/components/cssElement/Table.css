@@ -132,10 +132,6 @@ table tbody tr {
     left: 0;
 }
 
-table tbody tr:nth-of-type(even) td div .table__button::before {
-    background-color: #fff;
-}
-
 table tbody tr:nth-of-type(even) td input {
     color: #006C68;
 }
@@ -184,6 +180,7 @@ select {
 .fa-circle-check,
 .fa-circle-xmark,
 .fa-clock,
+.fa-receipt,
 .fa-vial-circle-check,
 .fa-filter-circle-xmark,
 .fa-square-minus {
@@ -203,6 +200,7 @@ select {
     background-color: #006C68;
     color: #fff !important;
     text-decoration: none;
+    text-align: center;
 }
 
 .delete--btn {

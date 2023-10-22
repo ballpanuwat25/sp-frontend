@@ -123,8 +123,8 @@ function BarcodeChemicals({ logout }) {
                             <thead>
                                 <tr>
                                     <th className="table-header">#</th>
+                                    <th className="table-header">สารเคมี</th>
                                     <th className="table-header">Barcode</th>
-                                    <th className="table-header">ชื่อสารเคมี</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -150,7 +150,7 @@ function BarcodeChemicals({ logout }) {
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='footer__item'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <Link to="/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

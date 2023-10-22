@@ -51,9 +51,11 @@ import EditEquipmentCategory from './components/staff/equipmentCategory/EditEqui
 import EquipmentCategoryList from './components/staff/equipmentCategory/EquipmentCategoryList.js';
 
 import StaffChemicalsRequest from './components/staff/staffConfirmReq/StaffChemicalsRequest.js';
+import StaffChemicalsReceipt from './components/staff/staffConfirmReq/StaffChemicalsReceipt.js';
 import StaffChemicalsRequestList from './components/staff/staffConfirmReq/StaffChemicalsRequestList.js';
 
 import StaffEquipmentRequest from './components/staff/staffConfirmReq/StaffEquipmentRequest.js';
+import StaffEquipmentReceipt from './components/staff/staffConfirmReq/StaffEquipmentReceipt.js';
 import StaffEquipmentRequestList from './components/staff/staffConfirmReq/StaffEquipmentRequestList.js';
 
 import BarcodeChemicals from './components/staff/chemicalsCrud/BarcodeChemicals.js';
@@ -179,8 +181,11 @@ function App() {
         <Route path="/staff-reset-password/:resetToken" element={<StaffNewPassword />} />
 
         <Route path="/staff-dashboard/staff-chemicals-request/:id" element={staffLoggedIn ? <StaffChemicalsRequest logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/staff-dashboard/staff-chemicals-receipt" element={staffLoggedIn ? <StaffChemicalsReceipt logout={handleStaffLogOut} /> : <Navigate to="/" />} />
         <Route path="/staff-dashboard/staff-chemicals-request-list" element={staffLoggedIn ? <StaffChemicalsRequestList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+
         <Route path="/staff-dashboard/staff-equipment-request/:id" element={staffLoggedIn ? <StaffEquipmentRequest logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/staff-dashboard/staff-equipment-receipt" element={staffLoggedIn ? <StaffEquipmentReceipt logout={handleStaffLogOut} /> : <Navigate to="/" />} />
         <Route path="/staff-dashboard/staff-equipment-request-list" element={staffLoggedIn ? <StaffEquipmentRequestList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
 
         <Route path="/chemicals-list" element={staffLoggedIn ? <ChemicalsList logout={handleStaffLogOut} /> : <Navigate to="/" />} />

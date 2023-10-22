@@ -34,12 +34,13 @@ function StudentChemicalsCart() {
         try {
             // Log each attribute separately
             for (const item of cartItems) {
+                const countingUnit = getCountingUnit(item.Chem_State);
                 const requestData = {
                     ...chemicalsRequest,
                     Student_Id: item.Student_Id,
                     Chem_Id: item.Chem_Id,
                     Requested_Quantity: item.Requested_Quantity,
-                    Counting_Unit: item.Counting_Unit,
+                    Counting_Unit: countingUnit,
                     Request_Purpose: item.Request_Purpose,
                     Request_Room: item.Request_Room,
                     Teacher_Id: item.Teacher_Id,
@@ -113,6 +114,26 @@ function StudentChemicalsCart() {
         });
     };
 
+    const [chemicalsDetail, setChemicalsDetail] = useState([]);
+
+    useEffect(() => {
+        getChemicalsDetail();
+    }, []);
+
+    const getChemNameById = (chemId) => {
+        const chemicalDetail = chemicalsDetail.find((chem) => chem.Chem_Id === chemId);
+        return chemicalDetail ? chemicalDetail.Chem_Name : "N/A";
+    };
+
+    const getChemicalsDetail = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+        setChemicalsDetail(response.data);
+    }
+
+    const getCountingUnit = (chemState) => {
+        return chemState === "Solid" ? "g" : "ml";
+    };
+
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
@@ -135,36 +156,36 @@ function StudentChemicalsCart() {
                 </aside>
 
                 <main className='dashboard__content'>
-                    {cartItems.length === 0 ? (
-                        <p>Nothing in cart.</p>
-                    ) : (
-                        <div>
-                            <div className='component__header'>
-                                <div className='component__headerGroup component__headerGroup--left' />
+                    <div>
+                        <div className='component__header'>
+                            <div className='component__headerGroup component__headerGroup--left' />
 
-                                <div className='component__headerGroup component__headerGroup--right'>
-                                    <div>{user_picture}</div>
-                                    <div>{user_email}</div>
-                                </div>
+                            <div className='component__headerGroup component__headerGroup--right'>
+                                <div>{user_picture}</div>
+                                <div>{user_email}</div>
                             </div>
-                            <div >
-                                <div className='table__tabs'>
-                                    <Link className='table__tab table__tab--chemicals table__tab--active'>ตระกร้าสารเคมี</Link>
-                                    <Link to="/student-dashboard/student-equipment-cart" className='table__tab table__tab--equipment table__tab--unactive'>ตระกร้าครุภัณฑ์</Link>
-                                </div>
-                                <table className="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Student Id</th>
-                                            <th>Chemicals Id</th>
-                                            <th>Requested Quantity</th>
-                                            <th>Counting Unit</th>
-                                            <th>Request Purpose</th>
-                                            <th>Request Room</th>
-                                            <th>Teacher Id</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
+                        </div>
+                        <div >
+                            <div className='table__tabs'>
+                                <Link className='table__tab table__tab--chemicals table__tab--active'>ตระกร้าสารเคมี</Link>
+                                <Link to="/student-dashboard/student-equipment-cart" className='table__tab table__tab--equipment table__tab--unactive'>ตระกร้าครุภัณฑ์</Link>
+                            </div>
+                            <table className="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>รหัสนิสิต</th>
+                                        <th>สารเคมี</th>
+                                        <th>ปริมาณที่ขอ</th>
+                                        <th>หน่วยนับ</th>
+                                        <th>วัตถุประสงค์</th>
+                                        <th>ห้องที่ใช้</th>
+                                        <th>รหัสอาจารย์</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                {cartItems.length === 0 ? (
+                                    <p>Nothing in cart.</p>
+                                ) : (
                                     <tbody>
                                         {cartItems.map((item, index) => (
                                             <tr key={index}>
@@ -180,7 +201,7 @@ function StudentChemicalsCart() {
                                                     <input
                                                         type="text"
                                                         className='table__form'
-                                                        value={item.Chem_Id}
+                                                        value={getChemNameById(item.Chem_Id)}
                                                         readOnly
                                                     />
                                                 </td>
@@ -195,16 +216,12 @@ function StudentChemicalsCart() {
                                                     />
                                                 </td>
                                                 <td>
-                                                    <select
-                                                        className='thai--font'
-                                                        value={item.Counting_Unit}
-                                                        onChange={(e) => handleChange(index, 'Counting_Unit', e.target.value)}
-                                                        required
-                                                    >
-                                                        <option value="">Select</option>
-                                                        <option value="g">กรัม</option>
-                                                        <option value="ml">มิลลิลิตร</option>
-                                                    </select>
+                                                    <input
+                                                        type="text"
+                                                        className='table__form'
+                                                        value={getCountingUnit(item.Chem_State)}
+                                                        readOnly
+                                                    />
                                                 </td>
                                                 <td>
                                                     <input
@@ -251,14 +268,14 @@ function StudentChemicalsCart() {
                                             </tr>
                                         ))}
                                     </tbody>
-                                </table>
-                            </div>
-
-                            <button className="table__tab table__button thai--font floating-button" type="button" onClick={sendChemicalsRequest}>
-                                ยืนยันการขอเบิกสารเคมี
-                            </button>
+                                )}
+                            </table>
                         </div>
-                    )}
+
+                        <button className="table__tab table__button thai--font floating-button" type="button" onClick={sendChemicalsRequest}>
+                            ยืนยันการขอเบิกสารเคมี
+                        </button>
+                    </div>
                 </main>
 
                 <footer className='footer'>

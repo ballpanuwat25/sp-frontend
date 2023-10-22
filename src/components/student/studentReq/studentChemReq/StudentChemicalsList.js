@@ -81,7 +81,7 @@ function StudentChemicalsList() {
         setMostRequestedChemIds(mostRequestedIds);
     };
 
-    const addChemToCartFromOffcanvas = (chemId) => {
+    const addChemToCartFromOffcanvas = (chemId, chemState) => {
         // Get the existing cart data from localStorage (if any)
         const cartData = JSON.parse(localStorage.getItem('chemicalsCart')) || [];
 
@@ -96,6 +96,7 @@ function StudentChemicalsList() {
         cartData.push({
             Student_Id: studentInfo.studentId,
             Chem_Id: chemId,
+            Chem_State: chemState, // Include Chem_State in the cart item
         });
 
         localStorage.setItem('chemicalsCart', JSON.stringify(cartData));
@@ -124,7 +125,7 @@ function StudentChemicalsList() {
         setFilteredChemicals(chemicalsDetail);
     }, [chemicalsDetail]);
 
-    const addToCart = (Chem_Id) => {
+    const addToCart = (Chem_Id, Chem_State) => {
         // Get the existing cart data from localStorage (if any)
         const cartData = JSON.parse(localStorage.getItem('chemicalsCart')) || [];
 
@@ -137,6 +138,7 @@ function StudentChemicalsList() {
             cartData.push({
                 Student_Id: studentInfo.studentId,
                 Chem_Id,
+                Chem_State,
             });
         }
         setSelectedChemicalsId({ Chem_Id: Chem_Id });
@@ -263,7 +265,7 @@ function StudentChemicalsList() {
                                                     <td>
                                                         <div>
                                                             <button
-                                                                onClick={() => addToCart(chemicalsDetail.Chem_Id)}
+                                                                onClick={() => addToCart(chemicalsDetail.Chem_Id, chemicalsDetail.Chem_State)}
                                                                 data-bs-toggle={isOffCanvasEnabled ? "offcanvas" : ""}
                                                                 data-bs-target={isOffCanvasEnabled ? "#offcanvasWithBackdrop1" : ""}
                                                                 aria-controls="offcanvasWithBackdrop"
@@ -293,7 +295,8 @@ function StudentChemicalsList() {
                                                                                                 {findChemicalNameById(chemId)}
                                                                                                 <button
                                                                                                     className="offcanvas__button"
-                                                                                                    onClick={() => addChemToCartFromOffcanvas(chemId)}
+                                                                                                    onClick={() => addChemToCartFromOffcanvas(chemId, chemicalsDetail.Chem_State)}
+                                                                                                // Pass chemicalsDetail.Chem_State as an argument
                                                                                                 >
                                                                                                     <i className="fa-solid fa-circle-plus" />
                                                                                                     <div className="offcanvas__button-text offcanvas__button-text--hover">
