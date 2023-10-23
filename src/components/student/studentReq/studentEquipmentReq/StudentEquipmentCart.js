@@ -169,7 +169,7 @@ function StudentEquipmentCart() {
                                         <th>รหัสนิสิต</th>
                                         <th>ครุภัณฑ์</th>
                                         <th>ปริมาณที่ขอ</th>
-                                        <th>ปริมาณที่ได้รับ</th>
+                                        <th>วัตถุประสงค์</th>
                                         <th>ห้องที่ใช้</th>
                                         <th>รหัสอาจารย์</th>
                                         <th></th>

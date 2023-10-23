@@ -111,8 +111,8 @@ function BarcodeEquipment({ logout }) {
                             <thead>
                                 <tr>
                                     <th className="table-header">#</th>
+                                    <th className="table-header">ครุภัณฑ์</th>
                                     <th className="table-header">Barcode</th>
-                                    <th className="table-header">ชื่อครุภัณฑ์</th>
                                 </tr>
                             </thead>
                             <tbody>

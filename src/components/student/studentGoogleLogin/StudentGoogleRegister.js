@@ -26,7 +26,7 @@ function StudentGoogleRegister() {
                     if (response.data.Error) {
                         alert(response.data.Error);
                     } else {
-                        navigate("/student-dashboard");
+                        navigate("/student-login");
                     }
                 });
             }
