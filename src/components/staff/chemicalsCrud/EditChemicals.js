@@ -185,7 +185,7 @@ function EditChemicals({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Package_Size" className="profile__label">ขนาดบรรจุ</label>
-                            <input type="number" className="profile__input" id="Package_Size" placeholder="Enter Package Size" required
+                            <input type="number" min="0" className="profile__input" id="Package_Size" placeholder="Enter Package Size" required
                                 value={Package_Size}
                                 onChange={(e) => {
                                     setPackage_Size(e.target.value);
@@ -195,7 +195,7 @@ function EditChemicals({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Remaining_Quantity" className="profile__label">ปริมาณคงเหลือ</label>
-                            <input type="number" className="profile__input" id="Remaining_Quantity" placeholder="Enter Remaining Quantity" required
+                            <input type="number" min="0" className="profile__input" id="Remaining_Quantity" placeholder="Enter Remaining Quantity" required
                                 value={Remaining_Quantity}
                                 onChange={(e) => {
                                     setRemaining_Quantity(e.target.value);
@@ -225,7 +225,7 @@ function EditChemicals({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Price" className="profile__label">ราคา</label>
-                            <input type="number" className="profile__input" id="Price" placeholder="Enter Price" required
+                            <input type="number" min="0" className="profile__input" id="Price" placeholder="Enter Price" required
                                 value={Price}
                                 onChange={(e) => {
                                     setPrice(e.target.value);

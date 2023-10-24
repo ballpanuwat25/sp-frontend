@@ -190,7 +190,7 @@ function StaffEquipmentRequest({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
-                        <Link to="/staff-dashboard/staff-chemicals-receipt" className='sidebar__item sidebar__item--hover'> <i className="me-3 fa-solid fa-receipt"/> Receipt</Link>
+                         
                         <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
@@ -255,6 +255,7 @@ function StaffEquipmentRequest({ logout }) {
                             <label htmlFor="Remaining_Quantity" className="profile__label">จำนวนที่เหลือ</label>
                             <input
                                 type="number"
+                                min="0"
                                 className="profile__input"
                                 id="Quantity"
                                 placeholder="Enter Remaining Quantity"
@@ -277,7 +278,7 @@ function StaffEquipmentRequest({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Release_Quantity" className="profile__label">จำนวนที่จ่าย</label>
-                            <input type="text" className="profile__input" id="Release_Quantity" placeholder="Enter Release Quantity" required={isRejectButtonClicked} value={Release_Quantity}
+                            <input type="number" min="0" className="profile__input" id="Release_Quantity" placeholder="Enter Release Quantity" required={isRejectButtonClicked} value={Release_Quantity}
                                 onChange={(e) => {
                                     setRelease_Quantity(e.target.value);
                                 }}

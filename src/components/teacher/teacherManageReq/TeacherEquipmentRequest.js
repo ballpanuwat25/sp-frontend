@@ -35,6 +35,8 @@ function TeacherEquipmentRequest({ logout }) {
 
     const [isLoading, setIsLoading] = useState(true);
 
+    const [filteredStatus, setFilteredStatus] = useState('All'); 
+
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
@@ -221,8 +223,6 @@ function TeacherEquipmentRequest({ logout }) {
         const studentDetail = student.find((student) => student.Student_Id === studentId);
         return studentDetail ? studentDetail.Student_FName + " " + studentDetail.Student_LName : "N/A";
     };
-
-    const [filteredStatus, setFilteredStatus] = useState('All');
 
     const filterRequestsByStatus = (status) => {
         if (status === 'All') {

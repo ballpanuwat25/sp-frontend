@@ -104,6 +104,49 @@ function StudentEquipmentRequest() {
         }
     };
 
+    const [equipment, setEquipment] = useState([]);
+    const [equipmentCategory, setEquipmentCategory] = useState([]);
+
+    useEffect(() => {
+        getEquipment();
+        getEquipmentCategory();
+    }, []);
+
+    const getEquipment = async () => {
+        try {
+            const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+            setEquipment(response.data);
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getEquipmentCategory = async () => {
+        try {
+            const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
+            setEquipmentCategory(response.data);
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getEquipmentName = (eqId) => {
+        const eq = equipment.find((eq) => eq.Equipment_Id === eqId);
+        return eq ? eq.Equipment_Name : "N/A";
+    }
+
+    const getEquipmentCategoryIdByEquipmentId = (eqId) => {
+        const eq = equipment.find((eq) => eq.Equipment_Id === eqId);
+        return eq ? eq.Equipment_Category_Id : "N/A";
+    }
+
+    const getEquipmentCategoryName = (eqCateId) => {
+        const eqCate = equipmentCategory.find((eqCate) => eqCate.Equipment_Category_Id === eqCateId);
+        return eqCate ? eqCate.Equipment_Category_Name : "N/A";
+    }
+
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
@@ -159,29 +202,25 @@ function StudentEquipmentRequest() {
                                 <table className="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Student Id</th>
-                                            <th scope="col">Equipment Id</th>
-                                            <th scope="col">Equipment Category Id</th>
-                                            <th scope="col">Requested Quantity</th>
-                                            <th scope="col">Release Quantity</th>
-                                            <th scope="col">Staff Id</th>
-                                            <th scope="col">Teacher Id</th>
-                                            <th scope="col">Request Status</th>
-                                            <th scope="col">Request Comment</th>
-                                            <th scope="col">Request Date</th>
+                                            <th scope="col">รหัสนิสิต</th>
+                                            <th scope="col">ชื่อครุภัณฑ์</th>
+                                            <th scope="col">หมวดหมู่</th>
+                                            <th scope="col">จำนวนที่ขอ</th>
+                                            <th scope="col">จำนวนที่ได้รับ</th>
+                                            <th scope="col">สถานะคำร้อง</th>
+                                            <th scope="col">หมายเหตุ</th>
+                                            <th scope="col">วันที่ส่งคำร้อง</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {filteredEquipmentReq.map((equipmentReq) => (
                                             <tr key={equipmentReq.Chem_Request_Id} className="active-row">
                                                 <td> {equipmentReq.Student_Id} </td>
-                                                <td> {equipmentReq.Equipment_Id} </td>
-                                                <td> {equipmentReq.Equipment_Category_Id} </td>
+                                                <td> {getEquipmentName(equipmentReq.Equipment_Id)} </td>
+                                                <td> {getEquipmentCategoryName(getEquipmentCategoryIdByEquipmentId(equipmentReq.Equipment_Id))} </td>
                                                 <td> {equipmentReq.Requested_Quantity} </td>
                                                 <td> {equipmentReq.Release_Quantity} </td>
-                                                <td> {equipmentReq.Staff_Id} </td>
-                                                <td> {equipmentReq.Teacher_Id} </td>
-                                                <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> </td>
+                                                <td> <i className={`${getStatusIcon(equipmentReq.Request_Status)}`} /> {equipmentReq.Request_Status} </td>
                                                 <td> {equipmentReq.Request_Comment} </td>
                                                 <td>{formatDate(equipmentReq.createdAt)}</td>
                                             </tr>

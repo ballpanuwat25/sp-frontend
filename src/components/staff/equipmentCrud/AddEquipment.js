@@ -147,7 +147,7 @@ function AddEquipment({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                        <Link to="/staff-dashboard/staff-chemicals-receipt" className='sidebar__item sidebar__item--hover'> <i className="me-3 fa-solid fa-receipt"/> Receipt</Link>
+                         
 <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" /><div className='sidebar__item--active'> Equipment</div></Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
@@ -218,7 +218,7 @@ function AddEquipment({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Quantity" className="profile__label">จำนวน*</label>
-                            <input type="number" className="profile__input" id="Quantity" placeholder="จำนวน" required
+                            <input type="number" min="0" className="profile__input" id="Quantity" placeholder="จำนวน" required
                                 onChange={(e) => {
                                     setEquipment({ ...equipment, Quantity: e.target.value });
                                 }}
@@ -236,7 +236,7 @@ function AddEquipment({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Price" className="profile__label">ราคา</label>
-                            <input type="number" className="profile__input" id="Price" placeholder="ราคา"
+                            <input type="number" min="0" className="profile__input" id="Price" placeholder="ราคา"
                                 onChange={(e) => {
                                     setEquipment({ ...equipment, Price: e.target.value });
                                 }}
@@ -245,7 +245,7 @@ function AddEquipment({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Fixed_Cost" className="profile__label">ค่าซ่อม</label>
-                            <input type="number" className="profile__input" id="Fixed_Cost" placeholder="หากยังไม่มีให้ใส่ 0"
+                            <input type="number" min="0" className="profile__input" id="Fixed_Cost" placeholder="หากยังไม่มีให้ใส่ 0"
                                 onChange={(e) => {
                                     setEquipment({ ...equipment, Fixed_Cost: e.target.value });
                                 }}

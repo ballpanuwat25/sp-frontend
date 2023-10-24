@@ -287,7 +287,7 @@ function StudentEquipmentList() {
                                                                                         {mostRequestedEquipIds.map((equipId, index) => (
                                                                                             selectedEquipmentId.Equipment_Id !== equipId && (
                                                                                                 <li className="offcanvas__item" key={index}>
-                                                                                                    {equipId}
+                                                                                                    {findEquipmentNameById(equipId)}
                                                                                                     <button
                                                                                                         className="offcanvas__button"
                                                                                                         onClick={() => addEquipToCartFromOffcanvas(equipId)}

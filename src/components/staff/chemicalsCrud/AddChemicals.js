@@ -207,7 +207,7 @@ function AddChemicals({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Package_Size" className="profile__label">ขนาดบรรจุ*</label>
-                            <input type="number" className="profile__input" id="Package_Size" placeholder="Enter Package Size" required
+                            <input type="number" min="0" className="profile__input" id="Package_Size" placeholder="Enter Package Size" required
                                 onChange={(e) => {
                                     setChemicals({ ...chemicals, Package_Size: e.target.value });
                                 }}
@@ -216,7 +216,7 @@ function AddChemicals({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Remaining_Quantity" className="profile__label">ปริมาณที่เหลือ*</label>
-                            <input type="number" className="profile__input" id="Remaining_Quantity" placeholder="Enter Remaining Quantity" required
+                            <input type="number" min="0" className="profile__input" id="Remaining_Quantity" placeholder="Enter Remaining Quantity" required
                                 onChange={(e) => {
                                     setChemicals({ ...chemicals, Remaining_Quantity: e.target.value });
                                 }}
@@ -243,7 +243,7 @@ function AddChemicals({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Price" className="profile__label">ราคา</label>
-                            <input type="number" className="profile__input" id="Price" placeholder="Enter Price"
+                            <input type="number" min="0" className="profile__input" id="Price" placeholder="Enter Price"
                                 onChange={(e) => {
                                     setChemicals({ ...chemicals, Price: e.target.value });
                                 }}
