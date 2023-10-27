@@ -99,7 +99,7 @@ function AddTeacher({ logout }) {
                     </div>
                     <div className='sidebar__body'>
                         <Link to="/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
-                        <Link to="/staff-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
+                        <Link to="/admin-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
                         <Link to="/admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
@@ -189,7 +189,7 @@ function AddTeacher({ logout }) {
 
                 <footer className='footer'>
                     <Link to="/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                    <Link to="/staff-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
+                    <Link to="/admin-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />

@@ -8,8 +8,8 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-const StaffList = ({ logout }) => {
-    const [staffs, setStaffs] = useState([]);
+const AdminList = ({ logout }) => {
+    const [admins, setAdmins] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const [adminInfo, setAdminInfo] = useState({
@@ -20,19 +20,19 @@ const StaffList = ({ logout }) => {
     });
 
     const [searchQuery, setSearchQuery] = useState("");
-    const [filteredStaffs, setFilteredStaffs] = useState([]);
+    const [filteredAdmins, setFilteredAdmins] = useState([]);
 
     const navigate = useNavigate();
 
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        getStaffs();
+        getAdmins();
     }, []);
 
     useEffect(() => {
-        setFilteredStaffs(staffs);
-    }, [staffs]);
+        setFilteredAdmins(admins);
+    }, [admins]);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/admin", {
@@ -52,16 +52,16 @@ const StaffList = ({ logout }) => {
             });
     }, []);
 
-    const getStaffs = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/staff-list");
-        setStaffs(response.data);
+    const getAdmins = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/admin-list");
+        setAdmins(response.data);
         setIsLoading(false);
     };
 
-    const deleteStaff = async (id) => {
+    const deleteAdmin = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/staff-list/${id}`)
-            getStaffs();
+            await axios.delete(`https://special-problem.onrender.com/admin-list/${id}`)
+            getAdmins();
         } catch (error) {
             console.log(error)
         }
@@ -83,14 +83,14 @@ const StaffList = ({ logout }) => {
         const query = e.target.value;
         setSearchQuery(query);
 
-        const filteredStaffs = staffs.filter((staff) =>
-            staff.Staff_Id.toLowerCase().includes(query.toLowerCase()) ||
-            staff.Staff_FName.toLowerCase().includes(query.toLowerCase()) ||
-            staff.Staff_LName.toLowerCase().includes(query.toLowerCase()) ||
-            staff.Staff_Username.toLowerCase().includes(query.toLowerCase())
+        const filteredAdmins = admins.filter((admin) =>
+            admin.Admin_Id.toLowerCase().includes(query.toLowerCase()) ||
+            admin.Admin_FName.toLowerCase().includes(query.toLowerCase()) ||
+            admin.Admin_LName.toLowerCase().includes(query.toLowerCase()) ||
+            admin.Admin_Username.toLowerCase().includes(query.toLowerCase())
         );
 
-        setFilteredStaffs(filteredStaffs);
+        setFilteredAdmins(filteredAdmins);
     };
 
     return (
@@ -124,28 +124,28 @@ const StaffList = ({ logout }) => {
                                     <input
                                         type="search"
                                         className='component__search'
-                                        placeholder="ค้นหาด้วยชื่อหรือรหัสเจ้าหน้าที่"
+                                        placeholder="ค้นหาด้วยชื่อหรือรหัสผู้ดูแล"
                                         value={searchQuery}
                                         onChange={handleSearch}
                                     />
                                 </div>
 
                                 <div className='component__headerGroup component__headerGroup--right'>
-                                    <Link to={`add-staff`} className="search__button add--btn">เพิ่มเจ้าหน้าที่</Link>
+                                    <Link to={`add-admin`} className="search__button add--btn">เพิ่มผู้ดูแล</Link>
                                 </div>
                             </div>
 
                             <div >
                                 <div className='table__tabs'>
-                                    <Link to="/admin-list" className='table__tab table__tab--chemicals table__tab--unactive'>ผู้ดูแล</Link>
-                                    <Link className='table__tab table__tab--chemicals table__tab--active'>เจ้าหน้าที่</Link>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>ผู้ดูแล</Link>
+                                    <Link to="/staff-list" className='table__tab table__tab--chemicals table__tab--unactive'>เจ้าหน้าที่</Link>
                                     <Link to="/teacher-list" className='table__tab table__tab--chemicals table__tab--unactive'>อาจารย์</Link>
                                 </div>
 
                                 <table className="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th scope="col">รหัสเจ้าหน้าที่</th>
+                                            <th scope="col">รหัสผู้ดูแล</th>
                                             <th scope="col">ชื่อ-สกุล</th>
                                             <th scope='col'>Email</th>
                                             <th scope="col">เบอร์โทรศัพท์</th>
@@ -153,16 +153,16 @@ const StaffList = ({ logout }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {filteredStaffs.map((staff) => (
-                                            <tr key={staff.Staff_Id} className="active-row">
-                                                <td> {staff.Staff_Id} </td>
-                                                <td> {staff.Staff_FName} {staff.Staff_LName}</td>
-                                                <td> {staff.Staff_Email} </td>
-                                                <td> {staff.Staff_Tel} </td>
+                                        {filteredAdmins.map((admin) => (
+                                            <tr key={admin.Admin_Id} className="active-row">
+                                                <td> {admin.Admin_Id} </td>
+                                                <td> {admin.Admin_FName} {admin.Admin_LName}</td>
+                                                <td> {admin.Admin_Email} </td>
+                                                <td> {admin.Admin_Tel} </td>
                                                 <td>
                                                     <div className="d-grid gap-2 d-sm-flex">
-                                                        <Link to={`edit-staff/${staff.Staff_Id}`} className="edit--btn">แก้ไขข้อมูล</Link>
-                                                        <button onClick={() => deleteStaff(staff.Staff_Id)} className="delete--btn btn-danger">ลบผู้ใช้</button>
+                                                        <Link to={`edit-admin/${admin.Admin_Id}`} className="edit--btn">แก้ไขข้อมูล</Link>
+                                                        <button onClick={() => deleteAdmin(admin.Admin_Id)} className="delete--btn btn-danger">ลบผู้ใช้</button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -192,4 +192,4 @@ const StaffList = ({ logout }) => {
     )
 }
 
-export default StaffList
+export default AdminList

@@ -11,25 +11,25 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function AddStaff({ logout }) {
-    const [staff, setStaff] = useState({
-        Staff_Id: "",
-        Staff_FName: "",
-        Staff_LName: "",
-        Staff_Username: "",
-        Staff_Username: "",
-        Staff_Password: "",
-        Staff_Tel: ""
+function AddAdmin({ logout }) {
+    const [admin, setAdmin] = useState({
+        Admin_Id: "",
+        Admin_FName: "",
+        Admin_LName: "",
+        Admin_Username: "",
+        Admin_Username: "",
+        Admin_Password: "",
+        Admin_Tel: ""
     });
 
-    const saveStaff = async (e) => {
+    const saveAdmin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("https://special-problem.onrender.com/staff-list", staff);
+            const response = await axios.post("https://special-problem.onrender.com/admin-list", admin);
     
             if (response.status === 201) {
-                // Staff Created successfully, navigate to staff list
-                navigate("/staff-list");
+                // Admin Created successfully, navigate to admin list
+                navigate("/admin-list");
             } else {
                 // Handle other possible responses
                 console.log("Unexpected response:", response);
@@ -117,68 +117,68 @@ function AddStaff({ logout }) {
                         </div>
                     </div>
 
-                    <form onSubmit={saveStaff}>
+                    <form onSubmit={saveAdmin}>
                         <div className='profile__form'>
                             <div className='mb-3'>
-                                <label htmlFor="Staff_Id" className='profile__label'>รหัสเจ้าหน้าที่*</label>
-                                <input type="text" className='profile__input' id="Staff_Id" placeholder="Staff Id" required
+                                <label htmlFor="Admin_Id" className='profile__label'>รหัสผู้ดูแล*</label>
+                                <input type="text" className='profile__input' id="Admin_Id" placeholder="Admin Id" required
                                     onChange={(e) => {
-                                        setStaff({ ...staff, Staff_Id: e.target.value });
+                                        setAdmin({ ...admin, Admin_Id: e.target.value });
                                     }
                                     }
                                 />
                             </div>
 
                             <div className='mb-3'>
-                                <label htmlFor="Staff_FName" className='profile__label'>ชื่อจริง</label>
-                                <input type="text" className='profile__input' id="Staff_FName" placeholder="Enter Staff First Name"
+                                <label htmlFor="Admin_FName" className='profile__label'>ชื่อจริง</label>
+                                <input type="text" className='profile__input' id="Admin_FName" placeholder="Enter Admin First Name"
                                     onChange={(e) => {
-                                        setStaff({ ...staff, Staff_FName: e.target.value });
+                                        setAdmin({ ...admin, Admin_FName: e.target.value });
                                     }}
                                 />
                             </div>
 
                             <div className='mb-3'>
-                                <label htmlFor="Staff_LName" className='profile__label'>นามสกุล</label>
-                                <input type="text" className='profile__input' id="Staff_LName" placeholder="Enter Staff Last Name"
+                                <label htmlFor="Admin_LName" className='profile__label'>นามสกุล</label>
+                                <input type="text" className='profile__input' id="Admin_LName" placeholder="Enter Admin Last Name"
                                     onChange={(e) => {
-                                        setStaff({ ...staff, Staff_LName: e.target.value });
+                                        setAdmin({ ...admin, Admin_LName: e.target.value });
                                     }}
                                 />
                             </div>
 
                             <div className='mb-3'>
-                                <label htmlFor="Staff_Email" className='profile__label'>Email</label>
-                                <input type="text" className='profile__input' id="Staff_Email" placeholder="Enter Staff Email" required
+                                <label htmlFor="Admin_Email" className='profile__label'>Email</label>
+                                <input type="text" className='profile__input' id="Admin_Email" placeholder="Enter Admin Email" required
                                     onChange={(e) => {
-                                        setStaff({ ...staff, Staff_Email: e.target.value });
+                                        setAdmin({ ...admin, Admin_Email: e.target.value });
                                     }}
                                 />
                             </div>
 
                             <div className='mb-3'>
-                                <label htmlFor="Staff_Username" className='profile__label'>Username*</label>
-                                <input type="text" className='profile__input' id="Staff_Username" placeholder="Enter Staff Username" required
+                                <label htmlFor="Admin_Username" className='profile__label'>Username*</label>
+                                <input type="text" className='profile__input' id="Admin_Username" placeholder="Enter Admin Username" required
                                     onChange={(e) => {
-                                        setStaff({ ...staff, Staff_Username: e.target.value });
+                                        setAdmin({ ...admin, Admin_Username: e.target.value });
                                     }}
                                 />
                             </div>
 
                             <div className='mb-3'>
-                                <label htmlFor="Staff_Password" className='profile__label'>Password*</label>
-                                <input type="password" className='profile__input' id="Staff_Password" placeholder="Enter Staff Password" required
+                                <label htmlFor="Admin_Password" className='profile__label'>Password*</label>
+                                <input type="password" className='profile__input' id="Admin_Password" placeholder="Enter Admin Password" required
                                     onChange={(e) => {
-                                        setStaff({ ...staff, Staff_Password: e.target.value });
+                                        setAdmin({ ...admin, Admin_Password: e.target.value });
                                     }}
                                 />
                             </div>
 
                             <div className='mb-3'>
-                                <label htmlFor="Staff_Tel" className='profile__label'>Tel</label>
-                                <input type="text" className='profile__input' id="Staff_Tel" placeholder="Enter Staff Tel"
+                                <label htmlFor="Admin_Tel" className='profile__label'>Tel</label>
+                                <input type="text" className='profile__input' id="Admin_Tel" placeholder="Enter Admin Tel"
                                     onChange={(e) => {
-                                        setStaff({ ...staff, Staff_Tel: e.target.value });
+                                        setAdmin({ ...admin, Admin_Tel: e.target.value });
                                     }}
                                 />
                             </div>
@@ -206,4 +206,4 @@ function AddStaff({ logout }) {
     )
 }
 
-export default AddStaff
+export default AddAdmin

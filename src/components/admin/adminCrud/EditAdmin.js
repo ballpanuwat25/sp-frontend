@@ -11,46 +11,46 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import logo from '../../assets/logo.png';
 
-function EditStaff({ logout }) {
-    const [Staff_FName, setStaff_FName] = useState("");
-    const [Staff_LName, setStaff_LName] = useState("");
-    const [Staff_Email, setStaff_Email] = useState(""); 
-    const [Staff_Username, setStaff_Username] = useState("");
-    const [Staff_Password, setStaff_Password] = useState("");
-    const [Staff_Tel, setStaff_Tel] = useState("");
+function EditAdmin({ logout }) {
+    const [Admin_FName, setAdmin_FName] = useState("");
+    const [Admin_LName, setAdmin_LName] = useState("");
+    const [Admin_Email, setAdmin_Email] = useState(""); 
+    const [Admin_Username, setAdmin_Username] = useState("");
+    const [Admin_Password, setAdmin_Password] = useState("");
+    const [Admin_Tel, setAdmin_Tel] = useState("");
 
     const { id } = useParams();
 
     useEffect(() => {
-        getStaffsById()
+        getAdminsById()
     }, [])
 
-    const getStaffsById = async () => {
-        const response = await axios.get(`https://special-problem.onrender.com/staff-list/${id}`);
-        const staff = response.data;
-        setStaff_FName(staff.Staff_FName);
-        setStaff_LName(staff.Staff_LName);
-        setStaff_Email(staff.Staff_Email);
-        setStaff_Username(staff.Staff_Username);
-        setStaff_Password(staff.Staff_Password);
-        setStaff_Tel(staff.Staff_Tel);
+    const getAdminsById = async () => {
+        const response = await axios.get(`https://special-problem.onrender.com/admin-list/${id}`);
+        const admin = response.data;
+        setAdmin_FName(admin.Admin_FName);
+        setAdmin_LName(admin.Admin_LName);
+        setAdmin_Email(admin.Admin_Email);
+        setAdmin_Username(admin.Admin_Username);
+        setAdmin_Password(admin.Admin_Password);
+        setAdmin_Tel(admin.Admin_Tel);
     };
 
-    const updateStaff = async (e) => {
+    const updateAdmin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.patch(`https://special-problem.onrender.com/staff-list/${id}`, {
-                Staff_FName,
-                Staff_LName,
-                Staff_Username,
-                Staff_Email,
-                Staff_Password,
-                Staff_Tel
+            const response = await axios.patch(`https://special-problem.onrender.com/admin-list/${id}`, {
+                Admin_FName,
+                Admin_LName,
+                Admin_Username,
+                Admin_Email,
+                Admin_Password,
+                Admin_Tel
             });
 
             if (response.status === 200) {
-                // Staff Updated successfully, navigate to staff list
-                navigate("/staff-list");
+                // Admin Updated successfully, navigate to admin list
+                navigate("/admin-list");
             } else {
                 // Handle other possible responses
                 console.log("Unexpected response:", response);
@@ -138,64 +138,64 @@ function EditStaff({ logout }) {
                         </div>
                     </div>
 
-                    <form onSubmit={updateStaff}>
+                    <form onSubmit={updateAdmin}>
                         <div className='profile__form'>
                             <div className="mb-3">
-                                <label htmlFor="Staff_FName" className='profile__label'>ชื่อจริง</label>
-                                <input type="text" className='profile__input' id="Staff_FName" placeholder="Enter Staff First Name"
-                                    value={Staff_FName}
+                                <label htmlFor="Admin_FName" className='profile__label'>ชื่อจริง</label>
+                                <input type="text" className='profile__input' id="Admin_FName" placeholder="Enter Admin First Name"
+                                    value={Admin_FName}
                                     onChange={(e) => {
-                                        setStaff_FName(e.target.value);
+                                        setAdmin_FName(e.target.value);
                                     }}
                                 />
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="Staff_LName" className='profile__label'>นามสกุล</label>
-                                <input type="text" className='profile__input' id="Staff_LName" placeholder="Enter Staff Last Name"
-                                    value={Staff_LName}
+                                <label htmlFor="Admin_LName" className='profile__label'>นามสกุล</label>
+                                <input type="text" className='profile__input' id="Admin_LName" placeholder="Enter Admin Last Name"
+                                    value={Admin_LName}
                                     onChange={(e) => {
-                                        setStaff_LName(e.target.value);
+                                        setAdmin_LName(e.target.value);
                                     }}
                                 />
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="Staff_Email" className='profile__label'>Email</label>
-                                <input type="text" className='profile__input' id="Staff_Email" placeholder="Enter Staff Email"
-                                    value={Staff_Email}
+                                <label htmlFor="Admin_Email" className='profile__label'>Email</label>
+                                <input type="text" className='profile__input' id="Admin_Email" placeholder="Enter Admin Email"
+                                    value={Admin_Email}
                                     onChange={(e) => {
-                                        setStaff_Email(e.target.value);
+                                        setAdmin_Email(e.target.value);
                                     }}
                                 />
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="Staff_Username" className='profile__label'>Username</label>
-                                <input type="text" className='profile__input' id="Staff_Username" placeholder="Enter Staff Username" required
-                                    value={Staff_Username}
+                                <label htmlFor="Admin_Username" className='profile__label'>Username</label>
+                                <input type="text" className='profile__input' id="Admin_Username" placeholder="Enter Admin Username" required
+                                    value={Admin_Username}
                                     onChange={(e) => {
-                                        setStaff_Username(e.target.value);
+                                        setAdmin_Username(e.target.value);
                                     }}
                                 />
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="Staff_Password" className='profile__label'>Password</label>
-                                <input type="password" className='profile__input' id="Staff_Password" placeholder="Enter Staff Password" required
-                                    value={Staff_Password}
+                                <label htmlFor="Admin_Password" className='profile__label'>Password</label>
+                                <input type="password" className='profile__input' id="Admin_Password" placeholder="Enter Admin Password" required
+                                    value={Admin_Password}
                                     onChange={(e) => {
-                                        setStaff_Password(e.target.value);
+                                        setAdmin_Password(e.target.value);
                                     }}
                                 />
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="Staff_Tel" className='profile__label'>Tel</label>
-                                <input type="text" className='profile__input' id="Staff_Tel" placeholder="Enter Staff Tel" required
-                                    value={Staff_Tel}
+                                <label htmlFor="Admin_Tel" className='profile__label'>Tel</label>
+                                <input type="text" className='profile__input' id="Admin_Tel" placeholder="Enter Admin Tel" required
+                                    value={Admin_Tel}
                                     onChange={(e) => {
-                                        setStaff_Tel(e.target.value);
+                                        setAdmin_Tel(e.target.value);
                                     }}
                                 />
                             </div>
@@ -223,4 +223,4 @@ function EditStaff({ logout }) {
     )
 }
 
-export default EditStaff
+export default EditAdmin

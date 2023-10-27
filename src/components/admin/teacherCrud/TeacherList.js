@@ -103,7 +103,7 @@ const TeacherList = ({ logout }) => {
                     </div>
                     <div className='sidebar__body'>
                         <Link to="/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
-                        <Link to="/staff-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
+                        <Link to="/admin-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
                         <Link to="/admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
@@ -137,6 +137,7 @@ const TeacherList = ({ logout }) => {
 
                             <div >
                                 <div className='table__tabs'>
+                                    <Link to="/admin-list" className='table__tab table__tab--chemicals table__tab--unactive'>ผู้ดูแล</Link>
                                     <Link to="/staff-list" className='table__tab table__tab--chemicals table__tab--unactive'>เจ้าหน้าที่</Link>
                                     <Link className='table__tab table__tab--chemicals table__tab--active'>อาจารย์</Link>
                                 </div>
@@ -144,12 +145,10 @@ const TeacherList = ({ logout }) => {
                                 <table className="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Teacher Id</th>
-                                            <th scope="col">Name</th>
+                                            <th scope="col">รหัสอาจารย์</th>
+                                            <th scope="col">ชื่อ-สกุล</th>
                                             <th scope="col">Email</th>
-                                            <th scope="col">Username</th>
-                                            <th scope="col">Password</th>
-                                            <th scope="col">Tel</th>
+                                            <th scope="col">เบอร์โทรศัพท์</th>
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
@@ -159,12 +158,10 @@ const TeacherList = ({ logout }) => {
                                                 <td> {teacher.Teacher_Id} </td>
                                                 <td> {teacher.Teacher_FName} {teacher.Teacher_LName}</td>
                                                 <td> {teacher.Teacher_Email} </td>
-                                                <td> {teacher.Teacher_Username} </td>
-                                                <td> {teacher.Teacher_Password} </td>
                                                 <td> {teacher.Teacher_Tel} </td>
                                                 <td>
                                                     <div className="d-grid gap-2 d-sm-flex">
-                                                        <Link to={`edit-teacher/${teacher.Teacher_Id}`} className="edit--btn">แก้ไขผู้ใช้</Link>
+                                                        <Link to={`edit-teacher/${teacher.Teacher_Id}`} className="edit--btn">แก้ไขข้อมูล</Link>
                                                         <button onClick={() => deleteTeacher(teacher.Teacher_Id)} className="delete--btn btn-danger">ลบผู้ใช้</button>
                                                     </div>
                                                 </td>
@@ -179,7 +176,7 @@ const TeacherList = ({ logout }) => {
 
                 <footer className='footer'>
                     <Link to="/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                    <Link to="/staff-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
+                    <Link to="/admin-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />

@@ -113,7 +113,7 @@ function StaffEditProfile({ logout }) {
         <div className='container-fluid vh-100'>
             <ToastContainer />
             <div className='dashboard__container'>
-            <aside className='sidebar'>
+                <aside className='sidebar'>
                     <div className='sidebar__header'>
                         <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
                         <div className='sidebar__title admin__name'>Welcome, {staffInfo.staffFirstName}</div>
@@ -121,8 +121,7 @@ function StaffEditProfile({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                         
-<Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" /> Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> <div className='sidebar__item--active'> Profile</div></Link>

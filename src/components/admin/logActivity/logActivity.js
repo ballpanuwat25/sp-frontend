@@ -132,8 +132,6 @@ function LogActivity() {
                                         <th scope="col">ชื่อ-สกุล</th>
                                         <th scope="col">กิจกรรม</th>
                                         <th scope="col">ผลิตภัณฑ์</th>
-                                        <th scope="col">Create At</th>
-                                        <th scope="col">Update At</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -146,13 +144,6 @@ function LogActivity() {
                                             <td> {logActivity.LogActivity_Name} </td>
                                             <td> {logActivity.Chem_Bottle_Id || logActivity.Equipment_Id} </td>
                                             <td> {formatDate(logActivity.createdAt)} </td>
-                                            <td> {formatDate(logActivity.updatedAt)} </td>
-                                            <td>
-                                                <button onClick={() => deleteLogActivity(logActivity.LogActivity_Id)} className="delete--btn btn-danger">
-                                                    <i className="fa-solid fa-trash" />
-                                                    ลบ
-                                                </button>
-                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

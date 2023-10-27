@@ -9,6 +9,12 @@ import AdminRegister from './components/admin/adminLogin/AdminRegister.js';
 import AdminForgetPassword from './components/admin/adminLogin/AdminForgetPassword.js';
 import AdminDashboard from './components/admin/AdminDashboard.js';
 import AdminProfile from './components/admin/adminLogin/AdminProfile';
+import AdminEditProfile from './components/admin/adminLogin/AdminEditProfile.js';
+import AdminNewPassword from './components/admin/adminLogin/AdminNewPassword.js';
+
+import AddAdmin from './components/admin/adminCrud/AddAdmin.js';
+import EditAdmin from './components/admin/adminCrud/EditAdmin.js';
+import AdminList from './components/admin/adminCrud/AdminList.js';
 
 import AddStaff from './components/admin/staffCrud/AddStaff.js';
 import EditStaff from './components/admin/staffCrud/EditStaff.js';
@@ -24,7 +30,6 @@ import LogActivity from './components/admin/logActivity/logActivity.js';
 import StaffLogin from './components/staff/staffLogin/StaffLogin.js';
 import StaffRegister from './components/staff/staffLogin/StaffRegister.js';
 import StaffForgetPassword from './components/staff/staffLogin/StaffForgetPassword.js';
-import StaffDashboard from './components/staff/StaffDashboard.js';
 import StaffProfile from './components/staff/staffLogin/StaffProfile';
 import StaffEditProfile from './components/staff/staffLogin/StaffEditProfile.js';
 
@@ -68,7 +73,6 @@ import ReportEquipment from './components/staff/equipmentCrud/ReportEquipment.js
 import TeacherLogin from './components/teacher/teacherLogin/TeacherLogin.js';
 import TeacherRegister from './components/teacher/teacherLogin/TeacherRegister.js';
 import TeacherForgetPassword from './components/teacher/teacherLogin/TeacherForgetPassword.js';
-import TeacherDashboard from './components/teacher/TeacherDashboard.js';
 import TeacherProfile from './components/teacher/teacherLogin/TeacherProfile';
 import TeacherEditProfile from './components/teacher/teacherLogin/TeacherEditProfile.js';
 
@@ -159,8 +163,15 @@ function App() {
         <Route path="/admin-forget-password" element={<AdminForgetPassword />} />
         <Route path="/admin-dashboard" element={adminLoggedIn ? <AdminDashboard logout={handleAdminLogOut} /> : <Navigate to="/" />} />
         <Route path="/admin-profile" element={adminLoggedIn ? <AdminProfile logout={handleAdminLogOut} /> : <Navigate to="/admin-login" />} />
+        <Route path="/admin-profile/:id" element={adminLoggedIn ? <AdminEditProfile logout={handleAdminLogOut} /> : <Navigate to="/admin-login" />} />
+
+        <Route path="/admin-reset-password/:resetToken" element={<AdminNewPassword />} />
 
         <Route path="/log-activity" element={adminLoggedIn ? <LogActivity logout={handleAdminLogOut} /> : <Navigate to="/" />} />
+
+        <Route path="/admin-list" element={adminLoggedIn ? <AdminList logout={handleAdminLogOut} /> : <Navigate to="/" />} />
+        <Route path="/admin-list/add-admin" element={adminLoggedIn ? <AddAdmin logout={handleAdminLogOut} /> : <Navigate to="/" />} />
+        <Route path="/admin-list/edit-admin/:id" element={adminLoggedIn ? <EditAdmin logout={handleAdminLogOut} /> : <Navigate to="/" />} />
 
         <Route path="/staff-list" element={adminLoggedIn ? <StaffList logout={handleAdminLogOut} /> : <Navigate to="/" />} />
         <Route path="/staff-list/add-staff" element={adminLoggedIn ? <AddStaff logout={handleAdminLogOut} /> : <Navigate to="/" />} />
