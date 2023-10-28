@@ -69,6 +69,9 @@ import BarcodeEquipment from './components/staff/equipmentCrud/BarcodeEquipment.
 import ReportChemicals from './components/staff/chemicalsCrud/ReportChemicals.js';
 import ReportEquipment from './components/staff/equipmentCrud/ReportEquipment.js';
 
+import AStudentList from './components/staff/approveStudents/AStudentList.js';
+import CurrentStudentList from './components/staff/approveStudents/CurrentStudentList.js';
+
 //------------------------------------------------------------ Teacher ------------------------------------------------------------//
 import TeacherLogin from './components/teacher/teacherLogin/TeacherLogin.js';
 import TeacherRegister from './components/teacher/teacherLogin/TeacherRegister.js';
@@ -224,6 +227,9 @@ function App() {
 
         <Route path="/report-chemicals" element={staffLoggedIn ? <ReportChemicals logout={handleStaffLogOut} /> : <Navigate to="/" />} />
         <Route path="/report-equipment" element={staffLoggedIn ? <ReportEquipment logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+
+        <Route path="/approve-students-list" element={staffLoggedIn ? <AStudentList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/current-students-list" element={staffLoggedIn ? <CurrentStudentList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
 
         {/* -------------------------------------------------------- Teacher -------------------------------------------------------- */}
         <Route path="/teacher-login" element={teacherLoggedIn ? <Navigate to="teacher-dashboard" /> : <TeacherLogin login={handleTeacherLogIn} />} />

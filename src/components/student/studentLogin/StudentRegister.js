@@ -2,6 +2,9 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import '../../cssElement/Form.css'
 
 function StudentRegister() {
@@ -14,7 +17,6 @@ function StudentRegister() {
         Student_Tel: "",
     });
 
-    const navigate = useNavigate();
     axios.defaults.withCredentials = true;
 
     const handleSubmit = (e) => {
@@ -23,13 +25,14 @@ function StudentRegister() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                navigate("/student-login");
+                toast.success('Please wait for the admin to approve your account');
             }
         });
     };
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <main className='form__container'>
                 <form className='form__card form__card--signup' onSubmit={handleSubmit}>
                     <h3 className='form__header'>Student Sign up</h3>

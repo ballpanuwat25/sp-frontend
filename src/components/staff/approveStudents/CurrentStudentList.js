@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
@@ -8,7 +8,10 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function EquipmentListCategory({ logout }) {
+const CurrentStudentList = ({ logout }) => {
+    const [students, setStudents] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
     const [staffInfo, setStaffInfo] = useState({
         staffId: "",
         staffFirstName: "",
@@ -16,21 +19,23 @@ function EquipmentListCategory({ logout }) {
         staffUsername: "",
         staffPassword: "",
         staffTel: "",
-    })
+    });
 
-    const [equipmentCategory, setEquipmentCategory] = useState([]);
-    const [searchQuery, setSearchQuery] = useState(""); // State for search query
-    const [filteredEquipmentCategory, setFilteredEquipmentCategory] = useState([]); // State for filtered equipment categories
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredStudents, setFilteredStudents] = useState([]);
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [checkedStudents, setCheckedStudents] = useState([]);
 
     const navigate = useNavigate();
-
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        getEquipmentCategory();
+        getStudents();
     }, []);
+
+    useEffect(() => {
+        setFilteredStudents(students);
+    }, [students]);
 
     useEffect(() => {
         axios.get("https://special-problem.onrender.com/staff", {
@@ -46,21 +51,34 @@ function EquipmentListCategory({ logout }) {
         });
     }, []);
 
-    const getEquipmentCategory = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
-        setEquipmentCategory(response.data);
-        setFilteredEquipmentCategory(response.data); // Initialize filtered equipment categories with all categories
+    const getStudents = async () => {
+        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        setStudents(response.data);
         setIsLoading(false);
-    }
+    };
 
-    const deleteEquipmentCategory = async (id) => {
+    const deleteStudent = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/equipmentCategory-list/${id}`)
-            getEquipmentCategory();
+            await axios.delete(`https://special-problem.onrender.com/student-list/${id}`)
+            getStudents();
         } catch (error) {
-            console.log(error)
+            console.error(error);
         }
-    }
+    };
+
+    const handleSearch = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        const filteredStudents = students.filter((student) =>
+            student.Student_Id.toLowerCase().includes(query.toLowerCase()) ||
+            student.Student_FName.toLowerCase().includes(query.toLowerCase()) ||
+            student.Student_LName.toLowerCase().includes(query.toLowerCase()) ||
+            student.Student_Email.toLowerCase().includes(query.toLowerCase())
+        );
+
+        setFilteredStudents(filteredStudents);
+    };
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
@@ -74,23 +92,6 @@ function EquipmentListCategory({ logout }) {
         });
     };
 
-    // Function to handle search input changes and filter equipment categories
-    const handleSearch = (e) => {
-        const query = e.target.value;
-        setSearchQuery(query);
-
-        // Use the query to filter equipment categories based on Equipment_Category_Id or any other property
-        const filteredCategories = equipmentCategory.filter((category) => {
-            return (
-                category.Equipment_Category_Id.toLowerCase().includes(query.toLowerCase()) ||
-                category.Equipment_Category_Name.toLowerCase().includes(query.toLowerCase())
-                // Add more conditions as needed for other properties
-            );
-        });
-
-        setFilteredEquipmentCategory(filteredCategories);
-    }
-
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
@@ -102,11 +103,10 @@ function EquipmentListCategory({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                         
-<Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
-                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" /><div className='sidebar__item--active'> Equipment</div></Link>
+                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" />  Chemicals</Link>
+                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
-<Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
+                        <Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /><div className='sidebar__item--active'> Users</div></Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
@@ -128,9 +128,9 @@ function EquipmentListCategory({ logout }) {
                                     <input
                                         type="text"
                                         className="component__search"
-                                        placeholder="ค้นหาด้วยรหัสหรือชื่อหมวดหมู่ครุภัณฑ์"
-                                        value={searchQuery} // Bind input value to searchQuery state
-                                        onChange={handleSearch} // Call handleSearch when input changes
+                                        placeholder="ค้นหาด้วยชื่อหรือรหัสนิสิต"
+                                        value={searchQuery}
+                                        onChange={handleSearch}
                                     />
                                 </div>
 
@@ -142,40 +142,32 @@ function EquipmentListCategory({ logout }) {
 
                             <div>
                                 <div className='table__tabs'>
-                                    <Link to="/equipment-list" className='table__tab table__tab--chemicals table__tab--unactive'>ครุภัณฑ์</Link>
-                                    <Link className='table__tab table__tab--equipment table__tab--active'>หมวดหมู่ครุภัณฑ์</Link>
-                                    <Link to="/report-equipment" className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
+                                    <Link to="/approve-students-list" className='table__tab table__tab--chemicals table__tab--unactive'>นิสิตรอการอนุมัติ</Link>
+                                    <Link className='table__tab table__tab--chemicals table__tab--active'>นิสิตปัจจุบัน</Link>
                                 </div>
 
                                 <table className="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">รหัสหมวดหมู่ครุภัณฑ์</th>
-                                            <th scope="col">หมวดหมู่ครุภัณฑ์</th>
                                             <th scope="col">
-                                                <Link to={`add-equipmentCategory`} className="buttonTab-btn thai--font disable--link"><i className="fa-solid fa-square-plus me-2" /> เพิ่มหมวดหมู่ครุภัณฑ์</Link>
+                                                #
                                             </th>
+                                            <th scope="col">รหัสนิสิต</th>
+                                            <th scope="col">ชื่อ-สกุล</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">เบอร์โทรศัพท์</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {filteredEquipmentCategory.map((equipmentCategory, index) => (
+                                        {(searchQuery ? filteredStudents : students).map((students, index) => (
                                             <tr key={index} className="active-row">
-                                                <td> {index + 1} </td>
-                                                <td> {equipmentCategory.Equipment_Category_Id} </td>
-                                                <td> {equipmentCategory.Equipment_Category_Name} </td>
                                                 <td>
-                                                    <div className="d-grid gap-2 d-sm-flex">
-                                                        <Link to={`edit-equipmentCategory/${equipmentCategory.Equipment_Category_Id}`} className="edit--btn">
-                                                            <i className="fa-solid fa-pen-to-square" />
-                                                            แก้ไข
-                                                        </Link>
-                                                        <button className="delete--btn btn-danger" type="button" onClick={() => deleteEquipmentCategory(equipmentCategory.Equipment_Category_Id)}>
-                                                            <i className="fa-solid fa-trash" />
-                                                            ลบ
-                                                        </button>
-                                                    </div>
+                                                    {index + 1}
                                                 </td>
+                                                <td> {students.Student_Id} </td>
+                                                <td> {students.Student_FName} {students.Student_LName} </td>
+                                                <td> {students.Student_Email}</td>
+                                                <td> {students.Student_Tel}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -206,4 +198,4 @@ function EquipmentListCategory({ logout }) {
     )
 }
 
-export default EquipmentListCategory
+export default CurrentStudentList;
