@@ -16,6 +16,7 @@ function StaffProfile({ logout }) {
         staffEmail: "",
         staffUsername: "",
         staffPassword: "",
+        staffTel: "",
     });
 
     const navigate = useNavigate();
@@ -65,7 +66,7 @@ function StaffProfile({ logout }) {
                         <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" /> Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
-<Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
+                        <Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> <div className='sidebar__item--active'> Profile</div></Link>
                     </div>
 
@@ -88,10 +89,12 @@ function StaffProfile({ logout }) {
 
                     <div className="d-flex flex-column">
                         <p className="profile__label">รหัสเจ้าหน้าที่: {staffInfo.staffId}</p>
+                        <p className="profile__label">ชื่อผู้ใช้: {staffInfo.staffUsername}</p>
                         <p className="profile__label">ชื่อ: {staffInfo.staffFirstName}</p>
                         <p className="profile__label">นามสกุล: {staffInfo.staffLastName}</p>
                         <p className="profile__label">อีเมล: {staffInfo.staffEmail}</p>
-                        <p className="profile__label">ชื่อผู้ใช้: {staffInfo.staffUsername}</p>
+                        <p className="profile__label">เบอร์โทรศัพท์: {staffInfo.staffTel}</p>
+
                         <Link to={`/staff-profile/${staffInfo.staffId}`} className='btn edit--btn thai--font'>แก้ไขข้อมูล</Link>
                     </div>
                 </main>

@@ -80,7 +80,7 @@ function StudentLogin() {
   };
 
   const notifyPassword = () => toast.error("Incorrect password");
-    const notifyUsername = () => toast.error("Email does not exist");
+  const notifyUsername = () => toast.error("Email does not exist");
 
   return (
     <div className='container-fluid vh-100'>

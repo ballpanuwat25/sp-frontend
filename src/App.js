@@ -99,6 +99,9 @@ import StudentForgetPassword from './components/student/studentLogin/StudentForg
 import StudentDashboard from './components/student/StudentDashboard.js';
 import StudentProfile from './components/student/studentLogin/StudentProfile';
 
+import StudentNewPassword from './components/student/studentLogin/StudentNewPassword.js';
+import StudentEditProfile from './components/student/studentLogin/StudentEditProfile.js';
+
 import StudentChemicalsList from './components/student/studentReq/studentChemReq/StudentChemicalsList.js';
 import StudentChemicalsCart from './components/student/studentReq/studentChemReq/StudentChemicalsCart.js';
 import StudentChemicalsRequest from './components/student/studentReq/studentChemReq/StudentChemicalsRequest.js';
@@ -257,6 +260,9 @@ function App() {
         <Route path="/student-forget-password" element={<StudentForgetPassword />} />
         <Route path="/student-dashboard" element={<StudentDashboard />} />
         <Route path="/student-profile" element={<StudentProfile />} />
+
+        <Route path="/student-profile/:id" element={<StudentEditProfile />} />
+        <Route path="/student-reset-password/:resetToken" element={<StudentNewPassword />} />
 
         <Route path="/student-dashboard/student-chemicals-request" element={<StudentChemicalsRequest />} />
         <Route path="/student-dashboard/student-chemicals-list" element={<StudentChemicalsList />} />

@@ -14,6 +14,7 @@ function AdminProfile({ logout }) {
         adminFirstName: "",
         adminLastName: "",
         adminEmail: "",
+        adminTel: "",
         adminUsername: "",
         adminPassword: "",
     });
@@ -83,10 +84,11 @@ function AdminProfile({ logout }) {
 
                     <div className="d-flex flex-column">
                         <p className="profile__label">รหัสผู้ดูแล: {adminInfo.adminId}</p>
+                        <p className="profile__label">ชื่อผู้ใช้: {adminInfo.adminUsername}</p>
                         <p className="profile__label">ชื่อ: {adminInfo.adminFirstName}</p>
                         <p className="profile__label">นามสกุล: {adminInfo.adminLastName}</p>
                         <p className="profile__label">อีเมล: {adminInfo.adminEmail}</p>
-                        <p className="profile__label">ชื่อผู้ใช้: {adminInfo.adminUsername}</p>
+                        <p className="profile__label">เบอร์โทรศัพท์: {adminInfo.adminTel}</p>
                         <Link to={`/admin-profile/${adminInfo.adminId}`} className='btn edit--btn thai--font'>แก้ไขข้อมูล</Link>
                     </div>
                 </main>

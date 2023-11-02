@@ -16,7 +16,6 @@ const TeacherList = ({ logout }) => {
     const [filteredTeachers, setFilteredTeachers] = useState([]);
 
     const [adminInfo, setAdminInfo] = useState({
-        adminName: "",
         adminUsername: "",
         adminPassword: "",
         adminTel: "",

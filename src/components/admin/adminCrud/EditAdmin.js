@@ -12,6 +12,34 @@ import 'react-toastify/dist/ReactToastify.css';
 import logo from '../../assets/logo.png';
 
 function EditAdmin({ logout }) {
+    const [adminInfo, setAdminInfo] = useState({
+        adminUsername: "",
+        adminPassword: "",
+        adminTel: "",
+    });
+
+    const navigate = useNavigate();
+
+    axios.defaults.withCredentials = true;
+
+    useEffect(() => {
+        axios.get("https://special-problem.onrender.com/admin", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+            },
+        })
+            .then((response) => {
+                if (response.data.Error) {
+                    console.error("Admin Request Error:", response.data.Error);
+                } else {
+                    setAdminInfo(response.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Admin Request Failed:", error);
+            });
+    }, []);
+
     const [Admin_FName, setAdmin_FName] = useState("");
     const [Admin_LName, setAdmin_LName] = useState("");
     const [Admin_Email, setAdmin_Email] = useState(""); 
@@ -67,35 +95,6 @@ function EditAdmin({ logout }) {
     };
 
     const notify = () => toast.warn("Username already exists");
-
-    const [adminInfo, setAdminInfo] = useState({
-        adminName: "",
-        adminUsername: "",
-        adminPassword: "",
-        adminTel: "",
-    });
-
-    const navigate = useNavigate();
-
-    axios.defaults.withCredentials = true;
-
-    useEffect(() => {
-        axios.get("https://special-problem.onrender.com/admin", {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
-            },
-        })
-            .then((response) => {
-                if (response.data.Error) {
-                    console.error("Admin Request Error:", response.data.Error);
-                } else {
-                    setAdminInfo(response.data);
-                }
-            })
-            .catch((error) => {
-                console.error("Admin Request Failed:", error);
-            });
-    }, []);
 
     const handleLogout = () => {
         axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {

@@ -2,6 +2,9 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import '../../cssElement/Form.css';
 
 function TeacherNewPassword() {
@@ -62,7 +65,7 @@ function TeacherNewPassword() {
         e.preventDefault();
 
         if (Teacher_Password !== confirmPassword) {
-            alert("Password and Confirm Password do not match");
+            toast.error("Password and Confirm Password do not match");
             return;
         } else {
             try {
@@ -103,6 +106,7 @@ function TeacherNewPassword() {
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <main className='form__container'>
                 <form onSubmit={updateTeacherInfo} className="form__card form__card--login">
                     <h3 className='form__header'>New Password</h3>

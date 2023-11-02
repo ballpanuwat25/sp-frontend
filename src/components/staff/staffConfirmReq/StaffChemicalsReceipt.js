@@ -23,8 +23,6 @@ function StaffChemicalsReceipt({ logout }) {
     const [chemicalsReq, setChemicalsReq] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const [selectedIds, setSelectedIds] = useState([]);
-
     const [isLoading, setIsLoading] = useState(true);
 
     const [chemicalsDetail, setChemicalsDetail] = useState([]);

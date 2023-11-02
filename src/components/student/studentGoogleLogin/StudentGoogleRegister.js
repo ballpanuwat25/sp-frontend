@@ -2,6 +2,9 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function StudentGoogleRegister() {
     const [user, setUser] = useState({});
     const [values, setValues] = useState({
@@ -22,13 +25,7 @@ function StudentGoogleRegister() {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
-                axios.post("https://special-problem.onrender.com/student-login", values).then((response) => {
-                    if (response.data.Error) {
-                        alert(response.data.Error);
-                    } else {
-                        navigate("/student-login");
-                    }
-                });
+                toast.success('Please wait for the admin to approve your account');
             }
         });
     };
@@ -52,6 +49,7 @@ function StudentGoogleRegister() {
 
     return (
         <div className='container-fluid vh-100'>
+            <ToastContainer />
             <main className='form__container'>
                 <form className='form__card form__card--signup' onSubmit={handleSubmit}>
                     <h3 className='form__header'>Information</h3>

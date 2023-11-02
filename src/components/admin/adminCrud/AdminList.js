@@ -13,7 +13,6 @@ const AdminList = ({ logout }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     const [adminInfo, setAdminInfo] = useState({
-        adminName: "",
         adminUsername: "",
         adminPassword: "",
         adminTel: "",

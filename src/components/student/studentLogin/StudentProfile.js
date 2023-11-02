@@ -18,6 +18,7 @@ function StudentProfile() {
         studentLastName: "",
         studentEmail: "",
         studentPassword: "",
+        studentTel: "",
     });
 
     const [values, setValues] = useState({
@@ -117,64 +118,16 @@ function StudentProfile() {
                             <div>{user_email}</div>
                         </div>
                     </div>
-                    <form onSubmit={handleSubmit}>
-                        <div className='profile__form'>
-                            <label className='profile__label'>รหัสนิสิต:</label>
-                            <input
-                                type="text"
-                                readOnly
-                                className='profile__input profile__input--readonly'
-                                placeholder='studentid'
-                                defaultValue={studentInfo.studentId}
-                            />
-                        </div>
+                    
+                    <div className="d-flex flex-column">
+                        <p className="profile__label">รหัสนิสิต: {studentInfo.studentId}</p>
+                        <p className="profile__label">ชื่อ: {studentInfo.studentFirstName}</p>
+                        <p className="profile__label">นามสกุล: {studentInfo.studentLastName}</p>
+                        <p className="profile__label">อีเมล: {studentInfo.studentEmail}</p>
+                        <p className="profile__label">เบอร์โทรศัพท์: {studentInfo.studentTel}</p>
 
-                        <div className='profile__form'>
-                            <label className='profile__label'>ชื่อ:</label> <br />
-                            <input
-                                type="text"
-                                readOnly
-                                className='profile__input profile__input--readonly'
-                                placeholder='firstname'
-                                defaultValue={studentInfo.studentFirstName}
-                            />
-                        </div>
-
-                        <div className='profile__form'>
-                            <label className='profile__label'>นามสกุล:</label> <br />
-                            <input
-                                type="text"
-                                readOnly
-                                className='profile__input profile__input--readonly'
-                                placeholder='lastname'
-                                defaultValue={studentInfo.studentLastName}
-                            />
-                        </div>
-
-                        <div className='profile__form'>
-                            <label className='profile__label'>Email:</label> <br />
-                            <input
-                                type="text"
-                                readOnly
-                                className='profile__input profile__input--readonly'
-                                placeholder='email'
-                                defaultValue={studentInfo.studentEmail}
-                            />
-                        </div>
-
-                        <div className='profile__form'>
-                            <label className='profile__label'>รหัสผ่านใหม่:</label>
-                            <input
-                                type="password"
-                                className='profile__input'
-                                placeholder='new password'
-                                values={values.Student_Password}
-                                onChange={(e) => setValues({ ...values, Student_Password: e.target.value })}
-                            />
-                        </div>
-
-                        <button type="submit" className="profile__button">Submit</button>
-                    </form>
+                        <Link to={`/student-profile/${studentInfo.studentId}`} className='btn edit--btn thai--font'>แก้ไขข้อมูล</Link>
+                    </div>
                 </main>
 
                 <footer className='footer'>

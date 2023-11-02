@@ -15,7 +15,6 @@ import logo from '../assets/logo.png';
 
 function AdminDashboard({ logout }) {
     const [adminInfo, setAdminInfo] = useState({
-        adminName: "",
         adminUsername: "",
         adminPassword: "",
         adminTel: "",

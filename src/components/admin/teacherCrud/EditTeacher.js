@@ -69,7 +69,6 @@ function EditTeacher({ logout }) {
     const notify = () => toast.warn("Username already exists");
 
     const [adminInfo, setAdminInfo] = useState({
-        adminName: "",
         adminUsername: "",
         adminPassword: "",
         adminTel: "",

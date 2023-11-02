@@ -1,28 +1,25 @@
 import axios from "axios";
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom';
-
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import '../../cssElement/Table.css'
 import '../../cssElement/Form.css'
 import '../../cssElement/Dashboard.css'
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import logo from '../../assets/logo.png';
-import { tr } from "date-fns/locale";
 
 function AdminEditProfile({ logout }) {
     const [adminInfo, setAdminInfo] = useState({
-        adminId: "",
-        adminFirstName: "",
-        adminLastName: "",
-        adminEmail: "",
         adminUsername: "",
         adminPassword: "",
+        adminTel: "",
     });
 
     const navigate = useNavigate();
+
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
@@ -43,6 +40,15 @@ function AdminEditProfile({ logout }) {
             });
     }, []);
 
+    const [Admin_FName, setAdmin_FName] = useState("");
+    const [Admin_LName, setAdmin_LName] = useState("");
+    const [Admin_Email, setAdmin_Email] = useState(""); 
+    const [Admin_Username, setAdmin_Username] = useState("");
+    const [Admin_Password, setAdmin_Password] = useState("");
+    const [Admin_Tel, setAdmin_Tel] = useState("");
+
+    const { id } = useParams();
+
     useEffect(() => {
         getAdminsById()
     }, [])
@@ -58,42 +64,23 @@ function AdminEditProfile({ logout }) {
         setAdmin_Tel(admin.Admin_Tel);
     };
 
-    const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
-            if (response.data.Error) {
-                alert(response.data.Error);
-            } else {
-                localStorage.removeItem('adminToken');
-                navigate("/");
-                logout();
-            }
-        });
-    };
-
-    const [Admin_FName, setAdmin_FName] = useState("");
-    const [Admin_LName, setAdmin_LName] = useState("");
-    const [Admin_Email, setAdmin_Email] = useState("");
-    const [Admin_Username, setAdmin_Username] = useState("");
-    const [Admin_Password, setAdmin_Password] = useState("");
-    const [Admin_Tel, setAdmin_Tel] = useState("");
-
-    const { id } = useParams();
-
-    const updateAdminInfo = async (e) => {
+    const updateAdmin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`https://special-problem.onrender.com/admin-list/${id}`, {
+            const response = await axios.patch(`https://special-problem.onrender.com/admin-list/${id}`, {
                 Admin_FName,
                 Admin_LName,
-                Admin_Email,
                 Admin_Username,
+                Admin_Email,
                 Admin_Password,
                 Admin_Tel
             });
 
             if (response.status === 200) {
+                // Admin Updated successfully, navigate to admin list
                 handleLogout();
             } else {
+                // Handle other possible responses
                 console.log("Unexpected response:", response);
             }
         } catch (err) {
@@ -109,10 +96,22 @@ function AdminEditProfile({ logout }) {
 
     const notify = () => toast.warn("Username already exists");
 
+    const handleLogout = () => {
+        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
+            if (response.data.Error) {
+                alert(response.data.Error);
+            } else {
+                logout();
+                localStorage.removeItem('adminToken');
+                navigate("/");
+            }
+        });
+    };
+
     return (
         <div className='container-fluid vh-100'>
             <ToastContainer />
-            <div className="dashboard__container">
+            <div className='dashboard__container'>
                 <aside className='sidebar'>
                     <div className='sidebar__header'>
                         <img src={logo} alt="logo" className='sidebar__logo' width={49} height={33} />
@@ -120,8 +119,8 @@ function AdminEditProfile({ logout }) {
                     </div>
                     <div className='sidebar__body'>
                         <Link to="/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
-                        <Link to="/admin-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
-                        <Link to="/admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> <div className='sidebar__item--active'>Profile</div></Link>
+                        <Link to="/admin-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
+                        <Link to="/admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
@@ -138,7 +137,7 @@ function AdminEditProfile({ logout }) {
                         </div>
                     </div>
 
-                    <form onSubmit={updateAdminInfo}>
+                    <form onSubmit={updateAdmin}>
                         <div className='profile__form'>
                             <div className="mb-3">
                                 <label htmlFor="Admin_FName" className='profile__label'>ชื่อจริง</label>
@@ -172,7 +171,7 @@ function AdminEditProfile({ logout }) {
 
                             <div className="mb-3">
                                 <label htmlFor="Admin_Username" className='profile__label'>Username</label>
-                                <input type="text" className='profile__input' id="Admin_Username" placeholder="Enter Admin Username"
+                                <input type="text" className='profile__input' id="Admin_Username" placeholder="Enter Admin Username" required
                                     value={Admin_Username}
                                     onChange={(e) => {
                                         setAdmin_Username(e.target.value);
@@ -203,21 +202,21 @@ function AdminEditProfile({ logout }) {
                             <button type="submit" className="profile__button thai--font">อัพเดตข้อมูล</button>
                         </div>
                     </form>
-
-                    <footer className='footer'>
-                        <Link to="/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                        <Link to="/admin-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
-                        <div className="dropup">
-                            <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
-                                <i className="fa-solid fa-user" />
-                            </button>
-                            <ul class="dropdown-menu">
-                                <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
-                                <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
-                            </ul>
-                        </div>
-                    </footer>
                 </main>
+
+                <footer className='footer'>
+                    <Link to="/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to="/admin-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
+                    <div className="dropup">
+                        <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
+                            <i className="fa-solid fa-user" />
+                        </button>
+                        <ul class="dropdown-menu">
+                            <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
+                        </ul>
+                    </div>
+                </footer>
             </div>
         </div>
     )
