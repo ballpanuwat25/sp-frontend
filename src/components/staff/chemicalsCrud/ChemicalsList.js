@@ -42,7 +42,7 @@ function ChemicalsList({ logout }) {
     }, [scannedCode, searchQuery]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -62,13 +62,13 @@ function ChemicalsList({ logout }) {
     }, []);
 
     const getChemicals = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicals-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicals-list");
         setChemicals(response.data);
         setIsLoading(false)
     }
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicalsDetail-list");
         setChemicalsDetail(response.data);
         setIsLoading(false)
     }
@@ -76,8 +76,8 @@ function ChemicalsList({ logout }) {
     const deleteChemicals = async (id) => {
         try {
             const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Chemicals", Chem_Bottle_Id: id, Staff_Id: staffId };
-            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
-            await axios.delete(`https://special-problem.onrender.com/chemicals-list/${id}`)
+            await axios.post(process.env.REACT_APP_API + "/log-activity", updatedLogActivity);
+            await axios.delete(process.env.REACT_APP_API + `/chemicals-list/${id}`)
             getChemicals();
         } catch (error) {
             console.log(error)
@@ -114,7 +114,7 @@ function ChemicalsList({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -128,7 +128,7 @@ function ChemicalsList({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -170,8 +170,8 @@ function ChemicalsList({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>

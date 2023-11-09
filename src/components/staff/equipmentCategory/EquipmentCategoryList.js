@@ -33,7 +33,7 @@ function EquipmentListCategory({ logout }) {
     }, []);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -47,7 +47,7 @@ function EquipmentListCategory({ logout }) {
     }, []);
 
     const getEquipmentCategory = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/equipmentCategory-list");
         setEquipmentCategory(response.data);
         setFilteredEquipmentCategory(response.data); // Initialize filtered equipment categories with all categories
         setIsLoading(false);
@@ -55,7 +55,7 @@ function EquipmentListCategory({ logout }) {
 
     const deleteEquipmentCategory = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/equipmentCategory-list/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/equipmentCategory-list/${id}`)
             getEquipmentCategory();
         } catch (error) {
             console.log(error)
@@ -63,7 +63,7 @@ function EquipmentListCategory({ logout }) {
     }
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -117,8 +117,8 @@ function EquipmentListCategory({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>

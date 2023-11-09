@@ -41,7 +41,7 @@ function AStudentList({ logout }) {
     }, [students]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -55,14 +55,14 @@ function AStudentList({ logout }) {
     }, []);
 
     const getStudents = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/approve-student-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/approve-student-list");
         setStudents(response.data);
         setIsLoading(false);
     };
 
     const handleApprove = async (id, firstName, lastName, email, tel, password) => {
         try {
-            await axios.post("https://special-problem.onrender.com/student-list", {
+            await axios.post(process.env.REACT_APP_API + "/student-list", {
                 Student_Id: id,
                 Student_FName: firstName,
                 Student_LName: lastName,
@@ -79,7 +79,7 @@ function AStudentList({ logout }) {
 
     const deleteStudent = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/approve-student-list/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/approve-student-list/${id}`)
             getStudents();
         } catch (error) {
             console.error(error);
@@ -138,7 +138,7 @@ function AStudentList({ logout }) {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -175,8 +175,8 @@ function AStudentList({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>

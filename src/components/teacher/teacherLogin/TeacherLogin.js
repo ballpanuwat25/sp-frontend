@@ -23,7 +23,7 @@ function TeacherLogin({ login }) {
 
         // Check if the username exists
         try {
-            const response = await axios.get("https://special-problem.onrender.com/teacher-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/teacher-list");
             const teacherList = response.data;
             const teacher = teacherList.find((teacher) => teacher.Teacher_Username === values.Teacher_Username);
 
@@ -40,7 +40,7 @@ function TeacherLogin({ login }) {
 
         // Check if the password is correct
         try {
-            const response = await axios.get("https://special-problem.onrender.com/teacher-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/teacher-list");
             const teacherList = response.data;
             const teacher = teacherList.find((teacher) => teacher.Teacher_Password === values.Teacher_Password);
 
@@ -58,7 +58,7 @@ function TeacherLogin({ login }) {
         setLoginInProgress(true);
 
         // If both username and password are valid, proceed with login
-        axios.post("https://special-problem.onrender.com/teacher-login", values)
+        axios.post(process.env.REACT_APP_API + "/teacher-login", values)
             .then((response) => {
                 console.log(response);
                 if (response.data.Error) {

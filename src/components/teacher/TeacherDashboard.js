@@ -33,7 +33,7 @@ function TeacherDashboard({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher", {
+        axios.get(process.env.REACT_APP_API + "/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -54,7 +54,7 @@ function TeacherDashboard({ logout }) {
     const notify = () => toast.info("หลังใช้งานเสร็จควรออกจากระบบทุกครั้ง เพื่อไม่ให้เกิดปัญหาในการเข้าสู่ระบบครั้งถัดไป");
 
     const getChemicalsRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicals-request-list");
         setChemicalsReq(response.data);
     };
 
@@ -90,7 +90,7 @@ function TeacherDashboard({ logout }) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`https://special-problem.onrender.com/chemicals-request-list/${id}`, data);
+            await axios.patch(process.env.REACT_APP_API + `/chemicals-request-list/${id}`, data);
             getChemicalsRequest(); // Refresh the chemicals request list after updating status
         } catch (error) {
             console.log(error);
@@ -142,7 +142,7 @@ function TeacherDashboard({ logout }) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -160,7 +160,7 @@ function TeacherDashboard({ logout }) {
     }, []);
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicalsDetail-list");
         setChemicalsDetail(response.data);
     };
 
@@ -345,7 +345,7 @@ function TeacherDashboard({ logout }) {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>

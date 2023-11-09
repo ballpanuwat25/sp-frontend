@@ -32,7 +32,7 @@ function TeacherEditProfile({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher", {
+        axios.get(process.env.REACT_APP_API + "/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -54,7 +54,7 @@ function TeacherEditProfile({ logout }) {
     }, [])
 
     const getTeachersById = async () => {
-        const response = await axios.get(`https://special-problem.onrender.com/teacher-list/${id}`);
+        const response = await axios.get(process.env.REACT_APP_API + `/teacher-list/${id}`);
         const teacher = response.data;
         setTeacher_FName(teacher.Teacher_FName);
         setTeacher_LName(teacher.Teacher_LName);
@@ -65,7 +65,7 @@ function TeacherEditProfile({ logout }) {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -81,7 +81,7 @@ function TeacherEditProfile({ logout }) {
     const updateTeacherInfo = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.patch(`https://special-problem.onrender.com/teacher-list/${id}`, {
+            const response = await axios.patch(process.env.REACT_APP_API + `/teacher-list/${id}`, {
                 Teacher_FName,
                 Teacher_LName,
                 Teacher_Email,
@@ -210,7 +210,7 @@ function TeacherEditProfile({ logout }) {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>

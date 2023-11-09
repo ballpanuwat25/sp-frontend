@@ -31,7 +31,7 @@ function StaffDashboard({logout}) {
     }, [searchQuery]);
 
     const getChemicalsRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicals-request-list");
         const filteredChemicalsReq = response.data.filter(chemicalsReq => {
             return (
                 chemicalsReq.Student_Id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -47,7 +47,7 @@ function StaffDashboard({logout}) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`https://special-problem.onrender.com/chemicals-request-list/${id}`, data);
+            await axios.patch(process.env.REACT_APP_API + `/chemicals-request-list/${id}`, data);
         } catch (error) {
             console.log(error);
         }
@@ -55,7 +55,7 @@ function StaffDashboard({logout}) {
 
     const deleteChemicalsRequest = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/chemicals-request-list/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/chemicals-request-list/${id}`)
             getChemicalsRequest();
         } catch (error) {
             console.log(error)
@@ -106,7 +106,7 @@ function StaffDashboard({logout}) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -120,7 +120,7 @@ function StaffDashboard({logout}) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

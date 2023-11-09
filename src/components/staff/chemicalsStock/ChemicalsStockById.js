@@ -16,7 +16,7 @@ function ChemicalsStockById({ logout }) {
 
     const getChemicalsByChemId = async (chemId) => {
         try {
-            const response = await axios.get(`https://special-problem.onrender.com/chemicals-list/chemid/${chemId}`);
+            const response = await axios.get(process.env.REACT_APP_API + `/chemicals-list/chemid/${chemId}`);
             setChemicals(response.data);
             setFilteredChemicals(response.data); // Initialize filtered chemicals with all chemicals
         } catch (error) {
@@ -42,7 +42,7 @@ function ChemicalsStockById({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -56,7 +56,7 @@ function ChemicalsStockById({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

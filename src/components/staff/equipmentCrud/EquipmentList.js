@@ -56,7 +56,7 @@ function EquipmentList({ logout }) {
     }, [scannedCode, searchQuery]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -71,7 +71,7 @@ function EquipmentList({ logout }) {
     }, [logActivity]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -86,7 +86,7 @@ function EquipmentList({ logout }) {
 
     const getEquipment = async () => {
         try {
-            const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/equipment-list");
             setEquipment(response.data);
             setFilteredEquipment(response.data); // Initialize filtered equipment with all equipment
             setIsLoading(false);
@@ -97,7 +97,7 @@ function EquipmentList({ logout }) {
 
     const getEquipmentCategory = async () => {
         try {
-            const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/equipmentCategory-list");
             setEquipmentCategory(response.data);
             setIsLoading(false);
         } catch (error) {
@@ -106,7 +106,7 @@ function EquipmentList({ logout }) {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -120,8 +120,8 @@ function EquipmentList({ logout }) {
     const deleteEquipment = async (id) => {
         try {
             const updatedLogActivity = { ...logActivity, LogActivity_Name: "Delete Equipment", Equipment_Id: id, Staff_Id: staffId };
-            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
-            await axios.delete(`https://special-problem.onrender.com/equipment-list/${id}`)
+            await axios.post(process.env.REACT_APP_API + "/log-activity", updatedLogActivity);
+            await axios.delete(process.env.REACT_APP_API + `/equipment-list/${id}`)
             getEquipment();
         } catch (error) {
             console.log(error)
@@ -179,8 +179,8 @@ function EquipmentList({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>

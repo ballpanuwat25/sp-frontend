@@ -48,7 +48,7 @@ function TeacherChemicalsRequest({ logout }) {
     }, []);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher", {
+        axios.get(process.env.REACT_APP_API + "/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -62,7 +62,7 @@ function TeacherChemicalsRequest({ logout }) {
     }, []);
 
     const getChemicalsRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicals-request-list");
         setChemicalsReq(response.data);
         setIsLoading(false);
     };
@@ -99,7 +99,7 @@ function TeacherChemicalsRequest({ logout }) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`https://special-problem.onrender.com/chemicals-request-list/${id}`, data);
+            await axios.patch(process.env.REACT_APP_API + `/chemicals-request-list/${id}`, data);
             getChemicalsRequest(); // Refresh the chemicals request list after updating status
         } catch (error) {
             console.log(error);
@@ -125,7 +125,7 @@ function TeacherChemicalsRequest({ logout }) {
     const handleDeleteChecked = async () => {
         try {
             for (const id of selectedIds) {
-                await axios.delete(`https://special-problem.onrender.com/chemicals-request-list/${id}`);
+                await axios.delete(process.env.REACT_APP_API + `/chemicals-request-list/${id}`);
             }
             getChemicalsRequest(); // Refresh the chemicals request list after deleting
             setSelectedIds([]); // Clear the selectedIds after successful deletion
@@ -136,7 +136,7 @@ function TeacherChemicalsRequest({ logout }) {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/chemicals-request-list/${id}`);
+            await axios.delete(process.env.REACT_APP_API + `/chemicals-request-list/${id}`);
             getChemicalsRequest(); // Refresh the chemicals request list after deleting
         } catch (error) {
             console.log(error);
@@ -193,7 +193,7 @@ function TeacherChemicalsRequest({ logout }) {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -205,7 +205,7 @@ function TeacherChemicalsRequest({ logout }) {
     };
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicalsDetail-list");
         setChemicalsDetail(response.data);
         setIsLoading(false);
     };
@@ -233,7 +233,7 @@ function TeacherChemicalsRequest({ logout }) {
     };
 
     const getStudent = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/student-list");
         setStudent(response.data);
     }
 
@@ -263,8 +263,8 @@ function TeacherChemicalsRequest({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>
@@ -426,7 +426,7 @@ function TeacherChemicalsRequest({ logout }) {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>

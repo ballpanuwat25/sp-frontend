@@ -29,7 +29,7 @@ function StaffNewPassword() {
     }, [])
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -48,7 +48,7 @@ function StaffNewPassword() {
     }, []);
 
     const getStaffsById = async () => {
-        const response = await axios.get(`https://special-problem.onrender.com/staff-list/${id}`);
+        const response = await axios.get(process.env.REACT_APP_API + `/staff-list/${id}`);
         const staff = response.data;
         setStaff_FName(staff.Staff_FName);
         setStaff_LName(staff.Staff_LName);
@@ -66,7 +66,7 @@ function StaffNewPassword() {
             return;
         } else {
             try {
-                const response = await axios.patch(`https://special-problem.onrender.com/staff-list/${id}`, {
+                const response = await axios.patch(process.env.REACT_APP_API + `/staff-list/${id}`, {
                     Staff_FName,
                     Staff_LName,
                     Staff_Email,
@@ -91,7 +91,7 @@ function StaffNewPassword() {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

@@ -46,7 +46,7 @@ function AddChemicals({ logout }) {
     }, [scannedCode, chemicals.Chem_Bottle_Id]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -66,15 +66,15 @@ function AddChemicals({ logout }) {
             const { Chem_Bottle_Id } = chemicals;
 
             // Check if Chem_Id already exists
-            const chemBottleIdExists = await axios.get(`https://special-problem.onrender.com/chemicals-list/${Chem_Bottle_Id}`);
+            const chemBottleIdExists = await axios.get(process.env.REACT_APP_API + `/chemicals-list/${Chem_Bottle_Id}`);
             if (chemBottleIdExists.data) {
                 notifyWarn();
                 return;
             }
 
             const updatedLogActivity = { ...logActivity, LogActivity_Name: "Add Chemicals", Chem_Bottle_Id: Chem_Bottle_Id };
-            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
-            await axios.post("https://special-problem.onrender.com/chemicals-list", chemicals);
+            await axios.post(process.env.REACT_APP_API + "/log-activity", updatedLogActivity);
+            await axios.post(process.env.REACT_APP_API + "/chemicals-list", chemicals);
 
             notifySuccess();
             navigate("/chemicals-list");
@@ -110,7 +110,7 @@ function AddChemicals({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -124,7 +124,7 @@ function AddChemicals({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

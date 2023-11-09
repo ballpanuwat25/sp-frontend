@@ -34,7 +34,7 @@ const StaffList = ({ logout }) => {
     }, [staffs]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/admin", {
+        axios.get(process.env.REACT_APP_API + "/admin", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
             },
@@ -52,14 +52,14 @@ const StaffList = ({ logout }) => {
     }, []);
 
     const getStaffs = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/staff-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/staff-list");
         setStaffs(response.data);
         setIsLoading(false);
     };
 
     const deleteStaff = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/staff-list/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/staff-list/${id}`)
             getStaffs();
         } catch (error) {
             console.log(error)
@@ -67,7 +67,7 @@ const StaffList = ({ logout }) => {
     }
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/admin-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -112,8 +112,8 @@ const StaffList = ({ logout }) => {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>
@@ -180,7 +180,7 @@ const StaffList = ({ logout }) => {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>

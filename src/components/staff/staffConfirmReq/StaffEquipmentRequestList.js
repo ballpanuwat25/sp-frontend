@@ -49,7 +49,7 @@ function StaffEquipmentRequestList({ logout }) {
     }, [searchQuery, filteredStatus]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -63,7 +63,7 @@ function StaffEquipmentRequestList({ logout }) {
     }, []);
 
     const getEquipmentRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/equipment-request-list");
         const filteredEquipmentReq = response.data.filter((equipmentReq) => {
             return (
                 (filteredStatus === "All" || equipmentReq.Request_Status === filteredStatus) &&
@@ -104,7 +104,7 @@ function StaffEquipmentRequestList({ logout }) {
     const handleDeleteChecked = async () => {
         try {
             for (const id of selectedIds) {
-                await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`);
+                await axios.delete(process.env.REACT_APP_API + `/equipment-request-list/${id}`);
             }
             getEquipmentRequest();
             setSelectedIds([]);
@@ -115,7 +115,7 @@ function StaffEquipmentRequestList({ logout }) {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`);
+            await axios.delete(process.env.REACT_APP_API + `/equipment-request-list/${id}`);
             getEquipmentRequest();
         } catch (err) {
             console.log(err);
@@ -128,7 +128,7 @@ function StaffEquipmentRequestList({ logout }) {
                 Request_Status: "Disapproved",
                 Request_Comment: comment,
             };
-            await axios.patch(`https://special-problem.onrender.com/equipment-request-list/${id}`, data);
+            await axios.patch(process.env.REACT_APP_API + `/equipment-request-list/${id}`, data);
         } catch (error) {
             console.log(error);
         }
@@ -136,7 +136,7 @@ function StaffEquipmentRequestList({ logout }) {
 
     const deleteEquipmentRequest = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/equipment-request-list/${id}`)
             getEquipmentRequest();
         } catch (error) {
             console.log(error)
@@ -150,7 +150,7 @@ function StaffEquipmentRequestList({ logout }) {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -179,12 +179,12 @@ function StaffEquipmentRequestList({ logout }) {
     };
 
     const getStudent = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/student-list");
         setStudent(response.data);
     }
 
     const getEquipment = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/equipment-list");
         setEquipment(response.data);
     }
 
@@ -224,8 +224,8 @@ function StaffEquipmentRequestList({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>

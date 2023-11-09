@@ -25,7 +25,7 @@ function StudentLogin() {
 
     // Check if the username exists
     try {
-      const response = await axios.get("https://special-problem.onrender.com/student-list");
+      const response = await axios.get(process.env.REACT_APP_API + "/student-list");
       const studentList = response.data;
       const student = studentList.find((student) => student.Student_Email === values.Student_Email);
 
@@ -42,7 +42,7 @@ function StudentLogin() {
 
     // Check if the password is correct
     try {
-      const response = await axios.get("https://special-problem.onrender.com/student-list");
+      const response = await axios.get(process.env.REACT_APP_API + "/student-list");
       const studentList = response.data;
       const student = studentList.find((student) => student.Student_Password === values.Student_Password);
 
@@ -60,7 +60,7 @@ function StudentLogin() {
     setLoginInProgress(true);
 
     // If both username and password are valid, proceed with login
-    axios.post("https://special-problem.onrender.com/student-login", values)
+    axios.post(process.env.REACT_APP_API + "/student-login", values)
       .then((response) => {
         console.log(response.data.Error);
         if (response.data.Error) {

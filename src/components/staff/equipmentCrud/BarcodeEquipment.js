@@ -19,7 +19,7 @@ function BarcodeEquipment({ logout }) {
     }, []);
 
     const getEquipment = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/equipment-list");
         setEquipment(response.data);
     }
     
@@ -44,7 +44,7 @@ function BarcodeEquipment({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -58,7 +58,7 @@ function BarcodeEquipment({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

@@ -45,7 +45,7 @@ function EquipmentBundleList({ logout }) {
     useEffect(() => {
         getEquipment();
 
-        axios.get("https://special-problem.onrender.com/teacher", {
+        axios.get(process.env.REACT_APP_API + "/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -64,7 +64,7 @@ function EquipmentBundleList({ logout }) {
     }, []);
 
     const getEquipment = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/equipment-list");
         setEquipment(response.data);
         setIsLoading(false);
     }
@@ -101,7 +101,7 @@ function EquipmentBundleList({ logout }) {
     }
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -134,8 +134,8 @@ function EquipmentBundleList({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>
@@ -201,7 +201,7 @@ function EquipmentBundleList({ logout }) {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>

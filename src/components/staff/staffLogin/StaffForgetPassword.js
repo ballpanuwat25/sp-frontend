@@ -18,7 +18,7 @@ function StaffForgetPassword() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post("https://special-problem.onrender.com/staff-forget-password", values)
+        axios.post(process.env.REACT_APP_API + "/staff-forget-password", values)
             .then((response) => {
                 console.log(response);
                 if (response.data.Error) {

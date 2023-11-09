@@ -50,7 +50,7 @@ function TeacherEquipmentRequest({ logout }) {
     }, [teacherInfo.teacherId]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher", {
+        axios.get(process.env.REACT_APP_API + "/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -64,7 +64,7 @@ function TeacherEquipmentRequest({ logout }) {
     }, []);
 
     const getEquipmentRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/equipment-request-list");
         setEquipmentReq(response.data);
         setIsLoading(false);
     };
@@ -101,7 +101,7 @@ function TeacherEquipmentRequest({ logout }) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`https://special-problem.onrender.com/equipment-request-list/${id}`, data);
+            await axios.patch(process.env.REACT_APP_API + `/equipment-request-list/${id}`, data);
             getEquipmentRequest();
         } catch (err) {
             console.log(err);
@@ -127,7 +127,7 @@ function TeacherEquipmentRequest({ logout }) {
     const handleDeleteChecked = async () => {
         try {
             for (const id of selectedIds) {
-                await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`);
+                await axios.delete(process.env.REACT_APP_API + `/equipment-request-list/${id}`);
             }
             getEquipmentRequest();
             setSelectedIds([]);
@@ -138,7 +138,7 @@ function TeacherEquipmentRequest({ logout }) {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/equipment-request-list/${id}`);
+            await axios.delete(process.env.REACT_APP_API + `/equipment-request-list/${id}`);
             getEquipmentRequest();
         } catch (err) {
             console.log(err);
@@ -175,7 +175,7 @@ function TeacherEquipmentRequest({ logout }) {
     const [filteredEquipmentReq, setFilteredEquipmentReq] = useState([]);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -187,7 +187,7 @@ function TeacherEquipmentRequest({ logout }) {
     };
 
     const getEquipmentDetail = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/equipment-list");
         setEquipmentDetail(response.data);
         setIsLoading(false);
     };
@@ -215,7 +215,7 @@ function TeacherEquipmentRequest({ logout }) {
     };
 
     const getStudent = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/student-list");
         setStudent(response.data);
     }
 
@@ -260,8 +260,8 @@ function TeacherEquipmentRequest({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>
@@ -419,7 +419,7 @@ function TeacherEquipmentRequest({ logout }) {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>

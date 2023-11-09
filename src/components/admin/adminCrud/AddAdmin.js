@@ -25,7 +25,7 @@ function AddAdmin({ logout }) {
     const saveAdmin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("https://special-problem.onrender.com/admin-list", admin);
+            const response = await axios.post(process.env.REACT_APP_API + "/admin-list", admin);
     
             if (response.status === 201) {
                 // Admin Created successfully, navigate to admin list
@@ -58,7 +58,7 @@ function AddAdmin({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/admin", {
+        axios.get(process.env.REACT_APP_API + "/admin", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
             },
@@ -76,7 +76,7 @@ function AddAdmin({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/admin-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -195,7 +195,7 @@ function AddAdmin({ logout }) {
                     <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                         <i className="fa-solid fa-user" />
                     </button>
-                    <ul class="dropdown-menu">
+                    <ul className="dropdown-menu">
                         <Link to="/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                         <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </ul>

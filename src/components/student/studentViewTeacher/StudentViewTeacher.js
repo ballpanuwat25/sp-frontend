@@ -17,7 +17,7 @@ const StudentViewTeacher = () => {
     }, []);
 
     const getTeachers = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/teacher-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/teacher-list");
         setTeachers(response.data);
         setIsLoading(false);
     };
@@ -36,7 +36,7 @@ const StudentViewTeacher = () => {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/student", {
+        axios.get(process.env.REACT_APP_API + "/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -53,7 +53,7 @@ const StudentViewTeacher = () => {
     const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -109,8 +109,8 @@ const StudentViewTeacher = () => {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>
@@ -169,7 +169,7 @@ const StudentViewTeacher = () => {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/student-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <Link to="/student-dashboard/student-view-teacher" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>

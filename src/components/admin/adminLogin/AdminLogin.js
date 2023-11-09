@@ -22,7 +22,7 @@ function AdminLogin({ login }) {
 
         // Check if the username exists
         try {
-            const response = await axios.get('https://special-problem.onrender.com/admin-list');
+            const response = await axios.get(process.env.REACT_APP_API + "/admin-list");
             const adminList = response.data;
             const admin = adminList.find((admin) => admin.Admin_Username === values.Admin_Username);
 
@@ -41,7 +41,7 @@ function AdminLogin({ login }) {
 
         // If both username and password are valid, proceed with login
         axios
-            .post('https://special-problem.onrender.com/admin-login', values)
+            .post(process.env.REACT_APP_API + "/admin-login", values)
             .then((response) => {
                 console.log(response.data.Error);
                 if (response.data.Error) {

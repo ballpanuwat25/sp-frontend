@@ -41,7 +41,7 @@ function ChemicalsStockList({ logout }) {
     }, []);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -64,13 +64,13 @@ function ChemicalsStockList({ logout }) {
     }, []);
 
     const getChemicals = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicals-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicals-list");
         setChemicals(response.data);
         setIsLoading(false);
     }
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicalsDetail-list");
         setChemicalsDetail(response.data);
         setIsLoading(false);
     }
@@ -201,7 +201,7 @@ function ChemicalsStockList({ logout }) {
     });
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -242,8 +242,8 @@ function ChemicalsStockList({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>

@@ -43,7 +43,7 @@ function StudentEquipmentRequest() {
     }, [equipmentReq]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/student", {
+        axios.get(process.env.REACT_APP_API + "/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -58,7 +58,7 @@ function StudentEquipmentRequest() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/equipment-request-list");
             setEquipmentReq(response.data);
             setIsLoading(false);
         } catch (error) {
@@ -74,7 +74,7 @@ function StudentEquipmentRequest() {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -114,7 +114,7 @@ function StudentEquipmentRequest() {
 
     const getEquipment = async () => {
         try {
-            const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/equipment-list");
             setEquipment(response.data);
             setIsLoading(false);
         } catch (error) {
@@ -124,7 +124,7 @@ function StudentEquipmentRequest() {
 
     const getEquipmentCategory = async () => {
         try {
-            const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/equipmentCategory-list");
             setEquipmentCategory(response.data);
             setIsLoading(false);
         } catch (error) {
@@ -170,8 +170,8 @@ function StudentEquipmentRequest() {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>
@@ -241,7 +241,7 @@ function StudentEquipmentRequest() {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/student-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <Link to="/student-dashboard/student-view-teacher" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>

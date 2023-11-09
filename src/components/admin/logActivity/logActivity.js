@@ -18,7 +18,6 @@ function LogActivity() {
     useEffect(() => {
         getLogActivity();
         getStaff();
-        console.log(staff)
     }, []);
 
     useEffect(() => {
@@ -26,14 +25,14 @@ function LogActivity() {
     }, [logActivity]);
 
     const getLogActivity = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/log-activity");
+        const response = await axios.get(process.env.REACT_APP_API + "/log-activity");
         
         setLogActivity(response.data);
         setIsLoading(false);
     }
 
     const getStaff = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/staff-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/staff-list");
         setStaff(response.data);
     }
 
@@ -44,7 +43,7 @@ function LogActivity() {
 
     const deleteLogActivity = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/log-activity/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/log-activity/${id}`)
             getLogActivity();
         } catch (error) {
             console.log(error)
@@ -87,8 +86,8 @@ function LogActivity() {
         <div className="container-fluid">
             <main>
                 {isLoading ? (
-                    <div class="spinner-border text-success" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                    <div className="spinner-border text-success" role="status">
+                        <span className="visually-hidden">Loading...</span>
                     </div>
                 ) : (
                     <div>

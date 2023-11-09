@@ -18,7 +18,7 @@ function StudentForgetPassword() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post("https://special-problem.onrender.com/student-forget-password", values).then((response) => {
+        axios.post(process.env.REACT_APP_API + "/student-forget-password", values).then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

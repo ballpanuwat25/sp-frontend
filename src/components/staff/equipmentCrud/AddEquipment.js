@@ -47,7 +47,7 @@ function AddEquipment({ logout }) {
     }, [scannedCode, equipment.Equipment_Id]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -66,15 +66,15 @@ function AddEquipment({ logout }) {
         try {
             const { Equipment_Id } = equipment;
 
-            const equipmentIdExists = await axios.get(`https://special-problem.onrender.com/equipment-list/${Equipment_Id}`);
+            const equipmentIdExists = await axios.get(process.env.REACT_APP_API + `/equipment-list/${Equipment_Id}`);
             if (equipmentIdExists.data) {
                 notifyWarn();
                 return;
             }
 
             const updatedLogActivity = { ...logActivity, LogActivity_Name: "Add Equipment", Equipment_Id: Equipment_Id };
-            await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
-            await axios.post("https://special-problem.onrender.com/equipment-list", (equipment));
+            await axios.post(process.env.REACT_APP_API + "/log-activity", updatedLogActivity);
+            await axios.post(process.env.REACT_APP_API + "/equipment-list", (equipment));
 
             notifySuccess();
             navigate("/equipment-list");
@@ -110,7 +110,7 @@ function AddEquipment({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -124,7 +124,7 @@ function AddEquipment({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

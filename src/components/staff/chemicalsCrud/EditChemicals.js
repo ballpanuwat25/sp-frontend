@@ -30,7 +30,7 @@ function EditChemicals({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -50,7 +50,7 @@ function EditChemicals({ logout }) {
     }, [])
 
     const getChemicalsById = async () => {
-        const response = await axios.get(`https://special-problem.onrender.com/chemicals-list/${id}`);
+        const response = await axios.get(process.env.REACT_APP_API + `/chemicals-list/${id}`);
         const chemicals = response.data;
         setChem_Bottle_Id(chemicals.Chem_Bottle_Id);
         setChem_Id(chemicals.Chem_Id);
@@ -63,7 +63,7 @@ function EditChemicals({ logout }) {
 
     const updateChemicals = async (e) => {
         e.preventDefault();
-        const response = await axios.patch(`https://special-problem.onrender.com/chemicals-list/${id}`, {
+        const response = await axios.patch(process.env.REACT_APP_API + `/chemicals-list/${id}`, {
             Chem_Bottle_Id,
             Chem_Id,
             Package_Size,
@@ -73,7 +73,7 @@ function EditChemicals({ logout }) {
             Price,
         });
         const updatedLogActivity = { ...logActivity, LogActivity_Name: "Updated Chemicals", Chem_Bottle_Id: Chem_Bottle_Id };
-        await axios.post("https://special-problem.onrender.com/log-activity", updatedLogActivity);
+        await axios.post(process.env.REACT_APP_API + "/log-activity", updatedLogActivity);
         if (response.data.Error) {
             alert(response.data.Error);
         } else {
@@ -93,7 +93,7 @@ function EditChemicals({ logout }) {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -107,7 +107,7 @@ function EditChemicals({ logout }) {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

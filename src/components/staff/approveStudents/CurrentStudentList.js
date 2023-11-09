@@ -38,7 +38,7 @@ const CurrentStudentList = ({ logout }) => {
     }, [students]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -52,14 +52,14 @@ const CurrentStudentList = ({ logout }) => {
     }, []);
 
     const getStudents = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/student-list");
         setStudents(response.data);
         setIsLoading(false);
     };
 
     const deleteStudent = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/student-list/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/student-list/${id}`)
             getStudents();
         } catch (error) {
             console.error(error);
@@ -81,7 +81,7 @@ const CurrentStudentList = ({ logout }) => {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -117,8 +117,8 @@ const CurrentStudentList = ({ logout }) => {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>

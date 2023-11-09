@@ -45,7 +45,7 @@ function StudentChemicalsCart() {
                     Request_Room: item.Request_Room,
                     Teacher_Id: item.Teacher_Id,
                 };
-                await axios.post("https://special-problem.onrender.com/chemicals-request-list", requestData);
+                await axios.post(process.env.REACT_APP_API + "/chemicals-request-list", requestData);
             }
 
             // Clear localStorage
@@ -84,7 +84,7 @@ function StudentChemicalsCart() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/student", {
+        axios.get(process.env.REACT_APP_API + "/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -101,7 +101,7 @@ function StudentChemicalsCart() {
     const user_email = localStorage.getItem('user_email') ? <div className='user__email'>{localStorage.getItem('user_email')}</div> : <div className='user__email'>{studentInfo.studentEmail}</div>;
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -126,7 +126,7 @@ function StudentChemicalsCart() {
     };
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicalsDetail-list");
         setChemicalsDetail(response.data);
     }
 
@@ -287,7 +287,7 @@ function StudentChemicalsCart() {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/student-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <Link to="/student-dashboard/student-view-teacher" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>

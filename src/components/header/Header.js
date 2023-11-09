@@ -15,11 +15,11 @@ function Header() {
                         Log in
                     </button>
 
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><Link class="dropdown-item" to="/student-login">Student</Link></li>
-                        <li><Link class="dropdown-item" to="/teacher-login">Teacher</Link></li>
-                        <li><Link class="dropdown-item" to="/staff-login">Staff</Link></li>
-                        <li><Link class="dropdown-item" to="/admin-login">Admin</Link></li>
+                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><Link className="dropdown-item" to="/student-login">Student</Link></li>
+                        <li><Link className="dropdown-item" to="/teacher-login">Teacher</Link></li>
+                        <li><Link className="dropdown-item" to="/staff-login">Staff</Link></li>
+                        <li><Link className="dropdown-item" to="/admin-login">Admin</Link></li>
                     </ul>
                 </div>
                 <Link to="/student-register" className='header__button header__button--signup '>Sign up</Link>

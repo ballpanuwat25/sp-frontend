@@ -53,7 +53,7 @@ function TeacherBundleCart({ logout }) {
                     Request_Room: bundleRoom, // Use bundleRoom for all items
                     Teacher_Id: item.Teacher_Id,
                 };
-                await axios.post("https://special-problem.onrender.com/bundle-list", requestData);
+                await axios.post(process.env.REACT_APP_API + "/bundle-list", requestData);
             }
 
             localStorage.removeItem('bundleCart');
@@ -85,7 +85,7 @@ function TeacherBundleCart({ logout }) {
     });
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/teacher", {
+        axios.get(process.env.REACT_APP_API + "/teacher", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("teacherToken")}`,
             },
@@ -101,7 +101,7 @@ function TeacherBundleCart({ logout }) {
     axios.defaults.withCredentials = true;
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/teacher-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/teacher-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -285,7 +285,7 @@ function TeacherBundleCart({ logout }) {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>

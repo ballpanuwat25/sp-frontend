@@ -38,7 +38,7 @@ function ChemicalsDetailList({ logout }) {
     }, [chemicalsDetail]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -53,7 +53,7 @@ function ChemicalsDetailList({ logout }) {
 
     const getChemicalsDetail = async () => {
         try {
-            const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/chemicalsDetail-list");
             setChemicalsDetail(response.data); // Make sure response.data is an array
             setIsLoading(false);
         } catch (error) {
@@ -63,7 +63,7 @@ function ChemicalsDetailList({ logout }) {
 
     const deleteChemicalsDetail = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/chemicalsDetail-list/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/chemicalsDetail-list/${id}`)
             getChemicalsDetail();
         } catch (error) {
             console.log(error)
@@ -71,7 +71,7 @@ function ChemicalsDetailList({ logout }) {
     }
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -123,8 +123,8 @@ function ChemicalsDetailList({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>

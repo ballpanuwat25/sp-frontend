@@ -49,7 +49,7 @@ function StaffChemicalsReceipt({ logout }) {
     }, [searchQuery, filteredStatus]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -63,7 +63,7 @@ function StaffChemicalsReceipt({ logout }) {
     }, []);
 
     const getChemicalsRequest = async (searchDate) => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicals-request-list");
         const filteredChemicalsReq = response.data.filter(chemicalsReq => {
             const formattedDate = (new Date(chemicalsReq.createdAt)).toLocaleDateString('en-GB'); // Format date as "dd/mm/yyyy"
             console.log(formattedDate);
@@ -87,7 +87,7 @@ function StaffChemicalsReceipt({ logout }) {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -99,12 +99,12 @@ function StaffChemicalsReceipt({ logout }) {
     };
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicalsDetail-list");
         setChemicalsDetail(response.data);
     }
 
     const getStudent = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/student-list");
         setStudent(response.data);
     }
 
@@ -151,8 +151,8 @@ function StaffChemicalsReceipt({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>
@@ -186,15 +186,15 @@ function StaffChemicalsReceipt({ logout }) {
 
                                 <div ref={conponentPDF} style={{ width: '100%' }} className='d-flex justify-content-center pt-3 row row-cols-3'>
                                     {chemicalsReq.map((chemicalsReq) => (
-                                        <div class="card col" style={{ width: 350 }}>
-                                            <div class="card-body">
-                                                <p class="card-text thai--font">{chemicalsReq.Student_Id} - {getStudentNameById(chemicalsReq.Student_Id)}</p>
+                                        <div className="card col" style={{ width: 350 }}>
+                                            <div className="card-body">
+                                                <p className="card-text thai--font">{chemicalsReq.Student_Id} - {getStudentNameById(chemicalsReq.Student_Id)}</p>
                                             </div>
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item thai--font">สารเคมี: {getChemNameById(chemicalsReq.Chem_Id)}</li>
-                                                <li class="list-group-item thai--font">ปริมาณที่ขอ: {chemicalsReq.Requested_Quantity} {chemicalsReq.Counting_Unit}</li>
-                                                <li class="list-group-item thai--font">ปริมาณที่ได้รับ: {chemicalsReq.Release_Quantity} {chemicalsReq.Counting_Unit}</li>
-                                                <li class="list-group-item text-end thai--font">{formatDate(chemicalsReq.updatedAt)}</li>
+                                            <ul className="list-group list-group-flush">
+                                                <li className="list-group-item thai--font">สารเคมี: {getChemNameById(chemicalsReq.Chem_Id)}</li>
+                                                <li className="list-group-item thai--font">ปริมาณที่ขอ: {chemicalsReq.Requested_Quantity} {chemicalsReq.Counting_Unit}</li>
+                                                <li className="list-group-item thai--font">ปริมาณที่ได้รับ: {chemicalsReq.Release_Quantity} {chemicalsReq.Counting_Unit}</li>
+                                                <li className="list-group-item text-end thai--font">{formatDate(chemicalsReq.updatedAt)}</li>
                                             </ul>
                                         </div>
                                     ))}

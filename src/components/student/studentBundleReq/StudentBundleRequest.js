@@ -46,9 +46,9 @@ function StudentBundleRequest() {
 
     const fetchData = async () => {
         try {
-            const bundleResponse = await axios.get(`https://special-problem.onrender.com/bundle-list/${id}`);
-            const chemicalsResponse = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
-            const equipmentResponse = await axios.get("https://special-problem.onrender.com/equipment-list");
+            const bundleResponse = await axios.get(process.env.REACT_APP_API + `/bundle-list/${id}`);
+            const chemicalsResponse = await axios.get(process.env.REACT_APP_API + "/chemicalsDetail-list");
+            const equipmentResponse = await axios.get(process.env.REACT_APP_API + "/equipment-list");
 
             setBundles(bundleResponse.data);
             setChemicals(chemicalsResponse.data);
@@ -87,9 +87,9 @@ function StudentBundleRequest() {
 
             await Promise.all(allRequests.map((requestData) => {
                 if (requestData.Chem_Id) {
-                    return axios.post("https://special-problem.onrender.com/chemicals-request-list", requestData);
+                    return axios.post(process.env.REACT_APP_API + "/chemicals-request-list", requestData);
                 } else if (requestData.Equipment_Id) {
-                    return axios.post("https://special-problem.onrender.com/equipment-request-list", requestData);
+                    return axios.post(process.env.REACT_APP_API + "/equipment-request-list", requestData);
                 }
                 // You can add more conditions if needed
             }));
@@ -114,7 +114,7 @@ function StudentBundleRequest() {
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/student", {
+        axios.get(process.env.REACT_APP_API + "/student", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
             },
@@ -136,7 +136,7 @@ function StudentBundleRequest() {
     }, []);
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/student-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/student-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -175,8 +175,8 @@ function StudentBundleRequest() {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>
@@ -235,7 +235,7 @@ function StudentBundleRequest() {
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul className="dropdown-menu">
                             <Link to="/student-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <Link to="/student-dashboard/student-view-teacher" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>

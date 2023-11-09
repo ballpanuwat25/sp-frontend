@@ -18,7 +18,7 @@ function AdminForgetPassword() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post("https://special-problem.onrender.com/admin-forget-password", values)
+        axios.post(process.env.REACT_APP_API + "/admin-forget-password", values)
             .then((response) => {
                 console.log(response);
                 if (response.data.Error) {

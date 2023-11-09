@@ -29,7 +29,7 @@ function AdminNewPassword() {
     }, [])
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/admin", {
+        axios.get(process.env.REACT_APP_API + "/admin", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
             },
@@ -48,7 +48,7 @@ function AdminNewPassword() {
     }, []);
 
     const getAdminsById = async () => {
-        const response = await axios.get(`https://special-problem.onrender.com/admin-list/${id}`);
+        const response = await axios.get(process.env.REACT_APP_API + `/admin-list/${id}`);
         const admin = response.data;
         setAdmin_FName(admin.Admin_FName);
         setAdmin_LName(admin.Admin_LName);
@@ -66,7 +66,7 @@ function AdminNewPassword() {
             return;
         } else {
             try {
-                const response = await axios.patch(`https://special-problem.onrender.com/admin-list/${id}`, {
+                const response = await axios.patch(process.env.REACT_APP_API + `/admin-list/${id}`, {
                     Admin_FName,
                     Admin_LName,
                     Admin_Email,
@@ -91,7 +91,7 @@ function AdminNewPassword() {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/admin-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/admin-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

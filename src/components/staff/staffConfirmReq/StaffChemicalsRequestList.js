@@ -50,7 +50,7 @@ function StaffChemicalsRequestList({ logout }) {
     }, [searchQuery, filteredStatus]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -64,7 +64,7 @@ function StaffChemicalsRequestList({ logout }) {
     }, []);
 
     const getChemicalsRequest = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicals-request-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicals-request-list");
         const filteredChemicalsReq = response.data.filter(chemicalsReq => {
             return (
                 (filteredStatus === "All" || chemicalsReq.Request_Status === filteredStatus) &&
@@ -85,7 +85,7 @@ function StaffChemicalsRequestList({ logout }) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(`https://special-problem.onrender.com/chemicals-request-list/${id}`, data);
+            await axios.patch(process.env.REACT_APP_API + `/chemicals-request-list/${id}`, data);
         } catch (error) {
             console.log(error);
         }
@@ -93,7 +93,7 @@ function StaffChemicalsRequestList({ logout }) {
 
     const deleteChemicalsRequest = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/chemicals-request-list/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/chemicals-request-list/${id}`)
             getChemicalsRequest();
         } catch (error) {
             console.log(error)
@@ -130,7 +130,7 @@ function StaffChemicalsRequestList({ logout }) {
     }
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -161,7 +161,7 @@ function StaffChemicalsRequestList({ logout }) {
     const handleDeleteChecked = async () => {
         try {
             for (const id of selectedIds) {
-                await axios.delete(`https://special-problem.onrender.com/chemicals-request-list/${id}`);
+                await axios.delete(process.env.REACT_APP_API + `/chemicals-request-list/${id}`);
             }
             getChemicalsRequest(); // Refresh the chemicals request list after deleting
             setSelectedIds([]); // Clear the selectedIds after successful deletion
@@ -172,7 +172,7 @@ function StaffChemicalsRequestList({ logout }) {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://special-problem.onrender.com/chemicals-request-list/${id}`);
+            await axios.delete(process.env.REACT_APP_API + `/chemicals-request-list/${id}`);
             getChemicalsRequest(); // Refresh the chemicals request list after deleting
         } catch (error) {
             console.log(error);
@@ -180,12 +180,12 @@ function StaffChemicalsRequestList({ logout }) {
     }
 
     const getChemicalsDetail = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/chemicalsDetail-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicalsDetail-list");
         setChemicalsDetail(response.data);
     }
 
     const getStudent = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/student-list");
         setStudent(response.data);
     }
 
@@ -224,8 +224,8 @@ function StaffChemicalsRequestList({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>

@@ -23,7 +23,7 @@ function StaffLogin({ login }) {
 
         // Check if the username exists
         try {
-            const response = await axios.get("https://special-problem.onrender.com/staff-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/staff-list");
             const staffList = response.data;
             const staff = staffList.find((staff) => staff.Staff_Username === values.Staff_Username);
 
@@ -40,7 +40,7 @@ function StaffLogin({ login }) {
 
         // Check if the password is correct
         try {
-            const response = await axios.get("https://special-problem.onrender.com/staff-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/staff-list");
             const staffList = response.data;
             const staff = staffList.find((staff) => staff.Staff_Password === values.Staff_Password);
 
@@ -58,7 +58,7 @@ function StaffLogin({ login }) {
         setLoginInProgress(true);
 
         // If both username and password are valid, proceed with login
-        axios.post("https://special-problem.onrender.com/staff-login", values)
+        axios.post(process.env.REACT_APP_API + "/staff-login", values)
             .then((response) => {
                 console.log(response.data.Error);
                 if (response.data.Error) {

@@ -49,7 +49,7 @@ function StaffEquipmentReceipt({ logout }) {
     }, [searchQuery, filteredStatus]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -63,7 +63,7 @@ function StaffEquipmentReceipt({ logout }) {
     }, []);
 
     const getEquipmentRequest = async (searchDate) => {
-        const response = await axios.get("https://special-problem.onrender.com/equipment-request-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/equipment-request-list");
         const filteredEquipmentReq = response.data.filter(equipmentReq => {
             const formattedDate = (new Date(equipmentReq.createdAt)).toLocaleDateString('en-GB'); // Format date as "dd/mm/yyyy"
             console.log(formattedDate);
@@ -87,7 +87,7 @@ function StaffEquipmentReceipt({ logout }) {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -99,12 +99,12 @@ function StaffEquipmentReceipt({ logout }) {
     };
 
     const getEquipmentCategory = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/equipmentCategory-list");
         setEquipmentCategory(response.data);
     }
 
     const getStudent = async () => {
-        const response = await axios.get("https://special-problem.onrender.com/student-list");
+        const response = await axios.get(process.env.REACT_APP_API + "/student-list");
         setStudent(response.data);
     }
 
@@ -150,8 +150,8 @@ function StaffEquipmentReceipt({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>
@@ -185,15 +185,15 @@ function StaffEquipmentReceipt({ logout }) {
 
                                 <div ref={conponentPDF} style={{ width: '100%' }} className='d-flex justify-content-center pt-3 row row-cols-3'>
                                     {equipmentReq.map((equipmentReq) => (
-                                        <div class="card col" style={{ width: 350 }}>
-                                            <div class="card-body">
-                                                <p class="card-text thai--font">{equipmentReq.Student_Id} - {getStudentNameById(equipmentReq.Student_Id)}</p>
+                                        <div className="card col" style={{ width: 350 }}>
+                                            <div className="card-body">
+                                                <p className="card-text thai--font">{equipmentReq.Student_Id} - {getStudentNameById(equipmentReq.Student_Id)}</p>
                                             </div>
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item thai--font">ครุภัณฑ์: {getChemNameById(equipmentReq.Chem_Id)}</li>
-                                                <li class="list-group-item thai--font">จำนวนที่ขอ: {equipmentReq.Requested_Quantity} pcs.</li>
-                                                <li class="list-group-item thai--font">จำนวนที่ได้รับ: {equipmentReq.Release_Quantity} pcs.</li>
-                                                <li class="list-group-item text-end thai--font">{formatDate(equipmentReq.updatedAt)}</li>
+                                            <ul className="list-group list-group-flush">
+                                                <li className="list-group-item thai--font">ครุภัณฑ์: {getChemNameById(equipmentReq.Chem_Id)}</li>
+                                                <li className="list-group-item thai--font">จำนวนที่ขอ: {equipmentReq.Requested_Quantity} pcs.</li>
+                                                <li className="list-group-item thai--font">จำนวนที่ได้รับ: {equipmentReq.Release_Quantity} pcs.</li>
+                                                <li className="list-group-item text-end thai--font">{formatDate(equipmentReq.updatedAt)}</li>
                                             </ul>
                                         </div>
                                     ))}

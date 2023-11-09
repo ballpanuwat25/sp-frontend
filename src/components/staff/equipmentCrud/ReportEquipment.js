@@ -61,7 +61,7 @@ function ReportEquipment({ logout }) {
     }, []);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -76,7 +76,7 @@ function ReportEquipment({ logout }) {
     }, [logActivity]);
 
     useEffect(() => {
-        axios.get("https://special-problem.onrender.com/staff", {
+        axios.get(process.env.REACT_APP_API + "/staff", {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("staffToken")}`,
             },
@@ -91,7 +91,7 @@ function ReportEquipment({ logout }) {
 
     const getEquipment = async () => {
         try {
-            const response = await axios.get("https://special-problem.onrender.com/equipment-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/equipment-list");
             setEquipment(response.data);
             setFilteredEquipment(response.data); // Initialize filtered equipment with all equipment
             setIsLoading(false);
@@ -102,7 +102,7 @@ function ReportEquipment({ logout }) {
 
     const getEquipmentCategory = async () => {
         try {
-            const response = await axios.get("https://special-problem.onrender.com/equipmentCategory-list");
+            const response = await axios.get(process.env.REACT_APP_API + "/equipmentCategory-list");
             setEquipmentCategory(response.data);
             setIsLoading(false);
         } catch (error) {
@@ -111,7 +111,7 @@ function ReportEquipment({ logout }) {
     };
 
     const handleLogout = () => {
-        axios.get("https://special-problem.onrender.com/staff-logout").then((response) => {
+        axios.get(process.env.REACT_APP_API + "/staff-logout").then((response) => {
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {
@@ -211,8 +211,8 @@ function ReportEquipment({ logout }) {
 
                 <main className='dashboard__content'>
                     {isLoading ? (
-                        <div class="spinner-border text-success" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-success" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     ) : (
                         <div>
