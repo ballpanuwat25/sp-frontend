@@ -138,7 +138,7 @@ function ReportChemicals({ logout }) {
         const worksheet = workbook.addWorksheet('ChemicalsStock');
 
         // Add headers to the worksheet
-        const headers = ['ลำดับ', 'รหัสขวด', 'ชื่อสาร', 'ขนาดบรรจุ', 'ปริมาณคงเหลือ', 'หน่วยนับ', 'สถานที่เก็บ', 'ราคา'];
+        const headers = ['ลำดับ', 'รหัสขวด', 'ชื่อสาร', 'ขนาดบรรจุ', 'ปริมาณคงเหลือ', 'หน่วยนับ', 'สถานที่เก็บ', 'ราคา (บาท)', 'ถูกใช้ไป (บาท)'];
         worksheet.addRow(headers);
 
         // Add data rows to the worksheet
@@ -153,6 +153,7 @@ function ReportChemicals({ logout }) {
                 chemical.Counting_Unit,
                 chemical.Location,
                 chemical.Price,
+                isUsed(chemical.Price, chemical.Package_Size, chemical.Remaining_Quantity)
             ]);
         });
 
@@ -176,6 +177,15 @@ function ReportChemicals({ logout }) {
         documentTitle: "Chemicals Stock",
     });
 
+    const isUsed = (chemPrice, chemSize, chemQuan) => {
+    
+        const pricePerUnit = chemPrice / chemSize;
+        const used = chemSize - chemQuan;
+        const cost = used * pricePerUnit;
+
+        return cost.toFixed(2);
+    }; 
+
     return (
         <div className='container-fluid vh-100'>
             <div className='dashboard__container'>
@@ -191,7 +201,7 @@ function ReportChemicals({ logout }) {
                         <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Chemicals</div></Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
-<Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
+                        <Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
@@ -253,7 +263,8 @@ function ReportChemicals({ logout }) {
                                             <th className="table-header" scope="col">ปริมาณคงเหลือ</th>
                                             <th className="table-header" scope="col">หน่วยนับ</th>
                                             <th className="table-header" scope="col">สถานที่เก็บ</th>
-                                            <th className="table-header" scope="col">ราคา</th>
+                                            <th className="table-header" scope="col">ราคา (บาท)</th>
+                                            <th className="table-header" scope="col">ถูกใช้ไป (บาท)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -268,6 +279,7 @@ function ReportChemicals({ logout }) {
                                                 <td className="table-data"> {chemicals.Counting_Unit} </td>
                                                 <td className="table-data"> {chemicals.Location} </td>
                                                 <td className="table-data"> {chemicals.Price} </td>
+                                                <td className="table-data"> {isUsed(chemicals.Price, chemicals.Package_Size, chemicals.Remaining_Quantity)} </td>
                                             </tr>
                                         ))}
                                     </tbody>

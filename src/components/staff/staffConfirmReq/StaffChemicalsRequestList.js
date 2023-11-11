@@ -283,8 +283,7 @@ function StaffChemicalsRequestList({ logout }) {
                                                     onChange={handleStatusChange}
                                                     value={filteredStatus}
                                                 >
-                                                    
-                                                    {/* <option value="All">ทั้งหมด</option>*/}
+                                                    <option value="All">ทั้งหมด</option>
                                                     <option value="Approved">อนุมัติ</option>
                                                     <option value="Disapproved">ไม่อนุมัติ</option>
                                                     <option value="Succeed">สำเร็จ</option>

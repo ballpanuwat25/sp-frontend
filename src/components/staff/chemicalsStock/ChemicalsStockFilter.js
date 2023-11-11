@@ -33,11 +33,24 @@ function ChemicalsStockList({ logout }) {
 
     const [isLoading, setIsLoading] = useState(true);
 
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+    const formattedDateTime = currentDateTime.toLocaleString();
+
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
         getChemicals();
         getChemicalsDetail();
+    }, []);
+
+    useEffect(() => {
+        // Update the current date and time every second
+        const intervalId = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000);
+
+        // Clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() => {
@@ -137,10 +150,22 @@ function ChemicalsStockList({ logout }) {
             );
         }
 
+        const maxPackageSizes = {};
+
+        // Loop through chemicals to find the max package size for each Chem_Id
+        chemicals.forEach((chemical) => {
+            const { Chem_Id, Package_Size } = chemical;
+            if (!maxPackageSizes[Chem_Id] || Package_Size > maxPackageSizes[Chem_Id]) {
+                maxPackageSizes[Chem_Id] = Package_Size;
+                console.log(maxPackageSizes);
+            }
+        });
+
         // Filter chemicals with remaining quantity greater than 25%
         processedChemicals = processedChemicals.filter(
             (chemical) =>
-                chemical.Remaining_Quantity <= 0.25 * chemical.Package_Size
+                chemical.Remaining_Quantity <= 0.25 * chemical.Package_Size ||
+                chemical.Remaining_Quantity < maxPackageSizes[chemical.Chem_Id]
         );
 
         return processedChemicals;
@@ -295,6 +320,10 @@ function ChemicalsStockList({ logout }) {
                             </div>
 
                             <div ref={conponentPDF} style={{ width: '100%' }}>
+                                <div className="d-flex justify-content-between">
+                                    <div className="report-header__title thai--font">รายงานสารเคมี</div>
+                                    <div className="report-header__date thai--font">วันที่ออกรายงาน {formattedDateTime}</div>
+                                </div>
                                 <table className="table table-export table-striped" id="stock-table">
                                     <thead>
                                         <tr>

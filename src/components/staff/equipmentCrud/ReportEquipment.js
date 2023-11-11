@@ -149,7 +149,7 @@ function ReportEquipment({ logout }) {
         const worksheet = workbook.addWorksheet('EquipmentStock');
 
         // Add headers to the worksheet
-        const headers = ['ลำดับ', 'รหัสครุภัณฑ์', 'หมวดหมู่', 'ชื่อครุภัณฑ์', 'จำนวน', 'สถานที่เก็บ', 'ราคา', 'ค่าซ่อม'];
+        const headers = ['ลำดับ', 'รหัสครุภัณฑ์', 'หมวดหมู่', 'ชื่อครุภัณฑ์', 'จำนวน', 'สถานที่เก็บ', 'ราคา (บาท)', 'ค่าซ่อม (บาท)'];
         worksheet.addRow(headers);
 
         equipment.forEach((equipment, index) => {
@@ -196,11 +196,10 @@ function ReportEquipment({ logout }) {
 
                     <div className='sidebar__body'>
                         <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                         
-<Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" /><div className='sidebar__item--active'> Equipment</div></Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
-<Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
+                        <Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
@@ -260,8 +259,8 @@ function ReportEquipment({ logout }) {
                                             <th className="table-header" scope="col">ชื่อครุภัณฑ์</th>
                                             <th className="table-header" scope="col">จำนวน</th>
                                             <th className="table-header" scope="col">สถานที่เก็บ</th>
-                                            <th className="table-header" scope="col">ราคา</th>
-                                            <th className="table-header" scope="col">ค่าซ่อม</th>
+                                            <th className="table-header" scope="col">ราคา (บาท) </th>
+                                            <th className="table-header" scope="col">ค่าซ่อม (บาท) </th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -360,7 +360,7 @@ function StaffChemicalsRequest({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Counting_Unit" className='profile__label'>หน่วยนับ</label>
-                            <input type="text" className="profile__input" id="Counting_Unit" placeholder="Enter Counting Unit" required={isRejectButtonClicked} value={Counting_Unit}
+                            <input type="text" className="profile__input profile__input--readonly" readOnly id="Counting_Unit" placeholder="Enter Counting Unit" required={isRejectButtonClicked} value={Counting_Unit}
                                 onChange={(e) => {
                                     setCounting_Unit(e.target.value);
                                 }}
