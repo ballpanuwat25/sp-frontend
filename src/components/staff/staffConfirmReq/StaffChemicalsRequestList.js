@@ -263,6 +263,7 @@ function StaffChemicalsRequestList({ logout }) {
                                 <div className='table__tabs'>
                                     <Link className='table__tab table__tab--chemicals table__tab--active'>คำขอเบิกสารเคมี</Link>
                                     <Link to="/staff-dashboard/staff-equipment-request-list" className='table__tab table__tab--equipment table__tab--unactive'>คำขอเบิกครุภัณฑ์</Link>
+                                    <Link to="/report-request" className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
                                 </div>
 
                                 <table className="table table-striped">

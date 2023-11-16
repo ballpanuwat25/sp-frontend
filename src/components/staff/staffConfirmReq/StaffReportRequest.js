@@ -12,7 +12,7 @@ import '../../cssElement/Dashboard.css'
 
 import logo from '../../assets/logo.png';
 
-function ReportChemicals({ logout }) {
+function ReportRequest({ logout }) {
     const [chemicals, setChemicals] = useState([]);
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
@@ -44,6 +44,9 @@ function ReportChemicals({ logout }) {
     const [isLoading, setIsLoading] = useState(true);
 
     axios.defaults.withCredentials = true;
+
+    const [chemicalsReq, setChemicalsReq] = useState([]);
+    const [filteredStatus, setFilteredStatus] = useState("Succeed");
 
     useEffect(() => {
         getChemicals();
@@ -89,6 +92,10 @@ function ReportChemicals({ logout }) {
         });
     }, []);
 
+    useEffect(() => {
+        getChemicalsRequest();
+    }, [searchQuery, filteredStatus]);
+
     const getChemicals = async () => {
         const response = await axios.get(process.env.REACT_APP_API + "/chemicals-list");
         setChemicals(response.data);
@@ -100,6 +107,23 @@ function ReportChemicals({ logout }) {
         setChemicalsDetail(response.data);
         setIsLoading(false);
     }
+
+    const getChemicalsRequest = async () => {
+        const response = await axios.get(process.env.REACT_APP_API + "/chemicals-request-list");
+        const filteredChemicalsReq = response.data.filter(chemicalsReq => {
+            return (
+                (filteredStatus === "Succeed" && chemicalsReq.Request_Status === "Succeed") &&
+                (chemicalsReq.Student_Id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    getChemNameById(chemicalsReq.Chem_Id).toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    chemicalsReq.Request_Purpose.toLowerCase().includes(searchQuery.toLowerCase())) &&
+                chemicalsReq.Request_Status !== "Pending"
+            );
+        });
+
+        filteredChemicalsReq.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setChemicalsReq(filteredChemicalsReq);
+        setIsLoading(false);
+    };
 
     const handleSearchInputChange = (e) => {
         const query = e.target.value;
@@ -137,22 +161,20 @@ function ReportChemicals({ logout }) {
         const worksheet = workbook.addWorksheet('ChemicalsStock');
 
         // Add headers to the worksheet
-        const headers = ['ลำดับ', 'รหัสขวด', 'ชื่อสาร', 'ขนาดบรรจุ', 'ปริมาณคงเหลือ', 'หน่วยนับ', 'สถานที่เก็บ', 'ราคา (บาท)', 'ถูกใช้ไป (บาท)'];
+        const headers = ['ลำดับ', 'รหัสนิสิต', 'ชื่อสาร', 'รหัสขวด', 'ปริมาณที่ขอ', 'ปริมาณที่จ่าย', 'หน่วยนับ', 'วัตถุประสงค์'];
         worksheet.addRow(headers);
 
         // Add data rows to the worksheet
-        chemicals.forEach((chemical, index) => {
+        chemicalsReq.forEach((chemicalsReq, index) => {
             worksheet.addRow([
                 index + 1,
-                chemical.Chem_Bottle_Id,
-                getChemNameById(chemical.Chem_Id),
-                getChemGradeById(chemical.Chem_Id),
-                chemical.Package_Size,
-                chemical.Remaining_Quantity,
-                chemical.Counting_Unit,
-                chemical.Location,
-                chemical.Price,
-                isUsed(chemical.Price, chemical.Package_Size, chemical.Remaining_Quantity)
+                chemicalsReq.Student_Id,
+                getChemNameById(chemicalsReq.Chem_Id),
+                chemicalsReq.Chem_Bottle_Id,
+                chemicalsReq.Requested_Quantity,
+                chemicalsReq.Release_Quantity,
+                chemicalsReq.Counting_Unit,
+                chemicalsReq.Request_Purpose,
             ]);
         });
 
@@ -183,7 +205,7 @@ function ReportChemicals({ logout }) {
         const cost = used * pricePerUnit;
 
         return cost.toFixed(2);
-    }; 
+    };
 
     return (
         <div className='container-fluid vh-100'>
@@ -195,9 +217,8 @@ function ReportChemicals({ logout }) {
                     </div>
 
                     <div className='sidebar__body'>
-                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                         
-                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Chemicals</div></Link>
+                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
+                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
                         <Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
@@ -222,7 +243,7 @@ function ReportChemicals({ logout }) {
                                     <input
                                         type="text"
                                         className="component__search"
-                                        placeholder="ค้นหาด้วยรหัสขวดสารเคมี"
+                                        placeholder="ค้นหาด้วยชื่อสารเคมีหรือวัตถุประสงค์"
                                         value={searchQuery}
                                         onChange={handleSearchInputChange}
                                     />
@@ -248,37 +269,31 @@ function ReportChemicals({ logout }) {
 
                             <div ref={conponentPDF} style={{ width: '100%' }}>
                                 <div className="d-flex justify-content-between">
-                                    <div className="report-header__title thai--font">รายงานสารเคมี</div>
+                                    <div className="report-header__title thai--font">รายงานการใช้สารเคมี</div>
                                     <div className="report-header__date thai--font">วันที่ออกรายงาน {formattedDateTime}</div>
                                 </div>
                                 <table className="table table-export table-striped" id="stock-table">
-                                    <thead>
+                                <thead>
                                         <tr>
-                                            <th className="table-header" scope="col">#</th>
+                                            <th className="table-header" scope="col">รหัสนิสิต</th>
+                                            <th className="table-header" scope="col">สารเคมี</th>
                                             <th className="table-header" scope="col">รหัสขวด</th>
-                                            <th className="table-header" scope="col">ชื่อสารเคมี</th>
-                                            <th className="table-header" scope="col">เกรด</th>
-                                            <th className="table-header" scope="col">ขนาดบรรจุ</th>
-                                            <th className="table-header" scope="col">ปริมาณคงเหลือ</th>
+                                            <th className="table-header" scope="col">ปริมาณที่ขอ</th>
+                                            <th className="table-header" scope="col">ปริมาณที่จ่าย</th>
                                             <th className="table-header" scope="col">หน่วยนับ</th>
-                                            <th className="table-header" scope="col">สถานที่เก็บ</th>
-                                            <th className="table-header" scope="col">ราคา (บาท)</th>
-                                            <th className="table-header" scope="col">ถูกใช้ไป (บาท)</th>
+                                            <th className="table-header" scope="col">วัตถุประสงค์</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {(searchQuery ? filteredChemicals : chemicals).map((chemicals, index) => (
-                                            <tr key={index} className="active-row">
-                                                <td className="table-data"> {index + 1} </td>
-                                                <td className="table-data"> {chemicals.Chem_Bottle_Id} </td>
-                                                <td className="table-data"> {getChemNameById(chemicals.Chem_Id)} </td>
-                                                <td className="table-data"> {getChemGradeById(chemicals.Chem_Id)} </td>
-                                                <td className="table-data"> {chemicals.Package_Size} </td>
-                                                <td className="table-data"> {chemicals.Remaining_Quantity} </td>
-                                                <td className="table-data"> {chemicals.Counting_Unit} </td>
-                                                <td className="table-data"> {chemicals.Location} </td>
-                                                <td className="table-data"> {chemicals.Price} </td>
-                                                <td className="table-data"> {isUsed(chemicals.Price, chemicals.Package_Size, chemicals.Remaining_Quantity)} </td>
+                                        {chemicalsReq.map((chemicalsReq) => (
+                                            <tr key={chemicalsReq.Chem_Request_Id} className="active-row">
+                                                <td className="table-data"> {chemicalsReq.Student_Id} </td>
+                                                <td className="table-data"> {getChemNameById(chemicalsReq.Chem_Id)} </td>
+                                                <td className="table-data"> {chemicalsReq.Chem_Bottle_Id} </td>
+                                                <td className="table-data"> {chemicalsReq.Requested_Quantity} </td>
+                                                <td className="table-data"> {chemicalsReq.Release_Quantity} </td>
+                                                <td className="table-data"> {chemicalsReq.Counting_Unit} </td>
+                                                <td className="table-data"> {chemicalsReq.Request_Purpose} </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -309,4 +324,4 @@ function ReportChemicals({ logout }) {
     )
 }
 
-export default ReportChemicals;
+export default ReportRequest;

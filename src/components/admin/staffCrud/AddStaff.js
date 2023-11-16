@@ -148,7 +148,7 @@ function AddStaff({ logout }) {
 
                             <div className='mb-3'>
                                 <label htmlFor="Staff_Email" className='profile__label'>Email</label>
-                                <input type="text" className='profile__input' id="Staff_Email" placeholder="Enter Staff Email" required
+                                <input type="text" className='profile__input' id="Staff_Email" placeholder="Enter Staff Email"
                                     onChange={(e) => {
                                         setStaff({ ...staff, Staff_Email: e.target.value });
                                     }}

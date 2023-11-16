@@ -72,6 +72,8 @@ import ReportEquipment from './components/staff/equipmentCrud/ReportEquipment.js
 import AStudentList from './components/staff/approveStudents/AStudentList.js';
 import CurrentStudentList from './components/staff/approveStudents/CurrentStudentList.js';
 
+import ReportRequest from './components/staff/staffConfirmReq/StaffReportRequest.js'
+
 //------------------------------------------------------------ Teacher ------------------------------------------------------------//
 import TeacherLogin from './components/teacher/teacherLogin/TeacherLogin.js';
 import TeacherRegister from './components/teacher/teacherLogin/TeacherRegister.js';
@@ -233,6 +235,8 @@ function App() {
 
         <Route path="/approve-students-list" element={staffLoggedIn ? <AStudentList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
         <Route path="/current-students-list" element={staffLoggedIn ? <CurrentStudentList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+
+        <Route path="/report-request" element={staffLoggedIn ? <ReportRequest logout={handleStaffLogOut} /> : <Navigate to="/" />} />
 
         {/* -------------------------------------------------------- Teacher -------------------------------------------------------- */}
         <Route path="/teacher-login" element={teacherLoggedIn ? <Navigate to="teacher-dashboard" /> : <TeacherLogin login={handleTeacherLogIn} />} />
