@@ -67,7 +67,7 @@ function StaffLogin({ login }) {
                     const token = response.data.token;
                     localStorage.setItem("staffToken", token);
                     login();
-                    navigate("/staff-dashboard");
+                    navigate("/chem/staff-dashboard");
                 }
             })
             .catch((error) => {
@@ -106,7 +106,7 @@ function StaffLogin({ login }) {
                     </div>
 
                     <div className='form__forgetPassword'>
-                        <Link to="/staff-forget-password" className='forgetPassword__text'>Forgot password</Link>
+                        <Link to="/chem/staff-forget-password" className='forgetPassword__text'>Forgot password</Link>
                     </div>
 
                     {loginInProgress ? (

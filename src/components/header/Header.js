@@ -16,13 +16,13 @@ function Header() {
                     </button>
 
                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><Link className="dropdown-item" to="/student-login">Student</Link></li>
-                        <li><Link className="dropdown-item" to="/teacher-login">Teacher</Link></li>
-                        <li><Link className="dropdown-item" to="/staff-login">Staff</Link></li>
-                        <li><Link className="dropdown-item" to="/admin-login">Admin</Link></li>
+                        <li><Link className="dropdown-item" to="/chem/student-login">Student</Link></li>
+                        <li><Link className="dropdown-item" to="/chem/teacher-login">Teacher</Link></li>
+                        <li><Link className="dropdown-item" to="/chem/staff-login">Staff</Link></li>
+                        <li><Link className="dropdown-item" to="/chem/admin-login">Admin</Link></li>
                     </ul>
                 </div>
-                <Link to="/student-register" className='header__button header__button--signup '>Sign up</Link>
+                <Link to="/chem/student-register" className='header__button header__button--signup '>Sign up</Link>
             </div>
         </div>
     )

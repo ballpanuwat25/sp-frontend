@@ -52,7 +52,7 @@ function StudentChemicalsCart() {
             localStorage.removeItem('chemicalsCart');
 
             // Redirect to the student dashboard or any other page
-            navigate("/student-dashboard/student-equipment-cart");
+            navigate("/chem/student-dashboard/student-equipment-cart");
         } catch (err) {
             console.log('Error:', err);
 
@@ -109,7 +109,7 @@ function StudentChemicalsCart() {
                 localStorage.removeItem('user_email');
                 localStorage.removeItem('user_picture');
                 localStorage.removeItem('studentToken');
-                navigate("/");
+                navigate("/chem");
             }
         });
     };
@@ -143,12 +143,12 @@ function StudentChemicalsCart() {
                         <div className='sidebar__title std__name thai--font'>Welcome, {studentInfo.studentFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/student-dashboard/student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
-                        <Link to="/student-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> Bundle</Link>
-                        <Link to="/student-dashboard/student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-cart-shopping" /> <div className='sidebar__item--active'>Cart</div></Link>
-                        <Link to="/student-dashboard/student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-clock-rotate-left" /> History</Link>
-                        <Link to="/student-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
-                        <Link to="/student-dashboard/student-view-teacher" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
+                        <Link to="/chem/student-dashboard/student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
+                        <Link to="/chem/student-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="/chem/student-dashboard/student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-cart-shopping" /> <div className='sidebar__item--active'>Cart</div></Link>
+                        <Link to="/chem/student-dashboard/student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-clock-rotate-left" /> History</Link>
+                        <Link to="/chem/student-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                        <Link to="/chem/student-dashboard/student-view-teacher" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
                     </div>
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
@@ -168,7 +168,7 @@ function StudentChemicalsCart() {
                         <div >
                             <div className='table__tabs'>
                                 <Link className='table__tab table__tab--chemicals table__tab--active'>ตระกร้าสารเคมี</Link>
-                                <Link to="/student-dashboard/student-equipment-cart" className='table__tab table__tab--equipment table__tab--unactive'>ตระกร้าครุภัณฑ์</Link>
+                                <Link to="/chem/student-dashboard/student-equipment-cart" className='table__tab table__tab--equipment table__tab--unactive'>ตระกร้าครุภัณฑ์</Link>
                             </div>
                             <table className="table table-striped">
                                 <thead>
@@ -279,17 +279,17 @@ function StudentChemicalsCart() {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/student-dashboard/student-chemicals-list" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                    <Link to="/student-dashboard/bundle-list" className='footer__item'> <i className="fa-solid fa-boxes-stacked" /></Link>
-                    <Link to="/student-dashboard/student-chemicals-cart" className='footer__item'> <i className="fa-solid fa-cart-shopping" /></Link>
-                    <Link to="/student-dashboard/student-chemicals-request" className='footer__item'> <i className="fa-solid fa-clock-rotate-left" /></Link>
+                    <Link to="/chem/student-dashboard/student-chemicals-list" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to="/chem/student-dashboard/bundle-list" className='footer__item'> <i className="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="/chem/student-dashboard/student-chemicals-cart" className='footer__item'> <i className="fa-solid fa-cart-shopping" /></Link>
+                    <Link to="/chem/student-dashboard/student-chemicals-request" className='footer__item'> <i className="fa-solid fa-clock-rotate-left" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/student-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
-                            <Link to="/student-dashboard/student-view-teacher" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
+                            <Link to="/chem/student-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <Link to="/chem/student-dashboard/student-view-teacher" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

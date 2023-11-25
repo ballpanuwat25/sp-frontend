@@ -97,7 +97,7 @@ function StudentNewPassword() {
                 alert(response.data.Error);
             } else {
                 localStorage.removeItem('studentToken');
-                navigate("/student-login");
+                navigate("/chem/student-login");
             }
         });
     };

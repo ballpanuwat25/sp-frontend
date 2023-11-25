@@ -92,7 +92,7 @@ function StaffEquipmentReceipt({ logout }) {
                 alert(response.data.Error);
             } else {
                 localStorage.removeItem('staffToken');
-                navigate("/");
+                navigate("/chem");
                 logout();
             }
         });
@@ -135,12 +135,12 @@ function StaffEquipmentReceipt({ logout }) {
                     </div>
 
                     <div className='sidebar__body'>
-                        <Link to="/staff-dashboard/staff-equipment-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> Request</Link>
+                        <Link to="/chem/staff-dashboard/staff-equipment-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> Request</Link>
                          
-                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
-                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
+                        <Link to="/chem/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link to="/chem/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/equipment-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
-                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
+                        <Link to="/chem/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
                     <div className='sidebar__footer'>
@@ -175,7 +175,7 @@ function StaffEquipmentReceipt({ logout }) {
 
                             <div className='container'>
                                 <div className='d-flex gap-2 mb-2'>
-                                    <Link to="/staff-dashboard/staff-chemicals-receipt" className='btn edit--btn thai--font'>ใบเสร็จสารเคมี</Link>
+                                    <Link to="/chem/staff-dashboard/staff-chemicals-receipt" className='btn edit--btn thai--font'>ใบเสร็จสารเคมี</Link>
                                     <Link className='btn edit--btn thai--font'>ใบเสร็จครุภัณฑ์</Link>
                                     <button className="delete--btn btn-danger" onClick={generatePDF}>
                                         <i className="fa-solid fa-file-pdf me-2"></i>
@@ -204,17 +204,17 @@ function StaffEquipmentReceipt({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/staff-dashboard/staff-equipment-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
-                    <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
-                    <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
+                    <Link to="/chem/staff-dashboard/staff-equipment-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/chem/equipment-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
+                    <Link to="/chem/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
                     <Link to="/equipment-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
-                            <Link to="/approve-students-list" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-users" /> Users</Link>
+                            <Link to="/chem/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <Link to="/chem/approve-students-list" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-users" /> Users</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

@@ -96,7 +96,7 @@ function StaffNewPassword() {
                 alert(response.data.Error);
             } else {
                 localStorage.removeItem('staffToken');
-                navigate("/staff-login");
+                navigate("/chem/staff-login");
             }
         });
     };

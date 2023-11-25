@@ -150,7 +150,7 @@ function ReportRequest({ logout }) {
                 alert(response.data.Error);
             } else {
                 localStorage.removeItem('staffToken');
-                navigate("/");
+                navigate("/chem");
                 logout();
             }
         });
@@ -161,7 +161,7 @@ function ReportRequest({ logout }) {
         const worksheet = workbook.addWorksheet('ChemicalsStock');
 
         // Add headers to the worksheet
-        const headers = ['ลำดับ', 'รหัสนิสิต', 'ชื่อสาร', 'รหัสขวด', 'ปริมาณที่ขอ', 'ปริมาณที่จ่าย', 'หน่วยนับ', 'วัตถุประสงค์'];
+        const headers = ['ลำดับ', 'รหัสนิสิต', 'ชื่อสาร', 'รหัสขวด', 'ปริมาณที่ขอ', 'ปริมาณที่จ่าย', 'หน่วยนับ', 'วัตถุประสงค์', 'วันที่ส่งคำร้อง'];
         worksheet.addRow(headers);
 
         // Add data rows to the worksheet
@@ -175,6 +175,7 @@ function ReportRequest({ logout }) {
                 chemicalsReq.Release_Quantity,
                 chemicalsReq.Counting_Unit,
                 chemicalsReq.Request_Purpose,
+                formatDate(chemicalsReq.createdAt),
             ]);
         });
 
@@ -198,13 +199,10 @@ function ReportRequest({ logout }) {
         documentTitle: "Chemicals Stock",
     });
 
-    const isUsed = (chemPrice, chemSize, chemQuan) => {
-    
-        const pricePerUnit = chemPrice / chemSize;
-        const used = chemSize - chemQuan;
-        const cost = used * pricePerUnit;
-
-        return cost.toFixed(2);
+    const formatDate = (dateString) => {
+        const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', options);
     };
 
     return (
@@ -217,12 +215,12 @@ function ReportRequest({ logout }) {
                     </div>
 
                     <div className='sidebar__body'>
-                        <Link to="/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
-                        <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
-                        <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
-                        <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
-                        <Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
-                        <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
+                        <Link to="/chem/staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'> Request</div></Link>
+                        <Link to="/chem/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> Chemicals</Link>
+                        <Link to="/chem/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
+                        <Link to="/chem/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
+                        <Link to="/chem/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
+                        <Link to="/chem/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
                     <div className='sidebar__footer'>
@@ -282,6 +280,7 @@ function ReportRequest({ logout }) {
                                             <th className="table-header" scope="col">ปริมาณที่จ่าย</th>
                                             <th className="table-header" scope="col">หน่วยนับ</th>
                                             <th className="table-header" scope="col">วัตถุประสงค์</th>
+                                            <th className="table-header" scope="col">วันที่ส่งคำร้อง</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -294,6 +293,7 @@ function ReportRequest({ logout }) {
                                                 <td className="table-data"> {chemicalsReq.Release_Quantity} </td>
                                                 <td className="table-data"> {chemicalsReq.Counting_Unit} </td>
                                                 <td className="table-data"> {chemicalsReq.Request_Purpose} </td>
+                                                <td className="table-data"> {formatDate(chemicalsReq.createdAt)} </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -304,17 +304,17 @@ function ReportRequest({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
-                    <Link to="/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
-                    <Link to="/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
-                    <Link to="/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
+                    <Link to="/chem/staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/chem/chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
+                    <Link to="/chem/equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
+                    <Link to="/chem/chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
-                            <Link to="/approve-students-list" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-users" /> Users</Link>
+                            <Link to="/chem/staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <Link to="/chem/approve-students-list" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-users" /> Users</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

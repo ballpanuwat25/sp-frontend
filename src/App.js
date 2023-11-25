@@ -163,126 +163,124 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<Notfound />} />
+        <Route path="/chem" element={<Home />} />
+        <Route path="/chem/*" element={<Notfound />} />
         {/* -------------------------------------------------------- Admin -------------------------------------------------------- */}
-        <Route path="/admin-login" element={adminLoggedIn ? <Navigate to="admin-dashboard" /> : <AdminLogin login={handleAdminLogIn} />} />
-        <Route path="/admin-register" element={<AdminRegister />} />
-        <Route path="/admin-forget-password" element={<AdminForgetPassword />} />
-        <Route path="/admin-dashboard" element={adminLoggedIn ? <AdminDashboard logout={handleAdminLogOut} /> : <Navigate to="/" />} />
-        <Route path="/admin-profile" element={adminLoggedIn ? <AdminProfile logout={handleAdminLogOut} /> : <Navigate to="/admin-login" />} />
-        <Route path="/admin-profile/:id" element={adminLoggedIn ? <AdminEditProfile logout={handleAdminLogOut} /> : <Navigate to="/admin-login" />} />
+        <Route path="/chem/admin-login" element={adminLoggedIn ? <Navigate to="/chem/admin-dashboard" /> : <AdminLogin login={handleAdminLogIn} />} />
+        <Route path="/chem/admin-forget-password" element={<AdminForgetPassword />} />
+        <Route path="/chem/admin-dashboard" element={adminLoggedIn ? <AdminDashboard logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/admin-profile" element={adminLoggedIn ? <AdminProfile logout={handleAdminLogOut} /> : <Navigate to="/admin-login" />} />
+        <Route path="/chem/admin-profile/:id" element={adminLoggedIn ? <AdminEditProfile logout={handleAdminLogOut} /> : <Navigate to="/admin-login" />} />
 
-        <Route path="/admin-reset-password/:resetToken" element={<AdminNewPassword />} />
+        <Route path="/chem/admin-reset-password/:resetToken" element={<AdminNewPassword />} />
 
-        <Route path="/log-activity" element={adminLoggedIn ? <LogActivity logout={handleAdminLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/log-activity" element={adminLoggedIn ? <LogActivity logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/admin-list" element={adminLoggedIn ? <AdminList logout={handleAdminLogOut} /> : <Navigate to="/" />} />
-        <Route path="/admin-list/add-admin" element={adminLoggedIn ? <AddAdmin logout={handleAdminLogOut} /> : <Navigate to="/" />} />
-        <Route path="/admin-list/edit-admin/:id" element={adminLoggedIn ? <EditAdmin logout={handleAdminLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/admin-list" element={adminLoggedIn ? <AdminList logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/admin-list/add-admin" element={adminLoggedIn ? <AddAdmin logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/admin-list/edit-admin/:id" element={adminLoggedIn ? <EditAdmin logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/staff-list" element={adminLoggedIn ? <StaffList logout={handleAdminLogOut} /> : <Navigate to="/" />} />
-        <Route path="/staff-list/add-staff" element={adminLoggedIn ? <AddStaff logout={handleAdminLogOut} /> : <Navigate to="/" />} />
-        <Route path="/staff-list/edit-staff/:id" element={adminLoggedIn ? <EditStaff logout={handleAdminLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/staff-list" element={adminLoggedIn ? <StaffList logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/staff-list/add-staff" element={adminLoggedIn ? <AddStaff logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/staff-list/edit-staff/:id" element={adminLoggedIn ? <EditStaff logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/teacher-list" element={adminLoggedIn ? <TeacherList logout={handleAdminLogOut} /> : <Navigate to="/" />} />
-        <Route path="/teacher-list/add-teacher" element={adminLoggedIn ? <AddTeacher logout={handleAdminLogOut} /> : <Navigate to="/" />} />
-        <Route path="/teacher-list/edit-teacher/:id" element={adminLoggedIn ? <EditTeacher logout={handleAdminLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/teacher-list" element={adminLoggedIn ? <TeacherList logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/teacher-list/add-teacher" element={adminLoggedIn ? <AddTeacher logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/teacher-list/edit-teacher/:id" element={adminLoggedIn ? <EditTeacher logout={handleAdminLogOut} /> : <Navigate to="/chem" />} />
 
         {/* -------------------------------------------------------- Staff -------------------------------------------------------- */}
-        <Route path="/staff-login" element={staffLoggedIn ? <Navigate to="/staff-dashboard" /> : <StaffLogin login={handleStaffLogIn} />} />
-        <Route path="/staff-register" element={<StaffRegister />} />
-        <Route path="/staff-forget-password" element={<StaffForgetPassword />} />
-        <Route path="/staff-dashboard" element={staffLoggedIn ? <StaffChemicalsRequestList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/staff-profile" element={staffLoggedIn ? <StaffProfile logout={handleStaffLogOut} /> : <Navigate to="/staff-login" />} />
-        <Route path="/staff-profile/:id" element={staffLoggedIn ? <StaffEditProfile logout={handleStaffLogOut} /> : <Navigate to="/staff-login" />} />
+        <Route path="/chem/staff-login" element={staffLoggedIn ? <Navigate to="/chem/staff-dashboard" /> : <StaffLogin login={handleStaffLogIn} />} />
+        <Route path="/chem/staff-forget-password" element={<StaffForgetPassword />} />
+        <Route path="/chem/staff-dashboard" element={staffLoggedIn ? <StaffChemicalsRequestList logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/staff-profile" element={staffLoggedIn ? <StaffProfile logout={handleStaffLogOut} /> : <Navigate to="/chem/staff-login" />} />
+        <Route path="/chem/staff-profile/:id" element={staffLoggedIn ? <StaffEditProfile logout={handleStaffLogOut} /> : <Navigate to="/chem/staff-login" />} />
 
-        <Route path="/staff-reset-password/:resetToken" element={<StaffNewPassword />} />
+        <Route path="/chem/staff-reset-password/:resetToken" element={<StaffNewPassword />} />
 
-        <Route path="/staff-dashboard/staff-chemicals-request/:id" element={staffLoggedIn ? <StaffChemicalsRequest logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/staff-dashboard/staff-chemicals-receipt" element={staffLoggedIn ? <StaffChemicalsReceipt logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/staff-dashboard/staff-chemicals-request-list" element={staffLoggedIn ? <StaffChemicalsRequestList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/staff-dashboard/staff-chemicals-request/:id" element={staffLoggedIn ? <StaffChemicalsRequest logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/staff-dashboard/staff-chemicals-receipt" element={staffLoggedIn ? <StaffChemicalsReceipt logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/staff-dashboard/staff-chemicals-request-list" element={staffLoggedIn ? <StaffChemicalsRequestList logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/staff-dashboard/staff-equipment-request/:id" element={staffLoggedIn ? <StaffEquipmentRequest logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/staff-dashboard/staff-equipment-receipt" element={staffLoggedIn ? <StaffEquipmentReceipt logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/staff-dashboard/staff-equipment-request-list" element={staffLoggedIn ? <StaffEquipmentRequestList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/staff-dashboard/staff-equipment-request/:id" element={staffLoggedIn ? <StaffEquipmentRequest logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/staff-dashboard/staff-equipment-receipt" element={staffLoggedIn ? <StaffEquipmentReceipt logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/staff-dashboard/staff-equipment-request-list" element={staffLoggedIn ? <StaffEquipmentRequestList logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/chemicals-list" element={staffLoggedIn ? <ChemicalsList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/chemicals-list/add-chemicals" element={staffLoggedIn ? <AddChemicals logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/chemicals-list/edit-chemicals/:id" element={staffLoggedIn ? <EditChemicals logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/chemicals-list" element={staffLoggedIn ? <ChemicalsList logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/chemicals-list/add-chemicals" element={staffLoggedIn ? <AddChemicals logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/chemicals-list/edit-chemicals/:id" element={staffLoggedIn ? <EditChemicals logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/chemicalsStock-filter" element={staffLoggedIn ? <ChemicalsStockFilter logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/chemicals-stock" element={staffLoggedIn ? <ChemicalsStockList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/chemicals-stock/:id" element={staffLoggedIn ? <ChemicalsStockById logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/chemicalsStock-filter" element={staffLoggedIn ? <ChemicalsStockFilter logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/chemicals-stock" element={staffLoggedIn ? <ChemicalsStockList logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/chemicals-stock/:id" element={staffLoggedIn ? <ChemicalsStockById logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/chemicalsDetail-list" element={staffLoggedIn ? <ChemicalsDetailList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/chemicalsDetail-list/add-chemicalsDetail" element={staffLoggedIn ? <AddChemicalsDetail logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/chemicalsDetail-list/edit-chemicalsDetail/:id" element={staffLoggedIn ? <EditChemicalsDetail logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/chemicalsDetail-list" element={staffLoggedIn ? <ChemicalsDetailList logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/chemicalsDetail-list/add-chemicalsDetail" element={staffLoggedIn ? <AddChemicalsDetail logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/chemicalsDetail-list/edit-chemicalsDetail/:id" element={staffLoggedIn ? <EditChemicalsDetail logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/barcode-chemicals" element={staffLoggedIn ? <BarcodeChemicals logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/barcode-equipment" element={staffLoggedIn ? <BarcodeEquipment logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/barcode-chemicals" element={staffLoggedIn ? <BarcodeChemicals logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/barcode-equipment" element={staffLoggedIn ? <BarcodeEquipment logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/equipment-list" element={staffLoggedIn ? <EquipmentList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/equipment-list/add-equipment" element={staffLoggedIn ? <AddEquipment logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/equipment-list/edit-equipment/:id" element={staffLoggedIn ? <EditEquipment logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/equipment-list" element={staffLoggedIn ? <EquipmentList logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/equipment-list/add-equipment" element={staffLoggedIn ? <AddEquipment logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/equipment-list/edit-equipment/:id" element={staffLoggedIn ? <EditEquipment logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/equipmentCategory-list" element={staffLoggedIn ? <EquipmentCategoryList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/equipmentCategory-list/add-equipmentCategory" element={staffLoggedIn ? <AddEquipmentCategory logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/equipmentCategory-list/edit-equipmentCategory/:id" element={staffLoggedIn ? <EditEquipmentCategory logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/equipmentCategory-list" element={staffLoggedIn ? <EquipmentCategoryList logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/equipmentCategory-list/add-equipmentCategory" element={staffLoggedIn ? <AddEquipmentCategory logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/equipmentCategory-list/edit-equipmentCategory/:id" element={staffLoggedIn ? <EditEquipmentCategory logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/report-chemicals" element={staffLoggedIn ? <ReportChemicals logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/report-equipment" element={staffLoggedIn ? <ReportEquipment logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/report-chemicals" element={staffLoggedIn ? <ReportChemicals logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/report-equipment" element={staffLoggedIn ? <ReportEquipment logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/approve-students-list" element={staffLoggedIn ? <AStudentList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
-        <Route path="/current-students-list" element={staffLoggedIn ? <CurrentStudentList logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/approve-students-list" element={staffLoggedIn ? <AStudentList logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/current-students-list" element={staffLoggedIn ? <CurrentStudentList logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="/report-request" element={staffLoggedIn ? <ReportRequest logout={handleStaffLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/report-request" element={staffLoggedIn ? <ReportRequest logout={handleStaffLogOut} /> : <Navigate to="/chem" />} />
 
         {/* -------------------------------------------------------- Teacher -------------------------------------------------------- */}
-        <Route path="/teacher-login" element={teacherLoggedIn ? <Navigate to="teacher-dashboard" /> : <TeacherLogin login={handleTeacherLogIn} />} />
-        <Route path="/teacher-register" element={<TeacherRegister />} />
-        <Route path="/teacher-forget-password" element={<TeacherForgetPassword />} />
-        <Route path="/teacher-dashboard" element={teacherLoggedIn ? <TeacherChemicalsRequest logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
-        <Route path="/teacher-profile" element={teacherLoggedIn ? <TeacherProfile logout={handleTeacherLogOut} /> : <Navigate to="/teacher-login" />} />
-        <Route path="/teacher-profile/:id" element={teacherLoggedIn ? <TeacherEditProfile logout={handleTeacherLogOut} /> : <Navigate to="/teacher-login" />} />
+        <Route path="/chem/teacher-login" element={teacherLoggedIn ? <Navigate to="/chem/teacher-dashboard" /> : <TeacherLogin login={handleTeacherLogIn} />} />
 
-        <Route path="/teacher-reset-password/:resetToken" element={<TeacherNewPassword />} />
+        <Route path="/chem/teacher-forget-password" element={<TeacherForgetPassword />} />
+        <Route path="/chem/teacher-dashboard" element={teacherLoggedIn ? <TeacherChemicalsRequest logout={handleTeacherLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/teacher-profile" element={teacherLoggedIn ? <TeacherProfile logout={handleTeacherLogOut} /> : <Navigate to="/chem/teacher-login" />} />
+        <Route path="/chem/teacher-profile/:id" element={teacherLoggedIn ? <TeacherEditProfile logout={handleTeacherLogOut} /> : <Navigate to="/chem/teacher-login" />} />
 
-        <Route path="/teacher-dashboard/teacher-chemicals-request" element={teacherLoggedIn ? <TeacherChemicalsRequest logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
-        <Route path="/teacher-dashboard/teacher-equipment-request" element={teacherLoggedIn ? <TeacherEquipmentRequest logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/teacher-reset-password/:resetToken" element={<TeacherNewPassword />} />
 
-        <Route path="/teacher-dashboard/bundle-list" element={teacherLoggedIn ? <BundleList logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
-        <Route path="/teacher-dashboard/bundle-list/:id" element={teacherLoggedIn ? <BundleView logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
-        <Route path="/teacher-dashboard/teacher-create-bundle" element={teacherLoggedIn ? <TeacherBundleCart logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
+        <Route path="/chem/teacher-dashboard/teacher-chemicals-request" element={teacherLoggedIn ? <TeacherChemicalsRequest logout={handleTeacherLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/teacher-dashboard/teacher-equipment-request" element={teacherLoggedIn ? <TeacherEquipmentRequest logout={handleTeacherLogOut} /> : <Navigate to="/chem" />} />
 
-        <Route path="teacher-dashboard/chemicals-bundle-list" element={teacherLoggedIn ? <ChemicalsBundleList logout={handleTeacherLogOut} /> : <Navigate to="/" /> } />
-        <Route path="teacher-dashboard/equipment-bundle-list" element={teacherLoggedIn ? <EquipmentBundleList logout={handleTeacherLogOut} /> : <Navigate to="/" /> } />
+        <Route path="/chem/teacher-dashboard/bundle-list" element={teacherLoggedIn ? <BundleList logout={handleTeacherLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/teacher-dashboard/bundle-list/:id" element={teacherLoggedIn ? <BundleView logout={handleTeacherLogOut} /> : <Navigate to="/chem" />} />
+        <Route path="/chem/teacher-dashboard/teacher-create-bundle" element={teacherLoggedIn ? <TeacherBundleCart logout={handleTeacherLogOut} /> : <Navigate to="/chem" />} />
+
+        <Route path="chem/teacher-dashboard/chemicals-bundle-list" element={teacherLoggedIn ? <ChemicalsBundleList logout={handleTeacherLogOut} /> : <Navigate to="/" /> } />
+        <Route path="chem/teacher-dashboard/equipment-bundle-list" element={teacherLoggedIn ? <EquipmentBundleList logout={handleTeacherLogOut} /> : <Navigate to="/" /> } />
 
         {/* -------------------------------------------------------- Student -------------------------------------------------------- */}
-        <Route path="/student-login" element={<StudentLogin />} />
-        <Route path="/student-register" element={<StudentRegister />} />
-        <Route path="/student-forget-password" element={<StudentForgetPassword />} />
-        <Route path="/student-dashboard" element={<StudentDashboard />} />
-        <Route path="/student-profile" element={<StudentProfile />} />
+        <Route path="/chem/student-login" element={<StudentLogin />} />
+        <Route path="/chem/student-register" element={<StudentRegister />} />
+        <Route path="/chem/student-forget-password" element={<StudentForgetPassword />} />
+        <Route path="/chem/student-dashboard" element={<StudentDashboard />} />
+        <Route path="/chem/student-profile" element={<StudentProfile />} />
 
-        <Route path="/student-profile/:id" element={<StudentEditProfile />} />
-        <Route path="/student-reset-password/:resetToken" element={<StudentNewPassword />} />
+        <Route path="/chem/student-profile/:id" element={<StudentEditProfile />} />
+        <Route path="/chem/student-reset-password/:resetToken" element={<StudentNewPassword />} />
 
-        <Route path="/student-dashboard/student-chemicals-request" element={<StudentChemicalsRequest />} />
-        <Route path="/student-dashboard/student-chemicals-list" element={<StudentChemicalsList />} />
+        <Route path="/chem/student-dashboard/student-chemicals-request" element={<StudentChemicalsRequest />} />
+        <Route path="/chem/student-dashboard/student-chemicals-list" element={<StudentChemicalsList />} />
 
-        <Route path="/student-dashboard/student-equipment-request" element={<StudentEquipmentRequest />} />
-        <Route path="/student-dashboard/student-equipment-list" element={<StudentEquipmentList />} />
+        <Route path="/chem/student-dashboard/student-equipment-request" element={<StudentEquipmentRequest />} />
+        <Route path="/chem/student-dashboard/student-equipment-list" element={<StudentEquipmentList />} />
 
-        <Route path="/student-dashboard/student-chemicals-cart" element={<StudentChemicalsCart />} />
-        <Route path="/student-dashboard/student-equipment-cart" element={<StudentEquipmentCart />} />
+        <Route path="/chem/student-dashboard/student-chemicals-cart" element={<StudentChemicalsCart />} />
+        <Route path="/chem/student-dashboard/student-equipment-cart" element={<StudentEquipmentCart />} />
 
-        <Route path="/student-dashboard/bundle-list" element={<StudentBundleList />} />
-        <Route path="/student-dashboard/bundle-list/:id" element={<StudentBundleRequest />} />
+        <Route path="/chem/student-dashboard/bundle-list" element={<StudentBundleList />} />
+        <Route path="/chem/student-dashboard/bundle-list/:id" element={<StudentBundleRequest />} />
 
-        <Route path="/student-dashboard/student-view-teacher" element={<StudentViewTeacher />} />
+        <Route path="/chem/student-dashboard/student-view-teacher" element={<StudentViewTeacher />} />
 
-        <Route path="/student-google-register" element={<StudentGoogleRegister />} />
+        <Route path="/chem/student-google-register" element={<StudentGoogleRegister />} />
       </Routes>
     </BrowserRouter>
   );

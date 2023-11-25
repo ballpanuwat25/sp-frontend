@@ -19,7 +19,7 @@ function Notfound() {
         localStorage.removeItem('teacherIsLoggedIn');
         localStorage.removeItem('staffIsLoggedIn');
         localStorage.removeItem('studentIsLoggedIn');
-        navigate('/');
+        navigate("/chem");
         window.location.reload();
     }
 

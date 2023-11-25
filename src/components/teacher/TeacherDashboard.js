@@ -90,7 +90,7 @@ function TeacherDashboard({ logout }) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(process.env.REACT_APP_API + `/chemicals-request-list/${id}`, data);
+            await axios.patch(process.env.REACT_APP_API + `icals-request-list/${id}`, data);
             getChemicalsRequest(); // Refresh the chemicals request list after updating status
         } catch (error) {
             console.log(error);
@@ -147,7 +147,7 @@ function TeacherDashboard({ logout }) {
                 alert(response.data.Error);
             } else {
                 localStorage.removeItem('teacherToken');
-                navigate("/");
+                navigate("/chem");
                 logout();
             }
         });
@@ -196,10 +196,10 @@ function TeacherDashboard({ logout }) {
                         <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'>Request</div></Link>
-                        <Link to="/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
-                        <Link to="/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> Bundle</Link>
-                        <Link to="/teacher-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                        <Link to="/chem/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'>Request</div></Link>
+                        <Link to="/chem/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
+                        <Link to="/chem/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="/chem/teacher-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
@@ -237,7 +237,7 @@ function TeacherDashboard({ logout }) {
                     <div>
                         <div className='table__tabs'>
                             <Link className='table__tab table__tab--chemicals table__tab--active'>คำขอเบิกสารเคมี</Link>
-                            <Link to="/teacher-dashboard/teacher-equipment-request" className='table__tab table__tab--equipment table__tab--unactive'>คำขอเบิกครุภัณฑ์</Link>
+                            <Link to="/chem/teacher-dashboard/teacher-equipment-request" className='table__tab table__tab--equipment table__tab--unactive'>คำขอเบิกครุภัณฑ์</Link>
                         </div>
 
                         <table className="table table-striped">
@@ -338,15 +338,15 @@ function TeacherDashboard({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
-                    <Link to="/teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                    <Link to="/teacher-dashboard/bundle-list" className='footer__item'> <i className="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="/chem/teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="/chem/teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to="/chem/teacher-dashboard/bundle-list" className='footer__item'> <i className="fa-solid fa-boxes-stacked" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <Link to="/chem/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>
