@@ -29,7 +29,7 @@ function AddStaff({ logout }) {
     
             if (response.status === 201) {
                 // Staff Created successfully, navigate to staff list
-                navigate("/chem/staff-list");
+                navigate(" staff-list");
             } else {
                 // Handle other possible responses
                 console.log("Unexpected response:", response);
@@ -82,7 +82,7 @@ function AddStaff({ logout }) {
             } else {
                 logout();
                 localStorage.removeItem('adminToken');
-                navigate("/chem");
+                navigate("/");
             }
         });
     };
@@ -97,9 +97,9 @@ function AddStaff({ logout }) {
                         <div className='sidebar__title admin__name'>Welcome, {adminInfo.adminUsername}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/chem/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
-                        <Link to="/chem/admin-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
-                        <Link to="/chem/admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                        <Link to=" admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
+                        <Link to=" admin-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
+                        <Link to=" admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
@@ -189,14 +189,14 @@ function AddStaff({ logout }) {
             </div>
 
             <footer className='footer'>
-                <Link to="/chem/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                <Link to="/chem/admin-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
+                <Link to=" admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                <Link to=" admin-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
                 <div className="dropup">
                     <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                         <i className="fa-solid fa-user" />
                     </button>
                     <ul className="dropdown-menu">
-                        <Link to="/chem/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                        <Link to=" admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                         <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                     </ul>
                 </div>

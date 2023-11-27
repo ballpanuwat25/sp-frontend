@@ -181,7 +181,7 @@ function TeacherEquipmentRequest({ logout }) {
             } else {
                 logout();
                 localStorage.removeItem('teacherToken');
-                navigate("/chem");
+                navigate("/");
             }
         });
     };
@@ -248,10 +248,10 @@ function TeacherEquipmentRequest({ logout }) {
                         <div className='sidebar__title admin__name'>Welcome, {teacherInfo.teacherFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/chem/teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'>Request</div></Link>
-                        <Link to="/chem/teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
-                        <Link to="/chem/teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> Bundle</Link>
-                        <Link to="/chem/teacher-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                        <Link to=" teacher-dashboard/teacher-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='sidebar__item--active ms-1'>Request</div></Link>
+                        <Link to=" teacher-dashboard/chemicals-bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> List</Link>
+                        <Link to=" teacher-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to=" teacher-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
@@ -294,7 +294,7 @@ function TeacherEquipmentRequest({ logout }) {
 
                             <div>
                                 <div className='table__tabs'>
-                                    <Link to="/chem/teacher-dashboard/teacher-chemicals-request" className='table__tab table__tab--chemicals table__tab--unactive'>คำขอเบิกสารเคมี</Link>
+                                    <Link to=" teacher-dashboard/teacher-chemicals-request" className='table__tab table__tab--chemicals table__tab--unactive'>คำขอเบิกสารเคมี</Link>
                                     <Link className='table__tab table__tab--equipment table__tab--active'>คำขอเบิกครุภัณฑ์</Link>
                                 </div>
 
@@ -412,15 +412,15 @@ function TeacherEquipmentRequest({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/chem/teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
-                    <Link to="/chem/teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                    <Link to="/chem/teacher-dashboard/bundle-list" className='footer__item'> <i className="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to=" teacher-dashboard/teacher-chemicals-request" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to=" teacher-dashboard/chemicals-bundle-list" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to=" teacher-dashboard/bundle-list" className='footer__item'> <i className="fa-solid fa-boxes-stacked" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/chem/teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <Link to=" teacher-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

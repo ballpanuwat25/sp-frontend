@@ -67,7 +67,7 @@ function TeacherLogin({ login }) {
                     const token = response.data.token;
                     localStorage.setItem("teacherToken", token);
                     login();
-                    navigate("/chem/teacher-dashboard");
+                    navigate(" teacher-dashboard");
                 }
             })
             .catch((error) => {
@@ -106,7 +106,7 @@ function TeacherLogin({ login }) {
                     </div>
 
                     <div className='form__forgetPassword'>
-                        <Link to="/chem/teacher-forget-password" className='forgetPassword__text'>Forgot password</Link>
+                        <Link to=" teacher-forget-password" className='forgetPassword__text'>Forgot password</Link>
                     </div>
 
                     {loginInProgress ? (

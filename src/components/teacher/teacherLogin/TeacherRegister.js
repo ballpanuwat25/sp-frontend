@@ -20,7 +20,7 @@ function TeacherRegister() {
       if (response.data.Error) {
         alert(response.data.Error);
       } else {
-        navigate("/chem/teacher-login");
+        navigate(" teacher-login");
       }
     });
   };
@@ -81,7 +81,7 @@ function TeacherRegister() {
 
         <button type="submit" className="btn btn-primary w-100 mb-3">Create Account</button>
         <div className="btn-group w-100" role="group">
-          <Link to="/chem/teacher-login" className='btn btn-outline-success w-100'>Login</Link>
+          <Link to=" teacher-login" className='btn btn-outline-success w-100'>Login</Link>
         </div>
       </form>
     </div>

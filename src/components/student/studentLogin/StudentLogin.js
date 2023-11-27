@@ -68,7 +68,7 @@ function StudentLogin() {
         } else {
           const token = response.data.token;
           localStorage.setItem("studentToken", token);
-          navigate("/chem/student-dashboard");
+          navigate(" student-dashboard");
         }
       })
       .catch((error) => {
@@ -108,7 +108,7 @@ function StudentLogin() {
           </div>
 
           <div className='form__forgetPassword'>
-            <Link className='forgetPassword__text' to="/chem/student-forget-password">Forget Password</Link>
+            <Link className='forgetPassword__text' to=" student-forget-password">Forget Password</Link>
           </div>
 
           {loginInProgress ? (
@@ -121,7 +121,7 @@ function StudentLogin() {
 
           <StudentGoogleLogin />
 
-          <div className='form__text'>Don't have an account? <Link to="/chem/student-register" className='form__subtext'>Register</Link></div>
+          <div className='form__text'>Don't have an account? <Link to=" student-register" className='form__subtext'>Register</Link></div>
         </form>
       </main>
     </div>

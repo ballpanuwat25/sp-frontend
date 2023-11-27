@@ -47,7 +47,7 @@ function AdminProfile({ logout }) {
             } else {
                 logout();
                 localStorage.removeItem('adminToken');
-                navigate("/chem");
+                navigate("/");
             }
         });
     };
@@ -61,9 +61,9 @@ function AdminProfile({ logout }) {
                         <div className='sidebar__title admin__name'>Welcome, {adminInfo.adminUsername}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to="/chem/admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
-                        <Link to="/chem/admin-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
-                        <Link to="/chem/admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> <div className='sidebar__item--active'>Profile</div></Link>
+                        <Link to=" admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
+                        <Link to=" admin-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
+                        <Link to=" admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> <div className='sidebar__item--active'>Profile</div></Link>
                     </div>
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
@@ -89,19 +89,19 @@ function AdminProfile({ logout }) {
                         <p className="profile__label">นามสกุล: {adminInfo.adminLastName}</p>
                         <p className="profile__label">อีเมล: {adminInfo.adminEmail}</p>
                         <p className="profile__label">เบอร์โทรศัพท์: {adminInfo.adminTel}</p>
-                        <Link to={`/chem/admin-profile/${adminInfo.adminId}`} className='btn edit--btn thai--font'>แก้ไขข้อมูล</Link>
+                        <Link to={` admin-profile/${adminInfo.adminId}`} className='btn edit--btn thai--font'>แก้ไขข้อมูล</Link>
                     </div>
                 </main>
 
                 <footer className='footer'>
-                    <Link to="/chem/admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                    <Link to="/chem/admin-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
+                    <Link to=" admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to=" admin-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to="/chem/admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <Link to=" admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

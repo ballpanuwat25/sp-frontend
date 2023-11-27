@@ -50,7 +50,7 @@ function AdminLogin({ login }) {
                     const token = response.data.token;
                     localStorage.setItem('adminToken', token);
                     login();
-                    navigate('/chem/admin-dashboard');
+                    navigate(' admin-dashboard');
                 }
             })
             .catch((error) => {
@@ -91,7 +91,7 @@ function AdminLogin({ login }) {
                     </div>
 
                     <div className="form__forgetPassword">
-                        <Link to="/chem/admin-forget-password" className="forgetPassword__text">
+                        <Link to=" admin-forget-password" className="forgetPassword__text">
                             Forgot password
                         </Link>
                     </div>

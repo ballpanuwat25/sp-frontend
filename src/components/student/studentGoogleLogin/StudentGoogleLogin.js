@@ -42,11 +42,11 @@ function StudentGoogleLogin() {
                     const token = postResponse.data.token;
                     localStorage.setItem("studentToken", token);
                     console.log('Login success');
-                    navigate("/chem/student-dashboard");
+                    navigate(" student-dashboard");
                 }
             } else {
                 notifyEmail2();
-                navigate('/chem/student-google-register');
+                navigate(' student-google-register');
             }
         } catch (error) {
             console.error('Error checking email:', error);
