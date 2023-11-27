@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://std.flas.kps.ku.ac.th/chem",
   "dependencies": {
     "@react-pdf/renderer": "^3.1.12",
     "@splinetool/react-spline": "^2.2.6",

@@ -155,12 +155,12 @@ function ChemicalsList({ logout }) {
                     </div>
 
                     <div className='sidebar__body'>
-                        <Link to=" staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
-                        <Link to=" chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Chemicals</div></Link>
-                        <Link to=" equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
-                        <Link to=" chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
-                        <Link to=" approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
-                        <Link to=" staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
+                        <Link to="staff-dashboard/staff-chemicals-request-list" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-clock" /> <div className='ms-1'> Request</div></Link>
+                        <Link to="chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Chemicals</div></Link>
+                        <Link to="equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
+                        <Link to="chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
+                        <Link to="approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
+                        <Link to="staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
                     <div className='sidebar__footer'>
@@ -178,7 +178,7 @@ function ChemicalsList({ logout }) {
                             <div className='component__header'>
                                 <div className='component__headerGroup component__headerGroup--left'>
                                     <BarcodeScanner2 onSave={handleSave} />
-                                    <Link to=" barcode-chemicals" className="btn btn-outline-success me-3"><i className="fa-solid fa-barcode"></i></Link>
+                                    <Link to="barcode-chemicals" className="btn btn-outline-success me-3"><i className="fa-solid fa-barcode"></i></Link>
 
                                     <i className='fa-solid fa-magnifying-glass' />
                                     <input
@@ -199,8 +199,8 @@ function ChemicalsList({ logout }) {
                             <div>
                                 <div className='table__tabs'>
                                     <Link className='table__tab table__tab--chemicals table__tab--active'>ขวดสารเคมี</Link>
-                                    <Link to=" chemicalsDetail-list" className='table__tab table__tab--equipment table__tab--unactive'>สารเคมี</Link>
-                                    <Link to=" report-chemicals" className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
+                                    <Link to="chemicalsDetail-list" className='table__tab table__tab--equipment table__tab--unactive'>สารเคมี</Link>
+                                    <Link to="report-chemicals" className='table__tab table__tab--equipment table__tab--unactive'>ออกรายงาน</Link>
                                 </div>
 
                                 <table className="table table-striped">
@@ -252,17 +252,17 @@ function ChemicalsList({ logout }) {
                 </main>
 
                 <footer className='footer'>
-                    <Link to=" staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
-                    <Link to=" chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
-                    <Link to=" equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
-                    <Link to=" chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
+                    <Link to="staff-dashboard/staff-chemicals-request-list" className='footer__item'> <i className="fa-regular fa-clock" /></Link>
+                    <Link to="chemicals-list" className='footer__item'> <i className="fa-solid fa-flask" /> </Link>
+                    <Link to="equipment-list" className='footer__item'> <i className="fa-solid fa-toolbox" /></Link>
+                    <Link to="chemicals-stock" className='footer__item'> <i className="fa-solid fa-flask-vial" /> </Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to=" staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
-                            <Link to=" approve-students-list" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-users" /> Users</Link>
+                            <Link to="staff-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
+                            <Link to="approve-students-list" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-regular fa-users" /> Users</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

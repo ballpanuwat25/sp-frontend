@@ -190,12 +190,12 @@ function StudentChemicalsList() {
                         <div className='sidebar__title std__name thai--font'>Welcome, {studentInfo.studentFirstName}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to=" student-dashboard/student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>
-                        <Link to=" student-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> Bundle</Link>
-                        <Link to=" student-dashboard/student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-cart-shopping" /> Cart</Link>
-                        <Link to=" student-dashboard/student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-clock-rotate-left" /> History</Link>
-                        <Link to=" student-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
-                        <Link to=" student-dashboard/student-view-teacher" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
+                        <Link to="student-dashboard/student-chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> <div className='sidebar__item--active'>List</div></Link>
+                        <Link to="student-dashboard/bundle-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-boxes-stacked" /> Bundle</Link>
+                        <Link to="student-dashboard/student-chemicals-cart" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-cart-shopping" /> Cart</Link>
+                        <Link to="student-dashboard/student-chemicals-request" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-clock-rotate-left" /> History</Link>
+                        <Link to="student-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                        <Link to="student-dashboard/student-view-teacher" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
                     </div>
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
@@ -230,7 +230,7 @@ function StudentChemicalsList() {
                             <div >
                                 <div className='table__tabs'>
                                     <Link className='table__tab table__tab--chemicals table__tab--active'>รายการสารเคมี</Link>
-                                    <Link to=" student-dashboard/student-equipment-list" className='table__tab table__tab--equipment table__tab--unactive'>รายการครุภัณฑ์</Link>
+                                    <Link to="student-dashboard/student-equipment-list" className='table__tab table__tab--equipment table__tab--unactive'>รายการครุภัณฑ์</Link>
                                 </div>
 
                                 <table className='table table-striped'>
@@ -282,7 +282,7 @@ function StudentChemicalsList() {
                                                                         <div className="offcanvas--title">
                                                                             {findChemicalNameById(selectedChemicalsId.Chem_Id)} <p className="offcanvas__title--highlight">ถูกเพิ่มลงตระกร้าสารเคมีแล้ว</p>
                                                                         </div>
-                                                                        <Link to=" student-dashboard/student-chemicals-cart" className="offcanvas--link">ไปที่ตระกร้าสารเคมี</Link>
+                                                                        <Link to="student-dashboard/student-chemicals-cart" className="offcanvas--link">ไปที่ตระกร้าสารเคมี</Link>
                                                                     </div>
                                                                     <div className="offcanvas-body">
                                                                         {selectedChemicalsId && (
@@ -326,17 +326,17 @@ function StudentChemicalsList() {
                 </main>
 
                 <footer className='footer'>
-                    <Link to=" student-dashboard/student-chemicals-list" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                    <Link to=" student-dashboard/bundle-list" className='footer__item'> <i className="fa-solid fa-boxes-stacked" /></Link>
-                    <Link to=" student-dashboard/student-chemicals-cart" className='footer__item'> <i className="fa-solid fa-cart-shopping" /></Link>
-                    <Link to=" student-dashboard/student-chemicals-request" className='footer__item'> <i className="fa-solid fa-clock-rotate-left" /></Link>
+                    <Link to="student-dashboard/student-chemicals-list" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to="student-dashboard/bundle-list" className='footer__item'> <i className="fa-solid fa-boxes-stacked" /></Link>
+                    <Link to="student-dashboard/student-chemicals-cart" className='footer__item'> <i className="fa-solid fa-cart-shopping" /></Link>
+                    <Link to="student-dashboard/student-chemicals-request" className='footer__item'> <i className="fa-solid fa-clock-rotate-left" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to=" student-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
-                            <Link to=" student-dashboard/student-view-teacher" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
+                            <Link to="student-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <Link to="student-dashboard/student-view-teacher" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-users" /> Teacher</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>

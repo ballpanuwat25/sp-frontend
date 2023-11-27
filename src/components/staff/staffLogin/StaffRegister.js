@@ -81,7 +81,7 @@ function StaffRegister() {
 
         <button type="submit" className="btn btn-primary w-100 mb-3">Create Account</button>
         <div className="btn-group w-100" role="group">
-          <Link to=" staff-login" className='btn btn-outline-success w-100'>Login</Link>
+          <Link to="staff-login" className='btn btn-outline-success w-100'>Login</Link>
         </div>
       </form>
     </div>

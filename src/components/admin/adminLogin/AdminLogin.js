@@ -91,7 +91,7 @@ function AdminLogin({ login }) {
                     </div>
 
                     <div className="form__forgetPassword">
-                        <Link to=" admin-forget-password" className="forgetPassword__text">
+                        <Link to="admin-forget-password" className="forgetPassword__text">
                             Forgot password
                         </Link>
                     </div>

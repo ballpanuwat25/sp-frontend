@@ -101,9 +101,9 @@ const StaffList = ({ logout }) => {
                         <div className='sidebar__title admin__name'>Welcome, {adminInfo.adminUsername}</div>
                     </div>
                     <div className='sidebar__body'>
-                        <Link to=" admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
-                        <Link to=" admin-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
-                        <Link to=" admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                        <Link to="admin-dashboard" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-list" /> Log Activity</Link>
+                        <Link to="admin-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> <div className='sidebar__item--active'>Users</div></Link>
+                        <Link to="admin-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                     </div>
                     <div className='sidebar__footer'>
                         <button onClick={handleLogout} className='sidebar__item sidebar__item--footer sidebar__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
@@ -136,9 +136,9 @@ const StaffList = ({ logout }) => {
 
                             <div >
                                 <div className='table__tabs'>
-                                    <Link to=" admin-list" className='table__tab table__tab--chemicals table__tab--unactive'>ผู้ดูแล</Link>
+                                    <Link to="admin-list" className='table__tab table__tab--chemicals table__tab--unactive'>ผู้ดูแล</Link>
                                     <Link className='table__tab table__tab--chemicals table__tab--active'>เจ้าหน้าที่</Link>
-                                    <Link to=" teacher-list" className='table__tab table__tab--chemicals table__tab--unactive'>อาจารย์</Link>
+                                    <Link to="teacher-list" className='table__tab table__tab--chemicals table__tab--unactive'>อาจารย์</Link>
                                 </div>
 
                                 <table className="table table-striped">
@@ -174,14 +174,14 @@ const StaffList = ({ logout }) => {
                 </main>
 
                 <footer className='footer'>
-                    <Link to=" admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
-                    <Link to=" admin-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
+                    <Link to="admin-dashboard" className='footer__item'> <i className="fa-solid fa-list" /></Link>
+                    <Link to="admin-list" className='footer__item'> <i className="fa-solid fa-users" /></Link>
                     <div className="dropup">
                         <button type="button" className='dropdown-toggle' data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="fa-solid fa-user" />
                         </button>
                         <ul className="dropdown-menu">
-                            <Link to=" admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
+                            <Link to="admin-profile" className='dropdown-menu__item dropdown-menu__item--hover'> <i className="fa-solid fa-user" /> Profile</Link>
                             <button onClick={handleLogout} className='dropdown-menu__item dropdown-menu__item--hover '> <i className="fa-solid fa-arrow-right-from-bracket" /> Logout</button>
                         </ul>
                     </div>
