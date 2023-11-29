@@ -78,7 +78,7 @@ function EditAdmin({ logout }) {
 
             if (response.status === 200) {
                 // Admin Updated successfully, navigate to admin list
-                navigate(" admin-list");
+                navigate("/admin-list");
             } else {
                 // Handle other possible responses
                 console.log("Unexpected response:", response);

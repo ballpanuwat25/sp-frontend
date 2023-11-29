@@ -50,7 +50,7 @@ function AdminLogin({ login }) {
                     const token = response.data.token;
                     localStorage.setItem('adminToken', token);
                     login();
-                    navigate(' admin-dashboard');
+                    navigate('/admin-dashboard');
                 }
             })
             .catch((error) => {

@@ -68,7 +68,7 @@ function StudentLogin() {
         } else {
           const token = response.data.token;
           localStorage.setItem("studentToken", token);
-          navigate(" student-dashboard");
+          navigate("/student-dashboard");
         }
       })
       .catch((error) => {

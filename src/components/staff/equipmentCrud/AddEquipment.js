@@ -77,7 +77,7 @@ function AddEquipment({ logout }) {
             await axios.post(process.env.REACT_APP_API + "/equipment-list", (equipment));
 
             notifySuccess();
-            navigate(" equipment-list");
+            navigate("/equipment-list");
         } catch (err) {
             console.log(err);
         }

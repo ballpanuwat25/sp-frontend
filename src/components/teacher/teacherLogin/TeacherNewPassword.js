@@ -99,7 +99,7 @@ function TeacherNewPassword() {
                 alert(response.data.Error);
             } else {
                 localStorage.removeItem('teacherToken');
-                navigate(" teacher-login");
+                navigate("/teacher-login");
             }
         });
     };

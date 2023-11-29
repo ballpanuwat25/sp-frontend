@@ -84,7 +84,7 @@ function EditEquipment({ logout }) {
         if (response.data.Error) {
             alert(response.data.Error);
         } else {
-            navigate(" equipment-list");
+            navigate("/equipment-list");
         }
     }
 

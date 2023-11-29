@@ -50,7 +50,7 @@ function EditTeacher({ logout }) {
 
             if (response.status === 200) {
                 // Teacher Updated successfully, navigate to teacher list
-                navigate(" teacher-list");
+                navigate("/teacher-list");
             } else {
                 // Handle other possible responses
                 console.log("Unexpected response:", response);

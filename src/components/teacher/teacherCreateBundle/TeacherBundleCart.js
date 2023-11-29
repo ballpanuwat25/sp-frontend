@@ -58,7 +58,7 @@ function TeacherBundleCart({ logout }) {
 
             localStorage.removeItem('bundleCart');
 
-            navigate(" teacher-dashboard");
+            navigate("/teacher-dashboard");
         } catch (err) {
             console.log('Error:', err);
 

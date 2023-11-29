@@ -96,7 +96,7 @@ function AdminNewPassword() {
                 alert(response.data.Error);
             } else {
                 localStorage.removeItem('adminToken');
-                navigate(" admin-login");
+                navigate("/admin-login");
             }
         });
     };

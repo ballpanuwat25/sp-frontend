@@ -29,7 +29,7 @@ function AddTeacher({ logout }) {
     
             if (response.status === 201) {
                 // Teacher Created successfully, navigate to teacher list
-                navigate(" teacher-list");
+                navigate("/teacher-list");
             } else {
                 // Handle other possible responses
                 console.log("Unexpected response:", response);

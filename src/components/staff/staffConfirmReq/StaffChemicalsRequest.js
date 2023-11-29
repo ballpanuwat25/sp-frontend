@@ -153,7 +153,7 @@ function StaffChemicalsRequest({ logout }) {
                     alert(chemicalsRequestResponse.data.Error);
                 } else {
                     // If both updates are successful, navigate to the staff dashboard
-                    navigate(" staff-dashboard");
+                    navigate("/staff-dashboard");
                 }
             }
         } catch (error) {

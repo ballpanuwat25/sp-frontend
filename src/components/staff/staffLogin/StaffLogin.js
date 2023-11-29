@@ -67,7 +67,7 @@ function StaffLogin({ login }) {
                     const token = response.data.token;
                     localStorage.setItem("staffToken", token);
                     login();
-                    navigate(" staff-dashboard");
+                    navigate("/staff-dashboard");
                 }
             })
             .catch((error) => {

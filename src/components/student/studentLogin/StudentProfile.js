@@ -64,7 +64,7 @@ function StudentProfile() {
                         alert(response.data.Error);
                     } else {
                         localStorage.removeItem('studentToken');
-                        navigate(" student-login");
+                        navigate("/student-login");
                     }
                 });
             }

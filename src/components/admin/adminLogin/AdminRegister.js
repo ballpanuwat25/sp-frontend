@@ -19,7 +19,7 @@ function AdminRegister() {
       if (response.data.Error) {
         alert(response.data.Error);
       } else {
-        navigate(" admin-login");
+        navigate("/admin-login");
       }
     });
   };

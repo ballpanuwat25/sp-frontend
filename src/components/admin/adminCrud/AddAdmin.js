@@ -29,7 +29,7 @@ function AddAdmin({ logout }) {
     
             if (response.status === 201) {
                 // Admin Created successfully, navigate to admin list
-                navigate(" admin-list");
+                navigate("/admin-list");
             } else {
                 // Handle other possible responses
                 console.log("Unexpected response:", response);

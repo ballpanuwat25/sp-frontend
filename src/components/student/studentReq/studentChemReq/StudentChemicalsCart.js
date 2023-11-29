@@ -52,7 +52,7 @@ function StudentChemicalsCart() {
             localStorage.removeItem('chemicalsCart');
 
             // Redirect to the student dashboard or any other page
-            navigate(" student-dashboard/student-equipment-cart");
+            navigate("/student-dashboard/student-equipment-cart");
         } catch (err) {
             console.log('Error:', err);
 

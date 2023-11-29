@@ -29,7 +29,7 @@ function AddStaff({ logout }) {
     
             if (response.status === 201) {
                 // Staff Created successfully, navigate to staff list
-                navigate(" staff-list");
+                navigate("/staff-list");
             } else {
                 // Handle other possible responses
                 console.log("Unexpected response:", response);

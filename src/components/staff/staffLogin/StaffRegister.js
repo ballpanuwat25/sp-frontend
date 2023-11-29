@@ -20,7 +20,7 @@ function StaffRegister() {
       if (response.data.Error) {
         alert(response.data.Error);
       } else {
-        navigate(" staff-login");
+        navigate("/staff-login");
       }
     });
   };

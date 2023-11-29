@@ -50,7 +50,7 @@ function EditStaff({ logout }) {
 
             if (response.status === 200) {
                 // Staff Updated successfully, navigate to staff list
-                navigate(" staff-list");
+                navigate("/staff-list");
             } else {
                 // Handle other possible responses
                 console.log("Unexpected response:", response);

@@ -77,7 +77,7 @@ function AddChemicals({ logout }) {
             await axios.post(process.env.REACT_APP_API + "/chemicals-list", chemicals);
 
             notifySuccess();
-            navigate(" chemicals-list");
+            navigate("/chemicals-list");
         } catch (err) {
             console.log(err);
         }

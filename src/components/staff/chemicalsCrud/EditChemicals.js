@@ -77,7 +77,7 @@ function EditChemicals({ logout }) {
         if (response.data.Error) {
             alert(response.data.Error);
         } else {
-            navigate(" chemicals-list");
+            navigate("/chemicals-list");
         }
     }
 

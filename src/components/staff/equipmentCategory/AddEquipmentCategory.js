@@ -20,7 +20,7 @@ function AddEquipmentCategory({ logout }) {
         e.preventDefault();
         try {
             await axios.post(process.env.REACT_APP_API + "/equipmentCategory-list", (equipmentCategory));
-            navigate(" equipmentCategory-list");
+            navigate("/equipmentCategory-list");
         } catch (err) {
             console.log(err);
         }

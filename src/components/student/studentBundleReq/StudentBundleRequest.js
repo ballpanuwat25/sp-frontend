@@ -94,7 +94,7 @@ function StudentBundleRequest() {
                 // You can add more conditions if needed
             }));
 
-            navigate(" student-dashboard");
+            navigate("/student-dashboard");
         } catch (err) {
             console.log(err);
         }

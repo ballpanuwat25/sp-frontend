@@ -131,7 +131,7 @@ function StaffEquipmentRequest({ logout }) {
                 if (equipmentRequestResponse.data.Error) {
                     alert(equipmentRequestResponse.data.Error);
                 } else {
-                    navigate(" staff-dashboard");
+                    navigate("/staff-dashboard");
                 }
             }
         } catch (error) {

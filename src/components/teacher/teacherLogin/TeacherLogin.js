@@ -67,7 +67,7 @@ function TeacherLogin({ login }) {
                     const token = response.data.token;
                     localStorage.setItem("teacherToken", token);
                     login();
-                    navigate(" teacher-dashboard");
+                    navigate("/teacher-dashboard");
                 }
             })
             .catch((error) => {

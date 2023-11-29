@@ -20,7 +20,7 @@ function TeacherRegister() {
       if (response.data.Error) {
         alert(response.data.Error);
       } else {
-        navigate(" teacher-login");
+        navigate("/teacher-login");
       }
     });
   };
