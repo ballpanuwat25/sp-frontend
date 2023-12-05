@@ -121,7 +121,7 @@ function StudentLogin() {
 
           <StudentGoogleLogin />
 
-          <div className='form__text'>Don't have an account? <Link to="student-register" className='form__subtext'>Register</Link></div>
+          <div className='form__text'>Don't have an account? <Link to="/student-register" className='form__subtext'>Register</Link></div>
         </form>
       </main>
     </div>

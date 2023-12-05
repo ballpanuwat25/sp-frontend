@@ -106,7 +106,7 @@ function StaffLogin({ login }) {
                     </div>
 
                     <div className='form__forgetPassword'>
-                        <Link to="staff-forget-password" className='forgetPassword__text'>Forgot password</Link>
+                        <Link to="/staff-forget-password" className='forgetPassword__text'>Forgot password</Link>
                     </div>
 
                     {loginInProgress ? (

@@ -22,7 +22,7 @@ function Header() {
                         <li><Link className="dropdown-item" to="admin-login">Admin</Link></li>
                     </ul>
                 </div>
-                <Link to="student-register" className='header__button header__button--signup '>Sign up</Link>
+                <Link to="/student-register" className='header__button header__button--signup '>Sign up</Link>
             </div>
         </div>
     )

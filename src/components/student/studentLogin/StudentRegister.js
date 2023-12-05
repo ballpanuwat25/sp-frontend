@@ -92,7 +92,7 @@ function StudentRegister() {
                     </div>
 
                     <button type="submit" className='form__btn'>Create Account</button>
-                    <div className='form__text'>Already have an account? <Link to="student-login" className='form__subtext'>Login</Link> </div>
+                    <div className='form__text'>Already have an account? <Link to="/student-login" className='form__subtext'>Login</Link> </div>
                 </form>
             </main>
         </div>
