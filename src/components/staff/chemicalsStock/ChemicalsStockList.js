@@ -89,10 +89,14 @@ function ChemicalsStockList({ logout }) {
       const detail = chemicalsDetail.find((detail) => detail.Chem_Id === Chem_Id);
 
       let Counting_Unit;
-      if (detail.Chem_State.toLowerCase() === "solid") {
-        Counting_Unit = "g";
-      } else if (detail.Chem_State.toLowerCase() === "liquid") {
-        Counting_Unit = "mL";
+      if (detail && detail.Chem_State) {
+        if (detail.Chem_State.toLowerCase() === "solid") {
+          Counting_Unit = "g";
+        } else if (detail.Chem_State.toLowerCase() === "liquid") {
+          Counting_Unit = "mL";
+        } else {
+          Counting_Unit = "N/A";
+        }
       } else {
         Counting_Unit = "N/A";
       }

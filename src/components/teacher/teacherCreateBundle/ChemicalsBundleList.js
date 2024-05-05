@@ -69,6 +69,8 @@ function ChemicalsBundleList({ logout }) {
         setIsLoading(false);
     }
 
+    const notifySuccess = () => toast.success("Chemical added to cart");
+
     const addToCart = (Chem_Id) => {
         const cartData = JSON.parse(localStorage.getItem('bundleCart')) || [];
 
@@ -81,6 +83,8 @@ function ChemicalsBundleList({ logout }) {
                 Teacher_Id: teacherInfo.teacherId,
                 Chem_Id,
             });
+
+            notifySuccess();
         }
 
         localStorage.setItem('bundleCart', JSON.stringify(cartData));

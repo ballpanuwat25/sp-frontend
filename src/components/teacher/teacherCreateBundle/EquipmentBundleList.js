@@ -69,6 +69,8 @@ function EquipmentBundleList({ logout }) {
         setIsLoading(false);
     }
 
+    const notifySuccess = () => toast.success("Chemical added to cart");
+
     const addToCart = (Equipment_Id) => {
         const cartData = JSON.parse(localStorage.getItem('bundleCart')) || [];
 
@@ -81,6 +83,8 @@ function EquipmentBundleList({ logout }) {
                 Teacher_Id: teacherInfo.teacherId,
                 Equipment_Id,
             });
+            
+            notifySuccess();
         }
 
         localStorage.setItem('bundleCart', JSON.stringify(cartData));

@@ -15,7 +15,7 @@ function ChemicalsStockList({ logout }) {
     const [chemicals, setChemicals] = useState([]);
     const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
-    const [searchFilter, setSearchFilter] = useState("All");
+    const [searchFilter, setSearchFilter] = useState("all");
     const [searchTerm, setSearchTerm] = useState("");
 
     const [exportData, setExportData] = useState([]);
@@ -112,36 +112,36 @@ function ChemicalsStockList({ logout }) {
         let processedChemicals = Object.keys(uniqueChemicals).map((Chem_Id) => {
             // Find the corresponding chemicalsDetail based on Chem_Id
             const detail = chemicalsDetail.find((detail) => detail.Chem_Id === Chem_Id);
-
-            // Set Counting_Unit based on Chem_State
+      
             let Counting_Unit;
-            if (detail) {
-                Counting_Unit =
-                    detail.Chem_State === "Solid"
-                        ? "g"
-                        : detail.Chem_State === "Liquid"
-                            ? "ml"
-                            : "N/A";
-            } else {
+            if (detail && detail.Chem_State) {
+              if (detail.Chem_State.toLowerCase() === "solid") {
+                Counting_Unit = "g";
+              } else if (detail.Chem_State.toLowerCase() === "liquid") {
+                Counting_Unit = "mL";
+              } else {
                 Counting_Unit = "N/A";
+              }
+            } else {
+              Counting_Unit = "N/A";
             }
-
+      
             return {
-                Chem_Id,
-                Chem_Name: detail ? detail.Chem_Name : "N/A",
-                Package_Size: uniqueChemicals[Chem_Id].Package_Size,
-                Remaining_Quantity: uniqueChemicals[Chem_Id].Remaining_Quantity,
-                Counting_Unit,
-                Chem_State: detail ? detail.Chem_State : "N/A",
+              Chem_Id,
+              Chem_Name: detail ? detail.Chem_Name : "N/A",
+              Package_Size: uniqueChemicals[Chem_Id].Package_Size,
+              Remaining_Quantity: uniqueChemicals[Chem_Id].Remaining_Quantity,
+              Counting_Unit,
+              Chem_State: detail ? detail.Chem_State : "N/A",
             };
-        });
+          });
 
         // Filter chemicals based on the searchFilter (Chem_State)
-        if (searchFilter !== "All") {
+        if (searchFilter.toLowerCase() !== "all") {
             processedChemicals = processedChemicals.filter(
-                (chemical) => chemical.Chem_State === searchFilter
+              (chemical) => chemical.Chem_State === searchFilter
             );
-        }
+          }
 
         // Filter chemicals based on the searchTerm (Chem_Name)
         if (searchTerm.trim() !== "") {
@@ -312,9 +312,9 @@ function ChemicalsStockList({ logout }) {
                                         onChange={handleSearchFilterChange}
                                         className="form-control w-75 thai--font"
                                     >
-                                        <option value="All">ทั้งหมด</option>
-                                        <option value="Liquid">Liquid</option>
-                                        <option value="Solid">Solid</option>
+                                        <option value="all">ทั้งหมด</option>
+                                        <option value="liquid">Liquid</option>
+                                        <option value="solid">Solid</option>
                                     </select>
                                 </div>
                             </div>
