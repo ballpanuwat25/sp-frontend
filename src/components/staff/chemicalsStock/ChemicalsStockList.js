@@ -12,7 +12,7 @@ function ChemicalsStockList({ logout }) {
   const [chemicals, setChemicals] = useState([]);
   const [chemicalsDetail, setChemicalsDetail] = useState([]);
 
-  const [searchFilter, setSearchFilter] = useState("All");
+  const [searchFilter, setSearchFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
@@ -88,15 +88,11 @@ function ChemicalsStockList({ logout }) {
       // Find the corresponding chemicalsDetail based on Chem_Id
       const detail = chemicalsDetail.find((detail) => detail.Chem_Id === Chem_Id);
 
-      // Set Counting_Unit based on Chem_State
       let Counting_Unit;
-      if (detail) {
-        Counting_Unit =
-          detail.Chem_State === "Solid"
-            ? "g"
-            : detail.Chem_State === "Liquid"
-              ? "ml"
-              : "N/A";
+      if (detail.Chem_State.toLowerCase() === "solid") {
+        Counting_Unit = "g";
+      } else if (detail.Chem_State.toLowerCase() === "liquid") {
+        Counting_Unit = "mL";
       } else {
         Counting_Unit = "N/A";
       }
@@ -112,7 +108,7 @@ function ChemicalsStockList({ logout }) {
     });
 
     // Filter chemicals based on the searchFilter (Chem_State)
-    if (searchFilter !== "All") {
+    if (searchFilter.toLowerCase() !== "all") {
       processedChemicals = processedChemicals.filter(
         (chemical) => chemical.Chem_State === searchFilter
       );
@@ -212,15 +208,15 @@ function ChemicalsStockList({ logout }) {
                       <th scope="col">ปริมาณทั้งหมด</th>
                       <th scope="col">ปริมาณคงเหลือ</th>
                       <th scope="col">หน่วยนับ</th>
+                      <th scope="col">สถานะของสาร</th>
                       <th scope="col">
                         <select id="searchFilter" value={searchFilter} onChange={handleSearchFilterChange} className="buttonTab-btn thai--font" >
                           <option disabled>เลือกสถานะของสาร</option>
-                          <option value="All">ทั้งหมด</option>
-                          <option value="Liquid">Liquid</option>
-                          <option value="Solid">Solid</option>
+                          <option value="all">ทั้งหมด</option>
+                          <option value="liquid">Liquid</option>
+                          <option value="solid">Solid</option>
                         </select>
                       </th>
-                      <th scope="col"></th>
                     </tr>
                   </thead>
                   <tbody>

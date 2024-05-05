@@ -49,6 +49,7 @@ function StudentChemicalsList() {
 
     const notify = () => toast.info("หลังใช้งานเสร็จควรออกจากระบบทุกครั้ง เพื่อไม่ให้เกิดปัญหาในการเข้าสู่ระบบครั้งถัดไป");
     const notifyWarn = () => toast.warn("This chemical is already in your cart");
+    const notifySuccess = () => toast.success("Chemical added to cart");
 
     const fetchData = async () => {
         try {
@@ -140,6 +141,7 @@ function StudentChemicalsList() {
                 Chem_Id,
                 Chem_State,
             });
+            notifySuccess();
         }
         setSelectedChemicalsId({ Chem_Id: Chem_Id });
         localStorage.setItem('chemicalsCart', JSON.stringify(cartData));

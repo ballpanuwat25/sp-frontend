@@ -112,7 +112,7 @@ function EditChemicalsDetail({ logout }) {
                         <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Chemicals</div></Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
-<Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
+                        <Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
@@ -156,7 +156,7 @@ function EditChemicalsDetail({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Chem_CAS" className="profile__label">Chemicals CAS</label>
-                            <input type="text" className="profile__input" id="Chem_CAS" placeholder="Enter Chemicals CAS" required
+                            <input type="text" className="profile__input" id="Chem_CAS" placeholder="Enter Chemicals CAS"
                                 value={Chem_CAS}
                                 onChange={(e) => {
                                     setChem_CAS(e.target.value);
@@ -166,7 +166,7 @@ function EditChemicalsDetail({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Chem_UN" className="profile__label">Chemicals UN</label>
-                            <input type="text" className="profile__input" id="Chem_UN" placeholder="Enter Chemicals UN" required
+                            <input type="text" className="profile__input" id="Chem_UN" placeholder="Enter Chemicals UN"
                                 value={Chem_UN}
                                 onChange={(e) => {
                                     setChem_UN(e.target.value);
@@ -176,7 +176,7 @@ function EditChemicalsDetail({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Chem_Type" className="profile__label">Chemicals Type</label>
-                            <input type="text" className="profile__input" id="Chem_Type" placeholder="Enter Chemicals Type" required
+                            <input type="text" className="profile__input" id="Chem_Type" placeholder="Enter Chemicals Type"
                                 value={Chem_Type}
                                 onChange={(e) => {
                                     setChem_Type(e.target.value);
@@ -186,7 +186,7 @@ function EditChemicalsDetail({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Chem_Grade" className="profile__label">Chemicals Grade</label>
-                            <input type="text" className="profile__input" id="Chem_Grade" placeholder="Enter Chemicals Grade" required
+                            <input type="text" className="profile__input" id="Chem_Grade" placeholder="Enter Chemicals Grade"
                                 value={Chem_Grade}
                                 onChange={(e) => {
                                     setChem_Grade(e.target.value);
@@ -195,7 +195,7 @@ function EditChemicalsDetail({ logout }) {
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="Chem_State" className="profile__label">Chemicals State</label>
+                            <label htmlFor="Chem_State" className="profile__label">Chemicals State*</label>
                             <input type="text" className="profile__input" id="Chem_State" placeholder="Enter Chemicals State" required
                                 value={Chem_State}
                                 onChange={(e) => {
@@ -206,7 +206,7 @@ function EditChemicalsDetail({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Chem_MSDS" className="profile__label">Chemicals MSDS</label>
-                            <input type="text" className="profile__input" id="Chem_MSDS" placeholder="Enter Chemicals MSDS" required
+                            <input type="text" className="profile__input" id="Chem_MSDS" placeholder="Enter Chemicals MSDS"
                                 value={Chem_MSDS}
                                 onChange={(e) => {
                                     setChem_MSDS(e.target.value);
@@ -216,7 +216,7 @@ function EditChemicalsDetail({ logout }) {
 
                         <div className="mb-3">
                             <label htmlFor="Chem_GHS" className="profile__label">Chemicals GHS</label>
-                            <input type="text" className="profile__input" id="Chem_GHS" placeholder="Enter Chemicals GHS" required
+                            <input type="text" className="profile__input" id="Chem_GHS" placeholder="Enter Chemicals GHS"
                                 value={Chem_GHS}
                                 onChange={(e) => {
                                     setChem_GHs(e.target.value);

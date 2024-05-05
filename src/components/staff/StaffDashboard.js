@@ -47,7 +47,7 @@ function StaffDashboard({logout}) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(process.env.REACT_APP_API + `chemicals-request-list/${id}`, data);
+            await axios.patch(process.env.REACT_APP_API + `/chemicals-request-list/${id}`, data);
         } catch (error) {
             console.log(error);
         }
@@ -55,7 +55,7 @@ function StaffDashboard({logout}) {
 
     const deleteChemicalsRequest = async (id) => {
         try {
-            await axios.delete(process.env.REACT_APP_API + `chemicals-request-list/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/chemicals-request-list/${id}`)
             getChemicalsRequest();
         } catch (error) {
             console.log(error)

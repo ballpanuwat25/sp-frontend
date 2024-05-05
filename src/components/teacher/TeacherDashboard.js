@@ -90,7 +90,7 @@ function TeacherDashboard({ logout }) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(process.env.REACT_APP_API + `icals-request-list/${id}`, data);
+            await axios.patch(process.env.REACT_APP_API + `/chemicals-request-list/${id}`, data);
             getChemicalsRequest(); // Refresh the chemicals request list after updating status
         } catch (error) {
             console.log(error);

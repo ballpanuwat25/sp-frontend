@@ -21,7 +21,8 @@ function StudentRegister() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(process.env.REACT_APP_API + "/student-register", values).then((response) => {
+        axios.post(process.env.REACT_APP_API + "/approve-student-list", values).then((response) => {
+            console.log(response);
             if (response.data.Error) {
                 alert(response.data.Error);
             } else {

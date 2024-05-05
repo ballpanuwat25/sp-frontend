@@ -71,6 +71,8 @@ function AStudentList({ logout }) {
                 Student_Password: password,
             });
             toast.success("Approve Success");
+            deleteStudent(id);
+            window.location.href = "/chem/current-students-list";
         } catch (error) {
             console.error(error);
             if (error.response.status === 400) toast.error("Student id already exists");
@@ -133,6 +135,8 @@ function AStudentList({ logout }) {
                     student.Student_Tel,
                     student.Student_Password
                 );
+                deleteStudent(student.Student_Id);
+                window.location.href = "/chem/current-students-list";
             }
         });
     };

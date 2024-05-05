@@ -102,7 +102,7 @@ function AddChemicalsDetail({ logout }) {
                         <Link to="/chemicals-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask" /> <div className='sidebar__item--active'> Chemicals</div></Link>
                         <Link to="/equipment-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-toolbox" />Equipment</Link>
                         <Link to="/chemicals-stock" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-flask-vial" /> Stock</Link>
-<Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
+                        <Link to="/approve-students-list" className='sidebar__item sidebar__item--hover'> <i className="fa-solid fa-users" /> Users</Link>
                         <Link to="/staff-profile" className='sidebar__item sidebar__item--hover'> <i className="fa-regular fa-user" /> Profile</Link>
                     </div>
 
@@ -180,8 +180,8 @@ function AddChemicalsDetail({ logout }) {
                         </div>
 
                         <div className="mb-3">
-                            <label htmlFor="Chem_State" className="profile__label">State</label>
-                            <input type="text" className="profile__input" id="Chem_State" placeholder="Enter Chemicals State"
+                            <label htmlFor="Chem_State" className="profile__label">State*</label>
+                            <input type="text" className="profile__input" id="Chem_State" placeholder="Enter Chemicals State" required
                                 onChange={(e) => {
                                     setChemicalsDetail({ ...chemicalsDetail, Chem_State: e.target.value });
                                 }}

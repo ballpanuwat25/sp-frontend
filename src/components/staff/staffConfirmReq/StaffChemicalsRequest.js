@@ -91,7 +91,7 @@ function StaffChemicalsRequest({ logout }) {
     }
 
     const getChemicalsRequestById = async () => {
-        const result = await axios.get(process.env.REACT_APP_API + `icals-request-list/${id}`);
+        const result = await axios.get(process.env.REACT_APP_API + `/chemicals-request-list/${id}`);
         setChem_Request_Id(result.data.Chem_Request_Id);
         setChem_Id(result.data.Chem_Id);
         setChem_Bottle_Id(result.data.Chem_Bottle_Id);
@@ -147,7 +147,7 @@ function StaffChemicalsRequest({ logout }) {
                     Request_Status,
                     Request_Comment,
                 };
-                const chemicalsRequestResponse = await axios.patch(process.env.REACT_APP_API + `icals-request-list/${id}`, requestData);
+                const chemicalsRequestResponse = await axios.patch(process.env.REACT_APP_API + `/chemicals-request-list/${id}`, requestData);
 
                 if (chemicalsRequestResponse.data.Error) {
                     alert(chemicalsRequestResponse.data.Error);

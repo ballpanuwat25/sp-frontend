@@ -85,7 +85,7 @@ function StaffChemicalsRequestList({ logout }) {
                 Request_Status: status,
                 Request_Comment: comment,
             };
-            await axios.patch(process.env.REACT_APP_API + `icals-request-list/${id}`, data);
+            await axios.patch(process.env.REACT_APP_API + `/chemicals-request-list/${id}`, data);
         } catch (error) {
             console.log(error);
         }
@@ -93,7 +93,7 @@ function StaffChemicalsRequestList({ logout }) {
 
     const deleteChemicalsRequest = async (id) => {
         try {
-            await axios.delete(process.env.REACT_APP_API + `icals-request-list/${id}`)
+            await axios.delete(process.env.REACT_APP_API + `/chemicals-request-list/${id}`)
             getChemicalsRequest();
         } catch (error) {
             console.log(error)
@@ -161,7 +161,7 @@ function StaffChemicalsRequestList({ logout }) {
     const handleDeleteChecked = async () => {
         try {
             for (const id of selectedIds) {
-                await axios.delete(process.env.REACT_APP_API + `icals-request-list/${id}`);
+                await axios.delete(process.env.REACT_APP_API + `/chemicals-request-list/${id}`);
             }
             getChemicalsRequest(); // Refresh the chemicals request list after deleting
             setSelectedIds([]); // Clear the selectedIds after successful deletion
@@ -172,7 +172,7 @@ function StaffChemicalsRequestList({ logout }) {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(process.env.REACT_APP_API + `icals-request-list/${id}`);
+            await axios.delete(process.env.REACT_APP_API + `/chemicals-request-list/${id}`);
             getChemicalsRequest(); // Refresh the chemicals request list after deleting
         } catch (error) {
             console.log(error);

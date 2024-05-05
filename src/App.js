@@ -253,8 +253,8 @@ function App() {
         <Route path="/teacher-dashboard/bundle-list/:id" element={teacherLoggedIn ? <BundleView logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
         <Route path="/teacher-dashboard/teacher-create-bundle" element={teacherLoggedIn ? <TeacherBundleCart logout={handleTeacherLogOut} /> : <Navigate to="/" />} />
 
-        <Route path="chem/teacher-dashboard/chemicals-bundle-list" element={teacherLoggedIn ? <ChemicalsBundleList logout={handleTeacherLogOut} /> : <Navigate to="/" /> } />
-        <Route path="chem/teacher-dashboard/equipment-bundle-list" element={teacherLoggedIn ? <EquipmentBundleList logout={handleTeacherLogOut} /> : <Navigate to="/" /> } />
+        <Route path="/teacher-dashboard/chemicals-bundle-list" element={teacherLoggedIn ? <ChemicalsBundleList logout={handleTeacherLogOut} /> : <Navigate to="/" /> } />
+        <Route path="/teacher-dashboard/equipment-bundle-list" element={teacherLoggedIn ? <EquipmentBundleList logout={handleTeacherLogOut} /> : <Navigate to="/" /> } />
 
         {/* -------------------------------------------------------- Student -------------------------------------------------------- */}
         <Route path="/student-login" element={<StudentLogin />} />

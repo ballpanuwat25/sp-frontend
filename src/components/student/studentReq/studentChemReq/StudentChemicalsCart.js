@@ -33,20 +33,14 @@ function StudentChemicalsCart() {
         e.preventDefault();
         try {
             // Log each attribute separately
-            for (const item of cartItems) {
-                const countingUnit = getCountingUnit(item.Chem_State);
-                const requestData = {
-                    ...chemicalsRequest,
-                    Student_Id: item.Student_Id,
-                    Chem_Id: item.Chem_Id,
-                    Requested_Quantity: item.Requested_Quantity,
-                    Counting_Unit: countingUnit,
-                    Request_Purpose: item.Request_Purpose,
-                    Request_Room: item.Request_Room,
-                    Teacher_Id: item.Teacher_Id,
-                };
-                await axios.post(process.env.REACT_APP_API + "/chemicals-request-list", requestData);
-            }
+            cartItems.forEach(async (item) => {
+                const response = await axios.post(process.env.REACT_APP_API + "/chemicals-request-list", item, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("studentToken")}`,
+                    },
+                });
+                console.log(item);
+            });
 
             // Clear localStorage
             localStorage.removeItem('chemicalsCart');
