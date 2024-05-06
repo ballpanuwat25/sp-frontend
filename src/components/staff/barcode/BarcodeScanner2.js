@@ -1,33 +1,40 @@
-import React, { useState } from "react";
-import Scanner from "./Scanner";
+import React, { useState, useRef } from "react";
+import Html5QrcodePlugin from "../barcodeScanner/Html5QrcodePlugin";
 
 import "./styles.css";
 import '../../cssElement/Table.css'
 
 function BarcodeScanner2({ onSave }) {
-    const [results, setResults] = useState([]);
-    const [scanning, setScanning] = useState(false);
-    const [scannedCode, setScannedCode] = useState("");
-    const [modalScannedText, setModalScannedText] = useState("");
+    const [scannedText, setScannedText] = useState(""); 
 
-    const handleScan = () => {
-        setScanning(!scanning);
-    };
-
-    const handleDetected = (result) => {
-        setResults([]);
-        setResults([result]);
-        setModalScannedText(result.codeResult.code);
+    const onNewScanResult = (decodedText) => {
+        setScannedText(decodedText);
     };
 
     const handleSaveChanges = () => {
-        setScannedCode(modalScannedText);
-        setModalScannedText("");
-        onSave(modalScannedText);
+        setScannedText("");
+        onSave(scannedText);
     };
 
     const handleClose = () => {
-        setModalScannedText("");
+        setScannedText("");
+    };
+
+    const checkCameraIsOpen = () => {
+        if(document.getElementById("html5-qrcode-button-camera-stop") != null){
+            const stopBtn = document.getElementById("html5-qrcode-button-camera-stop").style.display;
+
+            if(stopBtn != null && stopBtn == "inline-block") {
+                console.log("Camera is open");
+                document.getElementById("html5-qrcode-button-camera-stop").click();
+            }
+        } else {
+            console.log("Camera is not open");
+            if(document.getElementById("html5qr-code-full-region__scan_region") == null){
+                console.log("Camera is not ope2n");
+                window.location.reload();
+            }
+        }
     };
 
     return (
@@ -37,7 +44,7 @@ function BarcodeScanner2({ onSave }) {
                 className="btn btn-outline-success me-2"
                 data-bs-toggle="modal"
                 data-bs-target="#exampleModal"
-                onClick={handleScan}
+                onClick={checkCameraIsOpen}
             >
                 <i className="fa-solid fa-expand"></i>
             </button>
@@ -64,8 +71,13 @@ function BarcodeScanner2({ onSave }) {
                             ></button>
                         </div>
                         <div className="modal-body">
-                            <p className="profile__label">scanned: {modalScannedText}</p>
-                            <Scanner onDetected={handleDetected} />
+                            <p className="profile__label">scanned: {scannedText}</p>
+                            <Html5QrcodePlugin
+                                fps={10}
+                                qrbox={250}
+                                disableFlip={false}
+                                qrCodeSuccessCallback={onNewScanResult}
+                            />
                         </div>
                         <div className="modal-footer">
                             <button
